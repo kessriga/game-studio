@@ -1,4 +1,4 @@
-# CCGS Skill Testing Framework — Claude Instructions
+# QA — Skill & Agent Testing Framework — Claude Instructions
 
 This folder is the quality assurance layer for the Claude Code Game Studios skill/agent
 framework. It is self-contained and separate from any game project.
@@ -17,10 +17,10 @@ framework. It is self-contained and separate from any game project.
 
 ## Path conventions
 
-- Skill specs: `CCGS Skill Testing Framework/skills/[category]/[name].md`
-- Agent specs: `CCGS Skill Testing Framework/agents/[tier]/[name].md`
-- Catalog: `CCGS Skill Testing Framework/catalog.yaml`
-- Rubric: `CCGS Skill Testing Framework/quality-rubric.md`
+- Skill specs: `qa/skills/[category]/[name].md`
+- Agent specs: `qa/agents/[tier]/[name].md`
+- Catalog: `qa/catalog.yaml`
+- Rubric: `qa/quality-rubric.md`
 
 The `spec:` field in `catalog.yaml` is the authoritative path for each skill/agent spec.
 Always read it rather than guessing the path.

@@ -39,7 +39,7 @@
 - [x] 6.2 Update README.md, WORKFLOW-GUIDE.md engine tables and examples (incl. agent-count 49→53)
 - [x] 6.3 Update shader-code.md rule (WGSL naming), statusline.sh and content-audit globs (*.wgsl, *.ron), localize RTL row
 - [x] 6.4 Repo-wide sweep for three-engine phrasing; fix or add explicit N/A (CLAUDE.md note, quick-start, templates, engine-reference README, docs/CLAUDE.md godot path made generic)
-- [x] 6.5 Add Bevy agent specs + catalog.yaml entries to the skill/agent testing framework (use its current directory name)
+- [x] 6.5 Add Bevy agent specs + catalog.yaml entries to the skill/agent testing framework (`qa/`)
 
 ## 7. Verification
 

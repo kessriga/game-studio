@@ -10,7 +10,7 @@ The template supports Godot, Unity, and Unreal, but the owner's games are built 
 - New `docs/engine-reference/bevy/` tree satisfying the engine-reference README contract: `VERSION.md`, `breaking-changes.md`, `deprecated-apis.md`, `current-best-practices.md`, and 8 module references, pinned to the current Bevy release.
 - Test scaffolding skills (`test-setup`, `test-helpers`, `smoke-check`, `soak-test`, `test-flakiness`) and `coding-standards.md` gain cargo-based Bevy coverage (GitHub Actions cargo workflow, Rust test helpers, `cargo test` invocations, cargo/nextest log formats).
 - Rosters and docs updated: `agent-roster.md`, `agent-coordination-map.md`, `quick-start.md`, `README.md`, `WORKFLOW-GUIDE.md`, `brainstorm` engine options, `content-audit` globs, `shader-code.md` rule, statusline source globs.
-- Skill/agent testing framework (`CCGS Skill Testing Framework/`) gains Bevy agent specs and `catalog.yaml` entries.
+- Skill/agent testing framework (`qa/`) gains Bevy agent specs and `catalog.yaml` entries.
 - Existing Godot/Unity/Unreal support is unchanged (additive change; no removals).
 
 ## Capabilities
@@ -29,5 +29,5 @@ The template supports Godot, Unity, and Unreal, but the owner's games are built 
 - `.claude/docs/` — `agent-roster.md`, `agent-coordination-map.md`, `quick-start.md`, `coding-standards.md`; templates (`interaction-pattern-library.md` stays Godot-idiomatic — out of scope).
 - `docs/` — new `engine-reference/bevy/` tree (~13 files); `WORKFLOW-GUIDE.md`; `README.md`.
 - `.claude/rules/shader-code.md`, `.claude/statusline.sh` (add WGSL/RON globs).
-- `CCGS Skill Testing Framework/` — `catalog.yaml` + agent specs (directory may be renamed to `qa/` by TASK-2; use its current name at implementation time).
+- `qa/` — `catalog.yaml` + agent specs.
 - No dependencies added; no hooks changed (already `*.rs`-aware).
