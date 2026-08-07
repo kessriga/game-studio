@@ -60,6 +60,7 @@ domain lead) should delegate to specialists.
 | `unreal-specialist` | Unreal Engine 5 | Sonnet | Blueprint vs C++, GAS overview, UE subsystems, Unreal optimization |
 | `unity-specialist` | Unity | Sonnet | MonoBehaviour vs DOTS, Addressables, URP/HDRP, Unity optimization |
 | `godot-specialist` | Godot 4 | Sonnet | GDScript patterns, node/scene architecture, signals, Godot optimization |
+| `bevy-specialist` | Bevy | Sonnet | ECS/plugin architecture, schedules/system ordering, BSN scenes, ecosystem-crate choices, Bevy optimization |
 
 ### Unreal Engine Sub-Specialists
 
@@ -87,3 +88,11 @@ domain lead) should delegate to specialists.
 | `godot-csharp-specialist` | C# / .NET | Sonnet | .NET patterns, [Signal] delegates, async, nullable types, type-safe node access |
 | `godot-shader-specialist` | Shaders/Rendering | Sonnet | Godot shading language, visual shaders, particles, post-processing |
 | `godot-gdextension-specialist` | GDExtension | Sonnet | C++/Rust bindings, native performance, custom nodes, build systems |
+
+### Bevy Sub-Specialists
+
+| Agent | Subsystem | Model | When to Use |
+| ---- | ---- | ---- | ---- |
+| `bevy-rust-specialist` | Rust / ECS code | Sonnet | Ownership/error handling, idiomatic system & query design, module structure |
+| `bevy-render-specialist` | Rendering / WGSL | Sonnet | wgpu, WGSL shaders, custom materials, render systems, post-processing |
+| `bevy-ui-specialist` | bevy_ui | Sonnet | Node/flexbox layout, widgets (feathers), Parley text, EditableText, accessibility |

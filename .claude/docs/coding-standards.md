@@ -64,3 +64,4 @@ All stories must have appropriate test evidence before they can be marked Done:
   - **Godot**: `godot --headless --script tests/gdunit4_runner.gd`
   - **Unity**: `game-ci/unity-test-runner@v4` (GitHub Actions)
   - **Unreal**: headless runner with `-nullrhi` flag
+  - **Bevy**: `cargo test` (headless with `MinimalPlugins`); CI also runs `cargo fmt --check` and `cargo clippy -- -D warnings`

@@ -48,6 +48,11 @@
       godot-csharp-specialist      -- C#: .NET patterns, [Signal] delegates, async, type-safe node access
       godot-shader-specialist      -- Shaders: Godot shading language, visual shaders, VFX
       godot-gdextension-specialist -- Native: C++/Rust bindings, GDExtension, build systems
+
+    bevy-specialist    -- Bevy lead: ECS/plugins, schedules, BSN scenes, ecosystem crates
+      bevy-rust-specialist   -- Rust/ECS: ownership, error handling, system & query design
+      bevy-render-specialist -- Rendering: wgpu, WGSL, materials, render systems
+      bevy-ui-specialist     -- UI: bevy_ui layout, widgets, Parley text, accessibility
 ```
 
 ### Legend

@@ -37,7 +37,7 @@ If no engine is specified, run an interactive engine selection process:
 
 **Question 1 — Prior experience** (ask this first, always, via `AskUserQuestion`):
 - Prompt: "Have you worked in any of these engines before?"
-- Options: `Godot` / `Unity` / `Unreal Engine 5` / `Multiple — I'll explain` / `None of them`
+- Options: `Godot` / `Unity` / `Unreal Engine 5` / `Bevy` / `Multiple — I'll explain` / `None of them`
 - If they pick a specific engine → recommend that engine. Prior experience outweighs all other factors. Confirm with them and skip the matrix.
 - If "None" or "Multiple" → continue to the questions below.
 
@@ -49,9 +49,10 @@ If no engine is specified, run an interactive engine selection process:
 - Platform rules that feed directly into the recommendation:
   - Mobile → Unity strongly preferred; Unreal is a poor fit; Godot is viable for simple mobile
   - Console → Unity or Unreal; Godot console support requires third-party publishers or significant extra work
-  - Web → Godot exports cleanly to web; Unity WebGL is functional; Unreal has poor web support
+  - Web → Godot exports cleanly to web; Bevy targets WebGPU/WASM (functional, evolving); Unity WebGL is functional; Unreal has poor web support
   - PC only → all engines viable; other factors decide
-  - Multiple → Unity is the most portable across PC/mobile/console
+  - Multiple → Unity is the most portable across PC/mobile/console; Bevy covers PC + web well but console/mobile need extra work
+  - Bevy-specific: strongest on PC and web (WASM/WebGPU); console requires third-party/self-published effort (similar to Godot); mobile is possible but the least-trodden path
 
 1. **What kind of game?** (2D, 3D, or both?)
 2. **Primary input method?** (keyboard/mouse, gamepad, touch, or mixed?)
@@ -83,6 +84,12 @@ Do NOT use a simple scoring matrix that eliminates engines. Instead, reason thro
 - Licensing reality: 5% royalty only applies AFTER $1M gross revenue per title. For a first game or any game that doesn't reach $1M, it costs nothing. This threshold is high enough that most indie developers will never pay it.
 - Best fit: AAA-quality 3D; large open-world games; photorealistic visuals; developers with C++ experience or willing to use Blueprint; games targeting high-end PC/console where visual fidelity is a core selling point
 
+**Bevy**
+- Genuine strengths: Code-first Rust ECS — exceptional for systemic/simulation-heavy games, ECS-native architecture, no editor lock-in, free forever (MIT/Apache dual license), open source, fast and safe (Rust). Strong PC and web (WASM/WebGPU) story. Great when the team already knows Rust and wants full control in code.
+- Real limitations: **No editor** (scenes are authored in code via BSN, though an editor is in development); **breaking changes every ~3 months** (one minor per cycle) — you must budget for migrations; physics, networking, and pathfinding are third-party crates, not first-party; smaller ecosystem and job market than Unity/Unreal; requires learning Rust, which has a real learning curve; console/mobile are the least-trodden paths.
+- Licensing reality: Truly free with no revenue thresholds ever (MIT/Apache-2.0). You own everything.
+- Best fit: Systemic/simulation/roguelike/strategy games; developers who know or want to learn Rust; teams that prefer code-first workflows over editor-driven ones; PC and web targets; projects where a permissive license and full source control matter. Weakest fit: teams wanting a mature visual editor, artists-as-primary-authors workflows, or console-first launches on a tight timeline.
+
 **Genre-specific guidance** (factor this into the recommendation):
 - 2D any style → Godot strongly preferred
 - 3D stylized / atmospheric / contained world → Godot viable, Unity solid alternative
@@ -93,7 +100,9 @@ Do NOT use a simple scoring matrix that eliminates engines. Instead, reason thro
 - Horror / narrative / walking sim → any engine; match to art style and team experience
 - Action RPG / Soulslike → Unity or Unreal for 3D; community support and assets matter here
 - Platformer 2D → Godot
-- Strategy / top-down / RTS → Godot or Unity depending on 2D vs 3D
+- Strategy / top-down / RTS → Godot or Unity depending on 2D vs 3D; Bevy is a strong fit if the team knows Rust (ECS suits large entity counts and systemic simulation)
+- Systemic / simulation / roguelike (many entities, emergent rules) → Bevy is an excellent fit for Rust-comfortable teams; Godot/Unity otherwise
+- Rust-experienced team, code-first workflow, PC/web target → Bevy
 
 **Recommendation format:**
 1. Show a comparison table with the user's specific factors as rows
@@ -168,6 +177,18 @@ Update the Technology Stack section, replacing the `[CHOOSE]` placeholders with 
 - **Asset Pipeline**: Unreal Content Pipeline
 ```
 
+**For Bevy:**
+```markdown
+- **Engine**: Bevy [version]
+- **Language**: Rust
+- **Build System**: Cargo
+- **Asset Pipeline**: Bevy Asset System (asset_server) + BSN scenes
+```
+
+> **Note**: Bevy has a single language (Rust), so no language-selection step is
+> needed. Physics, networking, and pathfinding are third-party crates — do not
+> add them to Allowed Libraries until a system actively integrates one.
+
 ---
 
 ## 5. Populate Technical Preferences
@@ -196,6 +217,14 @@ engine-appropriate defaults. Read the existing template first, then fill in:
 - Functions: PascalCase (e.g., `TakeDamage()`)
 - Booleans: `b` prefix (e.g., `bIsAlive`)
 - Files: Match class without prefix (e.g., `PlayerController.h`)
+
+**For Bevy (Rust) — follow standard Rust `rustfmt`/Clippy conventions:**
+- Types (structs/enums/components/resources/traits): PascalCase (e.g., `PlayerController`, `Health`)
+- Functions/systems/variables: snake_case (e.g., `apply_damage`, `move_speed`)
+- Modules/files: snake_case (e.g., `player_controller.rs`)
+- Constants/statics: UPPER_SNAKE_CASE (e.g., `MAX_HEALTH`)
+- Events: PascalCase noun/verb (e.g., `DamageDealt`); systems that handle them read as verbs (`on_damage_dealt`)
+- Plugins: PascalCase ending in `Plugin` (e.g., `CombatPlugin`)
 
 ### Input & Platform Section
 
@@ -292,6 +321,28 @@ Also populate the `## Engine Specialists` section in `technical-preferences.md` 
 | General architecture review | unreal-specialist |
 ```
 
+**For Bevy:**
+```markdown
+## Engine Specialists
+- **Primary**: bevy-specialist
+- **Language/Code Specialist**: bevy-rust-specialist (all .rs files — Rust quality, ECS system/query design)
+- **Shader Specialist**: bevy-render-specialist (WGSL shaders, custom materials, render systems)
+- **UI Specialist**: bevy-ui-specialist (bevy_ui layout, widgets, Parley text, accessibility)
+- **Additional Specialists**: (none — Bevy's four-agent set covers the engine; ecosystem crates like physics/networking are consulted via the primary)
+- **Routing Notes**: Invoke primary for ECS/plugin architecture, schedule/system ordering, and ecosystem-crate decisions. Invoke Rust specialist for code quality and idiomatic system/query design. Invoke render specialist for WGSL/materials/render systems. Invoke UI specialist for all bevy_ui work. Bevy has no editor-authored scene/prefab format — scenes are code (BSN) or RON assets, routed to the primary.
+
+### File Extension Routing
+
+| File Extension / Type | Specialist to Spawn |
+|-----------------------|---------------------|
+| Game code (.rs files) | bevy-rust-specialist |
+| Shader / material files (.wgsl) | bevy-render-specialist |
+| UI / screen files (bevy_ui code in .rs) | bevy-ui-specialist |
+| Scene / asset data (.bsn, .ron, assets/) | bevy-specialist |
+| Native extension / plugin files | N/A — Bevy is native Rust; no separate native layer |
+| General architecture review | bevy-specialist |
+```
+
 ### Collaborative Step
 Present the filled-in preferences to the user. For Godot, include the chosen language and note where the full naming conventions and routing tables live:
 > "Here are the default technical preferences for [engine] ([language if Godot]). The naming conventions and specialist routing are in Appendix A of this skill — I'll apply the [GDScript/C#/Both] variant. Want to customize any of these, or shall I save the defaults?"
@@ -311,6 +362,7 @@ Check whether the engine version is likely beyond the LLM's training data.
 - Godot: training data likely covers up to ~4.3
 - Unity: training data likely covers up to ~2023.x / early 6000.x
 - Unreal: training data likely covers up to ~5.3 / early 5.4
+- Bevy: training data likely covers up to ~0.16-0.17. **Treat every Bevy version as HIGH risk by default** — Bevy ships breaking changes every ~3 months, so even a "current" minor is likely past the cutoff and the reference docs are effectively required, not optional.
 
 Compare the user's chosen version against these baselines:
 
@@ -412,6 +464,12 @@ Ask: "May I add a Version Awareness section to the engine specialist agent files
 For the chosen engine's specialist agents, verify they have a
 "Version Awareness" section. If not, add one following the pattern in
 the existing Godot specialist agents.
+
+> **Bevy note**: the four Bevy agents (`bevy-specialist`, `bevy-rust-specialist`,
+> `bevy-render-specialist`, `bevy-ui-specialist`) already ship with a Version
+> Awareness section pointing at `docs/engine-reference/bevy/`, because Bevy's
+> fast release cadence makes an unversioned agent wrong within months. For Bevy
+> this step is a no-op verification — confirm the section is present, add nothing.
 
 The section should instruct the agent to:
 1. Read `docs/engine-reference/<engine>/VERSION.md`
@@ -550,7 +608,7 @@ After setup is complete, output:
 Engine Setup Complete
 =====================
 Engine:          [name] [version]
-Language:        [GDScript | C# | GDScript + C# | C# | C++ + Blueprint]
+Language:        [GDScript | C# | GDScript + C# | C# | C++ + Blueprint | Rust]
 Knowledge Risk:  [LOW/MEDIUM/HIGH]
 Reference Docs:  [created/skipped]
 CLAUDE.md:       [updated]

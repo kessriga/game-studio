@@ -1032,6 +1032,31 @@ agents:
     last_spec_result: ""
     category: engine
 
+  # Engine Specialists — Bevy
+  - name: bevy-specialist
+    spec: CCGS Skill Testing Framework/agents/engine/bevy/bevy-specialist.md
+    last_spec: ""
+    last_spec_result: ""
+    category: engine
+
+  - name: bevy-rust-specialist
+    spec: CCGS Skill Testing Framework/agents/engine/bevy/bevy-rust-specialist.md
+    last_spec: ""
+    last_spec_result: ""
+    category: engine
+
+  - name: bevy-render-specialist
+    spec: CCGS Skill Testing Framework/agents/engine/bevy/bevy-render-specialist.md
+    last_spec: ""
+    last_spec_result: ""
+    category: engine
+
+  - name: bevy-ui-specialist
+    spec: CCGS Skill Testing Framework/agents/engine/bevy/bevy-ui-specialist.md
+    last_spec: ""
+    last_spec_result: ""
+    category: engine
+
   # Operations
   - name: devops-engineer
     spec: CCGS Skill Testing Framework/agents/operations/devops-engineer.md

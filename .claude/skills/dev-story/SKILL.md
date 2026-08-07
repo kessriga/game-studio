@@ -165,6 +165,7 @@ engine risk.
 | Godot 4 | `godot-specialist`, `godot-gdscript-specialist`, `godot-shader-specialist` |
 | Unity | `unity-specialist`, `unity-ui-specialist`, `unity-shader-specialist` |
 | Unreal Engine | `unreal-specialist`, `ue-gas-specialist`, `ue-blueprint-specialist`, `ue-umg-specialist`, `ue-replication-specialist` |
+| Bevy | `bevy-specialist`, `bevy-rust-specialist`, `bevy-render-specialist`, `bevy-ui-specialist` |
 
 **When engine risk is HIGH** (from the ADR or VERSION.md): always spawn the engine
 specialist, even for non-engine-facing stories. High risk means the ADR records

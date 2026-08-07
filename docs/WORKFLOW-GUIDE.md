@@ -239,7 +239,8 @@ Or with a specific engine:
 **Why this matters:** Once you set the engine, the system knows which
 engine-specialist agents to use. If you pick Godot, agents like
 `godot-specialist`, `godot-gdscript-specialist`, and `godot-shader-specialist`
-become your go-to experts.
+become your go-to experts; pick Bevy and you get `bevy-specialist`,
+`bevy-rust-specialist`, `bevy-render-specialist`, and `bevy-ui-specialist`.
 
 ### Step 1.4: Decompose Your Concept Into Systems
 
@@ -1397,6 +1398,10 @@ Reads existing code and generates GDD-format design documentation from it.
 | Unreal Blueprints | `ue-blueprint-specialist` | 3 |
 | Unreal replication | `ue-replication-specialist` | 3 |
 | Unreal UMG/CommonUI | `ue-umg-specialist` | 3 |
+| Bevy-specific help | `bevy-specialist` | 3 |
+| Bevy Rust/ECS code | `bevy-rust-specialist` | 3 |
+| Bevy rendering/WGSL | `bevy-render-specialist` | 3 |
+| Bevy UI (bevy_ui) | `bevy-ui-specialist` | 3 |
 
 ### Agent Hierarchy
 

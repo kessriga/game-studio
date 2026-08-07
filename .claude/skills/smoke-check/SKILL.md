@@ -110,6 +110,14 @@ ls -t Saved/Logs/ 2>/dev/null | grep -i "test\|automation" | head -5 \
 If no matching log found: "UE automation tests must be run via the Session
 Frontend or CI pipeline. Please confirm test status manually."
 
+**Bevy:**
+```bash
+# Runs headless (MinimalPlugins) — no window or GPU needed
+cargo test --workspace 2>&1
+```
+Parse the trailing `test result: ok. N passed; M failed; ...` summary line(s)
+for pass/fail counts. A non-zero exit code means the smoke check FAILS.
+
 **Unknown engine / not configured:**
 "Engine not configured in `.claude/docs/technical-preferences.md`. Run
 `/setup-engine` to specify the engine, then re-run `/smoke-check`."
