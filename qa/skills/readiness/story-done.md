@@ -5,10 +5,11 @@
 `/story-done` closes the loop between design and implementation. Run at the
 end of implementing a story, it reads the story file and verifies each
 acceptance criterion against the implementation. It checks for GDD and ADR
-deviations, prompts a code review, updates the story status to `Complete`,
-logs any tech debt, and surfaces the next ready story from the sprint. It
-produces a COMPLETE / COMPLETE WITH NOTES / BLOCKED verdict and writes to
-the story file and optionally to `docs/tech-debt-register.md`.
+deviations, prompts a code review, sets the Backlog task to `Done` (status lives
+in Backlog, not a `Status:` field in the `.md`), logs any tech debt, and surfaces
+the next ready task from the Backlog board. It produces a COMPLETE / COMPLETE
+WITH NOTES / BLOCKED verdict, appends `## Completion Notes` to the story file, and
+optionally writes to `docs/tech-debt-register.md`.
 
 ---
 
@@ -20,7 +21,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 - [ ] Has ≥5 phase headings (complex skill warranting `context: fork` if applicable)
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED
 - [ ] Contains "May I write" collaborative protocol language (writes to story file and tech-debt register)
-- [ ] Has a next-step handoff (surfaces next story from sprint)
+- [ ] Has a next-step handoff (surfaces the next task from the Backlog board, or the milestone close-out sequence when none remain)
 
 ---
 
@@ -33,7 +34,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
   - 3 acceptance criteria, all implemented as described
   - `TR-ID: TR-light-001` referencing a GDD requirement
   - `ADR: docs/architecture/adr-003-inventory.md` (Accepted)
-  - `Status: In Progress`
+  - `Tracked in: TASK-17` (Backlog status: `In Progress`)
 - Implementation files listed in story exist in `src/`
 - GDD requirement text at TR-light-001 matches how the feature was implemented
 - ADR guidance was followed (no deviations)
@@ -49,9 +50,9 @@ Verified automatically by `/skill-test static` — no fixture needed.
 6. Skill checks for ADR guideline deviations
 7. Skill prompts user: "Please provide the code review outcome for this story"
 8. Skill presents COMPLETE verdict
-9. Skill asks "May I update story Status to Complete and add Completion Notes?"
-10. If yes: skill updates the story file
-11. Skill surfaces the next `Ready for Dev` story from the sprint
+9. Skill asks "May I set the Backlog task to Done and append Completion Notes to the story file?"
+10. If yes: skill sets the Backlog task to `Done` via `task_edit` and appends `## Completion Notes` to the story `.md`
+11. Skill surfaces the next `To Do` task from the Backlog board (the milestone)
 
 **Assertions:**
 - [ ] Skill reads `docs/architecture/tr-registry.yaml` for TR-ID requirement text (not just story)
@@ -60,8 +61,8 @@ Verified automatically by `/skill-test static` — no fixture needed.
 - [ ] Skill prompts the user for code review outcome (does not skip this step)
 - [ ] Verdict is COMPLETE when all criteria are verified and no deviations exist
 - [ ] Skill asks "May I write" before updating the story file
-- [ ] Skill does NOT auto-update story status without user confirmation
-- [ ] After completion, skill surfaces the next ready story from `production/sprints/`
+- [ ] Skill does NOT set the Backlog task to Done without user confirmation
+- [ ] After completion, skill surfaces the next `To Do` task from the Backlog board (the milestone)
 
 ---
 
@@ -125,7 +126,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 **Fixture:**
 - `production/session-state/active.md` contains a reference to
   `production/epics/core/story-oxygen-drain.md` as the active story
-- That story file exists with `Status: In Progress`
+- That story file exists and is tracked by a Backlog task with status `In Progress`
 
 **Input:** `/story-done` (no argument)
 
@@ -191,7 +192,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 - [ ] Uses "May I write" before updating the story file
 - [ ] Uses "May I write" before adding entries to `docs/tech-debt-register.md`
 - [ ] Presents complete findings (criteria check, deviation check) before asking approval
-- [ ] Ends by surfacing the next ready story from the sprint plan
+- [ ] Ends by surfacing the next ready task from the Backlog board (the milestone), or the milestone close-out sequence (`/smoke-check` → `/team-qa [milestone]` → `/gate-check`) when no `To Do` tasks remain
 - [ ] Does not mark a story Complete if any criteria are in ERROR state
 - [ ] Does not skip the code review prompt
 
@@ -204,6 +205,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 - Tech debt logging (deferred items written to `docs/tech-debt-register.md`)
   is mentioned in Case 2 but not the primary assertion focus; dedicated
   coverage deferred.
-- The `sprint-status.yaml` update (Phase 7 in the skill) is implied by Case 1
-  but not the primary assertion; assumed to follow the same "May I write" pattern.
+- The Backlog task Done update (Phase 7 in the skill, via `task_edit`) is implied
+  by Case 1 but not the primary assertion; it follows the same "May I write"
+  confirmation pattern before status changes.
 - Stories with multiple TR-IDs or multiple ADRs are not explicitly tested.

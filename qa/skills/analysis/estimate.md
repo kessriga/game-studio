@@ -18,7 +18,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 - [ ] Has ≥2 phase headings
 - [ ] Contains size labels: S, M, L, XL (the "verdict" equivalents for this skill)
 - [ ] Does NOT require "May I write" language (advisory output only)
-- [ ] Has a next-step handoff (how to use the estimate in sprint planning)
+- [ ] Has a next-step handoff (how to use the estimate when prioritising the task on the Backlog board)
 
 ---
 
@@ -138,12 +138,12 @@ None. Estimation is an advisory informational skill; no gates are invoked.
 1. Skill reads story and sprint history; computes estimate
 2. No director gate is invoked in any review mode
 3. Estimate is presented as advisory output only
-4. Skill notes: "Use this estimate in /sprint-plan when selecting stories for the next sprint"
+4. Skill notes: "Use this estimate when prioritising the task on the Backlog board"
 
 **Assertions:**
 - [ ] No director gate is invoked regardless of review mode
 - [ ] Output is purely informational — no approval or write prompt
-- [ ] Next-step recommendation references `/sprint-plan`
+- [ ] Next-step recommendation references prioritising the task on the Backlog board
 - [ ] Estimate does not change based on review mode
 
 ---

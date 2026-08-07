@@ -276,7 +276,7 @@ After writing:
 1. Open the file and follow the Pre-Session Setup checklist
 2. Record each checkpoint as you play
 3. Complete the Post-Session Analysis section when done
-4. File bugs from 'Issues Found' to `production/qa/bugs/`
+4. File bugs from 'Issues Found' as Backlog tasks with the `bug` label (via `/bug-report`)
 5. File any S1/S2 issues as Backlog tasks (`bug` label) after the session and triage them on the board
 
 If the verdict is FAIL, run `/smoke-check` again after fixing the issues."

@@ -17,7 +17,7 @@ season plan requiring user approval before handoff to production.
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED
 - [ ] Contains "May I write" language in the File Write Protocol section (delegated to sub-agents)
 - [ ] Has a File Write Protocol section stating that the orchestrator does not write files directly
-- [ ] Has a next-step handoff at the end referencing `/design-review`, `/sprint-plan`, and `/team-release`
+- [ ] Has a next-step handoff at the end referencing `/design-review`, filing the season's work as Backlog tasks under a milestone, and `/team-release`
 - [ ] Uses `AskUserQuestion` at phase transitions to capture user approval before proceeding
 - [ ] States explicitly that Phases 3 and 4 can run simultaneously (parallel spawning)
 - [ ] Error recovery section present (or implied through BLOCKED handling)
@@ -56,7 +56,7 @@ season plan requiring user approval before handoff to production.
 - [ ] Three output documents written to `design/live-ops/seasons/` with correct naming convention
 - [ ] File writes are delegated to sub-agents — orchestrator does not write directly
 - [ ] Verdict: COMPLETE appears in final output
-- [ ] Next steps reference `/design-review`, `/sprint-plan`, and `/team-release`
+- [ ] Next steps reference `/design-review`, filing the season's work as Backlog tasks under a milestone, and `/team-release`
 
 ---
 
@@ -166,7 +166,7 @@ season plan requiring user approval before handoff to production.
 - [ ] Error recovery: any BLOCKED agent is surfaced immediately with AskUserQuestion options (skip / retry / stop)
 - [ ] Partial reports are produced if any phase blocks — work is never discarded
 - [ ] Verdict: COMPLETE only after user approves the consolidated season plan; BLOCKED if any unresolved ethics violation exists
-- [ ] Next steps always include `/design-review`, `/sprint-plan`, and `/team-release`
+- [ ] Next steps always include `/design-review`, filing the season's work as Backlog tasks under a milestone, and `/team-release`
 
 ---
 

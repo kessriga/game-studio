@@ -157,9 +157,7 @@ options:
   - "BLOCKED — cannot test yet (reason)"
 ```
 
-After each FAIL result: use `AskUserQuestion` to collect the failure description, then spawn `qa-tester` via Task to write a formal bug report in `production/qa/bugs/`.
-
-Bug report naming: `BUG-[NNN]-[short-slug].md` (increment NNN from existing bugs in the directory).
+After each FAIL result: use `AskUserQuestion` to collect the failure description, then file a bug via `/bug-report` — a Backlog task with the `bug` label (repro/severity/context in the task description). The board is the bug list; there is no `production/qa/bugs/` markdown store.
 
 After collecting all results, summarize:
 - Stories PASS: [count]

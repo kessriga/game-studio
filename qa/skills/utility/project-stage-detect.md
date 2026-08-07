@@ -53,7 +53,7 @@ gates apply.
 2. Skill cross-checks artifacts: GDDs present, source code present, sprint present
 3. Artifacts are consistent with Production stage
 4. Skill reports: Stage = Production, Confidence = HIGH (from stage.txt, confirmed by artifacts)
-5. Next step: continue with `/sprint-plan` or `/dev-story`
+5. Next step: continue with `/dev-story` or pick the next `To Do` task from the Backlog board
 
 **Assertions:**
 - [ ] Detected stage is Production
@@ -106,7 +106,7 @@ gates apply.
 2. Artifact scan: no GDDs, no source, no epics, no sprints, engine unconfigured
 3. Skill infers: Stage = Concept
 4. Confidence is MEDIUM
-5. Skill suggests `/start` to begin the onboarding workflow
+5. Skill suggests `/start` to begin the guided setup flow
 
 **Assertions:**
 - [ ] Inferred stage is Concept

@@ -37,7 +37,7 @@
 > | Architecture docs | ❌ | `docs/architecture/` missing |
 > | Systems index | ❌ | `design/gdd/systems-index.md` missing |
 > | Production tracking | ❌ | `production/` directory missing |
-> | Sprint/story files | ❌ | None |
+> | Story files / Backlog tasks | ❌ | None |
 >
 > **Phase 2: Format Audit (existing files)**
 >
@@ -64,7 +64,7 @@
 > | No systems index | BLOCKING | `/design-system`, `/create-stories`, `/gate-check` all require it |
 > | GDD files not in template format | HIGH | Skills cannot reference TR-IDs from malformed GDDs |
 > | No architecture docs | HIGH | Cannot run `/architecture-review` or `/create-control-manifest` |
-> | No production tracking | MEDIUM | Sprint and story skills won't work, but not needed until production phase |
+> | No production tracking | MEDIUM | Story and Backlog task skills won't work, but not needed until production phase |
 > | `design/crafting-ideas.md` — pre-GDD content | LOW | Useful as input; needs full GDD authoring before it blocks anything |
 
 ## Turn 3: Agent Presents the Migration Plan
@@ -82,7 +82,7 @@
 > | 4 | Convert `design/crafting-ideas.md` → full GDD | `/design-system crafting` (new authoring, uses ideas as input) | MEDIUM | Not a retrofit — too informal to retrofit |
 > | 5 | Create architecture ADRs from existing code | `/reverse-document` + `/architecture-decision` | HIGH | Captures decisions already made in code |
 > | 6 | Create master architecture document | `/create-architecture` | HIGH | After ADRs |
-> | 7 | Set up production tracking | `/sprint-plan new` | MEDIUM | After architecture phase |
+> | 7 | Set up production tracking (epics → milestones, stories → Backlog tasks) | `/create-epics` + `/create-stories` | MEDIUM | After architecture phase |
 >
 > **Important:** Step 1 must happen before any other step. Everything else can be done in parallel or reordered based on your priorities.
 >

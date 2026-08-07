@@ -24,7 +24,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: LAUNCH READY, LAUNCH BLOCKED, CONCERNS
 - [ ] Contains "May I write" collaborative protocol language before writing the checklist
-- [ ] Has a next-step handoff (e.g., `/team-release` or `/day-one-patch`)
+- [ ] Has a next-step handoff (e.g., `/team-release` or `/gate-check`)
 
 ---
 

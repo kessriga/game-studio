@@ -210,7 +210,7 @@
 > - [ ] Player runs at `base_walk_speed × run_multiplier` on normal ground
 > - [ ] Run automatically cancels when stamina reaches 0, no input required
 > - [ ] Roll executes with correct invincibility frames (verify via hitbox debug mode)
-> - [ ] Each terrain type applies the correct speed modifier (QA table in sprint plan)
+> - [ ] Each terrain type applies the correct speed modifier (QA table in the milestone)
 > - [ ] Carrying heavy object disables run (test with inventory integration)
 > - [ ] Stamina system receives `on_stamina_event` signals during walk, run, and roll
 > - [ ] All movement values come from exported variables — no hardcoded numbers in code

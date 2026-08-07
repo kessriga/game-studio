@@ -114,7 +114,7 @@ Follow the **Explain → Capture** pattern:
 
 ## Gate Verdict Format
 
-When invoked via a director gate (e.g., `PR-SPRINT`, `PR-EPIC`, `PR-MILESTONE`, `PR-SCOPE`), always
+When invoked via a director gate (e.g., `PR-EPIC`, `PR-MILESTONE`, `PR-SCOPE`), always
 begin your response with the verdict token on its own line:
 
 ```

@@ -1,9 +1,9 @@
 ---
 name: smoke-check
-description: "Run the critical path smoke test gate before QA hand-off. Executes the automated test suite, verifies core functionality, and produces a PASS/FAIL report. Run after a sprint's stories are implemented and before manual QA begins. A failed smoke check means the build is not ready for QA."
-argument-hint: "[sprint | quick | --platform pc|console|mobile|all]"
+description: "Run the critical path smoke test gate before QA hand-off. Executes the automated test suite, verifies core functionality, and produces a PASS/FAIL report. Run after a milestone's stories are implemented and before manual QA begins. A failed smoke check means the build is not ready for QA."
+argument-hint: "[milestone | quick | --platform pc|console|mobile|all]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Write, AskUserQuestion
+allowed-tools: Read, Glob, Grep, Bash, Write, AskUserQuestion, mcp__backlog__task_list
 model: sonnet
 ---
 
@@ -23,10 +23,10 @@ Handing a broken build to QA wastes their time and demoralises the team.
 
 ## Parse Arguments
 
-Arguments can be combined: `/smoke-check sprint --platform console`
+Arguments can be combined: `/smoke-check --platform console`
 
-**Base mode** (first argument, default: `sprint`):
-- `sprint` — full smoke check against the current sprint's stories
+**Base mode** (first argument, default: `milestone`):
+- `milestone` — full smoke check against the current milestone's stories
 - `quick` — skip coverage scan (Phase 3) and Batch 3; use for rapid re-checks
 
 **Platform flag** (`--platform`, default: none):
@@ -66,7 +66,7 @@ Before running anything, understand the environment:
 5. **QA plan check**: glob `production/qa/qa-plan-*.md` and take the most
    recently modified file. If found, note the path — it will be used in
    Phase 3 and Phase 4. If not found, note: "No QA plan found. Run
-   `/qa-plan sprint` before smoke-checking for best results."
+   `/qa-plan milestone` before smoke-checking for best results."
 
 Report findings before proceeding: "Environment: [engine]. Test directory:
 [found / not found]. CI configured: [yes / no]. QA plan: [path / not found]."
@@ -147,10 +147,10 @@ Parse runner output and extract:
 Draw the story list from, in priority order:
 1. The QA plan found in Phase 1 (its Test Summary table lists expected test
    file paths per story)
-2. The current sprint plan from `production/sprints/` (most recently modified
-   file)
+2. The current milestone's story tasks from the Backlog board (`task_list` by
+   milestone), following each task's `Spec:` reference to its story `.md`
 3. If the `quick` argument was passed, skip this phase entirely and note:
-   "Coverage scan skipped — run `/smoke-check sprint` for full coverage
+   "Coverage scan skipped — run `/smoke-check` for full coverage
    analysis."
 
 For each story in scope:
@@ -186,9 +186,9 @@ Draw the smoke test checklist from, in priority order:
 3. `tests/smoke/` directory contents (if it exists)
 4. The standard fallback list below (used only when none of the above exist)
 
-Tailor batches 2 and 3 to the actual systems identified from the sprint or QA
+Tailor batches 2 and 3 to the actual systems identified from the milestone or QA
 plan. Replace bracketed placeholders with real mechanic names from the current
-sprint's stories.
+milestone's stories.
 
 Use `AskUserQuestion` to batch-verify. Keep to at most 3 calls.
 
@@ -205,14 +205,14 @@ options:
 
 For any selected item, ask the user to briefly describe what failed before generating the report.
 
-**Batch 2 — Sprint changes and regression (always run):**
+**Batch 2 — Milestone changes and regression (always run):**
 ```
-question: "Sprint changes and regression — select any items that FAILED (leave all unselected if everything passed):"
+question: "Milestone changes and regression — select any items that FAILED (leave all unselected if everything passed):"
 multiSelect: true
 options:
-  - "[Primary mechanic this sprint] — FAILED"
-  - "[Second notable change this sprint, if any] — FAILED"
-  - "Regression in a previous sprint's feature — FAILED"
+  - "[Primary mechanic this milestone] — FAILED"
+  - "[Second notable change this milestone, if any] — FAILED"
+  - "Regression in a previous milestone's feature — FAILED"
   - "Other unexpected breakage observed — FAILED"
 ```
 
@@ -283,10 +283,10 @@ Assemble the full smoke check report:
 ````markdown
 ## Smoke Check Report
 **Date**: [date]
-**Sprint**: [sprint name / number, or "Not identified"]
+**Milestone**: [milestone name / number, or "Not identified"]
 **Engine**: [engine]
 **QA Plan**: [path, or "Not found — run /qa-plan first"]
-**Argument**: [sprint | quick | blank]
+**Argument**: [milestone | quick | blank]
 
 ---
 
@@ -361,7 +361,7 @@ Any platform with one or more FAIL checks contributes to the overall FAIL verdic
 **FAIL** if ANY of:
 - Automated test suite ran and reported one or more test failures
 - Any Batch 1 (core stability) check returned FAIL
-- Any Batch 2 (primary sprint mechanic or regression check) returned FAIL
+- Any Batch 2 (primary milestone mechanic or regression check) returned FAIL
 
 **PASS WITH WARNINGS** if ALL of:
 - Automated tests PASS or NOT RUN (developer has not yet confirmed)
@@ -402,14 +402,14 @@ Fix the failures and run `/smoke-check` again to re-gate before QA hand-off."
 Advisory items to resolve before running `/story-done` on affected stories:
 [list MISSING test evidence entries]
 
-QA hand-off: share `production/qa/qa-plan-[sprint].md` with the qa-tester
+QA hand-off: share `production/qa/qa-plan-[milestone].md` with the qa-tester
 agent to begin manual verification."
 
 **If verdict is PASS:**
 
 "Smoke check passed cleanly. The build is ready for manual QA.
 
-QA hand-off: share `production/qa/qa-plan-[sprint].md` with the qa-tester
+QA hand-off: share `production/qa/qa-plan-[milestone].md` with the qa-tester
 agent to begin manual verification."
 
 ---

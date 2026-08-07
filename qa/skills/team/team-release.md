@@ -20,7 +20,7 @@ NO-GO. Closes with a post-release monitoring plan.
 - [ ] Contains "May I write" language in the File Write Protocol section (delegated to sub-agents)
 - [ ] Has a File Write Protocol section stating that the orchestrator does not write files directly
 - [ ] Has an Error Recovery Protocol section with four recovery options (surface / assess / offer options / partial report)
-- [ ] Has a next-step handoff referencing post-release monitoring, `/retrospective`, and `production/stage.txt`
+- [ ] Has a next-step handoff referencing post-release monitoring, capturing lessons and follow-up work as Backlog tasks, and `production/stage.txt`
 - [ ] Uses `AskUserQuestion` at phase transitions requiring user approval before proceeding
 - [ ] Phase 3 agents (qa-lead, devops-engineer, and optionally security-engineer, network-programmer) are explicitly stated to run in parallel
 - [ ] Phase 6 (Deployment) is conditional on a GO decision from Phase 5
@@ -202,7 +202,7 @@ NO-GO. Closes with a post-release monitoring plan.
 - [ ] Error recovery: any BLOCKED agent is surfaced immediately before continuing to dependent phases
 - [ ] Partial reports are always produced if any phase fails or the pipeline is halted (Case 2)
 - [ ] Verdict: COMPLETE only when deployment completes; BLOCKED when go/no-go is NO or a hard blocker is unresolved
-- [ ] Next steps always include 48-hour post-release monitoring, `/retrospective` recommendation, and `production/stage.txt` update to `Live`
+- [ ] Next steps always include 48-hour post-release monitoring, capturing lessons and follow-up work as Backlog tasks, and `production/stage.txt` update to `Live`
 
 ---
 

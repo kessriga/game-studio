@@ -24,7 +24,7 @@ Identify files and modules that would need to change:
 - Assess complexity (size, dependency count, cyclomatic complexity)
 - Identify integration points with other systems
 - Check for existing test coverage in the affected areas
-- Read past sprint data from `production/sprints/` for similar completed tasks and historical velocity
+- Review past completed work on the Backlog board (`Done` tasks) for similar tasks and historical throughput
 
 ---
 
