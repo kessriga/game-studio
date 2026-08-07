@@ -20,7 +20,7 @@ This skill creates the whole-system blueprint that gives ADRs their context.
 Resolve the review mode (once, store for all gate spawns this run):
 1. If `--review [full|lean|solo]` was passed → use that
 2. Else read `production/review-mode.txt` → use that value
-3. Else → default to `lean`
+3. Else → default to `solo`
 
 See `.claude/docs/director-gates.md` for the full check pattern.
 

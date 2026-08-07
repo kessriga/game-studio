@@ -44,8 +44,8 @@ Examples:
 | Mode | What runs | Best for |
 |------|-----------|----------|
 | `full` | All gates active — every workflow step reviewed | Teams, learning users, or when you want thorough director feedback at every step |
-| `lean` | PHASE-GATEs only (`/gate-check`) — per-skill gates skipped | **Default** — solo devs and small teams; directors review at milestones only |
-| `solo` | No director gates anywhere | Game jams, prototypes, maximum speed |
+| `lean` | PHASE-GATEs only (`/gate-check`) — per-skill gates skipped | Small teams that still want director review at milestones |
+| `solo` | No director gates anywhere | **Default** — solo dev; game jams, prototypes, maximum speed |
 
 **Check pattern — apply before every gate spawn:**
 
@@ -53,7 +53,7 @@ Examples:
 Before spawning gate [GATE-ID]:
 1. If skill was called with --review [mode], use that
 2. Else read production/review-mode.txt
-3. Else default to lean
+3. Else default to solo
 
 Apply the resolved mode:
 - solo → skip all gates. Note: "[GATE-ID] skipped — Solo mode"
@@ -69,7 +69,7 @@ Apply the resolved mode:
 **MANDATORY: Resolve review mode before every gate spawn.** Never spawn a gate without checking. The resolved mode is determined once per skill run:
 1. If skill was called with `--review [mode]`, use that
 2. Else read `production/review-mode.txt`
-3. Else default to `lean`
+3. Else default to `solo`
 
 Apply the resolved mode:
 - `solo` → **skip all gates**. Note in output: `[GATE-ID] skipped — Solo mode`
