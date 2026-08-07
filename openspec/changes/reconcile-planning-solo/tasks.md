@@ -27,7 +27,7 @@
 
 ## 5. Bug flow
 
-- [ ] 5.1 `bug-report`: create a Backlog task with the `bug` label (repro/severity/context in description + acceptance criteria); retire `production/qa/bugs/*.md` output
+- [x] 5.1 `bug-report`: create a Backlog task with the `bug` label (repro/severity/context in description + acceptance criteria); retire `production/qa/bugs/*.md` output
 - [ ] 5.2 Delete `bug-triage` (superseded by the board filtered by `bug` + priority)
 
 ## 6. Delete the 7 skills

@@ -1,20 +1,27 @@
 ---
 name: bug-report
-description: "Creates a structured bug report from a description, or analyzes code to identify potential bugs. Ensures every bug report has full reproduction steps, severity assessment, and context."
-argument-hint: "[description] | analyze [path-to-file]"
+description: "Creates a structured bug report as a Backlog task (bug label), or analyzes code to identify potential bugs. Ensures every bug has full reproduction steps, severity assessment, and context. Verify and close modes drive the task's status through Backlog."
+argument-hint: "[description] | analyze [path-to-file] | verify [TASK-ID] | close [TASK-ID]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write
+allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion, mcp__backlog__task_create, mcp__backlog__task_view, mcp__backlog__task_edit, mcp__backlog__task_list
 model: sonnet
 ---
+
+# Bug Report
+
+Bugs are tracked as **Backlog tasks** with the `bug` label — the board is the bug
+list (there is no separate `production/qa/bugs/` markdown store, and no
+`/bug-triage`: triage is the board filtered by `bug` and sorted by priority).
+Rich repro/severity/context live in the task description and acceptance criteria.
 
 ## Phase 1: Parse Arguments
 
 Determine the mode from the argument:
 
-- No keyword → **Description Mode**: generate a structured bug report from the provided description
-- `analyze [path]` → **Analyze Mode**: read the target file(s) and identify potential bugs
-- `verify [BUG-ID]` → **Verify Mode**: confirm a reported fix actually resolved the bug
-- `close [BUG-ID]` → **Close Mode**: mark a verified bug as closed with resolution record
+- No keyword → **Description Mode**: file a structured bug task from the provided description
+- `analyze [path]` → **Analyze Mode**: read the target file(s) and file a bug task per potential bug
+- `verify [TASK-ID]` → **Verify Mode**: confirm a reported fix actually resolved the bug
+- `close [TASK-ID]` → **Close Mode**: mark a verified bug task `Done` with a resolution note
 
 If no argument is provided, ask the user for a bug description before proceeding.
 
@@ -26,75 +33,70 @@ If no argument is provided, ask the user for a bug description before proceeding
 
 2. **Search the codebase** for related files using Grep/Glob to add context (affected system, likely files).
 
-3. **Draft the bug report**:
+3. **Draft the bug report** as the task body:
 
 ```markdown
-# Bug Report
-
-## Summary
-**Title**: [Concise, descriptive title]
-**ID**: BUG-[NNNN]
-**Severity**: [S1-Critical / S2-Major / S3-Minor / S4-Trivial]
-**Priority**: [P1-Immediate / P2-Next Sprint / P3-Backlog / P4-Wishlist]
-**Status**: Open
-**Reported**: [Date]
-**Reporter**: [Name]
-
 ## Classification
+- **Severity**: [S1-Critical / S2-Major / S3-Minor / S4-Trivial]
 - **Category**: [Gameplay / UI / Audio / Visual / Performance / Crash / Network]
 - **System**: [Which game system is affected]
 - **Frequency**: [Always / Often (>50%) / Sometimes (10-50%) / Rare (<10%)]
-- **Regression**: [Yes/No/Unknown -- was this working before?]
+- **Regression**: [Yes/No/Unknown — was this working before?]
 
 ## Environment
-- **Build**: [Version or commit hash]
-- **Platform**: [OS, hardware if relevant]
-- **Scene/Level**: [Where in the game]
-- **Game State**: [Relevant state -- inventory, quest progress, etc.]
+- **Build**: [Version or commit hash]  **Platform**: [OS, hardware]
+- **Scene/Level**: [Where]  **Game State**: [inventory, quest progress, etc.]
 
 ## Reproduction Steps
 **Preconditions**: [Required state before starting]
-
 1. [Exact step 1]
 2. [Exact step 2]
-3. [Exact step 3]
 
 **Expected Result**: [What should happen]
 **Actual Result**: [What actually happens]
 
 ## Technical Context
-- **Likely affected files**: [List of files based on codebase search]
-- **Related systems**: [What other systems might be involved]
-- **Possible root cause**: [If identifiable from the description]
+- **Likely affected files**: [from codebase search]
+- **Related systems**: [what else might be involved]
+- **Possible root cause**: [if identifiable]
 
 ## Evidence
-- **Logs**: [Relevant log output if available]
-- **Visual**: [Description of visual evidence]
-
-## Related Issues
-- [Links to related bugs or design documents]
-
-## Notes
-[Any additional context or observations]
+- **Logs**: [relevant output]  **Visual**: [description]
 ```
+
+---
+
+## Phase 3: File the Bug Task
+
+Present the drafted report, then ask: "May I file this as a Backlog task with the `bug` label?"
+
+If yes, `mcp__backlog__task_create`:
+- `title`: the concise bug title
+- `description`: the structured report drafted above
+- `acceptanceCriteria`: `["The bug no longer reproduces: [expected result]"]` (the "fixed when" condition)
+- `labels`: `["bug"]` (add other applicable labels, never a story milestone)
+- `priority`: map from severity — S1/S2 → `high`, S3 → `medium`, S4 → `low`
+- `status`: `To Do`
+
+The returned task ID is the bug's identifier from here on. If no, stop. Verdict: **BLOCKED** — user declined.
+
+Verdict: **COMPLETE** — bug filed as TASK-N (`bug`).
 
 ---
 
 ## Phase 2B: Analyze Mode
 
 1. **Read the target file(s)** specified in the argument.
-
 2. **Identify potential bugs**: null references, off-by-one errors, race conditions, unhandled edge cases, resource leaks, incorrect state transitions.
-
-3. **For each potential bug**, generate a bug report using the template above, with the likely trigger scenario and recommended fix filled in.
+3. **For each potential bug**, draft a report (Phase 2A template) with the likely trigger scenario and recommended fix, and file it via Phase 3 (one `bug` task each).
 
 ---
 
 ## Phase 2C: Verify Mode
 
-Read `production/qa/bugs/[BUG-ID].md`. Extract the reproduction steps and expected result.
+`task_view` the given `TASK-ID`. Extract the reproduction steps and expected result from its description.
 
-1. **Re-run reproduction steps** — use Grep/Glob to check whether the root cause code path still exists as described. If the fix removed or changed it, note the change.
+1. **Re-run reproduction steps** — use Grep/Glob to check whether the root-cause code path still exists as described. If the fix removed or changed it, note the change.
 2. **Run the related test** — if the bug's system has a test file in `tests/`, run it via Bash and report pass/fail.
 3. **Check for regression** — grep the codebase for any new occurrence of the pattern that caused the bug.
 
@@ -104,61 +106,31 @@ Produce a verification verdict:
 - **STILL PRESENT** — bug reproduces as described; fix did not resolve the issue
 - **CANNOT VERIFY** — automated checks inconclusive; manual playtest required
 
-Ask: "May I update `production/qa/bugs/[BUG-ID].md` to set Status: Verified Fixed / Still Present / Cannot Verify?"
-
-If STILL PRESENT: reopen the bug, set Status back to Open, and suggest re-running `/hotfix [BUG-ID]`.
+If STILL PRESENT: `task_edit` the task back to `In Progress` (or `To Do`), append a comment with the evidence, and suggest `/hotfix [TASK-ID]`. If VERIFIED FIXED: proceed to Close Mode (or tell the user to run `close`).
 
 ---
 
 ## Phase 2D: Close Mode
 
-Read `production/qa/bugs/[BUG-ID].md`. Confirm Status is `Verified Fixed` before closing. If status is anything else, stop: "Bug [ID] must be Verified Fixed before it can be closed. Run `/bug-report verify [BUG-ID]` first."
+`task_view` the `TASK-ID` and confirm verification passed (Phase 2C returned VERIFIED FIXED, or the user confirms). If not verified, stop: "Bug [TASK-ID] must be verified fixed before closing. Run `/bug-report verify [TASK-ID]` first."
 
-Append a closure record to the bug file:
+Ask: "May I set [TASK-ID] to Done with a closure note?" If yes, `task_edit`:
+- `status`: `Done`
+- append a `commentsAppend` closure record: resolution one-liner, fix commit/PR if known, regression test path (or "manual verification"), closed-by
 
-```markdown
-## Closure Record
-**Closed**: [date]
-**Resolution**: Fixed — [one-line description of what was changed]
-**Fix commit / PR**: [if known]
-**Verified by**: qa-tester
-**Closed by**: [user]
-**Regression test**: [test file path, or "Manual verification"]
-**Status**: Closed
-```
-
-Update the top-level `**Status**: Open` field to `**Status**: Closed`.
-
-Ask: "May I update `production/qa/bugs/[BUG-ID].md` to mark it Closed?"
-
-After closing, check `production/qa/bug-triage-*.md` — if the bug appears in an open triage report, note: "Bug [ID] is referenced in the triage report. Run `/bug-triage` to refresh the open bug count."
-
----
-
-## Phase 3: Save Report
-
-Present the completed bug report(s) to the user.
-
-Ask: "May I write this to `production/qa/bugs/BUG-[NNNN].md`?"
-
-If yes, write the file, creating the directory if needed. Verdict: **COMPLETE** — bug report filed.
-
-If no, stop here. Verdict: **BLOCKED** — user declined write.
+Verdict: **COMPLETE** — bug [TASK-ID] closed.
 
 ---
 
 ## Phase 4: Next Steps
 
-After saving, suggest based on mode:
-
 **After filing (Description/Analyze mode):**
-- Run `/bug-triage` to prioritize alongside existing open bugs
-- If S1 or S2: run `/hotfix [BUG-ID]` for emergency fix workflow
+- Review the board filtered by `bug`, sorted by priority, to triage alongside existing open bugs
+- If S1 or S2: run `/hotfix [TASK-ID]` for the emergency fix workflow
 
 **After fixing the bug (developer confirms fix is in):**
-- Run `/bug-report verify [BUG-ID]` — confirm the fix actually works before closing
-- Never mark a bug closed without verification — a fix that doesn't verify is still Open
+- Run `/bug-report verify [TASK-ID]` — confirm the fix actually works before closing
+- Never mark a bug Done without verification — a fix that doesn't verify is still open
 
 **After verify returns VERIFIED FIXED:**
-- Run `/bug-report close [BUG-ID]` — write the closure record and update status
-- Run `/bug-triage` to refresh the open bug count and remove it from the active list
+- Run `/bug-report close [TASK-ID]` — set the task Done and write the closure note
