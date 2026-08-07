@@ -1,9 +1,9 @@
 ---
 name: story-done
-description: "End-of-story completion review. Reads the story file, verifies each acceptance criterion against the implementation, checks for GDD/ADR deviations, prompts code review, updates story status to Complete, and surfaces the next ready story from the sprint."
+description: "End-of-story completion review. Reads the story file, verifies each acceptance criterion against the implementation, checks for GDD/ADR deviations, prompts code review, sets the Backlog task to Done, and surfaces the next ready task from the board."
 argument-hint: "[story-file-path] [--review full|lean|solo]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Write, Edit, AskUserQuestion, Task
+allowed-tools: Read, Glob, Grep, Bash, Write, Edit, AskUserQuestion, Task, mcp__backlog__task_list, mcp__backlog__task_view, mcp__backlog__task_edit
 model: sonnet
 ---
 
@@ -15,7 +15,7 @@ before the story is marked done, GDD and ADR deviations are explicitly
 documented rather than silently introduced, code review is prompted rather than
 forgotten, and the story file reflects actual completion status.
 
-**Output:** Updated story file (Status: Complete) + surfaced next story.
+**Output:** Backlog task set to `Done` + `## Completion Notes` appended to the story `.md` + surfaced next task.
 
 ---
 
@@ -34,12 +34,12 @@ read that file directly.
 **If no argument is provided:**
 
 1. Check `production/session-state/active.md` for the currently active story.
-2. If not found there, read the most recent file in `production/sprints/` and
-   look for stories marked IN PROGRESS.
+2. If not found there, `task_list` with `status: "In Progress"` and follow each
+   task's `Spec:` reference to its story `.md`.
 3. If multiple in-progress stories are found, use `AskUserQuestion`:
    - "Which story are we completing?"
-   - Options: list the in-progress story file names.
-4. If no story can be found, ask the user to provide the path.
+   - Options: list the in-progress story titles (with their TASK-N).
+4. If no story can be found, ask the user to provide the path or task ID.
 
 ---
 
@@ -262,7 +262,7 @@ Skip this phase for Config/Data stories (no code tests required).
   - Options:
     - `Yes — /code-review passed or was approved with suggestions`
     - `No — skipping code review for this story`
-    - `No — I'll run /code-review before the sprint close-out`
+    - `No — I'll run /code-review before the milestone close-out`
   - Record the answer in the completion notes (Phase 7). All three options proceed to Phase 6.
 - `full` → spawn as normal.
 
@@ -341,8 +341,13 @@ If "Close", "Close and log tech debt", or "Accept deviations": edit the story fi
 If "Close and log tech debt": after updating the story file, also append the advisory deviations to `docs/tech-debt-register.md` (create the file if it does not exist).
 If "Fix first": stop here and list what the user flagged. Do not write any files.
 
-1. Update the status field: `Status: Complete`
-2. Update the `Last Updated:` field in the story header to today's date (format: `YYYY-MM-DD`). If the field does not exist, add it after the `Status:` line.
+1. Set the **Backlog task** to `Done` via `task_edit` (the task ID is in the
+   story's `Tracked in:` header). Status lives in Backlog — do **not** add or edit
+   a `Status:` field in the story `.md`. If the story is completing with accepted
+   advisory deviations, also record them in the task's completion notes or a comment.
+2. Update the `Last Updated:` field in the story header to today's date (format:
+   `YYYY-MM-DD`). If the field does not exist, add it after the `Tracked in:` line.
+   (Appending the evidence trail to the frozen `.md` is allowed — only its status is frozen.)
 3. Add a `## Completion Notes` section at the bottom:
 
 ```markdown
@@ -360,13 +365,7 @@ If "Fix first": stop here and list what the user flagged. Do not write any files
    ```
    Create the file with a `# Tech Debt Register` heading if it does not exist.
 
-5. **Update `production/sprint-status.yaml`** (if it exists):
-   - Find the entry matching this story's file path or ID
-   - Set `status: done` and `completed: [today's date]`
-   - Update the top-level `updated` field
-   - This is a silent update — no extra approval needed (already approved in step above)
-
-6. **Suggest a git commit**: Output a ready-to-use commit command covering the implementation files from the dev-story summary and the updated story file:
+5. **Suggest a git commit**: Output a ready-to-use commit command covering the implementation files from the dev-story summary and the updated story file:
 
 ```
 Suggested commit:
@@ -394,47 +393,42 @@ Confirm in conversation: "Session state updated."
 
 ## Phase 8: Surface the Next Story
 
-After completion, help the developer keep momentum:
+After completion, help the developer keep momentum by pulling the board:
 
-1. Read the current sprint plan from `production/sprints/`.
-2. Find stories that are:
-   - Status: READY or NOT STARTED
-   - Not blocked by other incomplete stories
-   - In the Must Have or Should Have tier
+1. `task_list` the current milestone (the completed story's epic) with `status: "To Do"`.
+2. Keep tasks that are not carrying the `blocked` label, ordered by priority.
 
 Present:
 
 ```
 ### Next Up
-The following stories are ready to pick up:
-1. [Story name] — [1-line description] — Est: [X hrs]
-2. [Story name] — [1-line description] — Est: [X hrs]
+The following tasks are ready to pick up (milestone [name]):
+1. [Story name] — [1-line description] — [priority] — [TASK-N]
+2. [Story name] — [1-line description] — [priority] — [TASK-N]
 
 Run `/story-readiness [path]` to confirm a story is implementation-ready
 before starting.
 ```
 
-If no more Must Have stories remain in this sprint (all are Complete or Blocked):
+If no `To Do` tasks remain in the milestone (all `Done`, `In Progress`, or blocked):
 
 ```
-### Sprint Close-Out Sequence
+### Milestone Close-Out Sequence
 
-All Must Have stories are complete. QA sign-off is required before advancing.
+All ready stories in this milestone are done. QA sign-off is required before advancing.
 Run these in order:
 
-1. `/smoke-check sprint` — verify the critical path still works end-to-end
-2. `/team-qa sprint` — full QA cycle: test case execution, bug triage, sign-off report
-3. `/retrospective` — capture what went well, what didn't, and action items for the next sprint
-4. `/gate-check` — advance to the next phase once QA approves (only if advancing a phase)
-5. `/sprint-plan new` — plan the next sprint, incorporating velocity data and retrospective action items
+1. `/smoke-check` — verify the critical path still works end-to-end
+2. `/team-qa [milestone]` — full QA cycle: test case execution, bug triage, sign-off report
+3. `/gate-check` — advance to the next phase once QA approves (only if advancing a phase)
 
 Do not run `/gate-check` until `/team-qa` returns APPROVED or APPROVED WITH CONDITIONS.
 ```
 
-If there are Should Have stories still unstarted, surface them alongside the close-out sequence so the user can choose: close the sprint now, or pull in more work first.
+If tasks are still `In Progress` (not done), note:
+"No more `To Do` tasks in this milestone — [N] still in progress. Continue those before close-out."
 
-If no more stories are ready but Must Have stories are still In Progress (not Complete):
-"No more stories ready to start — [N] Must Have stories still in progress. Continue implementing those before sprint close-out."
+If tasks are blocked, surface them so the user can unblock (clear the `blocked` label once the blocker resolves).
 
 ---
 
@@ -455,5 +449,5 @@ If no more stories are ready but Must Have stories are still In Progress (not Co
 ## Recommended Next Steps
 
 - Run `/story-readiness [next-story-path]` to validate the next story before starting implementation
-- If all Must Have stories are complete: run `/smoke-check sprint` → `/team-qa sprint` → `/gate-check`
+- If all ready stories in the milestone are done: run `/smoke-check` → `/team-qa [milestone]` → `/gate-check`
 - If tech debt was logged: track it via `/tech-debt` to keep the register current

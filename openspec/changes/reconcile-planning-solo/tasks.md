@@ -1,24 +1,24 @@
 ## 1. Status model & Backlog config
 
-- [ ] 1.1 Register `blocked` and `bug` labels in `backlog/config.yml`; leave `statuses` at the native set (`To Do`, `In Progress`, `Done`)
+- [x] 1.1 Register `blocked` and `bug` labels in `backlog/config.yml`; leave `statuses` at the native set (`To Do`, `In Progress`, `Done`)
 - [ ] 1.2 Record the status vocabulary mapping (template 6-status → native-4 + labels) in the change's design.md and in `WORKFLOW-GUIDE.md` (satisfies AC #8)
 
 ## 2. Review-mode default → solo
 
-- [ ] 2.1 `director-gates.md`: change the mode table's "Default" from `lean` to `solo`, and both "Invocation Pattern" blocks' `Else → default to lean` to `Else → default to solo`
-- [ ] 2.2 `/start`: write `solo` into `production/review-mode.txt` by default (was `lean`)
-- [ ] 2.3 Every gate-using skill: change the per-skill fallback line `Else → default to lean` to `solo` (sweep `.claude/skills/**` for the pattern; ~25 skills)
-- [ ] 2.4 Verify `full`/`lean` remain selectable via file and `--review` (AC #6)
+- [x] 2.1 `director-gates.md`: change the mode table's "Default" from `lean` to `solo`, and both "Invocation Pattern" blocks' `Else → default to lean` to `Else → default to solo`
+- [x] 2.2 `/start`: write `solo` into `production/review-mode.txt` by default (was `lean`)
+- [x] 2.3 Every gate-using skill: change the per-skill fallback line `Else → default to lean` to `solo` (sweep `.claude/skills/**` for the pattern; ~25 skills)
+- [x] 2.4 Verify `full`/`lean` remain selectable via file and `--review` (AC #6)
 
 ## 3. Story lifecycle → Backlog (Option C)
 
-- [ ] 3.1 `create-stories`: after writing each `story-NNN.md`, mint a Backlog task (`task_create`) with `milestone: [epic name]`, priority, a `Spec:` reference to the `.md`, and write `Tracked in: TASK-N` back into the `.md`. Untraced-requirement stories get the `blocked` label
-- [ ] 3.2 `create-stories`: stop maintaining any status roster in `production/epics/[slug]/EPIC.md` beyond the frozen pointer; remove `production/epics/index.md` Status/Stories columns (reshape to prose nav map)
-- [ ] 3.3 `dev-story`: select work via Backlog (`task_list`, exclude `blocked`), set task `In Progress` on start, load story context from the linked `.md`; remove `production/sprints/` and `sprint-status.yaml` reads
-- [ ] 3.4 `story-readiness`: read the Backlog task + linked `.md`; validate readiness; promote `Draft`→`To Do` or apply/clear the `blocked` label; drop `production/sprints/` reads
-- [ ] 3.5 `story-done` Phase 7: set task status via `task_edit` (`Done`), delete the `sprint-status.yaml` update step, keep appending `## Completion Notes` to the `.md` (status-only freeze)
-- [ ] 3.6 `story-done` Phase 8: rewrite "Surface the Next Story" to query the Backlog board for the next `To Do` task (no `blocked` label) in the current milestone by priority; delete the sprint close-out sequence that invokes `/retrospective` and `/sprint-plan new`
-- [ ] 3.7 `story-done` Phases 1–2: replace "read `production/sprints/` for in-progress stories" with a Backlog `task_list` lookup; keep Phases 3–4 evidence gating intact (AC #7)
+- [x] 3.1 `create-stories`: after writing each `story-NNN.md`, mint a Backlog task (`task_create`) with `milestone: [epic name]`, priority, a `Spec:` reference to the `.md`, and write `Tracked in: TASK-N` back into the `.md`. Untraced-requirement stories get the `blocked` label
+- [x] 3.2 `create-stories`: stop maintaining any status roster in `production/epics/[slug]/EPIC.md` beyond the frozen pointer; remove `production/epics/index.md` Status/Stories columns (reshape to prose nav map)
+- [x] 3.3 `dev-story`: select work via Backlog (`task_list`, exclude `blocked`), set task `In Progress` on start, load story context from the linked `.md`; remove `production/sprints/` and `sprint-status.yaml` reads
+- [x] 3.4 `story-readiness`: stays read-only. Replace `sprint` scope with `milestone` (via `task_list`), drop `production/sprints/` reads, check dependency state via the dependency's Backlog task, make Estimate optional. Status mutation stays with dev-story/story-done, not here
+- [x] 3.5 `story-done` Phase 7: set task status via `task_edit` (`Done`), delete the `sprint-status.yaml` update step, keep appending `## Completion Notes` to the `.md` (status-only freeze)
+- [x] 3.6 `story-done` Phase 8: rewrite "Surface the Next Story" to query the Backlog board for the next `To Do` task (no `blocked` label) in the current milestone by priority; delete the sprint close-out sequence that invokes `/retrospective` and `/sprint-plan new`
+- [x] 3.7 `story-done` Phases 1–2: replace "read `production/sprints/` for in-progress stories" with a Backlog `task_list` lookup; keep Phases 3–4 evidence gating intact (AC #7)
 
 ## 4. Epics → milestones
 
