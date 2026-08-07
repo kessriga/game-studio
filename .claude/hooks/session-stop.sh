@@ -1,6 +1,6 @@
 #!/bin/bash
 # Claude Code Stop hook: Log session summary when Claude finishes
-# Records what was worked on for audit trail and sprint tracking
+# Records what was worked on for audit trail and progress tracking
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 SESSION_LOG_DIR="production/session-logs"
