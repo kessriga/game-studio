@@ -1,7 +1,7 @@
 ## 1. Status model & Backlog config
 
 - [x] 1.1 Register `blocked` and `bug` labels in `backlog/config.yml`; leave `statuses` at the native set (`To Do`, `In Progress`, `Done`)
-- [ ] 1.2 Record the status vocabulary mapping (template 6-status → native-4 + labels) in the change's design.md and in `WORKFLOW-GUIDE.md` (satisfies AC #8)
+- [x] 1.2 Record the status vocabulary mapping (template 6-status → native-4 + labels) in the change's design.md and in `WORKFLOW-GUIDE.md` (satisfies AC #8)
 
 ## 2. Review-mode default → solo
 
@@ -45,16 +45,16 @@
 
 ## 8. Docs, catalog, hooks
 
-- [ ] 8.1 `workflow-catalog.yaml`: remove the 11 lines referencing removed skills; reflect continuous flow
-- [ ] 8.2 `skills-reference.md`, `quick-start.md`, `agent-coordination-map.md`, `coordination-rules.md`: scrub removed-skill and `sprint-status.yaml` references
-- [ ] 8.3 `.claude/docs/templates/*` (difficulty-curve, player-journey, project-stage-report, systems-index) and `hooks-reference/post-sprint-retrospective.md`: scrub/remove references to cut skills
-- [ ] 8.4 `detect-gaps.sh:146`: drop the `/sprint-plan` suggestion (replace with a Backlog/continuous-flow hint)
-- [ ] 8.5 `WORKFLOW-GUIDE.md` + `docs/examples/*` (`README.md`, `session-story-lifecycle.md`, `skill-flow-diagrams.md`) + `UPGRADING.md`: rewrite to the new lifecycle (AC #9)
-- [ ] 8.6 Delete `production/sprint-status.yaml` if present in any starter/template state and confirm no residual references (AC #1)
+- [x] 8.1 `workflow-catalog.yaml`: remove the 11 lines referencing removed skills; reflect continuous flow
+- [x] 8.2 `skills-reference.md`, `quick-start.md`, `agent-coordination-map.md`, `coordination-rules.md`: scrub removed-skill and `sprint-status.yaml` references
+- [x] 8.3 `.claude/docs/templates/*` (difficulty-curve, player-journey, project-stage-report, systems-index) and `hooks-reference/post-sprint-retrospective.md`: scrub/remove references to cut skills
+- [x] 8.4 `detect-gaps.sh:146`: drop the `/sprint-plan` suggestion (replace with a Backlog/continuous-flow hint)
+- [x] 8.5 `WORKFLOW-GUIDE.md` + `docs/examples/*` (`README.md`, `session-story-lifecycle.md`, `skill-flow-diagrams.md`) + `UPGRADING.md`: rewrite to the new lifecycle (AC #9)
+- [x] 8.6 Delete `production/sprint-status.yaml` if present in any starter/template state and confirm no residual references (AC #1)
 
 ## 9. Verify & close
 
-- [ ] 9.1 Repo-wide grep: zero references to `sprint-status.yaml` and to each removed skill (outside git history / this change's own docs)
-- [ ] 9.2 Smoke-run the rewired lifecycle mentally against a sample epic: create-epics → create-stories → dev-story → story-done, confirming status flows through Backlog and evidence gates fire
-- [ ] 9.3 `openspec validate reconcile-planning-solo --strict`
-- [ ] 9.4 Mark TASK-3 acceptance criteria done and copy the closed record into the PR (per task-finalization workflow)
+- [x] 9.1 Repo-wide grep: zero references to `sprint-status.yaml` and to each removed skill (outside git history / this change's own docs)
+- [x] 9.2 Smoke-run the rewired lifecycle mentally against a sample epic: create-epics → create-stories → dev-story → story-done, confirming status flows through Backlog and evidence gates fire
+- [x] 9.3 `openspec validate reconcile-planning-solo --strict`
+- [x] 9.4 Mark TASK-3 acceptance criteria done and copy the closed record into the PR (per task-finalization workflow)
