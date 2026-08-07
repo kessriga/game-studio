@@ -3,7 +3,7 @@
 # This repo is mostly markdown (skills, agents, docs, backlog, OpenSpec changes) driven by Claude
 # Code, so the surface is deliberately small: there is no build, no CI gate, and the .claude/hooks
 # scripts are invoked by Claude Code itself, never by hand. Skill/agent quality checks are
-# model-driven (/skill-test and the CCGS Skill Testing Framework), so no recipe can wrap them.
+# model-driven (/skill-test and the skill/agent testing framework in qa/), so no recipe can wrap them.
 # Add a recipe when a command line starts being repeated, not before.
 #
 #   just          list every recipe (`just --list --unsorted`, so the order below is the order

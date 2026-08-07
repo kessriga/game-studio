@@ -1,18 +1,18 @@
-# CCGS Skill Testing Framework
+# QA — Skill & Agent Testing Framework
 
 Quality assurance infrastructure for the **Claude Code Game Studios** framework.
 Tests the skills and agents themselves — not any game built with them.
 
 > **This folder is self-contained and optional.**
 > Game developers using CCGS don't need it. To remove it entirely:
-> `rm -rf "CCGS Skill Testing Framework"` — nothing in `.claude/` depends on it.
+> `rm -rf qa` — nothing in `.claude/` depends on it.
 
 ---
 
 ## What's in here
 
 ```
-CCGS Skill Testing Framework/
+qa/
 ├── README.md              ← you are here
 ├── CLAUDE.md              ← tells Claude how to use this framework
 ├── catalog.yaml           ← master registry: all 73 skills + 53 agents, coverage tracking
@@ -142,7 +142,7 @@ All testing is driven by two skills already in the framework:
 This folder has no hooks into the main project. To remove:
 
 ```bash
-rm -rf "CCGS Skill Testing Framework"
+rm -rf qa
 ```
 
 The skills `/skill-test` and `/skill-improve` will still function — they'll simply
