@@ -74,7 +74,7 @@ what the output looked like.
 Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-feat: add /retrospective skill for end-of-sprint reviews
+feat: add /playtest-report skill for structured playtest capture
 fix: correct grep -P usage in session-start hook
 docs: update skills-reference with new /qa-plan entry
 ```

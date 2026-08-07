@@ -55,7 +55,7 @@ Hybrid model landed at solo scale:
 - **bug-report** files a Backlog task with a `bug` label; verify/close drive its status (AC#2).
 - sprint-status.yaml eliminated from all skills/docs (AC#1); WORKFLOW-GUIDE, examples, quick-start, skills-reference, coordination docs, templates, the producer agent, the qa spec corpus, and detect-gaps.sh all describe the new flow (AC#4, AC#9).
 
-openspec validate --strict passes. Repo-wide grep confirms zero live references to the 7 removed skills or sprint-status.yaml (only an intentional "these no longer exist" note and the English word "onboarding" remain).
+openspec validate --strict passes. The kept skill/doc corpus and the workflow/qa catalogs no longer reference the 7 removed skills or sprint-status.yaml (apart from an intentional "these no longer exist" note); the top-level README, UPGRADING notes, session hooks, and the @-imported .claude/docs were scrubbed of the removed skills and abolished sprint directory in a follow-up pass.
 
 Follow-up surfaced (not filed): ~240 incidental uses of the word "sprint" as generic time-box prose remain in kept skills' test scenarios, changelog/patch-notes examples, gate-prompt prose, and some qa specs. None reference deleted skills or sprint-status.yaml; they are cosmetic consistency polish, left for a separate pass if desired.
 <!-- SECTION:FINAL_SUMMARY:END -->
