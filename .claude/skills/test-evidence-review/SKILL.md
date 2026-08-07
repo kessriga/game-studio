@@ -1,7 +1,7 @@
 ---
 name: test-evidence-review
 description: "Quality review of test files and manual evidence documents. Goes beyond existence checks — evaluates assertion coverage, edge case handling, naming conventions, and evidence completeness. Produces ADEQUATE/INCOMPLETE/MISSING verdict per story. Run before QA sign-off or on demand."
-argument-hint: "[story-path | sprint | system-name]"
+argument-hint: "[story-path | milestone | system-name]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write
 model: sonnet
@@ -27,9 +27,9 @@ A manual evidence doc that exists may lack the sign-offs required for closure.
 
 **Modes:**
 - `/test-evidence-review [story-path]` — review a single story's evidence
-- `/test-evidence-review sprint` — review all stories in the current sprint
+- `/test-evidence-review milestone` — review all stories (tasks) in the current milestone
 - `/test-evidence-review [system-name]` — review all stories in an epic/system
-- No argument — ask which scope: "Single story", "Current sprint", "A system"
+- No argument — ask which scope: "Single story", "Current milestone", "A system"
 
 ---
 
@@ -40,8 +40,9 @@ Based on the argument:
 **Single story**: Read the story file directly. Extract: Story Type, Test
 Evidence section, story slug, system name.
 
-**Sprint**: Read the most recently modified file in `production/sprints/`.
-Extract the list of story file paths from the sprint plan. Read each story file.
+**Milestone**: Review the batch of stories for the current milestone — Glob
+`production/epics/**/story-*.md` (each story has a Backlog task on the board)
+and read each.
 
 **System**: Glob `production/epics/[system-name]/story-*.md`. Read each.
 
@@ -150,8 +151,8 @@ log) is present.
 ### Date coverage
 
 Evidence doc should have a date. If the date is earlier than the story's
-last major change (heuristic: compare against sprint start date from the sprint
-plan), flag as POTENTIALLY STALE — the evidence may not cover the final
+last major change (heuristic: compare against the milestone start date), flag
+as POTENTIALLY STALE — the evidence may not cover the final
 implementation.
 
 ---
@@ -166,13 +167,13 @@ For each story, assign a verdict:
 | **INCOMPLETE** | Test/evidence exists but has quality gaps (thin assertions, missing sign-offs) |
 | **MISSING** | No test or evidence found for a story type that requires it |
 
-The overall sprint/system verdict is the worst story verdict present.
+The overall milestone/system verdict is the worst story verdict present.
 
 ```markdown
 ## Test Evidence Review
 
 > **Date**: [date]
-> **Scope**: [single story path | Sprint [N] | [system name]]
+> **Scope**: [single story path | Milestone [name] | [system name]]
 > **Stories reviewed**: [N]
 > **Overall verdict**: ADEQUATE / INCOMPLETE / MISSING
 

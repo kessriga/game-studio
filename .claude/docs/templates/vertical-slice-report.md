@@ -122,7 +122,7 @@ before running `/gate-check pre-production`.
 1. `/gate-check pre-production` — formally advance to Production
 2. `/create-epics layer:foundation` — plan Foundation layer epics
 3. `/create-epics layer:core` — plan Core layer epics
-4. `/sprint-plan` — use velocity data from this report in the estimate
+4. `/create-epics` → `/create-stories` — define the first epic and fill the Backlog board
 
 ---
 

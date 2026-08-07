@@ -3,7 +3,7 @@
 > **How to go from zero to a shipped game using the Agent Architecture.**
 >
 > This guide walks you through every phase of game development using the
-> 53-agent system, 73 slash commands, and 12 automated hooks. It assumes you
+> 53-agent system, 66 slash commands, and 12 automated hooks. It assumes you
 > have Claude Code installed and are working from the project root.
 >
 > The pipeline has 7 phases. Each phase has a formal gate (`/gate-check`)
@@ -22,10 +22,11 @@
 6. [Phase 5: Production](#phase-5-production)
 7. [Phase 6: Polish](#phase-6-polish)
 8. [Phase 7: Release](#phase-7-release)
-9. [Cross-Cutting Concerns](#cross-cutting-concerns)
-10. [Appendix A: Agent Quick-Reference](#appendix-a-agent-quick-reference)
-11. [Appendix B: Slash Command Quick-Reference](#appendix-b-slash-command-quick-reference)
-12. [Appendix C: Common Workflows](#appendix-c-common-workflows)
+9. [Status Model](#status-model)
+10. [Cross-Cutting Concerns](#cross-cutting-concerns)
+11. [Appendix A: Agent Quick-Reference](#appendix-a-agent-quick-reference)
+12. [Appendix B: Slash Command Quick-Reference](#appendix-b-slash-command-quick-reference)
+13. [Appendix C: Common Workflows](#appendix-c-common-workflows)
 
 ---
 
@@ -122,8 +123,7 @@ docs/                 # Technical documentation
   postmortems/        # Post-mortems
 tests/                # Test suites
 prototypes/           # Throwaway prototypes
-production/           # Sprint plans, milestones, releases
-  sprints/
+production/           # Epics, milestones, releases
   milestones/
   releases/
   epics/              # Epic and story files (from /create-epics + /create-stories)
@@ -558,19 +558,19 @@ reference this tier — it is a design prerequisite, not a UX deliverable.
 ### What Happens in This Phase
 
 You create UX specs for key screens, prototype risky mechanics, turn design
-documents into implementable stories, plan your first sprint, and build a
-Vertical Slice that proves the core loop is fun.
+documents into implementable stories (each minting a Backlog task), group them
+under a milestone, and build a Vertical Slice that proves the core loop is fun.
 
 ### Phase 4 Pipeline
 
 ```
-/ux-design  -->  /vertical-slice  -->  /create-epics  -->  /create-stories  -->  /sprint-plan
+/ux-design  -->  /vertical-slice  -->  /create-epics  -->  /create-stories  -->  the Backlog board
     |                   |                   |                   |                       |
     v                   v                   v                   v                       v
-  UX specs       Production-quality   Epic files in       Story files in          First sprint with
-  design/ux/     end-to-end build     production/         production/             prioritized stories
-                 in prototypes/       epics/*/EPIC.md     epics/*/story-*.md      production/sprints/
-                 PROCEED/PIVOT/KILL   (one per module)    (one per behaviour)     sprint-*.md
+  UX specs       Production-quality   EPIC.md prose +     Story .md +             Priority-ordered
+  design/ux/     end-to-end build     a Backlog          a Backlog task          tasks, pulled top
+                 in prototypes/       milestone          (owns status)           to bottom
+                 PROCEED/PIVOT/KILL   (one per module)   (one per behaviour)
     |                                                          |
     v                                                          v
  /ux-review                                             /story-readiness
@@ -664,10 +664,15 @@ in the full slice.
 ```
 
 `/create-epics` reads your GDDs, ADRs, and architecture to define epic scope —
-one epic per architectural module. Then `/create-stories` breaks each epic into
-implementable story files in `production/epics/[slug]/`. Each story embeds:
+one epic per architectural module. It writes `EPIC.md` prose and mints a matching
+**Backlog milestone**. Then `/create-stories` breaks each epic into implementable
+story files in `production/epics/[slug]/` and mints a **Backlog task** for each one.
+The Backlog task owns work-item status; the story `.md` freezes to a status-only
+record (it keeps receiving `## Completion Notes`). The two are cross-referenced:
+the task carries `Spec: <path-to-story.md>`, the story carries `Tracked in: TASK-N`.
+Each story embeds:
 - GDD requirement references (TR-IDs, not quoted text -- stays fresh)
-- ADR references (only from Accepted ADRs; Proposed ADRs cause `Status: Blocked`)
+- ADR references (only from Accepted ADRs; a Proposed ADR gets the task a `blocked` label)
 - Control manifest version date (for staleness detection)
 - Engine-specific implementation notes
 - Acceptance criteria from the GDD
@@ -692,18 +697,18 @@ of Done. Verdict: READY / NEEDS WORK / BLOCKED.
 
 Provides effort estimates with risk assessment.
 
-### Step 4.6: Plan Your First Sprint
+### Step 4.6: Set Up Your First Milestone on the Board
 
-```
-/sprint-plan new
-```
+There are no sprints. Work is pulled off the priority-ordered Backlog board, and
+grouping is the milestone (an epic == a Backlog milestone). `/create-epics`
+already minted the milestone; the `producer` agent can help you finish setting it
+up collaboratively:
+- Write the milestone's goal and Definition of Done into its description
+- Order the milestone's tasks on the board by priority (top = pull next)
+- Capture risks in an optional Backlog doc
 
-**What happens:** The `producer` agent collaborates on sprint planning:
-- Asks for sprint goal and available time
-- Breaks the goal into Must Have / Should Have / Nice to Have tasks
-- Identifies risks and blockers
-- Creates `production/sprints/sprint-01.md`
-- Populates `production/sprint-status.yaml` (machine-readable story tracking)
+Once tasks are prioritized, you pull the top-most ready task and run
+`/story-readiness` on it before pickup.
 
 ### Step 4.7: Vertical Slice (Hard Gate)
 
@@ -728,8 +733,8 @@ played the build unguided.
 - At least 1 UX spec reviewed in `design/ux/`
 - UX review completed (APPROVED or NEEDS REVISION with documented risks)
 - At least 1 prototype with README
-- Story files exist in `production/epics/[epic-slug]/`
-- At least 1 sprint plan exists
+- Story files exist in `production/epics/[epic-slug]/`, each with a Backlog task
+- At least 1 Backlog milestone exists with prioritized tasks
 - At least 1 playtest report exists (Vertical Slice played in 3+ sessions)
 
 ---
@@ -738,27 +743,25 @@ played the build unguided.
 
 ### What Happens in This Phase
 
-This is the core production loop. You work in sprints (typically 1-2 weeks),
-implementing features story by story, tracking progress, and closing stories
-through a structured completion review. This phase repeats until your game
-is content-complete.
+This is the core production loop. Work flows continuously — there are no sprints.
+You pull the top-most ready task off the priority-ordered Backlog board,
+implement it, and close it through a structured completion review. This phase
+repeats until your game is content-complete.
 
-### Phase 5 Pipeline (Per Sprint)
+### Phase 5 Pipeline (Continuous Flow)
 
 ```
-/sprint-plan new  -->  /story-readiness  -->  implement  -->  /story-done
-       |                     |                    |                |
-       v                     v                    v                v
-  Sprint created       Story validated      Code written     8-phase review:
-  sprint-status.yaml   READY verdict        Tests pass       verify criteria,
-  populated                                                  check deviations,
-                                                             update story status
-       |
-       |  (repeat per story until sprint complete)
-       v
-  /sprint-status  (quick 30-line snapshot anytime)
-  /scope-check    (if scope is growing)
-  /retrospective  (at sprint end)
+pull top task  -->  /story-readiness  -->  /dev-story  -->  /code-review  -->  /story-done
+      |                   |                    |                |                  |
+      v                   v                    v                v                  v
+  from the board     Story validated      Code written     Architectural     8-phase review:
+  (priority order)   READY verdict        Tests pass       review            verify criteria,
+                     task → In Progress                                      task → Done
+      |
+      |  (repeat per task; grouping is the milestone)
+      v
+  the Backlog board  (current state anytime — filter by milestone, label, or status)
+  /scope-check       (if a task or milestone is growing)
 ```
 
 ### Step 5.1: The Story Lifecycle
@@ -805,25 +808,21 @@ This runs an 8-phase completion review:
 4. Check for GDD/ADR deviations (BLOCKING / ADVISORY / OUT OF SCOPE)
 5. Prompt for code review
 6. Generate completion report (COMPLETE / COMPLETE WITH NOTES / BLOCKED)
-7. Update story `Status: Complete` with completion notes
-8. Surface the next ready story
+7. Set the story's Backlog task to `Done` and append `## Completion Notes` to the story `.md`
+8. Surface the next ready task from the board
 
 Tech debt discovered during review is logged to `docs/tech-debt-register.md`.
 
-### Step 5.2: Sprint Tracking
+### Step 5.2: Progress Tracking
 
-Check progress anytime:
+Check progress anytime by reading the Backlog board — it is the single source of
+truth for work-item status. Filter it by milestone (to see one epic's progress),
+by status (`To Do` / `In Progress` / `Done`), or by label (`blocked`, `bug`).
 
-```
-/sprint-status
-```
-
-Quick 30-line snapshot reading from `production/sprint-status.yaml`.
-
-If scope is growing:
+If a task or milestone is growing beyond its original scope:
 
 ```
-/scope-check production/sprints/sprint-03.md
+/scope-check production/epics/combat/EPIC.md
 ```
 
 This compares current scope against the original plan and flags scope increase,
@@ -871,32 +870,14 @@ Each team skill coordinates a 6-phase collaborative workflow:
 
 The orchestration is automated, but **decision points stay with you**.
 
-### Step 5.6: Sprint Review and Next Sprint
+### Step 5.6: Milestone Reviews
 
-At the end of a sprint:
-
-```
-/retrospective
-```
-
-Analyzes planned vs. completed, velocity, blockers, and actionable improvements.
-
-Then plan the next sprint:
-
-```
-/sprint-plan new
-```
-
-### Step 5.7: Milestone Reviews
-
-At milestone checkpoints:
-
-```
-/milestone-review "alpha"
-```
-
-Produces feature completeness, quality metrics, risk assessment, and go/no-go
-recommendation.
+Because work flows continuously off the board, there is no sprint boundary to
+review. Instead, review milestone progress on the Backlog board at any
+checkpoint: filter to the milestone and read its tasks by status to see feature
+completeness (how many `Done` vs. `To Do`), open risks (`blocked` label), and
+outstanding defects (`bug` label). When every task in a milestone is `Done`, that
+epic is complete and you can weigh readiness for the next phase gate.
 
 ### Phase 5 Gate
 
@@ -1093,7 +1074,7 @@ Each item gets a **Go / No-Go** status. All must be Go to ship.
 /patch-notes v1.0.0
 ```
 
-Generates player-friendly patch notes from git history and sprint data.
+Generates player-friendly patch notes from git history and the Backlog board.
 Translates developer language into player language.
 
 ```
@@ -1133,7 +1114,7 @@ git push origin main --tags
 /hotfix "Players losing save data when inventory exceeds 99 items"
 ```
 
-Bypasses normal sprint processes with a full audit trail:
+Bypasses the normal production flow with a full audit trail:
 1. Creates a hotfix branch
 2. Implements the fix
 3. Ensures backport to development branch
@@ -1148,6 +1129,52 @@ Ask Claude to create a post-mortem using the template at
 
 ---
 
+## Status model
+
+Work-item status lives in **Backlog.md** (via the Backlog MCP), not in any
+markdown file or YAML tracker. A story `.md` and its Backlog task are two halves
+of one record: the task owns status, the `.md` is a status-only spec that keeps
+receiving `## Completion Notes`. They cross-reference each other — the task
+carries `Spec: <path-to-story.md>`, the story carries `Tracked in: TASK-N`.
+Likewise, an epic's `EPIC.md` is prose and its Backlog milestone owns grouping.
+
+### Native statuses
+
+Backlog tasks move through three native statuses, plus one for pre-ready authoring:
+
+| Status | Meaning |
+|--------|---------|
+| `Draft` | Being authored, not yet ready to pull (pre-ready) |
+| `To Do` | Ready to pull off the board — a task existing at all means it is ready |
+| `In Progress` | Being implemented right now (set at `/dev-story` pickup) |
+| `Done` | Verified complete (set by `/story-done`) |
+
+### Labels, not statuses
+
+Two conditions that used to be statuses are now **labels** applied on top of a
+native status, so a task can be, e.g., `In Progress` + `blocked`:
+
+- **`blocked`** — cannot proceed (e.g. a referenced ADR is still `Proposed`, or an
+  upstream task is unfinished).
+- **`bug`** — the task is a defect. Filed by `/bug-report`; "triage" is simply the
+  board filtered by the `bug` label.
+
+### Migration from the old six-status model
+
+Earlier versions of this template tracked six statuses in markdown/YAML. They map
+to the new model as follows:
+
+| Old status | New model |
+|------------|-----------|
+| Not Started | `To Do` |
+| Ready | `To Do` (a task existing ⇒ it is ready) |
+| In Progress | `In Progress` |
+| In Review | dropped (fold into `In Progress` until `Done`) |
+| Complete | `Done` |
+| Blocked | `blocked` **label** (on whatever native status applies) |
+
+---
+
 ## Cross-Cutting Concerns
 
 These topics apply across all phases.
@@ -1155,15 +1182,16 @@ These topics apply across all phases.
 ### Director Review Modes
 
 Director gates are specialist agents that review your work at key workflow steps.
-By default they run at every checkpoint. You can control how much review you get.
+**`solo` is the default review mode** — no director reviews, so you move at full
+speed. You can dial review up if you want more oversight.
 
 **Set your review intensity once during `/start`.** Saved to `production/review-mode.txt`.
 
 | Mode | What runs | Best for |
 |------|-----------|----------|
+| `solo` (default) | No director reviews | Solo dev, game jams, prototypes, maximum speed |
+| `lean` | Directors only at phase transitions (`/gate-check`) | Experienced devs wanting light oversight |
 | `full` | All director gates at every step | New projects, learning the system |
-| `lean` | Directors only at phase transitions (`/gate-check`) | Experienced devs |
-| `solo` | No director reviews | Game jams, prototypes, maximum speed |
 
 **Override for a single run** without changing your global setting:
 
@@ -1274,10 +1302,12 @@ sections can be safely compacted.
 `active.md` automatically. The `pre-compact.sh` hook dumps state into the
 conversation before compaction.
 
-**Sprint status tracking:** `production/sprint-status.yaml` is the
-machine-readable story tracker. Written by `/sprint-plan` (init) and
-`/story-done` (status updates). Read by `/sprint-status`, `/help`, and
-`/story-done` (next story). Eliminates fragile markdown scanning.
+**Work-item tracking:** Status lives in **Backlog.md** (via the Backlog MCP),
+queried through the board. `/dev-story` sets a task `In Progress` at pickup and
+`/story-done` sets it `Done`; `/help` and `/story-done` read the board to surface
+the next ready task. See [Status Model](#status-model) for the full status and
+label scheme. Because status is in Backlog rather than a doc, there is no fragile
+markdown or YAML tracker to keep in sync.
 
 ### Brownfield Adoption
 
@@ -1357,7 +1387,7 @@ Reads existing code and generates GDD-format design documentation from it.
 | Build world lore | `world-builder` | 3 |
 | Write dialogue | `writer` | 3 |
 | Plan the story | `narrative-director` | 2 |
-| Plan a sprint | `producer` | 1 |
+| Prioritize the board / coordinate production | `producer` | 1 |
 | Make a creative decision | `creative-director` | 1 |
 | Make a technical decision | `technical-director` | 1 |
 | Implement gameplay code | `gameplay-programmer` | 3 |
@@ -1427,7 +1457,7 @@ conflicts go to `producer`.
 
 ## Appendix B: Slash Command Quick-Reference
 
-### All 73 Commands by Category
+### All 66 Commands by Category
 
 #### Onboarding and Navigation (6)
 
@@ -1467,15 +1497,13 @@ conflicts go to `producer`.
 | `/architecture-review` | Validate all ADRs, dependency ordering | 3 |
 | `/create-control-manifest` | Flat programmer rules from Accepted ADRs | 3 |
 
-#### Stories and Sprints (8)
+#### Stories (6)
 
 | Command | Purpose | Phase |
 |---------|---------|-------|
-| `/create-epics` | Translate GDDs + ADRs into epics (one per module) | 4 |
-| `/create-stories` | Break a single epic into story files | 4 |
+| `/create-epics` | Translate GDDs + ADRs into epics + Backlog milestones (one per module) | 4 |
+| `/create-stories` | Break a single epic into story files + Backlog tasks | 4 |
 | `/dev-story` | Implement a story — routes to the correct programmer agent | 5 |
-| `/sprint-plan` | Create or manage sprint plans | 4-5 |
-| `/sprint-status` | Quick 30-line sprint snapshot | 5 |
 | `/story-readiness` | Validate story is implementation-ready | 4-5 |
 | `/story-done` | 8-phase story completion review | 5 |
 | `/estimate` | Effort estimation with risk assessment | 4-5 |
@@ -1502,7 +1530,7 @@ conflicts go to `producer`.
 
 | Command | Purpose | Phase |
 |---------|---------|-------|
-| `/qa-plan` | Generate QA test plan for a sprint or feature | 5 |
+| `/qa-plan` | Generate QA test plan for a milestone or feature | 5 |
 | `/smoke-check` | Critical path smoke test gate before QA hand-off | 5-6 |
 | `/soak-test` | Soak test protocol for extended play sessions | 6 |
 | `/regression-suite` | Map test coverage, identify fixed bugs lacking regression tests | 5-6 |
@@ -1512,18 +1540,18 @@ conflicts go to `producer`.
 | `/test-flakiness` | Detect non-deterministic tests from CI logs | 5-6 |
 | `/skill-test` | Validate skill files for structural and behavioral correctness | Any |
 
-#### Production Management (6)
+#### Production Management (2)
 
 | Command | Purpose | Phase |
 |---------|---------|-------|
-| `/milestone-review` | Milestone progress and go/no-go | 5 |
-| `/retrospective` | Sprint retrospective analysis | 5 |
-| `/bug-report` | Structured bug report creation | 5+ |
-| `/bug-triage` | Re-evaluate open bugs for priority, severity, and owner | 5+ |
+| `/bug-report` | File a defect as a Backlog task with a `bug` label | 5+ |
 | `/playtest-report` | Structured playtest session report | 4-6 |
-| `/onboard` | Onboard a new team member | Any |
 
-#### Release (6)
+> Milestone progress, go/no-go, and bug triage are no longer skills — read them
+> off the Backlog board (filter by milestone, status, or the `bug` label). See
+> [Status Model](#status-model).
+
+#### Release (5)
 
 | Command | Purpose | Phase |
 |---------|---------|-------|
@@ -1532,7 +1560,6 @@ conflicts go to `producer`.
 | `/changelog` | Auto-generate internal changelog | 7 |
 | `/patch-notes` | Player-facing patch notes | 7 |
 | `/hotfix` | Emergency fix workflow | 7+ |
-| `/day-one-patch` | Scoped patch for issues found after gold master | 7+ |
 
 #### Creative (4)
 
@@ -1583,9 +1610,9 @@ conflicts go to `producer`.
 5. /architecture-review
 6. /create-control-manifest
 7. /gate-check technical-setup
-8. /create-epics layer: foundation + /create-stories [slug] (define epics, break into stories)
-9. /sprint-plan new
-10. /story-readiness -> implement -> /story-done (story lifecycle)
+8. /create-epics layer: foundation + /create-stories [slug] (define epics + milestones, break into stories + Backlog tasks)
+9. Prioritize the milestone's tasks on the Backlog board
+10. /story-readiness -> /dev-story -> /code-review -> /story-done (story lifecycle)
 ```
 
 ### Workflow 3: "I need to add a complex feature mid-production"
@@ -1622,16 +1649,16 @@ conflicts go to `producer`.
 6. /gate-check at appropriate transition
 ```
 
-### Workflow 6: "Starting a new sprint"
+### Workflow 6: "Working the board (continuous flow)"
 
 ```
-1. /retrospective (review last sprint)
-2. /sprint-plan new (create next sprint)
-3. /scope-check (ensure scope is manageable)
-4. /story-readiness per story before pickup
-5. Implement stories
-6. /story-done per completed story
-7. /sprint-status for quick progress checks
+1. Read the Backlog board (filter to the current milestone)
+2. /scope-check [epic or story path] (ensure scope is manageable)
+3. Pull the top-most ready task
+4. /story-readiness per task before pickup
+5. /dev-story to implement (sets the task In Progress)
+6. /code-review the changeset
+7. /story-done per completed task (sets the task Done, surfaces the next one)
 ```
 
 ### Workflow 7: "Shipping the game"
@@ -1693,8 +1720,8 @@ conflicts go to `producer`.
 9. **Prototype risky mechanics first.** A day of prototyping can save a week
    of production on a mechanic that does not work.
 
-10. **Keep your sprint plans honest.** Use `/scope-check` regularly. Scope
-    creep is the number one killer of indie games.
+10. **Keep your scope honest.** Use `/scope-check` regularly and keep the board
+    prioritized. Scope creep is the number one killer of indie games.
 
 11. **Document decisions with ADRs.** Future-you will thank present-you for
     recording *why* things were built the way they were.

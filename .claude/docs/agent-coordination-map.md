@@ -167,22 +167,21 @@ art-dir = art-director
 9. qa-tester          -- Tests the complete area
 ```
 
-### Pattern 5: Sprint Cycle
+### Pattern 5: Continuous Flow Cycle
 
 ```
-1. producer           -- Plans sprint with /sprint-plan new
-2. [All agents]       -- Execute assigned tasks
-3. producer           -- Daily status with /sprint-plan status
-4. qa-lead            -- Continuous testing during sprint
-5. lead-programmer    -- Continuous code review during sprint
-6. producer           -- Sprint retrospective with post-sprint hook
-7. producer           -- Plans next sprint incorporating learnings
+1. producer           -- Prioritises the Backlog board (milestone = epic)
+2. [All agents]       -- Pull the next ready task and execute
+3. producer           -- Tracks progress on the board (status/labels)
+4. qa-lead            -- Continuous testing as stories close
+5. lead-programmer    -- Continuous code review as stories close
+6. producer           -- Reprioritises the board as work lands
 ```
 
 ### Pattern 6: Milestone Checkpoint
 
 ```
-1. producer           -- Runs /milestone-review
+1. producer           -- Reviews milestone progress on the Backlog board
 2. creative-director  -- Reviews creative progress
 3. technical-director -- Reviews technical health
 4. qa-lead            -- Reviews quality metrics

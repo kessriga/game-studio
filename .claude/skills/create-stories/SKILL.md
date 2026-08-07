@@ -3,7 +3,7 @@ name: create-stories
 description: "Break a single epic into implementable story files. Reads the epic, its GDD, governing ADRs, and control manifest. Each story embeds its GDD requirement TR-ID, ADR guidance, acceptance criteria, story type, and test evidence path. Run after /create-epics for each epic."
 argument-hint: "[epic-slug | epic-path] [--review full|lean|solo]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Task, AskUserQuestion
+allowed-tools: Read, Glob, Grep, Write, Task, AskUserQuestion, mcp__backlog__task_create
 model: sonnet
 agent: lead-programmer
 ---
@@ -29,7 +29,7 @@ then Core, and so on — matching the dependency order.
 
 Extract `--review [full|lean|solo]` if present and store as the review mode
 override for this run. If not provided, read `production/review-mode.txt`
-(default `lean` if missing). This resolved mode applies to all gate spawns
+(default `solo` if missing). This resolved mode applies to all gate spawns
 in this skill — apply the check pattern from `.claude/docs/director-gates.md`
 before every gate invocation.
 
@@ -95,7 +95,7 @@ For each story, determine:
 - **TR-ID**: look up in `tr-registry.yaml`. Use the stable ID. If no match, use `TR-[system]-???` and warn.
 - **Governing ADR**: which ADR governs how to implement this?
   - `Status: Accepted` → embed normally
-  - `Status: Proposed` → set story `Status: Blocked` with note: "BLOCKED: ADR-NNNN is Proposed — run `/architecture-decision` to advance it"
+  - `Status: Proposed` → mark the story blocked: its Backlog task (minted in Step 6) gets the `blocked` label, with an Implementation Note: "BLOCKED: ADR-NNNN is Proposed — run `/architecture-decision` to advance it"
   - **Multiple ADRs apply**: List all governing ADRs in the story's `Governing ADRs:` field. Designate the one most directly controlling the implementation pattern as primary (first in the list). Others are listed as secondary references.
   - **No ADR applies at all**: Write `ADR: N/A — [brief reason, e.g. "pure data configuration, no architectural pattern required"]` in the story's ADR field. Do NOT leave the field blank — a blank ADR field means "not checked", not "not applicable".
 - **Story Type**: from Step 3 classification
@@ -185,12 +185,12 @@ For each story, write `production/epics/[epic-slug]/story-[NNN]-[slug].md`:
 # Story [NNN]: [title]
 
 > **Epic**: [epic name]
-> **Status**: Ready
+> **Tracked in**: TASK-N *(Backlog owns status; this `.md` is the frozen spec)*
 > **Layer**: [Foundation / Core / Feature / Presentation]
 > **Type**: [Logic | Integration | Visual/Feel | UI | Config/Data]
-> **Estimate**: [hours or t-shirt size — fill before sprint planning]
+> **Estimate**: [hours or t-shirt size — optional]
 > **Manifest Version**: [date from control-manifest.md header]
-> **Last Updated**: [set by /dev-story when implementation begins]
+> **Last Updated**: [set by /story-done when Completion Notes are appended]
 
 ## Context
 
@@ -279,22 +279,35 @@ change meaning. This is what the programmer reads instead of the ADR.]
 - Unlocks: [Story NNN+1, or "None"]
 ```
 
+### Then mint a Backlog task per story (Backlog owns status)
+
+For each story `.md` just written, create the tracking task with `mcp__backlog__task_create`:
+
+- `title`: the story title (e.g. "Story 001: Damage calculator")
+- `description`: 1–2 line summary + a `Spec:` pointer to the story file path (`production/epics/[epic-slug]/story-NNN-[slug].md`) — this is the forward-pointer to the frozen spec
+- `acceptanceCriteria`: the story's acceptance criteria (verbatim from the GDD-derived list)
+- `milestone`: the epic name (the milestone `/create-epics` minted)
+- `labels`: `blocked` if the story's governing ADR is Proposed (Step 4); otherwise none. Never a `bug` label (these are stories)
+- `status`: `To Do` (a task exists ⇒ the story is ready; `Draft` is only for stories still being authored)
+- `priority`: derive from layer/dependency order if known, else leave default
+- `references`: the story file path
+
+Then edit the story `.md` header's `Tracked in: TASK-N` placeholder to the real task ID returned by `task_create`. The task (status) and the `.md` (spec + evidence trail) now cross-reference each other.
+
 ### Also update `production/epics/[epic-slug]/EPIC.md`
 
-Replace the "Stories: Not yet created" line with a populated table:
+Replace the "Stories: Not yet created" line with a populated table. **No Status column** — status lives in the Backlog task:
 
 ```markdown
 ## Stories
 
-| # | Story | Type | Status | ADR |
-|---|-------|------|--------|-----|
-| 001 | [title] | Logic | Ready | ADR-NNNN |
-| 002 | [title] | Integration | Ready | ADR-MMMM |
+| # | Story | Type | Task | ADR |
+|---|-------|------|------|-----|
+| 001 | [title] | Logic | TASK-N | ADR-NNNN |
+| 002 | [title] | Integration | TASK-M | ADR-MMMM |
 ```
 
-### Also update `production/epics/index.md`
-
-Find the row in the index table matching this epic (by epic name or slug). Update its `Stories` column from `Not yet created` to `[N] stories` (where N is the count just written). If the index file does not exist, skip silently.
+Do **not** write a story roster or status count into `production/epics/index.md` — that file is a static prose navigation map (see `/create-epics`); the live roster is the Backlog milestone and board.
 
 ---
 
@@ -304,15 +317,13 @@ Use `AskUserQuestion` to close with context-aware next steps:
 
 Check:
 - Are there other epics in `production/epics/` without stories yet? List them.
-- Is this the last epic? If so, include `/sprint-plan` as an option.
 
 Widget:
-- Prompt: "[N] stories written to `production/epics/[epic-slug]/`. What next?"
+- Prompt: "[N] stories written to `production/epics/[epic-slug]/` and [N] Backlog tasks minted under milestone [epic]. What next?"
 - Options (include all that apply):
   - `[A] Start implementing — run /story-readiness [first-story-path]` (Recommended)
   - `[B] Create stories for [next-epic-slug] — run /create-stories [slug]` (only if other epics have no stories yet)
-  - `[C] Plan the sprint — run /sprint-plan new` (only if all epics have stories)
-  - `[D] Stop here for this session`
+  - `[C] Stop here for this session`
 
 Note in output: "Work through stories in order — each story's `Depends on:` field tells you what must be DONE before you can start it."
 

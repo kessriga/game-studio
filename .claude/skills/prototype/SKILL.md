@@ -32,7 +32,7 @@ before committing to Production, run `/vertical-slice` instead.
 Resolve the review mode (once, store for all gate spawns this run):
 1. If `--review [full|lean|solo]` was passed → use that
 2. Else read `production/review-mode.txt` → use that value
-3. Else → default to `lean`
+3. Else → default to `solo`
 
 **Check for spike mode:** If `--spike` was passed, skip to the **Spike Mode** section
 at the bottom of this skill.

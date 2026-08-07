@@ -160,9 +160,8 @@ Based on gaps identified, consider running:
 
 - `/reverse-document [type] [path]` — [For which gap]
 - `/architecture-decision` — [For which gap]
-- `/sprint-plan` — [If production planning missing]
-- `/milestone-review` — [If approaching deadline]
-- `/onboard [role]` — [If new contributor joining]
+- `/create-epics` → `/create-stories` — [If the Backlog board has no work items yet]
+- Review milestone progress on the Backlog board — [If approaching a deadline]
 
 ---
 

@@ -118,7 +118,7 @@ Output the report to the user. This mode is read-only — no files are written. 
 
 ## Phase 3: Next Steps
 
-- Run `/sprint-plan` to schedule high-priority debt items into the next sprint.
+- Add high-priority debt items to the Backlog board as tasks (label them for tracking).
 - Run `/tech-debt report` at the start of each sprint to track debt trends over time.
 
 ### Debt Register Format

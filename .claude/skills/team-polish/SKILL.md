@@ -20,7 +20,7 @@ The user must approve before moving to the next phase.
 
 1. If `--review [mode]` was passed as an argument, use that mode.
 2. Else read `production/review-mode.txt` — use whatever is written there.
-3. Else default to `lean`.
+3. Else default to `solo`.
 
 Modes:
 - `full` — spawn all director and lead gates as described
@@ -136,5 +136,5 @@ A summary report covering: performance before/after metrics, visual polish chang
 ## Next Steps
 
 - If READY FOR RELEASE: run `/release-checklist` for the final pre-release validation.
-- If NEEDS MORE WORK: schedule remaining issues in `/sprint-plan update` and re-run `/team-polish` after fixes.
+- If NEEDS MORE WORK: file the remaining issues as Backlog tasks and re-run `/team-polish` after fixes.
 - Run `/gate-check` for a formal phase gate verdict before handing off to release.

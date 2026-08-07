@@ -1,10 +1,10 @@
 # Agent Test Spec: producer
 
 ## Agent Summary
-**Domain owned:** Scope management, sprint planning validation, milestone tracking, epic prioritization, production phase gate.
+**Domain owned:** Scope management, Backlog prioritisation validation, milestone tracking, epic prioritization, production phase gate.
 **Does NOT own:** Game design decisions (creative-director / game-designer), technical architecture (technical-director), creative direction.
 **Model tier:** Opus (multi-document synthesis, high-stakes phase gate verdicts).
-**Gate IDs handled:** PR-SCOPE, PR-SPRINT, PR-MILESTONE, PR-EPIC, PR-PHASE-GATE.
+**Gate IDs handled:** PR-SCOPE, PR-MILESTONE, PR-EPIC, PR-PHASE-GATE.
 
 ---
 
@@ -12,8 +12,8 @@
 
 Verified by reading the agent's `.claude/agents/producer.md` frontmatter:
 
-- [ ] `description:` field is present and domain-specific (references scope, sprint, milestone, production — not generic)
-- [ ] `allowed-tools:` list is primarily read-focused; Bash only if sprint/milestone files require parsing
+- [ ] `description:` field is present and domain-specific (references scope, prioritisation, milestone, production — not generic)
+- [ ] `allowed-tools:` list is primarily read-focused; Bash only if milestone files require parsing
 - [ ] Model tier is `claude-opus-4-6` per coordination-rules.md (directors with gate synthesis = Opus)
 - [ ] Agent definition does not claim authority over design decisions or technical architecture
 
@@ -22,12 +22,12 @@ Verified by reading the agent's `.claude/agents/producer.md` frontmatter:
 ## Test Cases
 
 ### Case 1: In-domain request — appropriate output format
-**Scenario:** A sprint plan is submitted for Sprint 7. The plan includes 12 story points across 4 team members over 2 weeks. Historical velocity from the last 3 sprints averages 11.5 points. Request is tagged PR-SPRINT.
-**Expected:** Returns `PR-SPRINT: REALISTIC` with rationale noting the plan is within one standard deviation of historical velocity and capacity appears matched.
+**Scenario:** A milestone risk check is requested for the "Combat System" milestone. The Backlog board shows 8 of 12 tasks Done, 1 carrying the `blocked` label, target date in two weeks. Request is tagged PR-MILESTONE.
+**Expected:** Returns `PR-MILESTONE: AT RISK` (or ON TRACK / OFF TRACK) with rationale citing the completed-vs-remaining task count and the blocked task.
 **Assertions:**
-- [ ] Verdict is exactly one of REALISTIC / CONCERNS / UNREALISTIC
-- [ ] Verdict token is formatted as `PR-SPRINT: REALISTIC`
-- [ ] Rationale references the specific story point count and historical velocity figures
+- [ ] Verdict is exactly one of ON TRACK / AT RISK / OFF TRACK
+- [ ] Verdict token is formatted as `PR-MILESTONE: AT RISK`
+- [ ] Rationale references the board's completed/remaining/blocked task counts
 - [ ] Output stays within production scope — does not comment on whether the stories are well-designed or technically sound
 
 ### Case 2: Out-of-domain request — redirects or escalates
@@ -72,13 +72,13 @@ Verified by reading the agent's `.claude/agents/producer.md` frontmatter:
 - [ ] Returns verdicts using REALISTIC / CONCERNS / UNREALISTIC vocabulary only
 - [ ] Stays within declared production domain
 - [ ] Escalates design/technical conflicts by quantifying scope impact and presenting to user
-- [ ] Uses gate IDs in output (e.g., `PR-SPRINT: REALISTIC`) not inline prose verdicts
+- [ ] Uses gate IDs in output (e.g., `PR-MILESTONE: AT RISK`) not inline prose verdicts
 - [ ] Does not make binding game design or technical architecture decisions
 
 ---
 
 ## Coverage Notes
 - PR-EPIC (epic-level prioritization) is not covered — a dedicated case should be added when the /create-epics skill produces structured epic documents.
-- PR-MILESTONE (milestone health review) is not covered — deferred to integration with /milestone-review skill.
+- PR-MILESTONE (milestone health review) is not covered — deferred to milestone health review on the Backlog board via the PR-MILESTONE gate.
 - PR-PHASE-GATE (full production phase advancement) involving synthesis of multiple sub-gate results is deferred.
 - Multi-sprint burn-down and velocity trend analysis are not covered here.

@@ -23,8 +23,8 @@ scope creep.
 Locate the baseline scope document for the given argument:
 
 - **Feature name** → read `design/gdd/[feature].md` or matching file in `design/`
-- **Sprint number** (e.g., `sprint-3`) → read `production/sprints/sprint-03.md` or similar
-- **Milestone** → read `production/milestones/[name].md`
+- **Backlog milestone/label** (e.g., `combat-mvp`) → read the milestone's tasks under `backlog/tasks/` and use their titles/ACs as the baseline
+- **Milestone doc** → read `production/milestones/[name].md`
 
 If the document is not found, report the missing file and stop. Do not proceed without
 a baseline to compare against.
@@ -112,8 +112,8 @@ Net change: [+X%] — [On Track / Minor Creep / Significant Creep / Out of Contr
 After presenting the report, offer concrete follow-up:
 
 - **PASS** → no action required. Suggest re-running before next milestone.
-- **CONCERNS** → offer to identify the 2–3 additions with best cut ratio. Reference `/sprint-plan update` to formally re-scope.
-- **FAIL** → recommend escalating to producer. Reference `/sprint-plan update` for re-planning or `/estimate` to re-baseline timeline.
+- **CONCERNS** → offer to identify the 2–3 additions with best cut ratio. Reprioritise the Backlog board to formally re-scope.
+- **FAIL** → recommend escalating to producer. Reprioritise the board (defer tasks to a later milestone) or run `/estimate` to re-baseline timeline.
 
 Always end with:
 > "Run `/scope-check [name]` again after cuts are made to verify the verdict improves."

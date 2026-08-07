@@ -54,10 +54,8 @@
 | `/create-epics` | Translate GDDs + ADRs into epics — one per architectural module |
 | `/create-stories` | Break a single epic into implementable story files |
 | `/dev-story` | Read a story and implement it — routes to the correct programmer agent |
-| `/sprint-plan` | Generate or update a sprint plan; initializes sprint-status.yaml |
-| `/sprint-status` | Fast 30-line sprint snapshot (reads sprint-status.yaml) |
 | `/story-readiness` | Validate a story is implementation-ready before pickup (READY/NEEDS WORK/BLOCKED) |
-| `/story-done` | 8-phase completion review after implementation; updates story file, surfaces next story |
+| `/story-done` | 8-phase completion review after implementation; sets the Backlog task to Done, surfaces next task |
 | `/estimate` | Structured effort estimate with complexity, dependencies, and risk breakdown |
 
 ## Reviews & Analysis
@@ -94,12 +92,13 @@
 
 | Command | Purpose |
 |---------|---------|
-| `/milestone-review` | Review milestone progress and generate status report |
-| `/retrospective` | Run a structured sprint or milestone retrospective |
-| `/bug-report` | Create a structured bug report |
-| `/bug-triage` | Read all open bugs, re-evaluate priority vs. severity, assign owner and label |
+| `/bug-report` | File a bug as a Backlog task (bug label); verify/close drive its status |
 | `/reverse-document` | Generate design or architecture docs from existing implementation |
 | `/playtest-report` | Generate a structured playtest report or analyze existing playtest notes |
+
+> Work items (stories, bugs, epics→milestones) live on the **Backlog board**, not
+> in sprint files. There are no sprint-plan/sprint-status/retrospective/milestone-review
+> skills — track and prioritise work directly on the board (continuous flow).
 
 ## Release
 
@@ -107,10 +106,9 @@
 |---------|---------|
 | `/release-checklist` | Generate and validate a pre-release checklist for the current build |
 | `/launch-checklist` | Complete launch readiness validation across all departments |
-| `/changelog` | Auto-generate changelog from git commits and sprint data |
+| `/changelog` | Auto-generate changelog from git commits and Backlog data |
 | `/patch-notes` | Generate player-facing patch notes from git history and internal data |
-| `/hotfix` | Emergency fix workflow with audit trail, bypassing normal sprint process |
-| `/day-one-patch` | Prepare a focused day-one patch for known issues discovered after gold master but before or at public launch |
+| `/hotfix` | Emergency fix workflow with audit trail, bypassing the normal flow |
 
 ## Creative & Content
 
@@ -118,7 +116,6 @@
 |---------|---------|
 | `/prototype` | Concept prototype — throwaway build right after brainstorm to validate core idea (Phase 1) |
 | `/vertical-slice` | Pre-Production validation — production-quality end-to-end build before committing to Production (Phase 4) |
-| `/onboard` | Generate contextual onboarding document for a new contributor or agent |
 | `/localize` | Localization workflow: string extraction, validation, translation readiness |
 
 ## Team Orchestration

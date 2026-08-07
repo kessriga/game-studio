@@ -140,10 +140,10 @@ fi
 
 # --- Check 5: Production planning ---
 if [ "$SRC_FILES" -gt 100 ]; then
-  # For projects with substantial code, check for production planning
-  if [ ! -d "production/sprints" ] && [ ! -d "production/milestones" ]; then
-    echo "⚠️  GAP: Large codebase ($SRC_FILES files) but no production planning found"
-    echo "    Suggested action: /sprint-plan or create production/ directory"
+  # For projects with substantial code, check for a Backlog work-item store
+  if [ ! -d "backlog/tasks" ] && [ ! -f "backlog/config.yml" ]; then
+    echo "⚠️  GAP: Large codebase ($SRC_FILES files) but no Backlog board found"
+    echo "    Suggested action: initialise the Backlog board, or run /create-epics to set up your first milestone"
   fi
 fi
 

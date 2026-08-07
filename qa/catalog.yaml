@@ -168,29 +168,6 @@ skills:
     priority: high
     category: analysis
 
-  # Medium — team and sprint management skills
-  - name: sprint-plan
-    spec: qa/skills/sprint/sprint-plan.md
-    last_static: ""
-    last_static_result: ""
-    last_spec: ""
-    last_spec_result: ""
-    last_category: ""
-    last_category_result: ""
-    priority: medium
-    category: sprint
-
-  - name: sprint-status
-    spec: qa/skills/sprint/sprint-status.md
-    last_static: ""
-    last_static_result: ""
-    last_spec: ""
-    last_spec_result: ""
-    last_category: ""
-    last_category_result: ""
-    priority: medium
-    category: sprint
-
   - name: team-ui
     spec: qa/skills/team/team-ui.md
     last_static: ""
@@ -599,28 +576,6 @@ skills:
     priority: low
     category: utility
 
-  - name: milestone-review
-    spec: qa/skills/sprint/milestone-review.md
-    last_static: ""
-    last_static_result: ""
-    last_spec: ""
-    last_spec_result: ""
-    last_category: ""
-    last_category_result: ""
-    priority: low
-    category: sprint
-
-  - name: retrospective
-    spec: qa/skills/sprint/retrospective.md
-    last_static: ""
-    last_static_result: ""
-    last_spec: ""
-    last_spec_result: ""
-    last_category: ""
-    last_category_result: ""
-    priority: low
-    category: sprint
-
   - name: changelog
     spec: qa/skills/sprint/changelog.md
     last_static: ""
@@ -642,17 +597,6 @@ skills:
     last_category_result: ""
     priority: low
     category: sprint
-
-  - name: onboard
-    spec: qa/skills/utility/onboard.md
-    last_static: ""
-    last_static_result: ""
-    last_spec: ""
-    last_spec_result: ""
-    last_category: ""
-    last_category_result: ""
-    priority: low
-    category: utility
 
   - name: localize
     spec: qa/skills/utility/localize.md
@@ -764,30 +708,8 @@ skills:
     priority: low
     category: utility
 
-  - name: bug-triage
-    spec: qa/skills/utility/bug-triage.md
-    last_static: ""
-    last_static_result: ""
-    last_spec: ""
-    last_spec_result: ""
-    last_category: ""
-    last_category_result: ""
-    priority: low
-    category: utility
-
   - name: asset-spec
     spec: qa/skills/utility/asset-spec.md
-    last_static: ""
-    last_static_result: ""
-    last_spec: ""
-    last_spec_result: ""
-    last_category: ""
-    last_category_result: ""
-    priority: low
-    category: utility
-
-  - name: day-one-patch
-    spec: qa/skills/utility/day-one-patch.md
     last_static: ""
     last_static_result: ""
     last_spec: ""

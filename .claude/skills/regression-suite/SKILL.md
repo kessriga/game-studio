@@ -81,10 +81,10 @@ and story files to find stories with Status: Complete this sprint.
 
 ### Step 2d — Load closed bugs
 
-Glob `production/qa/bugs/*.md` and filter for bugs with a `Status: Closed`
-or `Status: Fixed` field. Note:
+List Backlog tasks carrying the `bug` label with status `Done` (the board is the
+bug store). For each, note:
 - Which story or system the bug was in
-- Whether a regression test was mentioned in the fix description
+- Whether a regression test was mentioned in the fix / closure note
 
 ---
 

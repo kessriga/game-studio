@@ -151,7 +151,7 @@ Output a deployment summary:
 **Rollback plan**: [from Phase 2 record]
 
 Merge to: release branch AND development branch
-Next: /bug-report verify [BUG-ID] after deploy to confirm resolution
+Next: /bug-report verify [TASK-ID] after deploy to confirm resolution
 ```
 
 ### Rules
@@ -165,12 +165,12 @@ Next: /bug-report verify [BUG-ID] after deploy to confirm resolution
 
 ## Phase 7: Post-Deploy Verification
 
-After deploying, run `/bug-report verify [BUG-ID]` to confirm the fix resolved the issue in the deployed build.
+After deploying, run `/bug-report verify [TASK-ID]` to confirm the fix resolved the issue in the deployed build.
 
-If VERIFIED FIXED: run `/bug-report close [BUG-ID]` to formally close it.
+If VERIFIED FIXED: run `/bug-report close [TASK-ID]` to formally close it.
 If STILL PRESENT: the hotfix failed — immediately re-open, assess rollback, and escalate.
 
-Schedule a post-incident review within 48 hours using `/retrospective hotfix`.
+Schedule a post-incident review within 48 hours (capture findings as Backlog tasks if follow-up work is needed).
 
 Use `AskUserQuestion`:
 - Prompt: "Hotfix complete. What's the next step?"

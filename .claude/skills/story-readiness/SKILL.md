@@ -1,9 +1,9 @@
 ---
 name: story-readiness
 description: "Validate that a story file is implementation-ready. Checks for embedded GDD requirements, ADR references, engine notes, clear acceptance criteria, and no open design questions. Produces READY / NEEDS WORK / BLOCKED verdict with specific gaps. Use when user says 'is this story ready', 'can I start on this story', 'is story X ready to implement'."
-argument-hint: "[story-file-path or 'all' or 'sprint']"
+argument-hint: "[story-file-path or 'all' or 'milestone']"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, AskUserQuestion, Task
+allowed-tools: Read, Glob, Grep, AskUserQuestion, Task, mcp__backlog__task_list, mcp__backlog__task_view
 model: sonnet
 ---
 
@@ -27,7 +27,7 @@ Resolve the review mode once at startup (store for all gate spawns this run):
 
 1. If skill was called with `--review [full|lean|solo]` → use that value
 2. Else read `production/review-mode.txt` → use that value
-3. Else → default to `lean`
+3. Else → default to `solo`
 
 See `.claude/docs/director-gates.md` for the full check pattern and mode definitions.
 
@@ -39,15 +39,15 @@ See `.claude/docs/director-gates.md` for the full check pattern and mode definit
 
 - **Specific path** (e.g., `/story-readiness production/epics/combat/story-001-basic-attack.md`):
   validate that single story file.
-- **`sprint`**: read the current sprint plan from `production/sprints/` (most
-  recent file), extract every story path it references, validate each one.
+- **`milestone [name]`**: `task_list` for that Backlog milestone, follow each task's
+  `Spec:` reference to its story `.md`, validate each one.
 - **`all`**: glob `production/epics/**/*.md`, exclude `EPIC.md` index files,
   validate every story file found.
 - **No argument**: ask the user which scope to validate.
 
 If no argument is given, use `AskUserQuestion`:
 - "What would you like to validate?"
-  - Options: "A specific story file", "All stories in the current sprint",
+  - Options: "A specific story file", "All stories in a milestone (epic)",
     "All stories in production/epics/", "Stories for a specific epic"
 
 Report the scope before proceeding: "Validating [N] story files."
@@ -69,8 +69,8 @@ Before checking any stories, load reference documents once (not per-story):
 - All ADR status fields — for each unique ADR referenced across the stories being
   checked, read the ADR file and note its `Status:` field. Cache these so you
   don't re-read the same ADR for every story.
-- The current sprint file (if scope is `sprint`) — to identify Must Have /
-  Should Have priority for escalation decisions
+- The milestone's Backlog tasks (if scope is `milestone`) — read task priority
+  to identify high-priority stories for escalation decisions
 
 ---
 
@@ -142,8 +142,9 @@ items pass or are explicitly marked N/A with a stated reason.
 
 ### Scope Clarity
 
-- [ ] **Estimate present**: The story includes a size estimate (hours,
-  points, or a t-shirt size). A story with no estimate cannot be planned.
+- [ ] **Estimate present** *(optional — auto-pass if absent)*: A size estimate
+  (hours, points, or t-shirt size) is helpful but not required in continuous
+  flow. Note its absence; do not mark NEEDS WORK for a missing estimate.
 - [ ] **In-scope / Out-of-scope boundary stated**: The story states what
   it does NOT include, either in an explicit Out of Scope section or in
   language that makes the boundary unambiguous. Without this, scope creep
@@ -157,10 +158,10 @@ items pass or are explicitly marked N/A with a stated reason.
 - [ ] **No unresolved design questions**: The story does not contain text
   flagged as "UNRESOLVED", "TBD", "TODO", "?", or equivalent markers in
   any acceptance criterion, implementation note, or rule statement.
-- [ ] **Dependency stories are not in DRAFT**: For each story listed as a
-  dependency, check if the file exists and does not have a DRAFT status. A
-  story that depends on a DRAFT or missing story is BLOCKED, not just
-  NEEDS WORK.
+- [ ] **Dependency stories are not in Draft**: For each story listed as a
+  dependency, glob its story `.md`, read its `Tracked in:` task, and `task_view`
+  that task. A story that depends on a `Draft`-status or missing dependency task
+  is BLOCKED, not just NEEDS WORK.
 
 ### Asset References Check
 
@@ -259,15 +260,15 @@ Blocked:    [N] stories
 [Full detail for each non-ready story follows, using the single-story format]
 ```
 
-### Sprint escalation
+### Milestone escalation
 
-If the scope is `sprint` and any Must Have stories are NEEDS WORK or BLOCKED,
+If the scope is `milestone` and any high-priority tasks are NEEDS WORK or BLOCKED,
 add a prominent warning at the top of the output:
 
 ```
-WARNING: [N] Must Have stories are not implementation-ready.
+WARNING: [N] high-priority stories are not implementation-ready.
 [List them with their primary gap or blocker.]
-Resolve these before the sprint begins or replan with `/sprint-plan update`.
+Resolve these before starting the milestone, or reprioritise the board.
 ```
 
 ---
@@ -300,27 +301,26 @@ in conversation. Do not use Write or Edit tools — the user (or
 
 ## 7. Next-Story Handoff
 
-After completing a single-story readiness check (not `all` or `sprint` scope):
+After completing a single-story readiness check (not `all` or `milestone` scope):
 
-1. Read the current sprint file from `production/sprints/` (most recent).
-2. Find stories that are:
-   - Status: READY or NOT STARTED
+1. `task_list` the current milestone (the epic of the story just checked), status `To Do`.
+2. Find tasks that are:
+   - Status `To Do` (not carrying the `blocked` label)
    - Not the story just checked
-   - Not blocked by incomplete dependencies
-   - In the Must Have or Should Have tier
+   - Highest priority first
 
 If any are found, surface up to 3:
 
 ```
-### Other Ready Stories in This Sprint
+### Other Ready Stories on the Board
 
-1. [Story name] — [1-line description] — Est: [X hrs]
-2. [Story name] — [1-line description] — Est: [X hrs]
+1. [Story name] — [1-line description] — [priority]
+2. [Story name] — [1-line description] — [priority]
 
 Run `/story-readiness [path]` to validate before starting.
 ```
 
-If no sprint file exists or no other ready stories are found, skip this section silently.
+If no other ready tasks are found, skip this section silently.
 
 ---
 
@@ -351,5 +351,5 @@ Handle the verdict per standard rules in `director-gates.md`:
 ## Recommended Next Steps
 
 - Run `/dev-story [story-path]` to begin implementation once the story is READY
-- Run `/story-readiness sprint` to check all stories in the current sprint at once
+- Run `/story-readiness milestone [name]` to check all stories in a milestone at once
 - Run `/create-stories [epic-slug]` if a story file is missing entirely

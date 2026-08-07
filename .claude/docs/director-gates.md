@@ -44,8 +44,8 @@ Examples:
 | Mode | What runs | Best for |
 |------|-----------|----------|
 | `full` | All gates active — every workflow step reviewed | Teams, learning users, or when you want thorough director feedback at every step |
-| `lean` | PHASE-GATEs only (`/gate-check`) — per-skill gates skipped | **Default** — solo devs and small teams; directors review at milestones only |
-| `solo` | No director gates anywhere | Game jams, prototypes, maximum speed |
+| `lean` | PHASE-GATEs only (`/gate-check`) — per-skill gates skipped | Small teams that still want director review at milestones |
+| `solo` | No director gates anywhere | **Default** — solo dev; game jams, prototypes, maximum speed |
 
 **Check pattern — apply before every gate spawn:**
 
@@ -53,7 +53,7 @@ Examples:
 Before spawning gate [GATE-ID]:
 1. If skill was called with --review [mode], use that
 2. Else read production/review-mode.txt
-3. Else default to lean
+3. Else default to solo
 
 Apply the resolved mode:
 - solo → skip all gates. Note: "[GATE-ID] skipped — Solo mode"
@@ -69,7 +69,7 @@ Apply the resolved mode:
 **MANDATORY: Resolve review mode before every gate spawn.** Never spawn a gate without checking. The resolved mode is determined once per skill run:
 1. If skill was called with `--review [mode]`, use that
 2. Else read `production/review-mode.txt`
-3. Else default to `lean`
+3. Else default to `solo`
 
 Apply the resolved mode:
 - `solo` → **skip all gates**. Note in output: `[GATE-ID] skipped — Solo mode`
@@ -440,47 +440,23 @@ any workflow that produces an MVP definition and timeline estimate)
 
 ---
 
-### PR-SPRINT — Sprint Feasibility Review
-
-**Trigger**: Before finalising a sprint plan (`/sprint-plan`), and after any
-mid-sprint scope change
-
-**Context to pass**:
-- Proposed sprint story list (titles, estimates, dependencies)
-- Team capacity (hours available)
-- Current sprint backlog debt (if any)
-- Milestone constraints
-
-**Prompt**:
-> "Review this sprint plan for feasibility. Is the story load realistic for the
-> available capacity? Are stories correctly ordered by dependency? Are there hidden
-> dependencies between stories that could block the sprint mid-way? Are any stories
-> underestimated given their technical complexity? Return REALISTIC (plan is
-> achievable), CONCERNS [specific risks], or UNREALISTIC [sprint must be
-> descoped — identify which stories to defer]."
-
-**Verdicts**: REALISTIC / CONCERNS / UNREALISTIC
-
----
-
 ### PR-MILESTONE — Milestone Risk Assessment
 
-**Trigger**: At milestone review (`/milestone-review`), at mid-sprint retrospectives,
-or when a scope change is proposed that affects the milestone
+**Trigger**: On request when a scope change is proposed that affects a milestone,
+or when checking whether a milestone is on track (full mode only)
 
 **Context to pass**:
-- Milestone definition and target date
-- Current completion percentage
-- Blocked stories count
-- Sprint velocity data (if available)
+- Milestone definition and target date (from the Backlog milestone)
+- Current completion (Done vs total tasks on the board for this milestone)
+- Blocked task count (tasks carrying the `blocked` label)
 
 **Prompt**:
-> "Review this milestone status. Based on current velocity and blocked story count,
-> will this milestone hit its target date? What are the top 3 production risks
-> between now and the milestone? Are there scope items that should be cut to protect
-> the milestone date vs. items that are non-negotiable? Return ON TRACK, AT RISK
-> [specific mitigations], or OFF TRACK [date must slip or scope must cut — provide
-> both options]."
+> "Review this milestone status. Based on the board (completed vs remaining tasks
+> and blocked count), will this milestone hit its target date? What are the top 3
+> production risks between now and the milestone? Are there scope items that should
+> be cut to protect the milestone date vs. items that are non-negotiable? Return
+> ON TRACK, AT RISK [specific mitigations], or OFF TRACK [date must slip or scope
+> must cut — provide both options]."
 
 **Verdicts**: ON TRACK / AT RISK / OFF TRACK
 
@@ -669,8 +645,8 @@ as part of `/code-review`
 
 ### QL-STORY-READY — QA Lead Story Readiness Check
 
-**Trigger**: Before a story is accepted into a sprint — invoked by `/create-stories`,
-`/story-readiness`, and `/sprint-plan` during story selection
+**Trigger**: Before a story is cleared for dev — invoked by `/create-stories`
+and `/story-readiness` during story selection
 
 **Context to pass**:
 - Story file path
@@ -800,7 +776,7 @@ When a new gate is needed for a new skill or workflow:
 | **Concept** | CD-PILLARS, AD-CONCEPT-VISUAL | TD-FEASIBILITY, PR-SCOPE |
 | **Systems Design** | TD-SYSTEM-BOUNDARY, CD-SYSTEMS, PR-SCOPE, CD-GDD-ALIGN (per GDD) | ND-CONSISTENCY, AD-VISUAL |
 | **Technical Setup** | TD-ARCHITECTURE, TD-ADR (per ADR), LP-FEASIBILITY, AD-ART-BIBLE | TD-ENGINE-RISK |
-| **Pre-Production** | PR-EPIC, QL-STORY-READY (per story), PR-SPRINT, all four PHASE-GATEs (via gate-check) | CD-PLAYTEST |
-| **Production** | LP-CODE-REVIEW (per story), QL-STORY-READY, PR-SPRINT (per sprint), QL-TEST-COVERAGE (per sprint close-out) | PR-MILESTONE, AD-VISUAL |
+| **Pre-Production** | PR-EPIC, QL-STORY-READY (per story), all four PHASE-GATEs (via gate-check) | CD-PLAYTEST |
+| **Production** | LP-CODE-REVIEW (per story), QL-STORY-READY, QL-TEST-COVERAGE (per milestone close-out) | PR-MILESTONE, AD-VISUAL |
 | **Polish** | QL-TEST-COVERAGE, CD-PLAYTEST, PR-MILESTONE | AD-VISUAL |
 | **Release** | All four PHASE-GATEs (via gate-check) | QL-TEST-COVERAGE |

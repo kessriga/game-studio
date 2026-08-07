@@ -22,7 +22,7 @@ The user must approve before moving to the next phase.
 
 1. If `--review [mode]` was passed as an argument, use that mode.
 2. Else read `production/review-mode.txt` — use whatever is written there.
-3. Else default to `lean`.
+3. Else default to `solo`.
 
 Modes:
 - `full` — spawn all director and lead gates as described
@@ -114,7 +114,7 @@ Delegate to **release-manager** + **devops-engineer**:
 - Generate changelog using `/changelog`
 - Deploy to staging for final smoke test
 - Deploy to production
-- Human team action: Monitor dashboards and error rates for 48 hours post-release. Schedule a follow-up retrospective using `/retrospective` at the 48-hour mark.
+- Human team action: Monitor dashboards and error rates for 48 hours post-release. Capture any follow-up work as Backlog tasks at the 48-hour mark.
 
 Delegate to **community-manager** (in parallel with deployment):
 - Finalize patch notes using `/patch-notes [version]`
@@ -164,5 +164,5 @@ Verdict: **BLOCKED** — release halted; go/no-go was NO or a hard blocker is un
 ## Next Steps
 
 - Monitor post-release dashboards for 48 hours.
-- Run `/retrospective` if significant issues occurred during the release.
+- If significant issues occurred during the release, capture the lessons and any follow-up work as Backlog tasks.
 - Update `production/stage.txt` to `Live` after successful deployment.

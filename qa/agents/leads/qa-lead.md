@@ -80,6 +80,6 @@ Verified by reading the agent's `.claude/agents/qa-lead.md` frontmatter:
 
 ## Coverage Notes
 - QL-TEST-COVERAGE (overall coverage assessment for a sprint or milestone) is not covered — a dedicated case should be added when coverage reports are available.
-- Bug severity triage (P0/P1/P2 classification) is not covered here — deferred to /bug-triage skill integration.
+- Bug severity triage (P0/P1/P2 classification) is not covered here — deferred to triage via the Backlog board filtered by the `bug` label.
 - Release quality gate behavior (PASS / FAIL vocabulary variant) is not covered.
 - Interaction between QL-STORY-READY and story Done criteria (/story-done skill) is not covered.

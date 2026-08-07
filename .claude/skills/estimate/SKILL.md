@@ -24,7 +24,7 @@ Identify files and modules that would need to change:
 - Assess complexity (size, dependency count, cyclomatic complexity)
 - Identify integration points with other systems
 - Check for existing test coverage in the affected areas
-- Read past sprint data from `production/sprints/` for similar completed tasks and historical velocity
+- Review past completed work on the Backlog board (`Done` tasks) for similar tasks and historical throughput
 
 ---
 
@@ -122,7 +122,7 @@ This skill is read-only — no files are written. Verdict: **COMPLETE** — esti
 
 - If confidence is Low: recommend a time-boxed spike (`/prototype`) before committing.
 - If the task is > 10 days: recommend breaking it into smaller stories via `/create-stories`.
-- To schedule the task: run `/sprint-plan update` to add it to the next sprint.
+- To schedule the task: file it on the Backlog board and prioritise it.
 
 ### Guidelines
 

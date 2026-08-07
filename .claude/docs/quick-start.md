@@ -102,8 +102,6 @@ Ask yourself: "What department would handle this in a real studio?"
 | `/create-epics` | Translate GDDs + ADRs into epics (one per architectural module) |
 | `/create-stories` | Break a single epic into implementable story files |
 | `/dev-story` | Read a story and implement it — routes to the correct programmer agent |
-| `/sprint-plan` | Creates or updates sprint plans |
-| `/sprint-status` | Quick 30-line sprint snapshot |
 | `/story-readiness` | Validate a story is implementation-ready before pickup |
 | `/story-done` | End-of-story completion review — verifies acceptance criteria |
 | `/estimate` | Produces structured effort estimates |
@@ -119,17 +117,13 @@ Ask yourself: "What department would handle this in a real studio?"
 | `/consistency-check` | Scan all GDDs for cross-document inconsistencies (conflicting stats, names, rules) |
 | `/security-audit` | Audit for security vulnerabilities: save tampering, cheat vectors, network exploits, data exposure |
 | `/reverse-document` | Generate design/architecture docs from existing code |
-| `/milestone-review` | Reviews milestone progress |
-| `/retrospective` | Runs sprint/milestone retrospective |
-| `/bug-report` | Structured bug report creation |
+| `/bug-report` | File a bug as a Backlog task (bug label); verify/close via Backlog |
 | `/playtest-report` | Creates or analyzes playtest feedback |
-| `/onboard` | Generates onboarding docs for a role |
 | `/release-checklist` | Validates pre-release checklist |
 | `/launch-checklist` | Complete launch readiness validation |
 | `/changelog` | Generates changelog from git history |
 | `/patch-notes` | Generate player-facing patch notes |
 | `/hotfix` | Emergency fix with audit trail |
-| `/day-one-patch` | Prepare a focused day-one patch for known issues discovered after gold master |
 | `/prototype` | Concept prototype — validate core idea before writing GDDs (Phase 1) |
 | `/vertical-slice` | Production-quality end-to-end build — validate full game loop (Phase 4) |
 | `/localize` | Localization scan, extract, validate |
@@ -142,8 +136,7 @@ Ask yourself: "What department would handle this in a real studio?"
 | `/team-level` | Orchestrate full level creation pipeline |
 | `/team-live-ops` | Orchestrate live-ops team for seasons, events, and post-launch content |
 | `/team-qa` | Orchestrate full QA team cycle — test plan, test cases, smoke check, sign-off |
-| `/qa-plan` | Generate a QA test plan for a sprint or feature |
-| `/bug-triage` | Re-prioritize open bugs, assign to sprints, surface systemic trends |
+| `/qa-plan` | Generate a QA test plan for a milestone or feature |
 | `/smoke-check` | Run critical path smoke test gate before QA hand-off (PASS/FAIL) |
 | `/soak-test` | Generate a soak test protocol for extended play sessions |
 | `/regression-suite` | Map coverage to GDD critical paths, flag gaps, maintain regression suite |
@@ -164,7 +157,6 @@ Templates are in `.claude/docs/templates/`:
 - `risk-register-entry.md` -- for new risks
 - `narrative-character-sheet.md` -- for new characters
 - `test-plan.md` -- for feature test plans
-- `sprint-plan.md` -- for sprint planning
 - `milestone-definition.md` -- for new milestones
 - `level-design-document.md` -- for new levels
 - `game-pillars.md` -- for core design pillars
@@ -232,7 +224,7 @@ If you already know what you need, jump directly to the relevant path:
    to write GDDs in dependency order
 6. **Prototype the mechanic** — Run `/prototype [core-mechanic]` (1–3 days — before writing GDDs)
 7. **Design each system** — Run `/design-system [system-name]` to write GDDs, informed by prototype findings
-8. **Plan the first sprint** — After architecture and `/vertical-slice`, run `/sprint-plan new`
+8. **Define the first epic** — After architecture and `/vertical-slice`, run `/create-epics` then `/create-stories` to fill the Backlog board
 9. Start building
 
 ### Path B: "I know what I want to build"
@@ -245,8 +237,8 @@ If you already have a game concept and engine choice:
 3. **Decompose into systems** — Run `/map-systems` to enumerate systems and dependencies
 4. **Design each system** — Run `/design-system [system-name]` for GDDs in dependency order
 5. **Create the initial ADR** — Run `/architecture-decision`
-6. **Create the first milestone** in `production/milestones/`
-7. **Plan the first sprint** — Run `/sprint-plan new`
+6. **Define the first epic** — Run `/create-epics` (mints a Backlog milestone)
+7. **Break it into stories** — Run `/create-stories [epic]` to fill the board
 8. Start building
 
 ### Path C: "I know the game but not the engine"
@@ -269,7 +261,7 @@ If you have design docs, prototypes, or code already:
    without overwriting your existing work
 3. **Configure engine if needed** — Run `/setup-engine` if not yet configured
 4. **Validate phase readiness** — Run `/gate-check` to see where you stand
-5. **Plan the next sprint** — Run `/sprint-plan new`
+5. **Pick up work** — check the Backlog board for the next ready task
 
 ## File Structure Reference
 
@@ -278,7 +270,7 @@ CLAUDE.md                          -- Master config (read this first, ~60 lines)
 .claude/
   settings.json                    -- Claude Code hooks and project settings
   agents/                          -- 53 agent definitions (YAML frontmatter)
-  skills/                          -- 73 slash command definitions (YAML frontmatter)
+  skills/                          -- 66 slash command definitions (YAML frontmatter)
   hooks/                           -- 12 hook scripts (.sh) wired by settings.json
   rules/                           -- 11 path-specific rule files
   docs/

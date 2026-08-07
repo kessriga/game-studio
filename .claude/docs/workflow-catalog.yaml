@@ -223,15 +223,6 @@ phases:
           note: "Check tests/ directory for engine-specific test framework scaffold"
         description: "Scaffold the test framework and CI pipeline once before the first sprint. Leads to /test-helpers for fixture generation, /qa-plan per epic, and /smoke-check per sprint."
 
-      - id: sprint-plan
-        name: "First Sprint Plan"
-        command: /sprint-plan
-        required: true
-        artifact:
-          glob: "production/sprints/sprint-*.md"
-          min_count: 1
-        description: "Plan the first sprint with prioritized stories from epics"
-
       - id: vertical-slice
         name: "Vertical Slice"
         command: /vertical-slice
@@ -243,18 +234,9 @@ phases:
 
   production:
     label: "Production"
-    description: "Sprint-based feature development — pick, implement, close stories"
+    description: "Continuous feature development — pick, implement, close stories off the Backlog board"
     next_phase: polish
     steps:
-      - id: sprint-plan
-        name: "Sprint Plan"
-        command: /sprint-plan
-        required: true
-        repeatable: true
-        artifact:
-          glob: "production/sprints/sprint-*.md"
-        description: "Plan the current sprint with prioritized, ready stories"
-
       - id: story-readiness
         name: "Story Readiness Check"
         command: /story-readiness
@@ -292,18 +274,11 @@ phases:
         description: "Generate a QA test plan per epic or sprint. Run /qa-plan [epic-slug]. Produces test cases for /smoke-check, /regression-suite, and /test-evidence-review."
 
       - id: bug-report
-        name: "Bug Report / Triage"
+        name: "Bug Report"
         command: /bug-report
         required: false
         repeatable: true
-        description: "Log and prioritize bugs found during implementation. /bug-report creates a structured report; /bug-triage prioritizes the open backlog."
-
-      - id: retrospective
-        name: "Sprint Retrospective"
-        command: /retrospective
-        required: false
-        repeatable: true
-        description: "Post-sprint review to capture what worked and what to change. Run at the end of each sprint, before planning the next."
+        description: "Log bugs found during implementation. /bug-report files a Backlog task with a `bug` label; triage is the board filtered by `bug` and sorted by priority."
 
       - id: team-feature
         name: "Team Orchestration (optional)"
@@ -316,16 +291,7 @@ phases:
         command: /scope-check
         required: false
         repeatable: true
-        artifact:
-          glob: "production/sprints/sprint-*.md"
-          note: "Run when stories are added mid-sprint, or before sprint retrospectives"
-        description: "Detect scope creep by comparing current sprint scope to original epic scope. Run (a) when stories are added mid-sprint, or (b) before sprint retrospectives."
-
-      - id: sprint-status
-        name: "Sprint Status"
-        command: /sprint-status
-        required: false
-        description: "Quick 30-line snapshot of sprint progress without a full report"
+        description: "Detect scope creep by comparing current milestone scope to the original epic scope. Run when tasks are added to a milestone mid-flight."
 
   polish:
     label: "Polish"

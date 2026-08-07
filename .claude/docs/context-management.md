@@ -86,7 +86,7 @@ When context is compacted, preserve the following in the summary:
 - Reference to `production/session-state/active.md` (read it to recover state)
 - List of files modified in this session and their purpose
 - Any architectural decisions made and their rationale
-- Active sprint tasks and their current status
+- Active Backlog tasks and their current status
 - Agent invocations and their outcomes (success/failure/blocked)
 - Test results (pass/fail counts, specific failures)
 - Unresolved blockers or questions awaiting user input

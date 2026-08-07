@@ -12,7 +12,7 @@
 ├── tests/                       # Test suites (unit, integration, performance, playtest)
 ├── tools/                       # Build and pipeline tools (ci, build, asset-pipeline)
 ├── prototypes/                  # Throwaway prototypes (isolated from src/)
-└── production/                  # Production management (sprints, milestones, releases)
+└── production/                  # Production management (milestones, releases, QA evidence)
     ├── session-state/           # Ephemeral session state (active.md — gitignored)
     └── session-logs/            # Session audit trail (gitignored)
 ```

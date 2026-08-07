@@ -52,43 +52,42 @@ PHASE 4: PRE-PRODUCTION
   /vertical-slice ─────────────────────────────────────────────► prototypes/[name]-vertical-slice/REPORT.md
   /playtest-report ────────────────────────────────────────────► production/playtests/
 
-  [Stories + sprint plan — only after vertical slice PROCEEDS]
-  /create-epics [layer] ───────────────────────────────────────► production/epics/*/EPIC.md
-  /create-stories [epic-slug] ─────────────────────────────────► production/epics/*/story-*.md
-  /sprint-plan new ────────────────────────────────────────────► production/sprints/sprint-01.md
+  [Stories + milestone — only after vertical slice PROCEEDS]
+  /create-epics [layer] ───────────────────────────────────────► production/epics/*/EPIC.md + Backlog milestone
+  /create-stories [epic-slug] ─────────────────────────────────► production/epics/*/story-*.md + a Backlog task per story
+  (prioritize the milestone's tasks on the Backlog board)
   /gate-check ─────────────────────────────────────────────────► PASS → advance to production
         │
         ▼
-PHASE 5: PRODUCTION (repeating sprint loop)
-  /sprint-status ──────────────────────────────────────────────► sprint snapshot
+PHASE 5: PRODUCTION (continuous flow off the board)
+  read the Backlog board ──────────────────────────────────────► current status (filter by milestone/status/label)
   /story-readiness [story] ────────────────────────────────────► story validated READY
         │
-        ▼ (pick up and implement)
-  /dev-story [story] ──────────────────────────────────────────► routes to correct programmer agent
+        ▼ (pull top ready task and implement)
+  /dev-story [story] ──────────────────────────────────────────► routes to correct agent; sets task In Progress
         │
         ▼ (during implementation, as needed)
   /code-review ────────────────────────────────────────────────► code review report
   /scope-check ────────────────────────────────────────────────► scope creep detected / clear
   /content-audit ──────────────────────────────────────────────► GDD content gaps identified
-  /bug-report ─────────────────────────────────────────────────► production/qa/bugs/bug-NNN.md
-  /bug-triage ─────────────────────────────────────────────────► bugs re-prioritized + assigned
+  /bug-report ─────────────────────────────────────────────────► Backlog task with a `bug` label
+  (triage = the Backlog board filtered by the `bug` label)
 
   [Team skills for feature areas — spawn when working a full feature]
   /team-combat / /team-narrative / /team-ui / /team-level / /team-audio
 
-  [QA cycle per sprint]
-  /qa-plan ────────────────────────────────────────────────────► production/qa/qa-plan-sprint-NN.md
+  [QA cycle — ongoing]
+  /qa-plan ────────────────────────────────────────────────────► production/qa/qa-plan-[milestone].md
   /smoke-check ────────────────────────────────────────────────► smoke test gate (PASS/FAIL)
   /regression-suite ───────────────────────────────────────────► coverage gaps + missing regression tests
   /test-evidence-review ───────────────────────────────────────► evidence quality report
   /test-flakiness ─────────────────────────────────────────────► flaky test report
         │
         ▼
-  /story-done [story] ─────────────────────────────────────────► story closed + next surfaced
-  /sprint-plan [next] ─────────────────────────────────────────► next sprint
+  /story-done [story] ─────────────────────────────────────────► task set Done + next task surfaced
         │
-        ▼ (after Production milestone)
-  /milestone-review ───────────────────────────────────────────► milestone report
+        ▼ (repeat; when a milestone's tasks are all Done)
+  review milestone progress on the Backlog board ──────────────► completeness by status/label
   /gate-check ─────────────────────────────────────────────────► PASS → advance to polish
         │
         ▼
@@ -99,7 +98,7 @@ PHASE 6: POLISH
   /tech-debt ──────────────────────────────────────────────────► docs/tech-debt-register.md
   /soak-test ──────────────────────────────────────────────────► soak test protocol + results
   /localize ───────────────────────────────────────────────────► localization readiness report
-  /team-polish ────────────────────────────────────────────────► polish sprint orchestrated
+  /team-polish ────────────────────────────────────────────────► polish pass orchestrated
   /team-qa ────────────────────────────────────────────────────► full QA cycle sign-off
   /gate-check ─────────────────────────────────────────────────► PASS → advance to release
         │
@@ -196,9 +195,9 @@ How a story moves from backlog to closed:
 ```
 /story-readiness [story]
         │
-        ├── READY → Status: ready-for-dev → pick up for implementation
+        ├── READY → task stays To Do (ready) → pull for implementation
         ├── NEEDS WORK → agent shows specific gaps → resolve → re-run readiness
-        └── BLOCKED → ADR still Proposed, or upstream story incomplete
+        └── BLOCKED → ADR still Proposed, or upstream story incomplete (task gets a `blocked` label)
                 │
                 ▼ (after READY)
         /dev-story [story]
@@ -216,8 +215,8 @@ How a story moves from backlog to closed:
                         ▼
                 /story-done [story]
                         │
-                        ├── COMPLETE → Status: Complete, sprint-status.yaml updated, next story surfaced
-                        ├── COMPLETE WITH NOTES → complete but some criteria deferred (logged)
+                        ├── COMPLETE → task set Done on the board, next task surfaced
+                        ├── COMPLETE WITH NOTES → complete but some criteria deferred (logged in `## Completion Notes`)
                         └── BLOCKED → acceptance criteria cannot be verified → investigate blocker
 ```
 
@@ -230,13 +229,13 @@ How a story gets from backlog to closed (summary view):
 ```
 /create-epics [layer]
         │
-        └── Output: production/epics/[slug]/EPIC.md
+        └── Output: production/epics/[slug]/EPIC.md + a Backlog milestone
                 │
                 ▼
         /create-stories [epic-slug]
                 │
-                └── Output: production/epics/[slug]/story-NNN-[slug].md
-                            (Status: Ready or Blocked if ADR is Proposed)
+                └── Output: production/epics/[slug]/story-NNN-[slug].md + a Backlog task
+                            (task is To Do, or gets a `blocked` label if the ADR is Proposed)
                 │
                 ▼
         /story-readiness [story]
@@ -255,8 +254,8 @@ How a story gets from backlog to closed (summary view):
 /test-setup ────────────────────────────────────────────────────► test framework scaffolded + CI/CD wired
 /test-helpers ──────────────────────────────────────────────────► tests/helpers/[engine].gd (GDUnit4, NUnit, etc.)
 
-[Phase 5 — per-sprint QA cycle]
-/qa-plan [sprint or feature]
+[Phase 5 — ongoing QA cycle]
+/qa-plan [milestone or feature]
         │
         ├── Reads: story files, GDDs, acceptance criteria
         ├── Classifies each story by test type:
@@ -265,13 +264,13 @@ How a story gets from backlog to closed (summary view):
         │     Visual/Feel → screenshot + lead sign-off (ADVISORY)
         │     UI → manual walkthrough or interaction test (ADVISORY)
         │     Config/Data → smoke check (ADVISORY)
-        └── Output: production/qa/qa-plan-sprint-NN.md
+        └── Output: production/qa/qa-plan-[milestone].md
                 │
                 ▼
         /smoke-check
                 │
                 ├── PASS → QA hand-off cleared
-                └── FAIL → block sprint close → fix critical paths first
+                └── FAIL → block QA hand-off → fix critical paths first
                         │
                         ▼
                 /regression-suite
@@ -293,8 +292,8 @@ How a story gets from backlog to closed (summary view):
 /team-qa ───────────────────────────────────────────────────────► full QA cycle sign-off for release gate
 
 [Ongoing — bug management]
-/bug-report ────────────────────────────────────────────────────► production/qa/bugs/bug-NNN.md
-/bug-triage ────────────────────────────────────────────────────► open bugs re-prioritized + assigned
+/bug-report ────────────────────────────────────────────────────► Backlog task with a `bug` label
+(triage = the Backlog board filtered by the `bug` label)
 
 [Meta — harness validation]
 /skill-test [lint|spec|catalog] ────────────────────────────────► skill file structural + behavioral check
@@ -355,8 +354,8 @@ For projects with existing work (use `/start` option D or run directly):
 | Scaffolding tests | `/test-setup` → `/test-helpers` |
 | Have stories, ready to code | `/story-readiness [story]` → `/dev-story [story]` |
 | Story done | `/story-done [story]` |
-| Running QA for a sprint | `/qa-plan` → `/smoke-check` → `/regression-suite` |
-| Bug backlog needs sorting | `/bug-triage` |
+| Running QA for a milestone | `/qa-plan` → `/smoke-check` → `/regression-suite` |
+| Bug backlog needs sorting | Read the Backlog board filtered by the `bug` label |
 | Extended stability testing | `/soak-test` |
 | Not sure | `/help` |
 | Existing project | `/adopt` |

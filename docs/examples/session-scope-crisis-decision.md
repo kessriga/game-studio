@@ -28,7 +28,7 @@
 > - `production/milestones/alpha.md` (milestone definition)
 > - `design/pillars.md` (what's non-negotiable)
 > - `design/gdd/crafting-system.md` (what was designed)
-> - `production/sprints/sprint-current.md` (current work)
+> - the current milestone on the Backlog board (work in flight)
 >
 > [Reads documents]
 >
@@ -239,7 +239,7 @@
 > We'll know this was the right choice if:
 > - Investor demo successfully shows both pillars
 > - Funding secured for next development phase
-> - Post-Alpha sprint can implement full system without rework
+> - Post-Alpha work can implement full system without rework
 > ```
 >
 > **Updated GDD Markers:**
@@ -307,12 +307,12 @@
 >
 > To `producer`:
 > > "Strategic decision made: Simplified crafting to make Alpha deadline.
-> > ADR-007 documents rationale. Sprint plan needs updating to reflect new scope."
+> > ADR-007 documents rationale. The board needs re-prioritizing to reflect the new scope."
 >
 > **Next Steps:**
 > 1. Gameplay-programmer can start implementing simplified crafting
 > 2. You can practice demo script before investor meeting
-> 3. Producer will update sprint plan with new task breakdown
+> 3. Producer will re-prioritize the board with the new task breakdown
 >
 > **Validation:**
 > We'll know this decision was correct when:

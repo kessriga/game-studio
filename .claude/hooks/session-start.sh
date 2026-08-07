@@ -19,30 +19,14 @@ if [ -n "$BRANCH" ]; then
     done
 fi
 
-# Current sprint (find most recent sprint file)
-LATEST_SPRINT=$(ls -t production/sprints/sprint-*.md 2>/dev/null | head -1)
-if [ -n "$LATEST_SPRINT" ]; then
-    echo ""
-    echo "Active sprint: $(basename "$LATEST_SPRINT" .md)"
-fi
-
 # Current milestone
 LATEST_MILESTONE=$(ls -t production/milestones/*.md 2>/dev/null | head -1)
 if [ -n "$LATEST_MILESTONE" ]; then
     echo "Active milestone: $(basename "$LATEST_MILESTONE" .md)"
 fi
 
-# Open bug count
-BUG_COUNT=0
-for dir in tests/playtest production; do
-    if [ -d "$dir" ]; then
-        count=$(find "$dir" -name "BUG-*.md" 2>/dev/null | wc -l)
-        BUG_COUNT=$((BUG_COUNT + count))
-    fi
-done
-if [ "$BUG_COUNT" -gt 0 ]; then
-    echo "Open bugs: $BUG_COUNT"
-fi
+# Open bugs are tracked as Backlog tasks with the `bug` label — check the board
+# (`backlog task list --label bug`), not a file scan.
 
 # Code health quick check
 if [ -d "src" ]; then

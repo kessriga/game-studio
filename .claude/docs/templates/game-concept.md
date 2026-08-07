@@ -314,4 +314,4 @@ the combat-crafting loop engaging for 30+ minute sessions"]
 - [ ] Design each system (`/design-system [system-name]`) — use prototype learnings in Tuning Knobs and Formulas sections
 - [ ] Build vertical slice in Pre-Production (`/vertical-slice`) — validate full game loop before committing to Production
 - [ ] Validate core loop with playtest (`/playtest-report`)
-- [ ] Plan first milestone (`/sprint-plan new`)
+- [ ] Define first epic / milestone (`/create-epics`)

@@ -56,14 +56,14 @@ Dev runs `/design-system movement` after `/map-systems` produced the systems ind
 **Complexity:** Medium
 
 **Scenario:**
-Dev picks up a story from the sprint backlog. `/story-readiness` catches a roll-direction ambiguity before any code is written. After implementation, `/story-done` verifies 9 acceptance criteria, identifies 2 deferred criteria (inventory not integrated yet), and closes the story with notes.
+Dev pulls a story off the Backlog board. `/story-readiness` catches a roll-direction ambiguity before any code is written. After implementation, `/story-done` verifies 9 acceptance criteria, identifies 2 deferred criteria (inventory not integrated yet), and closes the story with notes.
 
 **Key Moments:**
 - `/story-readiness` catches spec ambiguity in Turn 2 — resolved before implementation starts
 - ADR status check: story would be BLOCKED if ADR was still Proposed
 - Manifest version check: confirms story's guidance hasn't drifted from current architecture
 - Deferred criteria tracked (not lost) when integration not yet possible
-- `sprint-status.yaml` updated at story close, next ready story surfaced automatically
+- The story's Backlog task set to Done at story close, next ready task surfaced automatically
 
 **Learn:**
 - Why `/story-readiness` prevents late-implementation ambiguity
@@ -85,7 +85,7 @@ Dev completes the Systems Design phase and runs `/gate-check` to advance. The ga
 **Key Moments:**
 - Gate validates artifact presence AND internal completeness (8 sections per GDD)
 - CONCERNS ≠ FAIL: low-severity cross-review note passes the gate
-- stage.txt update changes what `/help`, `/sprint-status`, and all skills see going forward
+- stage.txt update changes what `/help` and all skills see going forward
 - Agent surfaces the cross-review concern as a concrete ADR to write next
 - Next phase checklist is specific and ordered, not generic
 

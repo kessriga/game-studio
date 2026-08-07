@@ -14,6 +14,7 @@ Or check `README.md` for the version badge.
 ## Table of Contents
 
 - [Upgrade Strategies](#upgrade-strategies)
+- [v1.0 → v1.1 (Backlog planning reconciliation)](#v10--v11-backlog-planning-reconciliation)
 - [v1.0.0-beta → v1.0](#v100-beta--v10)
 - [v0.4.x → v1.0](#v04x--v10)
 - [v0.4.0 → v0.4.1](#v040--v041)
@@ -78,6 +79,51 @@ Best when: you didn't use git to set up the template (just downloaded a zip).
 2. Copy the files listed under **"Safe to overwrite"** directly.
 3. For files under **"Merge carefully"**, open both versions side-by-side
    and manually merge the structural changes while keeping your content.
+
+---
+
+## v1.0 → v1.1 (Backlog planning reconciliation)
+
+**Released:** 2026-08-08
+**Commit range:** `ac73e68..HEAD`
+**Key themes:** Work tracking moves onto Backlog.md; sprint machinery retired; solo review by default
+
+### What Changed
+
+| Category | Changes |
+|----------|---------|
+| **Removed skills (7)** | `/sprint-plan`, `/sprint-status`, `/milestone-review`, `/retrospective`, `/bug-triage`, `/day-one-patch`, `/onboard` — deleted (recoverable from git history). Sprint planning/status is replaced by the Backlog board; bug triage happens on the board via the `bug` label; milestone review is folded into Backlog milestones. |
+| **Removed state file** | `production/sprint-status.yaml` no longer exists. Work-item state lives solely in Backlog.md. |
+| **New flow — bugs** | `/bug-report` now files a Backlog task with the `bug` label (via the Backlog MCP) instead of writing `BUG-*.md` files. |
+| **New flow — epics** | Epics map to Backlog **milestones**; stories map to Backlog **tasks**. |
+| **Status model** | The old six-status story model maps onto Backlog's native `To Do` / `In Progress` / `Done` plus a `Draft` pre-ready status and `blocked` / `bug` labels. See `docs/WORKFLOW-GUIDE.md` § Status model for the full mapping. |
+| **Review mode** | `solo` is now the default review mode — director sub-agent gates are skipped unless `--review full`/`lean` is requested. |
+| **Config** | `backlog/config.yml` registers the `blocked` and `bug` labels. |
+| **New change record** | OpenSpec change `reconcile-planning-solo` documents the proposal, design, spec, and task breakdown for this reconciliation. |
+
+---
+
+### Files: Safe to Overwrite
+
+**Files removed (delete on upgrade):**
+```
+.claude/skills/{sprint-plan,sprint-status,milestone-review,retrospective,bug-triage,day-one-patch,onboard}/SKILL.md
+.claude/docs/templates/sprint-plan.md
+.claude/docs/hooks-reference/post-sprint-retrospective.md
+production/sprint-status.yaml   # if present in your repo
+```
+
+**Existing files to overwrite (no user content):**
+- All kept `.claude/skills/` files modified in the commit range (sprint/removed-skill references scrubbed)
+- `.claude/hooks/session-start.sh`, `.claude/hooks/session-stop.sh`
+- `.claude/docs/*` (directory-structure, coordination, catalogs), `README.md`, `UPGRADING.md`
+- `docs/WORKFLOW-GUIDE.md` and `docs/examples/*`
+
+---
+
+### Files: Merge Carefully
+
+- `backlog/config.yml` — keep your `project_name` and any custom statuses; add the `blocked` and `bug` labels.
 
 ---
 

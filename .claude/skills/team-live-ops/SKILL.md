@@ -21,7 +21,7 @@ The user must approve before moving to the next phase.
 
 1. If `--review [mode]` was passed as an argument, use that mode.
 2. Else read `production/review-mode.txt` — use whatever is written there.
-3. Else default to `lean`.
+3. Else default to `solo`.
 
 Modes:
 - `full` — spawn all director and lead gates as described
@@ -155,5 +155,5 @@ Verdict: **COMPLETE** — season plan produced and handed off for production.
 ## Next Steps
 
 - Run `/design-review` on the season design document for consistency validation.
-- Run `/sprint-plan` to schedule content creation work for the season.
+- File the season's content creation work as Backlog tasks (group them under a milestone).
 - Run `/team-release` when the season content is ready to deploy.

@@ -3,7 +3,7 @@ name: dev-story
 description: "Read a story file and implement it. Loads the full context (story, GDD requirement, ADR guidelines, control manifest), routes to the right programmer agent for the system and engine, implements the code and test, and confirms each acceptance criterion. The core implementation skill — run after /story-readiness, before /code-review and /story-done."
 argument-hint: "[story-path]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Bash, Task, AskUserQuestion
+allowed-tools: Read, Glob, Grep, Write, Bash, Task, AskUserQuestion, mcp__backlog__task_list, mcp__backlog__task_view, mcp__backlog__task_edit
 model: sonnet
 ---
 
@@ -15,14 +15,14 @@ drives implementation to completion — including writing the test.
 
 **The loop for every story:**
 ```
-/qa-plan sprint           ← define test requirements before sprint begins
+/qa-plan [epic]           ← define test requirements for the epic's stories
 /story-readiness [path]   ← validate before starting
 /dev-story [path]         ← implement it  (this skill)
 /code-review [files]      ← review it
-/story-done [path]        ← verify and close it
+/story-done [path]        ← verify and close it (sets the Backlog task to Done)
 ```
 
-**After all sprint stories are done:** run `/team-qa sprint` to execute the full QA cycle and get a sign-off verdict before advancing the project stage.
+**After a milestone's stories are done:** run `/team-qa [milestone]` to execute the full QA cycle and get a sign-off verdict before advancing the project stage.
 
 **Output:** Source code + test file in the project's `src/` and `tests/` directories.
 
@@ -30,12 +30,17 @@ drives implementation to completion — including writing the test.
 
 ## Phase 1: Find the Story
 
-**If a path is provided**: read that file directly.
+**If a path is provided**: read that story `.md` directly, and note its
+`Tracked in: TASK-N` header so Phase 2 can update the Backlog task.
+
+**If a Backlog task ID is provided** (e.g. `/dev-story TASK-42`): `task_view` it,
+read its `Spec:` reference, and open that story `.md`.
 
 **If no argument**: check `production/session-state/active.md` for the active
 story. If found, confirm: "Continuing work on [story title] — is that correct?"
-If not found, ask: "Which story are we implementing?" Glob
-`production/epics/**/*.md` and list stories with Status: Ready.
+If not found, pull the board: `task_list` with `status: "To Do"` (exclude any
+task carrying the `blocked` label), ordered by priority. List the ready tasks and
+ask which to implement, then open the chosen task's `Spec:` story `.md`.
 
 ---
 
@@ -99,20 +104,21 @@ If [C]: stop. Do not spawn any agent. Let the user review and re-run `/dev-story
 
 After extracting the **Dependencies** list from the story file, validate each:
 
-1. Glob `production/epics/**/*.md` to find each dependency story file.
-2. Read its `Status:` field.
-3. If any dependency has Status other than `Complete` or `Done`:
+1. Glob `production/epics/**/*.md` to find each dependency story file and read its
+   `Tracked in: TASK-N` header (its Backlog task).
+2. `task_view` that task and read its status (status lives in Backlog, not the `.md`).
+3. If any dependency's task status is not `Done`:
    - Use `AskUserQuestion`:
-     - Prompt: "Story '[current story]' depends on '[dependency title]' which is currently [status], not Complete. How do you want to proceed?"
+     - Prompt: "Story '[current story]' depends on '[dependency title]' whose task is currently [status], not Done. How do you want to proceed?"
      - Options:
        - `[A] Proceed anyway — I accept the dependency risk`
        - `[B] Stop — I'll complete the dependency first`
-       - `[C] The dependency is done but status wasn't updated — mark it Complete and continue`
-   - If [B]: set story status to **BLOCKED** in session state and stop. Do not spawn any programmer agent.
-   - If [C]: ask "May I update [dependency path] Status to Complete?" before continuing.
+       - `[C] The dependency is done but its task wasn't updated — mark it Done and continue`
+   - If [B]: apply the `blocked` label to this story's task, note it in session state, and stop. Do not spawn any programmer agent.
+   - If [C]: ask "May I set [dependency task] to Done?" then `task_edit` it before continuing.
    - If [A]: note in Phase 6 summary under "Deviations": "Implemented with incomplete dependency: [dependency title] — [status]."
 
-If a dependency file cannot be found: warn "Dependency story not found: [path]. Verify the path or create the story file."
+If a dependency story file cannot be found: warn "Dependency story not found: [path]. Verify the path or create the story file." If found but it has no `Tracked in:` task: warn and treat the dependency as unverified.
 
 ---
 
@@ -125,11 +131,10 @@ Read `.claude/docs/technical-preferences.md`:
 
 ### Mark Story In Progress
 
-Silently update two things before spawning any agent:
-
-1. **`production/sprint-status.yaml`** (if it exists): find the entry matching this story's file path and set `status: in_progress`. Update the top-level `updated` field to today's date. If the file does not exist, skip silently.
-
-2. **The story file itself**: edit the `Last Updated:` field in the story header to today's date (format: `YYYY-MM-DD`). If the field does not exist in the story header, add it after the `Status:` line. This enables sprint-status staleness detection for this story.
+Before spawning any agent, set the story's Backlog task to `In Progress` via
+`task_edit` (the task ID is in the story's `Tracked in:` header, or is the task
+you opened in Phase 1). Do not edit the story `.md` — it is the frozen spec;
+Backlog owns status. This is a silent update — no extra approval needed.
 
 ---
 
@@ -323,4 +328,4 @@ Common blockers:
 
 - Run `/code-review [file1] [file2]` to review the implementation before closing the story
 - Run `/story-done [story-path]` to verify acceptance criteria and mark the story complete
-- After all sprint stories are done: run `/team-qa sprint` for the full QA cycle before advancing the project stage
+- After a milestone's stories are done: run `/team-qa [milestone]` for the full QA cycle before advancing the project stage

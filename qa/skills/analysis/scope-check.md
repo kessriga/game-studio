@@ -97,7 +97,7 @@ None. Scope check is a read-only advisory skill; no gates are invoked.
 - [ ] Skill does not error when no milestone is defined
 - [ ] Output explicitly states that scope validation requires a milestone reference
 - [ ] Verdict is CONCERNS (not ON SCOPE or SCOPE CREEP DETECTED without data)
-- [ ] Output suggests running `/milestone-review` or creating a milestone
+- [ ] Output suggests creating a milestone (e.g., via `/create-epics`) or checking the Backlog board
 
 ---
 

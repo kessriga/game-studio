@@ -22,7 +22,7 @@ independent stories.
 - [ ] Has an Error Recovery Protocol section
 - [ ] Uses `AskUserQuestion` at phase transitions to capture user approval before proceeding
 - [ ] Phase 4 (smoke check) is a hard gate: FAIL stops the cycle
-- [ ] Bug reports are written to `production/qa/bugs/` with `BUG-[NNN]-[short-slug].md` naming
+- [ ] Bugs are filed as Backlog tasks with the `bug` label (via `/bug-report`)
 - [ ] Next-step guidance differs by verdict (APPROVED / APPROVED WITH CONDITIONS / NOT APPROVED)
 - [ ] Independent qa-tester tasks in Phase 5 are spawned in parallel
 
@@ -33,22 +33,22 @@ independent stories.
 ### Case 1: Happy Path — All stories pass manual QA, APPROVED verdict
 
 **Fixture:**
-- `production/sprints/sprint-03/` exists with 4 story files
+- The `Combat System` milestone has 4 story tasks on the Backlog board
 - Stories are a mix of types: 1 Logic, 1 Integration, 2 Visual/Feel
 - All stories have acceptance criteria populated
 - `tests/smoke/` contains a smoke test list; all items are verifiable
-- No existing bugs in `production/qa/bugs/`
+- No existing bug tasks on the Backlog board
 
-**Input:** `/team-qa sprint-03`
+**Input:** `/team-qa "Combat System"`
 
 **Expected behavior:**
-1. Phase 1: Reads all story files in `production/sprints/sprint-03/`; reads `production/stage.txt`; reports "Found 4 stories. Current stage: [stage]. Ready to begin QA strategy?"
+1. Phase 1: `task_list`s the `Combat System` milestone and follows each task's `Spec:` reference to its story `.md`; reads `production/stage.txt`; reports "Found 4 stories. Current stage: [stage]. Ready to begin QA strategy?"
 2. Phase 2: Spawns `qa-lead` via Task; produces strategy table classifying all 4 stories; no blockers flagged; presents to user; AskUserQuestion: user selects "Looks good — proceed to test plan"
-3. Phase 3: Produces QA plan document; asks "May I write the QA plan to `production/qa/qa-plan-sprint-03-[date].md`?"; writes after approval
+3. Phase 3: Produces QA plan document; asks "May I write the QA plan to `production/qa/qa-plan-Combat-System-[date].md`?"; writes after approval
 4. Phase 4: Spawns `qa-lead` via Task; reviews `tests/smoke/`; returns PASS; reports "Smoke check passed. Proceeding to test case writing."
 5. Phase 5: Spawns `qa-tester` via Task for each Visual/Feel and Integration story (2–3 stories); run in parallel; presents test cases grouped by story; AskUserQuestion per group; user approves
 6. Phase 6: Walks through each approved story; user marks all as PASS; result summary: "Stories PASS: 4, FAIL: 0, BLOCKED: 0"
-7. Phase 7: Spawns `qa-lead` via Task to produce sign-off report; report shows all stories PASS; no bugs filed; Verdict: APPROVED; asks "May I write this QA sign-off report to `production/qa/qa-signoff-sprint-03-[date].md`?"; writes after approval
+7. Phase 7: Spawns `qa-lead` via Task to produce sign-off report; report shows all stories PASS; no bugs filed; Verdict: APPROVED; asks "May I write this QA sign-off report to `production/qa/qa-signoff-Combat-System-[date].md`?"; writes after approval
 8. Verdict: COMPLETE — QA cycle finished
 
 **Assertions:**
@@ -67,10 +67,10 @@ independent stories.
 ### Case 2: Smoke Check Fail — QA cycle stops at Phase 4
 
 **Fixture:**
-- `production/sprints/sprint-04/` exists with 3 story files
+- The `Enemy AI` milestone has 3 story tasks on the Backlog board
 - `tests/smoke/` exists with 5 smoke test items; 2 items cannot be verified (e.g., build is unstable, core navigation broken)
 
-**Input:** `/team-qa sprint-04`
+**Input:** `/team-qa "Enemy AI"`
 
 **Expected behavior:**
 1. Phases 1–3 complete normally; QA plan is written
@@ -92,26 +92,26 @@ independent stories.
 ### Case 3: Bug Found — Visual/Feel story fails manual QA, bug report filed
 
 **Fixture:**
-- `production/sprints/sprint-05/` exists with 2 story files: 1 Logic (passes automated tests), 1 Visual/Feel
+- The `Level Streaming` milestone has 2 story tasks on the board: 1 Logic (passes automated tests), 1 Visual/Feel
 - `tests/smoke/` smoke check passes
 - The Visual/Feel story's animation timing is visibly wrong (acceptance criterion not met)
-- `production/qa/bugs/` directory exists (empty or with existing bugs)
+- the Backlog board is available (with or without existing bug tasks)
 
-**Input:** `/team-qa sprint-05`
+**Input:** `/team-qa "Level Streaming"`
 
 **Expected behavior:**
 1. Phases 1–5 complete normally; test cases are written for the Visual/Feel story
 2. Phase 6: User marks Visual/Feel story as FAIL; AskUserQuestion collects failure description: "Animation plays at 2x speed — jitter visible on every loop"
-3. Phase 6: Spawns `qa-tester` via Task to write a formal bug report; bug report written to `production/qa/bugs/BUG-001-animation-speed-jitter.md` (or next increment if bugs exist); report includes severity field
+3. Phase 6: Spawns `qa-tester` via Task to file a bug as a Backlog task with the `bug` label (via `/bug-report`); the task includes a severity in its description and a severity-mapped priority
 4. Result summary: "Stories PASS: 1, FAIL: 1 — bugs filed: BUG-001"
 5. Phase 7: Spawns `qa-lead` to produce sign-off report; Bugs Found table lists BUG-001 with severity and status Open; Verdict: NOT APPROVED (S1/S2 bug open, or FAIL without documented workaround)
 6. Sign-off report write is offered; writes after approval
 7. Next step: "Resolve S1/S2 bugs and re-run `/team-qa` or targeted manual QA before advancing."
 
 **Assertions:**
-- [ ] FAIL result in Phase 6 triggers AskUserQuestion to collect the failure description before the bug report is written
-- [ ] `qa-tester` is spawned via Task to write the bug report — orchestrator does not write it directly
-- [ ] Bug report follows naming convention: `BUG-[NNN]-[short-slug].md` in `production/qa/bugs/`
+- [ ] FAIL result in Phase 6 triggers AskUserQuestion to collect the failure description before the bug task is filed
+- [ ] the bug is filed via `/bug-report` as a Backlog `bug` task — the orchestrator does not write a markdown bug file
+- [ ] Bug is filed as a Backlog task carrying the `bug` label (no markdown bug file)
 - [ ] Bug report NNN is incremented correctly from existing bugs in the directory
 - [ ] Phase 7 sign-off report Bugs Found table includes the bug ID, story name, severity, and status
 - [ ] Verdict in sign-off report is NOT APPROVED
@@ -120,52 +120,52 @@ independent stories.
 
 ---
 
-### Case 4: No Argument — Skill infers active sprint or asks user
+### Case 4: No Argument — Skill infers active milestone from the board or asks
 
-**Fixture (variant A — state files present):**
-- `production/session-state/active.md` exists and contains a reference to `sprint-06`
-- `production/sprint-status.yaml` exists and identifies `sprint-06` as active
+**Fixture (variant A — active work discoverable):**
+- `production/session-state/active.md` exists and references the `Combat System` milestone
+- The Backlog board has `In Progress`/`Done` tasks grouped under the `Combat System` milestone
 
-**Fixture (variant B — state files absent):**
+**Fixture (variant B — no active work discoverable):**
 - `production/session-state/active.md` does NOT exist
-- `production/sprint-status.yaml` does NOT exist
+- The Backlog board has no `In Progress` or `Done` tasks to infer a milestone from
 
 **Input:** `/team-qa` (no argument)
 
 **Expected behavior (variant A):**
-1. Phase 1: No argument provided; reads `production/session-state/active.md`; reads `production/sprint-status.yaml`
-2. Detects `sprint-06` as the active sprint from both sources
-3. Proceeds as if `/team-qa sprint-06` was the input; reports "No sprint argument provided — inferred sprint-06 from session state. Found [N] stories."
+1. Phase 1: No argument provided; reads `production/session-state/active.md`; `task_list`s the Backlog board (status `In Progress`/`Done`)
+2. Infers `Combat System` as the active milestone from both sources
+3. Proceeds as if `/team-qa "Combat System"` was the input; reports "No milestone argument provided — inferred Combat System from session state and the board. Found [N] stories."
 
 **Expected behavior (variant B):**
-1. Phase 1: No argument provided; attempts to read `production/session-state/active.md` — file missing; attempts to read `production/sprint-status.yaml` — file missing
-2. Cannot infer sprint; uses AskUserQuestion: "Which sprint or feature should QA cover?" with options to type a sprint identifier or cancel
+1. Phase 1: No argument provided; `production/session-state/active.md` is missing; `task_list` returns no in-progress/done work to infer a milestone from
+2. Cannot infer a milestone; uses AskUserQuestion: "Which milestone or feature should QA cover?" with options to name one or cancel
 
 **Assertions:**
-- [ ] Skill does NOT default to a hardcoded sprint name when no argument is provided
-- [ ] Skill reads both `production/session-state/active.md` AND `production/sprint-status.yaml` before asking the user (variant A)
-- [ ] When both state files are absent, skill uses AskUserQuestion rather than guessing (variant B)
-- [ ] Inferred sprint is reported to the user before proceeding (variant A transparency)
-- [ ] Skill does NOT error out when state files are missing — it falls back to asking (variant B)
+- [ ] Skill does NOT default to a hardcoded milestone name when no argument is provided
+- [ ] Skill reads `production/session-state/active.md` AND `task_list`s the Backlog board before asking the user (variant A)
+- [ ] When no active work is discoverable, skill uses AskUserQuestion rather than guessing (variant B)
+- [ ] Inferred milestone is reported to the user before proceeding (variant A transparency)
+- [ ] Skill does NOT error out when session state is missing — it falls back to asking (variant B)
 
 ---
 
 ### Case 5: Mixed Results — Some PASS, one FAIL with S1 bug, one BLOCKED
 
 **Fixture:**
-- `production/sprints/sprint-07/` exists with 4 story files
+- The `Inventory` milestone has 4 story tasks on the board
 - Smoke check passes
 - Story A (Logic): automated test passes — PASS
 - Story B (UI): manual QA — PASS WITH NOTES (minor text overflow)
 - Story C (Visual/Feel): manual QA — FAIL; tester identifies S1 crash on ability activation
 - Story D (Integration): cannot test — BLOCKED (dependency system not yet implemented)
 
-**Input:** `/team-qa sprint-07`
+**Input:** `/team-qa "Inventory"`
 
 **Expected behavior:**
 1. Phases 1–5 proceed; Phase 5 test cases cover stories B, C, D
 2. Phase 6: User marks Story A as implicitly PASS (automated); Story B: PASS WITH NOTES; Story C: FAIL; Story D: BLOCKED
-3. After Story C FAIL: qa-tester spawned to write bug report `BUG-001-crash-ability-activation.md` with S1 severity
+3. After Story C FAIL: a Backlog `bug` task filed for the crash with S1 severity (priority high)
 4. Result summary presented: "Stories PASS: 1, PASS WITH NOTES: 1, FAIL: 1 — bugs filed: BUG-001 (S1), BLOCKED: 1"
 5. Phase 7: qa-lead produces sign-off report covering all 4 stories; BUG-001 listed as S1/Open; Story D listed as BLOCKED; Verdict: NOT APPROVED
 6. Sign-off report written after "May I write?" approval
@@ -199,6 +199,6 @@ independent stories.
 ## Coverage Notes
 
 - The "APPROVED WITH CONDITIONS" verdict path (S3/S4 bugs, PASS WITH NOTES) is covered implicitly by Case 5's PASS WITH NOTES story (Story B) — if no S1/S2 bugs existed, that case would produce APPROVED WITH CONDITIONS. A dedicated case is not required as the verdict logic is table-driven.
-- The `feature: [system-name]` argument form is not separately tested — it follows the same Phase 1 logic as the sprint form, using glob instead of directory read. The no-argument inference path (Case 4) provides sufficient coverage of the detection logic.
+- The `feature: [system-name]` argument form is not separately tested — it follows the same Phase 1 logic as the milestone form, using glob instead of a milestone `task_list`. The no-argument inference path (Case 4) provides sufficient coverage of the detection logic.
 - Logic stories with passing automated tests do not need manual QA — this is validated implicitly by Case 5 (Story A) where the Logic story receives no manual QA phase.
 - Parallel qa-tester spawning in Phase 5 is validated implicitly by Case 1 (multiple Visual/Feel stories issued simultaneously); no dedicated parallelism case is required beyond the Static Assertions check.

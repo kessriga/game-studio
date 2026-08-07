@@ -25,7 +25,7 @@ Check:
 - **Source code exists?** Glob for source files in `src/` (`*.gd`, `*.cs`, `*.cpp`, `*.h`, `*.rs`, `*.py`, `*.js`, `*.ts`).
 - **Prototypes exist?** Check for subdirectories in `prototypes/`.
 - **Design docs exist?** Count markdown files in `design/gdd/`.
-- **Production artifacts?** Check for files in `production/sprints/` or `production/milestones/`.
+- **Production artifacts?** Check for Backlog tasks (`backlog/tasks/*.md`) and for files in `production/milestones/`.
 
 Store these findings internally to validate the user's self-assessment and tailor recommendations.
 
@@ -76,7 +76,7 @@ The user needs creative exploration before anything else.
    - `/playtest-report (×1+)` — document each vertical slice playtest session
    - `/create-epics` — map systems to epics
    - `/create-stories` — break epics into implementable stories
-   - `/sprint-plan` — plan the first sprint
+   - `/create-epics` — define the first epic (Backlog milestone), then `/create-stories` to fill the board
    **Production phase:** → pick up stories with `/dev-story`
 
 #### If B: Vague idea
@@ -105,7 +105,7 @@ The user needs creative exploration before anything else.
    - `/playtest-report (×1+)` — document each vertical slice playtest session
    - `/create-epics` — map systems to epics
    - `/create-stories` — break epics into implementable stories
-   - `/sprint-plan` — plan the first sprint
+   - `/create-epics` — define the first epic (Backlog milestone), then `/create-stories` to fill the board
    **Production phase:** → pick up stories with `/dev-story`
 
 #### If C: Clear concept
@@ -137,7 +137,7 @@ The user needs creative exploration before anything else.
    - `/playtest-report (×1+)` — document each vertical slice playtest session
    - `/create-epics` — map systems to epics
    - `/create-stories` — break epics into implementable stories
-   - `/sprint-plan` — plan the first sprint
+   - `/create-epics` — define the first epic (Backlog milestone), then `/create-stories` to fill the board
    **Production phase:** → pick up stories with `/dev-story`
 
 #### If D: Existing work
@@ -193,18 +193,19 @@ Check if `production/review-mode.txt` already exists.
 
 - **Prompt**: "One setup choice: how much design review would you want as you work through the workflow?"
 - **Options**:
+  - `Solo (recommended)` — No director reviews at all. Maximum speed. Best for solo devs, game jams, and prototypes. This is the default if you skip this choice.
+  - `Lean` — Directors only at phase gate transitions (/gate-check). Skips per-skill reviews. For small teams that still want milestone review.
   - `Full` — Director specialists review at each key workflow step. Best for teams, learning the workflow, or when you want thorough feedback on every decision.
-  - `Lean (recommended)` — Directors only at phase gate transitions (/gate-check). Skips per-skill reviews. Balanced approach for solo devs and small teams.
-  - `Solo` — No director reviews at all. Maximum speed. Best for game jams, prototypes, or if the reviews feel like overhead.
 
 Write the choice to `production/review-mode.txt` immediately after the user
 selects — no separate "May I write?" needed, as the write is a direct
 consequence of the selection:
+- `Solo (recommended)` → write `solo`
+- `Lean` → write `lean`
 - `Full` → write `full`
-- `Lean (recommended)` → write `lean`
-- `Solo` → write `solo`
 
-Create the `production/` directory if it does not exist.
+If the user skips or dismisses the choice, write `solo` (the default). Create
+the `production/` directory if it does not exist.
 
 ---
 
@@ -231,7 +232,7 @@ Verdict: **COMPLETE** — user oriented and handed off to next step.
 
 - **User picks D but project is empty**: Gently redirect — "It looks like the project is a fresh template with no artifacts yet. Would Path A or B be a better fit?"
 - **User picks A but project has code**: Mention what you found — "I noticed there's already code in `src/`. Did you mean to pick D (existing work)?"
-- **User is returning (engine configured, concept exists)**: Skip onboarding entirely — "It looks like you're already set up! Your engine is [X] and you have a game concept at `design/gdd/game-concept.md`. Review mode: `[read from production/review-mode.txt, or 'lean (default)' if missing]`. Want to pick up where you left off? Try `/sprint-plan` or just tell me what you'd like to work on."
+- **User is returning (engine configured, concept exists)**: Skip onboarding entirely — "It looks like you're already set up! Your engine is [X] and you have a game concept at `design/gdd/game-concept.md`. Review mode: `[read from production/review-mode.txt, or 'solo (default)' if missing]`. Want to pick up where you left off? Check your Backlog board for the next ready task, or just tell me what you'd like to work on."
 - **User doesn't fit any option**: Let them describe their situation in their own words and adapt.
 
 ---
