@@ -1,7 +1,9 @@
 project_name: "Game Studio"
 default_status: "To Do"
 statuses: ["To Do", "In Progress", "Done"]
-labels: []
+# Draft (native) is used for pre-ready story authoring. Ready/Blocked/In Review from
+# the old template map onto native statuses + labels (see WORKFLOW-GUIDE.md § Status model).
+labels: ["blocked", "bug"]
 date_format: yyyy-mm-dd
 max_column_width: 20
 auto_open_browser: true
