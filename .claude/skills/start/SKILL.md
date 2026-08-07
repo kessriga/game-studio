@@ -25,7 +25,7 @@ Check:
 - **Source code exists?** Glob for source files in `src/` (`*.gd`, `*.cs`, `*.cpp`, `*.h`, `*.rs`, `*.py`, `*.js`, `*.ts`).
 - **Prototypes exist?** Check for subdirectories in `prototypes/`.
 - **Design docs exist?** Count markdown files in `design/gdd/`.
-- **Production artifacts?** Check for files in `production/sprints/` or `production/milestones/`.
+- **Production artifacts?** Check for Backlog tasks (`backlog/tasks/*.md`) and for files in `production/milestones/`.
 
 Store these findings internally to validate the user's self-assessment and tailor recommendations.
 

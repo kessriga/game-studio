@@ -28,7 +28,7 @@ git log --oneline [last-tag]..HEAD
 
 If no tags exist, read the full log or a reasonable recent range (last 100 commits).
 
-Read sprint reports from `production/sprints/` for the relevant period to understand planned work and context behind changes.
+Review the relevant Backlog tasks (`backlog/tasks/`) for the period to understand planned work and context behind changes.
 
 Read completed design documents from `design/gdd/` for any new features implemented during this period.
 

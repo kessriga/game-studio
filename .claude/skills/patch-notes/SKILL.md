@@ -22,7 +22,7 @@ If no version is provided, ask the user before proceeding.
 - Read the internal changelog at `production/releases/[version]/changelog.md` if it exists
 - Also check `docs/CHANGELOG.md` for the relevant version entry
 - Run `git log` between the previous release tag and current tag/HEAD as a fallback
-- Read sprint retrospectives in `production/sprints/` for context
+- Review the relevant completed Backlog tasks (`backlog/tasks/`) for context
 - Read any balance change documents in `design/balance/`
 - Read bug fix records from QA if available
 
