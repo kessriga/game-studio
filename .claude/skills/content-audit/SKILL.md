@@ -61,7 +61,7 @@ For each content type found in Phase 1, scan the relevant directories to count
 what has been implemented. Use Glob and Grep to locate files.
 
 **Levels / Areas / Maps:**
-- Glob `assets/**/*.tscn`, `assets/**/*.unity`, `assets/**/*.umap`
+- Glob `assets/**/*.tscn`, `assets/**/*.unity`, `assets/**/*.umap`, `assets/**/*.bsn`, `assets/**/*.scn.ron` (Bevy scenes)
 - Glob `src/**/*.tscn`, `src/**/*.unity`
 - Look for scene files in subdirectories named `levels/`, `areas/`, `maps/`,
   `worlds/`, `stages/`

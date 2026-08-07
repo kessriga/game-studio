@@ -30,4 +30,6 @@ ADR Dependencies, Engine Compatibility, GDD Requirements Addressed
 Version-pinned engine API snapshots. **Always check here before using any
 engine API** — the LLM's training data predates the pinned engine version.
 
-Current engine: see `docs/engine-reference/godot/VERSION.md`
+Current engine: see the `VERSION.md` under `docs/engine-reference/<engine>/`
+for your configured engine (`/setup-engine` pins this and repoints the
+`@` import in the root `CLAUDE.md`).

@@ -13,12 +13,13 @@ visual quality, performance, and cross-platform compatibility.
   - `spatial_env_water.gdshader` (Godot)
   - `SG_Env_Water` (Unity Shader Graph)
   - `M_Env_Water` (Unreal Material)
+  - `env_water.wgsl` (Bevy — snake_case WGSL, paired with a `Material` impl)
 - Use descriptive names that indicate the material purpose
 - Prefix with shader type: `spatial_`, `canvas_`, `particles_`, `post_`
 
 ## Code Quality
 - All uniforms/parameters must have descriptive names and appropriate hints
-- Group related parameters (Godot: `group_uniforms`, Unity: `[Header]`, Unreal: Category)
+- Group related parameters (Godot: `group_uniforms`, Unity: `[Header]`, Unreal: Category, Bevy: fields in the `AsBindGroup` material struct)
 - Comment non-obvious calculations (especially math-heavy sections)
 - No magic numbers — use named constants or documented uniform values
 - Include authorship and purpose comment at the top of each shader file

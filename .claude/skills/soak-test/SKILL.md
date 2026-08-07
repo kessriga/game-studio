@@ -108,6 +108,15 @@ Engine-specific monitoring guidance:
 - Record: Physical Memory Used (MB), Physical Memory Available
 - Alert threshold: Physical Memory Used growth > 50MB over the full soak
 
+**Bevy:**
+- Enable Bevy's diagnostics (`FrameTimeDiagnosticsPlugin`, `EntityCountDiagnosticsPlugin`,
+  `SystemInformationDiagnosticsPlugin`) and log at each checkpoint
+- Record: process RSS (MB, via the system-information diagnostic or OS tools),
+  entity count, and frame time
+- Alert thresholds: RSS growing monotonically across 3+ checkpoints; **entity
+  count trending upward with no despawn** (the most common Bevy leak — orphaned
+  entities/children never despawned)
+
 ### Stability observation items (if focus = stability or all)
 
 At each checkpoint, note:
@@ -151,6 +160,7 @@ Before starting the soak:
   - **Godot**: Debugger → Monitors tab → Memory section visible
   - **Unity**: Memory Profiler window open
   - **Unreal**: `stat memory` ready in console
+  - **Bevy**: diagnostics plugins added and logging (frame time, entity count, system info); optionally run under an OS memory monitor
 - [ ] Soak target confirmed: [session design intent from game concept]
 - [ ] Prior known issues to watch for: [from most recent playtest / qa-plan]
 

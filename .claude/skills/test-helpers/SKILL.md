@@ -297,6 +297,60 @@ namespace GameTestHelpers
 }
 ```
 
+### Bevy (Rust)
+
+**Base helper** (`tests/helpers/mod.rs`, or a `test_support` module in the crate):
+
+```rust
+//! Game-specific test helpers for [Project Name] Bevy tests.
+//! Build a headless App with MinimalPlugins — no window, no GPU — so tests
+//! run in CI without a display.
+
+use bevy::prelude::*;
+
+/// Create a headless App suitable for ECS/logic tests.
+/// Add the systems/plugins under test, insert components, then `.update()`.
+pub fn test_app() -> App {
+    let mut app = App::new();
+    app.add_plugins(MinimalPlugins);
+    app
+}
+
+/// Assert a float is within an inclusive range.
+#[track_caller]
+pub fn assert_in_range(value: f32, min: f32, max: f32, label: &str) {
+    assert!(
+        value >= min && value <= max,
+        "{label} ({value}) not in range [{min}, {max}]"
+    );
+}
+
+/// Assert two floats are equal within an epsilon (default 1e-4).
+#[track_caller]
+pub fn assert_approx(a: f32, b: f32, label: &str) {
+    assert!((a - b).abs() < 1e-4, "{label}: {a} != {b} (approx)");
+}
+
+/// Fetch a component for an entity, panicking with a clear message if absent.
+#[track_caller]
+pub fn get_component<T: Component + Clone>(app: &App, entity: Entity) -> T {
+    app.world()
+        .get::<T>(entity)
+        .cloned()
+        .unwrap_or_else(|| panic!("entity {entity:?} missing component {}", std::any::type_name::<T>()))
+}
+```
+
+Usage:
+```rust
+let mut app = test_app();
+app.add_systems(Update, apply_damage);
+let e = app.world_mut().spawn(Health(100)).id();
+app.world_mut().send_event(DamageDealt { target: e, amount: 30 });
+app.update();
+assert_eq!(get_component::<Health>(&app, e).0, 70);
+```
+
 ---
 
 ## 5. Generate System-Specific Helpers
@@ -373,7 +427,8 @@ After writing: Verdict: **COMPLETE** — helper files created.
 "Helper files created. To use them in a test:
 - Godot: `class_name` is auto-imported — no explicit import needed
 - Unity: Add `using` directive or reference the test assembly
-- Unreal: `#include \"tests/helpers/GameTestHelpers.h\"`"
+- Unreal: `#include \"tests/helpers/GameTestHelpers.h\"`
+- Bevy: `use crate::test_support::*;` (or `mod helpers;` for a `tests/` integration file)"
 
 ---
 

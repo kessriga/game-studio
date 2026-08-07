@@ -4,8 +4,8 @@
 > **Author**: [ux-designer]
 > **Last Updated**: [Date]
 > **Version**: [1.0]
-> **Engine**: [Godot 4.6 / Unity 6 / Unreal Engine 5]
-> **UI Framework**: [Godot Control nodes / Unity UI Toolkit / Unreal UMG]
+> **Engine**: [Godot 4.6 / Unity 6 / Unreal Engine 5 / Bevy 0.19]
+> **UI Framework**: [Godot Control nodes / Unity UI Toolkit / Unreal UMG / Bevy bevy_ui]
 > **Related Documents**:
 > - `design/art/art-bible.md` — visual standards (colors, typography, iconography)
 > - `docs/accessibility-requirements.md` — accessibility commitments per feature

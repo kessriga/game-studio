@@ -88,7 +88,7 @@ After approval, create the following files:
 # Test Infrastructure
 
 **Engine**: [engine name + version]
-**Test Framework**: [GdUnit4 | Unity Test Framework | UE Automation]
+**Test Framework**: [GdUnit4 | Unity Test Framework | UE Automation | cargo test (Bevy)]
 **CI**: `.github/workflows/tests.yml`
 **Setup date**: [date]
 
@@ -200,6 +200,40 @@ Or headlessly: UnrealEditor -nullrhi -ExecCmds="Automation RunTests MyGame.; Qui
 
 Test class naming: F[SystemName]Test
 Test category naming: "MyGame.[System].[Feature]"
+```
+
+#### Bevy (`Engine: Bevy`)
+
+Bevy uses Rust's built-in test harness (`cargo test`) — no separate runner file.
+Logic/ECS tests build a headless `App` with `MinimalPlugins` (no window, no GPU)
+so they run in CI without a display. Colocate unit tests with the code under test
+(`#[cfg(test)] mod tests`) per Rust convention; put multi-system integration tests
+in the crate's `tests/` directory.
+
+Note in the README: **Running Bevy tests**
+```
+cargo test                 # all unit + integration tests, headless
+cargo test -p <crate>      # a single workspace crate
+cargo test <name>          # tests matching a substring
+```
+
+Headless ECS test pattern (no window/GPU required):
+```rust
+#[cfg(test)]
+mod tests {
+    use bevy::prelude::*;
+    use super::*;
+
+    #[test]
+    fn test_damage_reduces_health() {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins).add_systems(Update, apply_damage);
+        let e = app.world_mut().spawn(Health(100)).id();
+        app.world_mut().send_event(DamageDealt { target: e, amount: 30 });
+        app.update();
+        assert_eq!(app.world().get::<Health>(e).unwrap().0, 70);
+    }
+}
 ```
 
 ---
@@ -340,6 +374,61 @@ jobs:
 
 Note: UE CI requires a self-hosted runner with Unreal Editor installed.
 Set the `UE_EDITOR_PATH` environment variable on the runner.
+
+### Bevy
+
+Create `.github/workflows/tests.yml`:
+
+```yaml
+name: Automated Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: cargo fmt + clippy + test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      # Bevy needs system deps (alsa, udev) to build on Linux even for headless tests
+      - name: Install Linux dependencies
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
+
+      - name: Format check
+        run: cargo fmt --all -- --check
+
+      - name: Clippy (warnings as errors)
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Test (headless)
+        run: cargo test --all-features --workspace
+```
+
+Notes:
+- Logic/ECS tests run headlessly with `MinimalPlugins` — **no** window or GPU, so
+  a standard `ubuntu-latest` runner suffices (no self-hosted runner, no license).
+- The `libasound2-dev` / `libudev-dev` packages are Bevy's Linux build
+  dependencies; without them the crate fails to compile even for headless tests.
+- For faster/segmented runs, `cargo nextest run` is a drop-in alternative to
+  `cargo test`; keep `cargo test` as the baseline.
 
 ---
 
