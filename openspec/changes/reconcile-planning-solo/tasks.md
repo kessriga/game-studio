@@ -28,13 +28,13 @@
 ## 5. Bug flow
 
 - [x] 5.1 `bug-report`: create a Backlog task with the `bug` label (repro/severity/context in description + acceptance criteria); retire `production/qa/bugs/*.md` output
-- [ ] 5.2 Delete `bug-triage` (superseded by the board filtered by `bug` + priority)
+- [x] 5.2 Delete `bug-triage` (superseded by the board filtered by `bug` + priority)
 
 ## 6. Delete the 7 skills
 
-- [ ] 6.1 Remove skill dirs: `sprint-plan`, `sprint-status`, `bug-triage`, `retrospective`, `milestone-review`, `day-one-patch`, `onboard` under `.claude/skills/`
-- [ ] 6.2 Remove their `qa/` specs: `qa/skills/sprint/{sprint-plan,sprint-status,retrospective,milestone-review}.md`, `qa/skills/utility/{bug-triage,onboard,day-one-patch}.md`
-- [ ] 6.3 Update the `qa/` catalog + `qa/README.md` to drop the removed entries
+- [x] 6.1 Remove skill dirs: `sprint-plan`, `sprint-status`, `bug-triage`, `retrospective`, `milestone-review`, `day-one-patch`, `onboard` under `.claude/skills/`
+- [x] 6.2 Remove their `qa/` specs: `qa/skills/sprint/{sprint-plan,sprint-status,retrospective,milestone-review}.md`, `qa/skills/utility/{bug-triage,onboard,day-one-patch}.md`
+- [x] 6.3 Update the `qa/` catalog + `qa/README.md` to drop the removed entries
 
 ## 7. Rewire remaining Backlog-coupled skills
 

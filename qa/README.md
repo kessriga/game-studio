@@ -98,7 +98,7 @@ All testing is driven by two skills already in the framework:
 | `pipeline` | create-epics, create-stories, dev-story, map-systems, … | Upstream dependency check, handoff path clear |
 | `analysis` | consistency-check, balance-check, code-review, tech-debt, … | Read-only report, verdict keyword, no writes |
 | `team` | team-combat, team-narrative, team-audio, … | All required agents spawned, blocked surfaced |
-| `sprint` | sprint-plan, sprint-status, milestone-review, … | Reads sprint data, status keywords present |
+| `sprint` | changelog, patch-notes | Generates release-facing notes from git/Backlog data |
 | `utility` | start, adopt, hotfix, localize, setup-engine, … | Passes static checks |
 
 ---

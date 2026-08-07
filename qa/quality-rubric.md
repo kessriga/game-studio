@@ -142,27 +142,25 @@ spawn the right agents, run independent ones in parallel, and surface blocks imm
 
 ### `sprint`
 
-**Skills**: sprint-plan, sprint-status, milestone-review, retrospective, changelog, patch-notes
+**Skills**: changelog, patch-notes
 
-Sprint skills read production state and produce reports or planning artifacts.
-They have a PR-SPRINT or PR-MILESTONE gate at specific mode thresholds.
+These skills generate release-facing notes from git history and Backlog data.
 
 | Metric | PASS criteria |
 |---|---|
-| **SP1 — Reads sprint/milestone state** | Skill reads `production/sprints/` or `production/milestones/` before producing output |
-| **SP2 — Correct sprint gate** | PR-SPRINT (for planning) or PR-MILESTONE (for milestone review) gate runs in `full` mode, skips in `lean`/`solo` |
-| **SP3 — Structured output** | Output uses a consistent structure (velocity table, risk list, action items) rather than free prose |
-| **SP4 — No auto-commit** | Skill never writes sprint files or milestone records without "May I write" |
+| **SP1 — Reads real source data** | Skill reads git history and/or the Backlog board before producing output |
+| **SP3 — Structured output** | Output uses a consistent structure (grouped changes, categories) rather than free prose |
+| **SP4 — No auto-commit** | Skill never writes files without "May I write" |
 
 ---
 
 ### `utility`
 
-**Skills**: start, help, brainstorm, onboard, adopt, hotfix, prototype, localize,
+**Skills**: start, help, brainstorm, adopt, hotfix, prototype, localize,
 launch-checklist, release-checklist, smoke-check, soak-test, test-setup, test-helpers,
-regression-suite, qa-plan, bug-triage, bug-report, playtest-report, asset-spec,
+regression-suite, qa-plan, bug-report, playtest-report, asset-spec,
 reverse-document, project-stage-detect, setup-engine, skill-test, skill-improve,
-day-one-patch, and any other skills not in categories above
+and any other skills not in categories above
 
 Utility skills pass the 7 standard static checks. If they happen to spawn director
 gates, the gate mode logic must also be correct.
