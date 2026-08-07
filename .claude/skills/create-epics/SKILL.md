@@ -3,7 +3,7 @@ name: create-epics
 description: "Translate approved GDDs + architecture into epics — one epic per architectural module. Defines scope, governing ADRs, engine risk, and untraced requirements. Does NOT break into stories — run /create-stories [epic-slug] after each epic is created."
 argument-hint: "[system-name | layer: foundation|core|feature|presentation | all] [--review full|lean|solo]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Task, AskUserQuestion
+allowed-tools: Read, Glob, Grep, Write, Task, AskUserQuestion, mcp__backlog__milestone_add, mcp__backlog__milestone_list, mcp__backlog__milestone_rename
 model: sonnet
 agent: technical-director
 ---
@@ -18,7 +18,7 @@ does not prescribe implementation steps — that is the job of stories.
 Do not create Feature layer epics until Core is nearly complete — the design
 will have changed.
 
-**Output:** `production/epics/[epic-slug]/EPIC.md` + `production/epics/index.md`
+**Output:** `production/epics/[epic-slug]/EPIC.md` (prose) + a Backlog milestone (tracking) + `production/epics/index.md` (prose navigation map)
 
 **Next step after each epic:** `/create-stories [epic-slug]`
 
@@ -169,7 +169,7 @@ After user confirms, write:
 > **Layer**: [Foundation / Core / Feature / Presentation]
 > **GDD**: design/gdd/[filename].md
 > **Architecture Module**: [module name]
-> **Status**: Ready
+> **Milestone**: [epic name] *(tracked in Backlog; this `.md` is the prose spec)*
 > **Stories**: Not yet created — run `/create-stories [epic-slug]`
 
 ## Overview
@@ -203,19 +203,32 @@ This epic is complete when:
 Run `/create-stories [epic-slug]` to break this epic into implementable stories.
 ```
 
+### Mint the Backlog milestone
+
+After writing `EPIC.md`, create the tracking milestone with `mcp__backlog__milestone_add`:
+- `name`: the epic name (e.g. "Combat System") — story tasks are later assigned to this milestone by `/create-stories`
+- `description`: the epic's goal and Definition of Done (a compact form of the EPIC.md Overview + Definition of Done)
+
+First `milestone_list` to check the milestone does not already exist (idempotent re-runs). If an epic is later renamed, use `milestone_rename` to keep the milestone in sync with `EPIC.md`.
+
+The milestone is the epic's live tracking home; `EPIC.md` is its prose spec. Backlog owns roster and status — do not track story status in `EPIC.md`.
+
 ### Update `production/epics/index.md`
 
-Create or update the master index:
+Create or update the master index as a **prose navigation map** — no Status or story-count columns (those live in Backlog):
 
 ```markdown
 # Epics Index
 
+A navigation map from epics to their GDDs and governing ADRs. Live status and the
+story roster live in the Backlog milestones and board, not here.
+
 Last Updated: [date]
 Engine: [name + version]
 
-| Epic | Layer | System | GDD | Stories | Status |
-|------|-------|--------|-----|---------|--------|
-| [name] | Foundation | [system] | [file] | Not yet created | Ready |
+| Epic | Layer | System | GDD | Governing ADRs | Spec |
+|------|-------|--------|-----|----------------|------|
+| [name] | Foundation | [system] | [gdd file] | ADR-NNNN, ADR-MMMM | production/epics/[slug]/EPIC.md |
 ```
 
 ---

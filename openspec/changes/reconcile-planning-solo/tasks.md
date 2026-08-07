@@ -22,8 +22,8 @@
 
 ## 4. Epics → milestones
 
-- [ ] 4.1 `create-epics` Step 5: after `EPIC.md`, call `milestone_add` with the epic name (and goal/DoD in the description); handle rename via `milestone_rename` if the epic is renamed
-- [ ] 4.2 `create-epics`: reshape the `production/epics/index.md` template to a prose navigation map (Epic | Layer | System | GDD | Governing ADRs), dropping Status/Stories tracking columns
+- [x] 4.1 `create-epics` Step 5: after `EPIC.md`, call `milestone_add` with the epic name (and goal/DoD in the description); handle rename via `milestone_rename` if the epic is renamed
+- [x] 4.2 `create-epics`: reshape the `production/epics/index.md` template to a prose navigation map (Epic | Layer | System | GDD | Governing ADRs), dropping Status/Stories tracking columns
 
 ## 5. Bug flow
 
