@@ -475,8 +475,8 @@ Gate passed. What would you like to do next?
 > 3. Playtest → `/playtest-report` — at least 1 session required to pass the Pre-Production gate; 3+ recommended before committing the full team
 > 4. `/ux-design [screen]` — UX specs for main menu, core HUD, pause menu (if not done)
 > 5. `/create-epics layer:foundation` then `/create-epics layer:core` — plan after fun is validated
-> 6. `/create-stories [epic-slug]` for each epic
-> 7. `/sprint-plan new`
+> 6. `/create-stories [epic-slug]` for each epic — mints Backlog tasks under the epic's milestone
+> 7. Work the Backlog board — pick the highest-priority ready task and run `/dev-story`
 >
 > **Why prototype before epics?** If the prototype reveals the core loop needs to change,
 > epics written before that discovery will be partially wrong. Validate fun cheaply first,
@@ -503,7 +503,7 @@ Based on the verdict, suggest specific next steps:
 - **GDDs not cross-reviewed?** → `/review-all-gdds` (run after all MVP GDDs are individually approved)
 - **Cross-GDD consistency issues?** → fix flagged GDDs, then re-run `/review-all-gdds`
 - **No test framework?** → `/test-setup` to scaffold the framework for your engine
-- **No QA plan for current sprint?** → `/qa-plan sprint` to generate one before implementation begins
+- **No QA plan for the current epic?** → `/qa-plan [epic]` to generate one before implementation begins
 - **Missing ADRs?** → `/architecture-decision` for individual decisions
 - **No master architecture doc?** → `/create-architecture` for the full blueprint
 - **ADRs missing engine compatibility sections?** → Re-run `/architecture-decision`
@@ -517,7 +517,7 @@ Based on the verdict, suggest specific next steps:
 - **No playtest sessions beyond the minimum?** → Additional sessions give more reliable signal. 3+ total is recommended before committing the full team. Use `/playtest-report` to structure findings.
 - **No Difficulty Curve doc?** → Create `design/difficulty-curve.md` from the template at `.claude/docs/templates/difficulty-curve.md` — or use `/quick-design "difficulty curve"` for a guided session.
 - **No player journey map?** → Create `design/player-journey.md` from the template at `.claude/docs/templates/player-journey.md` — or author it collaboratively using `/ux-design` Phase 2b.
-- **Need a quick sprint check?** → `/sprint-status` for current sprint progress snapshot
+- **Need a progress snapshot?** → check the Backlog board (filter by milestone and status)
 - **Performance unknown?** → `/perf-profile`
 - **Not localized?** → `/localize`
 - **Ready for release?** → `/launch-checklist`

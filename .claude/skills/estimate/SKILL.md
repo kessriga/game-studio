@@ -122,7 +122,7 @@ This skill is read-only — no files are written. Verdict: **COMPLETE** — esti
 
 - If confidence is Low: recommend a time-boxed spike (`/prototype`) before committing.
 - If the task is > 10 days: recommend breaking it into smaller stories via `/create-stories`.
-- To schedule the task: run `/sprint-plan update` to add it to the next sprint.
+- To schedule the task: file it on the Backlog board and prioritise it.
 
 ### Guidelines
 

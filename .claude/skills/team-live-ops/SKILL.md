@@ -155,5 +155,5 @@ Verdict: **COMPLETE** — season plan produced and handed off for production.
 ## Next Steps
 
 - Run `/design-review` on the season design document for consistency validation.
-- Run `/sprint-plan` to schedule content creation work for the season.
+- File the season's content creation work as Backlog tasks (group them under a milestone).
 - Run `/team-release` when the season content is ready to deploy.

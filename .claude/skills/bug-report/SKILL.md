@@ -10,9 +10,9 @@ model: sonnet
 # Bug Report
 
 Bugs are tracked as **Backlog tasks** with the `bug` label — the board is the bug
-list (there is no separate `production/qa/bugs/` markdown store, and no
-`/bug-triage`: triage is the board filtered by `bug` and sorted by priority).
-Rich repro/severity/context live in the task description and acceptance criteria.
+list (there is no separate `production/qa/bugs/` markdown store). Triage is the
+board filtered by the `bug` label and sorted by priority. Rich repro/severity/
+context live in the task description and acceptance criteria.
 
 ## Phase 1: Parse Arguments
 

@@ -177,8 +177,8 @@ After generating the report, suggest relevant next steps:
 - **Missing design docs?** → `/reverse-document design src/[system]`
 - **Missing architecture docs?** → `/architecture-decision` or `/reverse-document architecture`
 - **Prototypes need documentation?** → `/reverse-document concept prototypes/[name]`
-- **No sprint plan?** → `/sprint-plan`
-- **Approaching milestone?** → `/milestone-review`
+- **No epics/milestones yet?** → `/create-epics` then `/create-stories`
+- **Approaching a milestone?** → review milestone progress on the Backlog board
 
 ---
 

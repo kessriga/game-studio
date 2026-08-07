@@ -621,7 +621,7 @@ Next Steps:
 3. [If from /brainstorm] Run /design-system to author per-system GDDs (guided, section-by-section)
 4. [If from /brainstorm] Run /prototype [core-mechanic] to validate the core idea before writing GDDs
 5. [If fresh start] Run /brainstorm to discover your game concept
-6. Create your first milestone: /sprint-plan new
+6. Define your first epic (Backlog milestone): /create-epics
 ```
 
 ---

@@ -144,4 +144,4 @@ Verdict: **COMPLETE** — playtest report generated.
 
 - Act on the highest-priority finding category first.
 - After addressing design changes: re-run `/design-review` on the updated GDD.
-- After fixing bugs: re-run `/bug-triage` to update priorities.
+- After fixing bugs: re-prioritise bugs on the Backlog board (filter by the `bug` label).

@@ -136,5 +136,5 @@ A summary report covering: performance before/after metrics, visual polish chang
 ## Next Steps
 
 - If READY FOR RELEASE: run `/release-checklist` for the final pre-release validation.
-- If NEEDS MORE WORK: schedule remaining issues in `/sprint-plan update` and re-run `/team-polish` after fixes.
+- If NEEDS MORE WORK: file the remaining issues as Backlog tasks and re-run `/team-polish` after fixes.
 - Run `/gate-check` for a formal phase gate verdict before handing off to release.

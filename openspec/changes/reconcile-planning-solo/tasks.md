@@ -38,10 +38,10 @@
 
 ## 7. Rewire remaining Backlog-coupled skills
 
-- [ ] 7.1 `qa-plan`: replace `sprint-status.yaml`/sprint framing with milestone/board reads
-- [ ] 7.2 `team-qa`: replace `sprint-status.yaml` + sprint close-out with board-based flow
-- [ ] 7.3 `help`: drop `sprint-status.yaml` and removed-skill references; describe the new flow
-- [ ] 7.4 `adopt`: update the brownfield audit checklist (no `sprint-status.yaml`, solo default, Backlog-backed lifecycle, removed skills)
+- [x] 7.1 `qa-plan`: replace `sprint-status.yaml`/sprint framing with milestone/board reads
+- [x] 7.2 `team-qa`: replace `sprint-status.yaml` + sprint close-out with board-based flow
+- [x] 7.3 `help`: drop `sprint-status.yaml` and removed-skill references; describe the new flow
+- [x] 7.4 `adopt`: update the brownfield audit checklist (no `sprint-status.yaml`, solo default, Backlog-backed lifecycle, removed skills)
 
 ## 8. Docs, catalog, hooks
 

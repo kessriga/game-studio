@@ -277,7 +277,7 @@ After writing:
 2. Record each checkpoint as you play
 3. Complete the Post-Session Analysis section when done
 4. File bugs from 'Issues Found' to `production/qa/bugs/`
-5. Run `/bug-triage sprint` after the session to integrate any S1/S2 issues
+5. File any S1/S2 issues as Backlog tasks (`bug` label) after the session and triage them on the board
 
 If the verdict is FAIL, run `/smoke-check` again after fixing the issues."
 

@@ -285,7 +285,7 @@ Recommended next steps:
 - `/create-epics layer:foundation` — plan Foundation layer epics
 - `/create-epics layer:core` — plan Core layer epics
 - `/create-stories [epic-slug]` — break each epic into implementable stories
-- `/sprint-plan` — plan the first sprint using velocity data from the slice
+- `/create-epics` — define the first epic (Backlog milestone), then `/create-stories` to fill the board
 - `/gate-check pre-production` — formally advance the stage to Production
 
 **Playtest note:** `/gate-check` will look for documented playtest evidence.

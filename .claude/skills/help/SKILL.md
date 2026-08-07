@@ -5,7 +5,7 @@ argument-hint: "[optional: what you just finished, e.g. 'finished design-review'
 user-invocable: true
 allowed-tools: Read, Glob, Grep
 context: |
-  !echo "=== Live Project State ===" && echo "Stage: $(cat production/stage.txt 2>/dev/null | tr -d '[:space:]' || echo 'not set')" && echo "Latest sprint: $(ls -t production/sprints/*.md 2>/dev/null | head -1 || echo 'none')" && echo "Session state: $(head -5 production/session-state/active.md 2>/dev/null || echo 'none')"
+  !echo "=== Live Project State ===" && echo "Stage: $(cat production/stage.txt 2>/dev/null | tr -d '[:space:]' || echo 'not set')" && echo "Review mode: $(cat production/review-mode.txt 2>/dev/null | tr -d '[:space:]' || echo 'solo (default)')" && echo "Session state: $(head -5 production/session-state/active.md 2>/dev/null || echo 'none')" && echo "(work items live on the Backlog board)"
 model: haiku
 ---
 
@@ -105,18 +105,20 @@ If the step has `artifact.note` (no glob):
 If the step has no `artifact` field:
 - Mark as **UNKNOWN** — completion not trackable (e.g. repeatable implementation work)
 
-### Special case: production phase — read `sprint-status.yaml`
+### Special case: production phase — read the Backlog board
 
-When the current phase is `production`, check for `production/sprint-status.yaml`
-before doing any glob-based story checks. If it exists, read it directly:
+When the current phase is `production`, the Backlog board is the authoritative
+work-item state (this skill is haiku/read-only, so it cannot call the Backlog
+MCP directly — advise the user to consult their board, or describe what to look
+for):
 
-- Stories with `status: in-progress` → surface as "currently active"
-- Stories with `status: ready-for-dev` → surface as "next up"
-- Stories with `status: done` → count as complete
-- Stories with `status: blocked` → surface as blocker with the `blocker` field
+- Tasks with status `In Progress` → "currently active"
+- Tasks with status `To Do` (no `blocked` label) → "next up"
+- Tasks with status `Done` → complete
+- Tasks carrying the `blocked` label → blockers to surface
 
-This gives precise per-story status without markdown scanning. Skip the glob
-artifact check for the `implement` and `story-done` steps — the YAML is authoritative.
+This gives precise per-task status without markdown scanning. The board is
+authoritative for the `implement` and `story-done` steps.
 
 ### Special case: `repeatable: true` (non-production)
 

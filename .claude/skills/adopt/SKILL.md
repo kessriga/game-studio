@@ -31,7 +31,7 @@ wrong internal format.
 - **`gdds`**: GDD format compliance only
 - **`adrs`**: ADR format compliance only
 - **`stories`**: Story format compliance only
-- **`infra`**: Infrastructure artifact gaps only (registry, manifest, sprint-status, stage.txt)
+- **`infra`**: Infrastructure artifact gaps only (registry, manifest, Backlog board, stage.txt)
 
 ---
 
@@ -153,7 +153,7 @@ For each story file found:
 | TR registry | `docs/architecture/tr-registry.yaml` | HIGH — no stable requirement IDs |
 | Control manifest | `docs/architecture/control-manifest.md` | HIGH — no layer rules for stories |
 | Manifest version stamp | In manifest header: `Manifest Version:` | MEDIUM — staleness checks blind |
-| Sprint status | `production/sprint-status.yaml` | MEDIUM — `/sprint-status` falls back to markdown |
+| Backlog board | `backlog/config.yml` + `backlog/tasks/` | MEDIUM — no work-item store; stories/bugs can't be tracked |
 | Stage file | `production/stage.txt` | MEDIUM — phase auto-detect unreliable |
 | Engine reference | `docs/engine-reference/[engine]/VERSION.md` | HIGH — ADR engine checks blind |
 | Architecture traceability | `docs/architecture/architecture-traceability.md` | MEDIUM — no persistent matrix |
@@ -183,7 +183,7 @@ Examples: ADRs missing Engine Compatibility, GDDs missing Acceptance Criteria
 
 **MEDIUM** — Degrades quality and pipeline tracking but does not break functionality.
 Examples: GDDs missing Tuning Knobs or Formulas sections, stories missing TR-IDs,
-sprint-status.yaml missing.
+Backlog board not initialised.
 
 **LOW** — Retroactive improvements that are nice-to-have but not urgent.
 Examples: Stories missing Manifest Version stamps, GDDs missing Open Questions section.
@@ -225,7 +225,7 @@ For each affected GDD, list which sections are missing and the fix:
 1. Fix ADR formats first (registry depends on reading ADR Status fields)
 2. Run `/architecture-review` → bootstraps `tr-registry.yaml`
 3. Run `/create-control-manifest` → creates manifest with version stamp
-4. Run `/sprint-plan update` → creates `sprint-status.yaml`
+4. Initialise the Backlog board (`backlog/config.yml`) → work-item store for stories/bugs
 5. Run `/gate-check [phase]` → writes `stage.txt` authoritatively
 
 **Existing stories** — note explicitly:
@@ -322,10 +322,10 @@ Run `/create-control-manifest`
 **Time**: 30 min
 - [ ] docs/architecture/control-manifest.md created
 
-### 3c. Create sprint tracking file
-Run `/sprint-plan update`
-**Time**: 5 min (if sprint plan already exists as markdown)
-- [ ] production/sprint-status.yaml created
+### 3c. Initialise the Backlog board
+Ensure `backlog/config.yml` exists (statuses To Do/In Progress/Done; labels blocked, bug).
+**Time**: 5 min
+- [ ] backlog/ board initialised for work-item tracking
 
 ### 3d. Set authoritative project stage
 Run `/gate-check [current-phase]`

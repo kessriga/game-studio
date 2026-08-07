@@ -76,7 +76,7 @@ The user needs creative exploration before anything else.
    - `/playtest-report (×1+)` — document each vertical slice playtest session
    - `/create-epics` — map systems to epics
    - `/create-stories` — break epics into implementable stories
-   - `/sprint-plan` — plan the first sprint
+   - `/create-epics` — define the first epic (Backlog milestone), then `/create-stories` to fill the board
    **Production phase:** → pick up stories with `/dev-story`
 
 #### If B: Vague idea
@@ -105,7 +105,7 @@ The user needs creative exploration before anything else.
    - `/playtest-report (×1+)` — document each vertical slice playtest session
    - `/create-epics` — map systems to epics
    - `/create-stories` — break epics into implementable stories
-   - `/sprint-plan` — plan the first sprint
+   - `/create-epics` — define the first epic (Backlog milestone), then `/create-stories` to fill the board
    **Production phase:** → pick up stories with `/dev-story`
 
 #### If C: Clear concept
@@ -137,7 +137,7 @@ The user needs creative exploration before anything else.
    - `/playtest-report (×1+)` — document each vertical slice playtest session
    - `/create-epics` — map systems to epics
    - `/create-stories` — break epics into implementable stories
-   - `/sprint-plan` — plan the first sprint
+   - `/create-epics` — define the first epic (Backlog milestone), then `/create-stories` to fill the board
    **Production phase:** → pick up stories with `/dev-story`
 
 #### If D: Existing work
