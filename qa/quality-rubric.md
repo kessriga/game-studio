@@ -196,7 +196,7 @@ systems-designer, level-designer
 |---|---|
 | **L1 — Domain verdict** | Returns a domain-specific verdict (e.g., FEASIBLE/INFEASIBLE for lead-programmer, PASS/FAIL for qa-lead) |
 | **L2 — Escalates to shared parent** | Out-of-domain conflicts escalate to creative-director (design) or technical-director (tech) |
-| **L3 — Lead/specialist model tier** | Agent runs the model coordination-rules.md assigns it — Opus 4.8 for department leads, Sonnet (floating alias) for specialists |
+| **L3 — Lead/specialist model tier** | Agent runs the model coordination-rules.md assigns it — Fable (pinned) for game-designer, Opus 4.8 for other department leads, Sonnet (floating alias) for specialists |
 
 ### `specialist`
 

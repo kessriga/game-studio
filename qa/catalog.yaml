@@ -745,7 +745,7 @@ agents:
     last_spec_result: ""
     category: director
 
-  # Tier 2 Leads (Opus 4.8)
+  # Tier 2 Leads (Opus 4.8; game-designer on Fable)
   - name: lead-programmer
     spec: qa/agents/leads/lead-programmer.md
     last_spec: ""
