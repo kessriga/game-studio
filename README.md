@@ -23,6 +23,7 @@ The result: you still make every decision, but now you have a team that asks the
 
 - [What's Included](#whats-included)
 - [Studio Hierarchy](#studio-hierarchy)
+- [Usage Guide](#usage-guide)
 - [Slash Commands](#slash-commands)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
@@ -31,7 +32,6 @@ The result: you still make every decision, but now you have a team that asks the
 - [Customization](#customization)
 - [Platform Support](#platform-support)
 - [Community](#community)
-- [Supporting This Project](#supporting-this-project)
 - [License](#license)
 
 ---
@@ -86,9 +86,88 @@ The plugin includes agent sets for four engines. Use the set that matches your p
 | **Unreal Engine 5** | `unreal-specialist` | GAS, Blueprints, Replication, UMG/CommonUI |
 | **Bevy** | `bevy-specialist` | Rust/ECS, Rendering/WGSL, bevy_ui |
 
+## Usage Guide
+
+Seventy-two commands is a lot to face on day one — but **you never memorize them.**
+Four navigation commands read your project's actual state and tell you what to run
+next; the rest fall into a pipeline you walk once, front to back, plus a handful you
+reach for only when the situation calls.
+
+### The self-navigating loop
+
+| Command | Answers |
+|---------|---------|
+| `/gamedev:start` | *"I'm new — where do I begin?"* Routes a fresh or existing project into the right phase. |
+| `/gamedev:status` | *"Where am I?"* Prints the current production stage and Epic > Feature > Task breadcrumb. |
+| `/gamedev:help [what you just finished]` | *"What's next?"* Reads your phase and artifacts, then names the next command. |
+| `/gamedev:project-stage-detect` | *"What am I missing?"* Full gap analysis — deeper than `help`. |
+
+The rhythm is: run a command → run `/gamedev:help` → it names the next one → repeat.
+You never have to hold the whole map in your head — `help` keeps your place.
+
+### Set your review mode first
+
+On a fresh project, `/gamedev:start` asks one question that shapes every later step:
+how much director review do you want as you work?
+
+- **`solo`** (default) — no director reviews. Maximum speed; best for solo devs, game jams, and prototypes.
+- **`lean`** — directors review only at phase-gate transitions (`/gamedev:gate-check`).
+- **`full`** — director specialists review at each key step. Best for teams, or for learning the workflow.
+
+Your choice is saved to `production/review-mode.txt`. Override it for any single run
+with `--review solo|lean|full` on the command.
+
+### The pipeline — seven phases, walked once
+
+Each phase produces a few durable artifacts the next phase builds on. The **Minimum
+path** is the shortest legal route through a phase; **Optional adds** buy extra rigor
+where the risk justifies it (a first mechanic, a large team, a shaky concept).
+
+| Phase | You produce | Minimum path | Optional adds |
+|-------|-------------|--------------|---------------|
+| **1. Concept** | Game concept, art bible, systems map | `/gamedev:brainstorm` → `/gamedev:setup-engine` → `/gamedev:art-bible` → `/gamedev:map-systems` | `/gamedev:design-review` on the concept |
+| **2. Systems Design** | One approved GDD per system | `/gamedev:design-system` (once per system) → `/gamedev:review-all-gdds` | `/gamedev:consistency-check` |
+| **3. Technical Setup** | Architecture, ADRs, control manifest | `/gamedev:create-architecture` → `/gamedev:architecture-decision` (×3+) → `/gamedev:architecture-review` → `/gamedev:create-control-manifest` | — |
+| **4. Pre-Production** | UX + accessibility specs, a filled Backlog board | `/gamedev:ux-design` → `/gamedev:ux-review` → `/gamedev:create-epics` → `/gamedev:create-stories` | `/gamedev:asset-spec`, `/gamedev:prototype`, `/gamedev:test-setup`, `/gamedev:vertical-slice` |
+| **5. Production** | Implemented, reviewed features | the daily loop below | `/gamedev:story-readiness`, `/gamedev:code-review`, `/gamedev:qa-plan`, `/gamedev:team-*` |
+| **6. Polish** | Shippable quality | `/gamedev:playtest-report` (×3) → `/gamedev:team-polish` | `/gamedev:perf-profile`, `/gamedev:balance-check`, `/gamedev:asset-audit` |
+| **7. Release** | A shipped game | `/gamedev:release-checklist` → `/gamedev:launch-checklist` | `/gamedev:patch-notes`, `/gamedev:changelog` |
+
+Phase gates are **advisory**: `/gamedev:help` and `/gamedev:gate-check` tell you when a
+phase looks complete, but you always decide when to advance.
+
+### The daily loop (Phase 5)
+
+You spend most of the project here, repeating one short cycle per story off the
+Backlog board:
+
+```
+/gamedev:dev-story [story]     # implement — routes to the right programmer agent
+      ↓
+/gamedev:code-review           # optional architectural pass
+      ↓
+/gamedev:story-done [story]    # verify acceptance criteria, close it, surface the next story
+```
+
+`/gamedev:story-done` hands you the next ready story, so the loop feeds itself. When a
+feature spans several domains at once — combat, a full UI flow, an audio pass — reach
+for a **team** command (`/gamedev:team-combat`, `/gamedev:team-ui`, `/gamedev:team-audio`,
+and the rest) to coordinate all the relevant agents in one go.
+
+### Everything else is on-demand
+
+The remaining commands aren't part of the linear walk — reviews and analysis
+(`/gamedev:balance-check`, `/gamedev:scope-check`, `/gamedev:security-audit`), QA
+(`/gamedev:qa-plan`, `/gamedev:smoke-check`, `/gamedev:regression-suite`), bug and
+hotfix flows, and localization. You run them when the situation calls for it, and
+`/gamedev:help` will point at the relevant ones for your current phase. The complete
+reference is below.
+
 ## Slash Commands
 
-Type `/` in Claude Code to access all 72 skills. Arguments in `[brackets]` are
+This is the complete reference; see the [Usage Guide](#usage-guide) above for the
+workflow that decides which to run when. Type `/` in Claude Code to access all 72
+skills. Arguments in `[brackets]` are
 optional, `<angle brackets>` required. Most authoring, team, and gate skills also
 accept a review-depth flag — `--review full|lean|solo` (`--depth` for
 `/gamedev:design-review`) — omitted below for brevity.
@@ -365,17 +444,6 @@ Primary development and testing on **Windows 10** with Git Bash. All hooks use P
 
 - **Discussions** — [GitHub Discussions](https://github.com/Donchitos/Claude-Code-Game-Studios/discussions) for questions, ideas, and showcasing what you've built
 - **Issues** — [Bug reports and feature requests](https://github.com/Donchitos/Claude-Code-Game-Studios/issues)
-
----
-
-## Supporting This Project
-
-Claude Code Game Studios is free and open source. If it saves you time or helps you ship your game, consider supporting continued development:
-
-- **[Buy Me a Coffee](https://www.buymeacoffee.com/donchitos3)** — one-time support
-- **[GitHub Sponsors](https://github.com/sponsors/Donchitos)** — recurring support through GitHub
-
-Sponsorships help fund time spent maintaining skills, adding new agents, keeping up with Claude Code and engine API changes, and responding to community issues.
 
 ---
 
