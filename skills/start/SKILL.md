@@ -33,8 +33,9 @@ A Claude Code plugin cannot ship the project `CLAUDE.md`, the `.claude/rules/`, 
    - **Options**: `Godot` / `Unity` / `Unreal` / `Bevy` — plus let them pick "Decide later" via the free-text option, in which case skip the engine-reference copy.
 4. **Copy, never overwriting** (`cp` with `-n`). Create parent directories as needed. Run these from the project root:
    - Project config & rules:
-     - `cp -n "$TPL/CLAUDE.md" ./CLAUDE.md`
+     - `cp -n "$TPL/CLAUDE.md" ./CLAUDE.md` and `cp -n "$TPL/AGENTS.md" ./AGENTS.md` (the AGENTS.md mirror is read by non-Claude harnesses)
      - `mkdir -p .claude/docs && cp -Rn "$TPL/.claude/rules" ./.claude/ && cp -n "$TPL/.claude/docs/technical-preferences.md" ./.claude/docs/`
+     - Optional local-config guides: `cp -n "$TPL/.claude/docs/CLAUDE-local-template.md" "$TPL/.claude/docs/settings-local-template.md" ./.claude/docs/`
    - Directory tree & seeds (design registry, architecture registry):
      - `cp -Rn "$TPL/design" "$TPL/production" "$TPL/src" ./`
      - `mkdir -p docs && cp -Rn "$TPL/docs/architecture" "$TPL/docs/registry" ./docs/`

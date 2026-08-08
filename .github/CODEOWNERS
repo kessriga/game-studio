@@ -11,6 +11,7 @@ CLAUDE.md                   @Donchitos
 settings.json               @Donchitos
 
 # Skills and agents — high-impact, review carefully
-.claude/skills/             @Donchitos
-.claude/agents/             @Donchitos
-.claude/hooks/              @Donchitos
+skills/                     @Donchitos
+agents/                     @Donchitos
+hooks/                      @Donchitos
+bin/                        @Donchitos
