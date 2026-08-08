@@ -59,6 +59,35 @@ Skills and agents must ask before acting. Nothing writes to files without
 explicit user confirmation. If your contribution has an agent making decisions
 or writing files unilaterally, it won't be merged.
 
+## Developing the plugin (dogfooding)
+
+This repo **is** the `gamedev` plugin. Skills live in `skills/`, agents in
+`agents/`, hooks in `hooks/`, framework docs in `docs/`, and project scaffold
+sources in `templates/`. Opening the repo directly no longer loads the skills
+(a plugin-root `CLAUDE.md` is not auto-loaded). To exercise your changes, install
+the repo as a local plugin:
+
+```
+claude plugin marketplace add ./
+claude plugin install gamedev@game-studio
+```
+
+Because the local marketplace uses `source: "./"`, `${CLAUDE_PLUGIN_ROOT}` points
+at this repo, so edits under `skills/`, `agents/`, `hooks/`, and `docs/` are live
+in the next session. Two conventions the CI-style gate enforces:
+
+- **Namespacing.** Cross-references use `/gamedev:<skill>` and `gamedev:<agent>`;
+  frontmatter `name:` fields stay bare. Run `python3 scripts/check-namespacing.py`
+  before committing — it fails on any bare framework reference.
+- **Paths.** Skills reference framework docs relative to their own `SKILL.md`
+  (`../../docs/<file>.md`); project-side files (`.claude/rules/`,
+  `.claude/docs/technical-preferences.md`) keep their project paths.
+
+Two things a plugin cannot ship, delivered instead by `/gamedev:start` scaffolding:
+`.claude/rules/` (no rules component exists) and the production-stage status line
+(no plugin main-session `statusLine`; surfaced by the SessionStart hook and
+`/gamedev:status` instead).
+
 ## Testing Your Changes
 
 Run it in a Claude Code session and confirm it works end-to-end. For skills,
