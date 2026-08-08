@@ -7,17 +7,6 @@
   </p>
 </p>
 
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
-  <a href=".claude/agents"><img src="https://img.shields.io/badge/agents-53-blueviolet" alt="53 Agents"></a>
-  <a href=".claude/skills"><img src="https://img.shields.io/badge/skills-71-green" alt="71 Skills"></a>
-  <a href=".claude/hooks"><img src="https://img.shields.io/badge/hooks-12-orange" alt="12 Hooks"></a>
-  <a href=".claude/rules"><img src="https://img.shields.io/badge/rules-11-red" alt="11 Rules"></a>
-  <a href="https://docs.anthropic.com/en/docs/claude-code"><img src="https://img.shields.io/badge/built%20for-Claude%20Code-f5f5f5?logo=anthropic" alt="Built for Claude Code"></a>
-  <a href="https://www.buymeacoffee.com/donchitos3"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support%20this%20project-FFDD00?logo=buymeacoffee&logoColor=black" alt="Buy Me a Coffee"></a>
-  <a href="https://github.com/sponsors/Donchitos"><img src="https://img.shields.io/badge/GitHub%20Sponsors-Support%20this%20project-ea4aaa?logo=githubsponsors&logoColor=white" alt="GitHub Sponsors"></a>
-</p>
-
 ---
 
 ## Why This Exists
@@ -36,7 +25,6 @@ The result: you still make every decision, but now you have a team that asks the
 - [Studio Hierarchy](#studio-hierarchy)
 - [Slash Commands](#slash-commands)
 - [Getting Started](#getting-started)
-- [Upgrading](#upgrading)
 - [Project Structure](#project-structure)
 - [How It Works](#how-it-works)
 - [Design Philosophy](#design-philosophy)
@@ -56,7 +44,7 @@ The result: you still make every decision, but now you have a team that asks the
 | **Skills** | 71 | Slash commands for every workflow phase (`/start`, `/design-system`, `/create-epics`, `/create-stories`, `/dev-story`, `/story-done`, etc.) |
 | **Hooks** | 12 | Automated validation on commits, pushes, asset changes, session lifecycle, agent audit trail, and gap detection |
 | **Rules** | 11 | Path-scoped coding standards enforced when editing gameplay, engine, AI, UI, network code, and more |
-| **Templates** | 41 | Document templates for GDDs, UX specs, ADRs, sprint plans, HUD design, accessibility, and more |
+| **Templates** | 41 | Document templates for GDDs, UX specs, ADRs, HUD design, accessibility, and more |
 
 ## Studio Hierarchy
 
@@ -92,7 +80,7 @@ The template includes agent sets for four engines. Use the set that matches your
 
 | Engine | Lead Agent | Sub-Specialists |
 |--------|-----------|-----------------|
-| **Godot 4** | `godot-specialist` | GDScript, Shaders, GDExtension |
+| **Godot 4** | `godot-specialist` | GDScript, C#, Shaders, GDExtension |
 | **Unity** | `unity-specialist` | DOTS/ECS, Shaders/VFX, Addressables, UI Toolkit |
 | **Unreal Engine 5** | `unreal-specialist` | GAS, Blueprints, Replication, UMG/CommonUI |
 | **Bevy** | `bevy-specialist` | Rust/ECS, Rendering/WGSL, bevy_ui |
@@ -132,7 +120,10 @@ Type `/` in Claude Code to access all 71 skills:
 `/release-checklist` `/launch-checklist` `/changelog` `/patch-notes` `/hotfix`
 
 **Creative & Content**
-`/prototype` `/localize`
+`/prototype` `/vertical-slice` `/localize`
+
+**Change Management (OpenSpec)**
+`/openspec-propose` `/openspec-explore` `/openspec-apply-change` `/openspec-sync-specs` `/openspec-archive-change`
 
 **Team Orchestration** (coordinate multiple agents on a single feature)
 `/team-combat` `/team-narrative` `/team-ui` `/team-release` `/team-polish` `/team-audio` `/team-level` `/team-live-ops` `/team-qa`
@@ -168,12 +159,6 @@ All hooks fail gracefully if optional tools are missing — nothing breaks, you 
    - `/setup-engine godot 4.6` — configure your engine if you already know
    - `/project-stage-detect` — analyze an existing project
 
-## Upgrading
-
-Already using an older version of this template? See [UPGRADING.md](UPGRADING.md)
-for step-by-step migration instructions, a breakdown of what changed between
-versions, and which files are safe to overwrite vs. which need a manual merge.
-
 ## Project Structure
 
 ```
@@ -195,7 +180,7 @@ docs/                               # Technical documentation and ADRs
 tests/                              # Test suites (unit, integration, performance, playtest)
 tools/                              # Build and pipeline tools
 prototypes/                         # Throwaway prototypes (isolated from src/)
-production/                         # Sprint plans, milestones, release tracking
+production/                         # Production management (milestones, releases, QA evidence)
 ```
 
 ## How It Works
@@ -257,6 +242,9 @@ Coding standards are automatically enforced based on file location:
 | `src/networking/**` | Server-authoritative, versioned messages, security |
 | `src/ui/**` | No game state ownership, localization-ready, accessibility |
 | `design/gdd/**` | Required 8 sections, formula format, edge cases |
+| `design/narrative/**` | Canon levels, lore consistency, localization-ready dialogue |
+| `assets/data/**` | Valid JSON, documented schemas, no orphaned entries |
+| `assets/shaders/**` | Shader naming, performance budgets, cross-platform compatibility |
 | `tests/**` | Test naming, coverage requirements, fixture patterns |
 | `prototypes/**` | Relaxed standards, README required, hypothesis documented |
 
@@ -296,12 +284,6 @@ Primary development and testing on **Windows 10** with Git Bash. All hooks use P
 ## Supporting This Project
 
 Claude Code Game Studios is free and open source. If it saves you time or helps you ship your game, consider supporting continued development:
-
-<p>
-  <a href="https://www.buymeacoffee.com/donchitos3"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee"></a>
-  &nbsp;
-  <a href="https://github.com/sponsors/Donchitos"><img src="https://img.shields.io/badge/GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="GitHub Sponsors"></a>
-</p>
 
 - **[Buy Me a Coffee](https://www.buymeacoffee.com/donchitos3)** — one-time support
 - **[GitHub Sponsors](https://github.com/sponsors/Donchitos)** — recurring support through GitHub
