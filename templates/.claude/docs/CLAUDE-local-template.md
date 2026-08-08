@@ -26,7 +26,7 @@ This file is gitignored and will not be committed.
 - Explain architectural decisions briefly
 
 ## Personal Shortcuts
-- When I say "review", run /code-review on the last changed files
+- When I say "review", run /gamedev:code-review on the last changed files
 - When I say "status", show git status + sprint progress
 ```
 

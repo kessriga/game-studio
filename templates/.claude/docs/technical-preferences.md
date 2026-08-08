@@ -1,18 +1,18 @@
 # Technical Preferences
 
-<!-- Populated by /setup-engine. Updated as the user makes decisions throughout development. -->
+<!-- Populated by /gamedev:setup-engine. Updated as the user makes decisions throughout development. -->
 <!-- All agents reference this file for project-specific standards and conventions. -->
 
 ## Engine & Language
 
-- **Engine**: [TO BE CONFIGURED — run /setup-engine]
+- **Engine**: [TO BE CONFIGURED — run /gamedev:setup-engine]
 - **Language**: [TO BE CONFIGURED]
 - **Rendering**: [TO BE CONFIGURED]
 - **Physics**: [TO BE CONFIGURED]
 
 ## Input & Platform
 
-<!-- Written by /setup-engine. Read by /ux-design, /ux-review, /test-setup, /team-ui, and /dev-story -->
+<!-- Written by /gamedev:setup-engine. Read by /gamedev:ux-design, /gamedev:ux-review, /gamedev:test-setup, /gamedev:team-ui, and /gamedev:dev-story -->
 <!-- to scope interaction specs, test helpers, and implementation to the correct input methods. -->
 
 - **Target Platforms**: [TO BE CONFIGURED — e.g., PC, Console, Mobile, Web]
@@ -57,15 +57,15 @@
 ## Architecture Decisions Log
 
 <!-- Quick reference linking to full ADRs in docs/architecture/ -->
-- [No ADRs yet — use /architecture-decision to create one]
+- [No ADRs yet — use /gamedev:architecture-decision to create one]
 
 ## Engine Specialists
 
-<!-- Written by /setup-engine when engine is configured. -->
-<!-- Read by /code-review, /architecture-decision, /architecture-review, and team skills -->
+<!-- Written by /gamedev:setup-engine when engine is configured. -->
+<!-- Read by /gamedev:code-review, /gamedev:architecture-decision, /gamedev:architecture-review, and team skills -->
 <!-- to know which specialist to spawn for engine-specific validation. -->
 
-- **Primary**: [TO BE CONFIGURED — run /setup-engine]
+- **Primary**: [TO BE CONFIGURED — run /gamedev:setup-engine]
 - **Language/Code Specialist**: [TO BE CONFIGURED]
 - **Shader Specialist**: [TO BE CONFIGURED]
 - **UI Specialist**: [TO BE CONFIGURED]

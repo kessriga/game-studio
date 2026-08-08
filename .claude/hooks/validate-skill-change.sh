@@ -1,6 +1,7 @@
 #!/bin/bash
 # Claude Code PostToolUse hook: Advises running skill-test after skill file changes
-# Fires when any file inside .claude/skills/ is written or edited.
+# Fires when a plugin skill file (skills/<name>/SKILL.md) is written or edited.
+# Repo-side dev tooling only — not shipped with the plugin.
 #
 # Exit behavior:
 #   exit 0 = advisory only (non-blocking)
@@ -20,20 +21,20 @@ fi
 # Normalize path separators (Windows backslash to forward slash)
 FILE_PATH=$(echo "$FILE_PATH" | sed 's|\\|/|g')
 
-# Only act on files inside .claude/skills/
-if ! echo "$FILE_PATH" | grep -qE '(^|/)\.claude/skills/'; then
+# Only act on plugin skill files: skills/<name>/SKILL.md (not the qa/skills corpus)
+if ! echo "$FILE_PATH" | grep -qE '(^|/)skills/[^/]+/SKILL\.md$'; then
     exit 0
 fi
 
-# Extract skill name from path (.claude/skills/[skill-name]/SKILL.md)
-SKILL_NAME=$(echo "$FILE_PATH" | grep -oE '\.claude/skills/[^/]+' | sed 's|\.claude/skills/||')
+# Extract skill name from path (skills/[skill-name]/SKILL.md)
+SKILL_NAME=$(echo "$FILE_PATH" | grep -oE '(^|/)skills/[^/]+/SKILL\.md$' | sed -E 's|.*/?skills/([^/]+)/SKILL\.md$|\1|')
 
 if [ -z "$SKILL_NAME" ]; then
     exit 0
 fi
 
 echo "=== Skill Modified: $SKILL_NAME ===" >&2
-echo "Run /skill-test static $SKILL_NAME to validate structural compliance." >&2
+echo "Run /gamedev:skill-test static $SKILL_NAME to validate structural compliance." >&2
 echo "====================================" >&2
 
 exit 0
