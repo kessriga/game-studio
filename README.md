@@ -30,8 +30,6 @@ The result: you still make every decision, but now you have a team that asks the
 - [How It Works](#how-it-works)
 - [Design Philosophy](#design-philosophy)
 - [Customization](#customization)
-- [Platform Support](#platform-support)
-- [Community](#community)
 - [License](#license)
 
 ---
@@ -436,18 +434,9 @@ The plugin is a starting point, not a locked framework. Everything you scaffold 
 - **Pick your engine** — use the Godot, Unity, Unreal, or Bevy agent set (or none)
 - **Set review intensity** — `full` (all director gates), `lean` (phase gates only), or `solo` (none). Set during `/gamedev:start` or edit `production/review-mode.txt`. Override per-run with `--review solo` on any skill.
 
-## Platform Support
-
-Primary development and testing on **Windows 10** with Git Bash. All hooks use POSIX-compatible patterns (`grep -E`, not `grep -P`) and include fallbacks for missing tools, so they should run on macOS and Linux. The `notify.sh` hook uses PowerShell for Windows toast notifications and is a no-op elsewhere — desktop notifications on macOS/Linux are not yet wired. Cross-platform testing is ongoing; please file issues for any platform-specific breakage.
-
-## Community
-
-- **Discussions** — [GitHub Discussions](https://github.com/Donchitos/Claude-Code-Game-Studios/discussions) for questions, ideas, and showcasing what you've built
-- **Issues** — [Bug reports and feature requests](https://github.com/Donchitos/Claude-Code-Game-Studios/issues)
-
 ---
 
-*Built for Claude Code. Maintained and extended — contributions welcome via [GitHub Discussions](https://github.com/Donchitos/Claude-Code-Game-Studios/discussions).*
+*Built for Claude Code. Maintained and extended — contributions welcome.*
 
 ## License
 
