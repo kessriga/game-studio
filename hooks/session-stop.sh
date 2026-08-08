@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Resolve project-relative paths against the user's project (plugin runs from CLAUDE_PLUGIN_ROOT).
+cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # Claude Code Stop hook: Log session summary when Claude finishes
 # Records what was worked on for audit trail and progress tracking
 

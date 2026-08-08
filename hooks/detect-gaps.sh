@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Resolve project-relative paths against the user's project (plugin runs from CLAUDE_PLUGIN_ROOT).
+cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # Hook: detect-gaps.sh
 # Event: SessionStart
 # Purpose: Detect missing documentation when code/prototypes exist

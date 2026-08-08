@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Resolve project-relative paths against the user's project (plugin runs from CLAUDE_PLUGIN_ROOT).
+cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # Claude Code PreToolUse hook: Validates git commit commands
 # Receives JSON on stdin with tool_input.command
 # Exit 0 = allow, Exit 2 = block (stderr shown to Claude)

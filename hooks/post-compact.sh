@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# Resolve project-relative paths against the user's project (plugin runs from CLAUDE_PLUGIN_ROOT).
+cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # post-compact.sh — fires after conversation compaction
 # Reminds Claude to restore session state from the file-backed checkpoint.
 

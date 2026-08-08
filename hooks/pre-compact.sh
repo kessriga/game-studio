@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Resolve project-relative paths against the user's project (plugin runs from CLAUDE_PLUGIN_ROOT).
+cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # Claude Code PreCompact hook: Dump session state before context compression
 # This output appears in the conversation right before compaction, ensuring
 # critical state survives the summarization process.

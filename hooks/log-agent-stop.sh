@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Resolve project-relative paths against the user's project (plugin runs from CLAUDE_PLUGIN_ROOT).
+cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # Claude Code SubagentStop hook: Log agent completion for audit trail
 # Tracks when agents finish and their outcome
 #
