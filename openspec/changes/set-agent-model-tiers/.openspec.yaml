@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-08-07
+goal: Directors run on claude-fable-5, department leads on claude-opus-4-8,
+  specialists on the sonnet alias
