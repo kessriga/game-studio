@@ -1,4 +1,4 @@
-# Skill Test Spec: /team-combat
+# Skill Test Spec: /gamedev:team-combat
 
 ## Skill Summary
 
@@ -8,8 +8,8 @@ sound-designer, the primary engine specialist, and qa-tester through six structu
 phases: Design → Architecture (with engine specialist validation) → Implementation
 (parallel) → Integration → Validation → Sign-off. Uses `AskUserQuestion` at each
 phase transition. Delegates all file writes to sub-agents. Produces a summary report
-with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
-`/balance-check`, and `/team-polish`.
+with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/gamedev:code-review`,
+`/gamedev:balance-check`, and `/gamedev:team-polish`.
 
 ---
 
@@ -19,7 +19,7 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 - [ ] Has ≥2 phase headings (Phase 1 through Phase 6 are all present)
 - [ ] Contains verdict keywords: COMPLETE, NEEDS WORK, BLOCKED
 - [ ] Contains "May I write" or "File Write Protocol" — writes delegated to sub-agents, orchestrator does not write files directly
-- [ ] Has a next-step handoff at the end (references `/code-review`, `/balance-check`, `/team-polish`)
+- [ ] Has a next-step handoff at the end (references `/gamedev:code-review`, `/gamedev:balance-check`, `/gamedev:team-polish`)
 - [ ] Error Recovery Protocol section is present with all four recovery steps
 - [ ] Uses `AskUserQuestion` at phase transitions for user approval before proceeding
 - [ ] Phase 3 is explicitly marked as parallel (gameplay-programmer, ai-programmer, technical-artist, sound-designer)
@@ -37,7 +37,7 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 - Engine is configured in `.claude/docs/technical-preferences.md` (Engine Specialists section filled)
 - No existing GDD for the requested combat feature
 
-**Input:** `/team-combat parry and riposte system`
+**Input:** `/gamedev:team-combat parry and riposte system`
 
 **Expected behavior:**
 1. Phase 1 — game-designer spawned; produces `design/gdd/parry-riposte.md` covering all 8 required sections (overview, player fantasy, rules, formulas, edge cases, dependencies, tuning knobs, acceptance criteria); asks user to approve design doc
@@ -46,7 +46,7 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 4. Phase 4 — integration wires together all Phase 3 outputs; tuning knobs verified as data-driven; `AskUserQuestion` confirms integration before Phase 5
 5. Phase 5 — qa-tester spawned; writes test cases from acceptance criteria; verifies edge cases; performance impact checked against budget
 6. Phase 6 — summary report produced: design COMPLETE, all team members COMPLETE, test cases listed, verdict: COMPLETE
-7. Next steps listed: `/code-review`, `/balance-check`, `/team-polish`
+7. Next steps listed: `/gamedev:code-review`, `/gamedev:balance-check`, `/gamedev:team-polish`
 
 **Assertions:**
 - [ ] `AskUserQuestion` called at each phase gate (at minimum before Phase 3 and before Phase 5)
@@ -54,7 +54,7 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 - [ ] Engine specialist runs in Phase 2 before Phase 3 begins (output incorporated into architecture)
 - [ ] All file writes delegated to sub-agents (orchestrator never calls Write/Edit directly)
 - [ ] Verdict COMPLETE present in final report
-- [ ] Next steps include `/code-review`, `/balance-check`, `/team-polish`
+- [ ] Next steps include `/gamedev:code-review`, `/gamedev:balance-check`, `/gamedev:team-polish`
 - [ ] Design doc covers all 8 required GDD sections
 
 ---
@@ -65,13 +65,13 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 - `design/gdd/parry-riposte.md` exists (Phase 1 already complete)
 - ai-programmer agent returns BLOCKED because no AI system architecture ADR exists (ADR status is Proposed)
 
-**Input:** `/team-combat parry and riposte system`
+**Input:** `/gamedev:team-combat parry and riposte system`
 
 **Expected behavior:**
 1. Phase 1 — design doc found; game-designer confirms it is valid; phase approved
 2. Phase 2 — gameplay-programmer completes architecture sketch; ai-programmer returns BLOCKED: "ADR for AI behavior system is Proposed — cannot implement until ADR is Accepted"
 3. Error Recovery Protocol triggered: "ai-programmer: BLOCKED — AI behavior ADR is Proposed"
-4. `AskUserQuestion` presented with options: (a) Skip ai-programmer and note the gap; (b) Retry with narrower scope; (c) Stop here and run `/architecture-decision` first
+4. `AskUserQuestion` presented with options: (a) Skip ai-programmer and note the gap; (b) Retry with narrower scope; (c) Stop here and run `/gamedev:architecture-decision` first
 5. If user chooses (a): Phase 3 proceeds with gameplay-programmer, technical-artist, sound-designer only; ai-programmer gap noted in partial report
 6. Final report produced: partial implementation documented, ai-programmer section marked BLOCKED, overall verdict: BLOCKED
 
@@ -80,7 +80,7 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 - [ ] `AskUserQuestion` offers at minimum three options: skip / retry / stop
 - [ ] Partial report produced — completed agents' work is not discarded
 - [ ] Overall verdict is BLOCKED (not COMPLETE) when any agent is unresolved
-- [ ] Blocked reason references the ADR and suggests `/architecture-decision`
+- [ ] Blocked reason references the ADR and suggests `/gamedev:architecture-decision`
 - [ ] Orchestrator does not silently proceed past the blocked dependency
 
 ---
@@ -90,12 +90,12 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 **Fixture:**
 - Any project state
 
-**Input:** `/team-combat` (no argument)
+**Input:** `/gamedev:team-combat` (no argument)
 
 **Expected behavior:**
 1. Skill detects no argument provided
 2. Outputs usage message explaining the required argument (combat feature description)
-3. Provides an example invocation: `/team-combat [combat feature description]`
+3. Provides an example invocation: `/gamedev:team-combat [combat feature description]`
 4. Skill exits without spawning any subagents
 
 **Assertions:**
@@ -114,7 +114,7 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 - Architecture sketch has been approved
 - Engine specialist has validated architecture
 
-**Input:** `/team-combat parry and riposte system` (resuming from Phase 2 complete)
+**Input:** `/gamedev:team-combat parry and riposte system` (resuming from Phase 2 complete)
 
 **Expected behavior:**
 1. Phase 3 begins after architecture approval
@@ -137,7 +137,7 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 - Architecture sketch produced by gameplay-programmer is available
 - Engine version pinned in `docs/engine-reference/godot/VERSION.md`
 
-**Input:** `/team-combat parry and riposte system`
+**Input:** `/gamedev:team-combat parry and riposte system`
 
 **Expected behavior:**
 1. Phase 2 — gameplay-programmer produces architecture sketch
@@ -164,7 +164,7 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 - [ ] Phase 3 agents launched in parallel per skill spec
 - [ ] Partial report always produced even when agents are BLOCKED
 - [ ] Verdict is one of COMPLETE / NEEDS WORK / BLOCKED
-- [ ] Next steps present at end of output: `/code-review`, `/balance-check`, `/team-polish`
+- [ ] Next steps present at end of output: `/gamedev:code-review`, `/gamedev:balance-check`, `/gamedev:team-polish`
 
 ---
 
@@ -173,7 +173,7 @@ with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to `/code-review`,
 - The NEEDS WORK verdict path (qa-tester finds failures in Phase 5) is not separately tested
   here; it follows the same error recovery and partial report protocol as Case 2.
 - "Retry with narrower scope" error recovery option is listed in assertions but its full
-  recursive behavior (splitting via `/create-stories`) is covered by the `/create-stories` spec.
+  recursive behavior (splitting via `/gamedev:create-stories`) is covered by the `/gamedev:create-stories` spec.
 - Phase 4 integration logic (wiring gameplay, AI, VFX, audio) is validated implicitly by
   the Happy Path case; a dedicated integration test would require fixture code files.
 - Engine specialist unavailable (no engine configured) is partially covered in Case 5

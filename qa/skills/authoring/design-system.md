@@ -1,8 +1,8 @@
-# Skill Test Spec: /design-system
+# Skill Test Spec: /gamedev:design-system
 
 ## Skill Summary
 
-`/design-system` guides the user through section-by-section authoring of a Game
+`/gamedev:design-system` guides the user through section-by-section authoring of a Game
 Design Document (GDD) for a single game system. All 8 required sections must be
 authored: Overview, Player Fantasy, Detailed Rules, Formulas, Edge Cases,
 Dependencies, Tuning Knobs, and Acceptance Criteria. The skill uses a
@@ -18,7 +18,7 @@ document.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill-test static` — no fixture needed.
+Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
 - [ ] Has ≥2 phase headings
@@ -53,7 +53,7 @@ In `solo` mode: CD-GDD-ALIGN is skipped. Output notes:
 - No existing GDD for the target system in `design/gdd/`
 - `production/session-state/review-mode.txt` contains `lean`
 
-**Input:** `/design-system [system-name]`
+**Input:** `/gamedev:design-system [system-name]`
 
 **Expected behavior:**
 1. Skill creates skeleton file `design/gdd/[system-name].md` with all 8 section headers (empty bodies)
@@ -78,7 +78,7 @@ In `solo` mode: CD-GDD-ALIGN is skipped. Output notes:
 **Fixture:**
 - `design/gdd/[system-name].md` already exists with all 8 sections populated
 
-**Input:** `/design-system [system-name]`
+**Input:** `/gamedev:design-system [system-name]`
 
 **Expected behavior:**
 1. Skill detects existing GDD file and reads its current content
@@ -103,7 +103,7 @@ In `solo` mode: CD-GDD-ALIGN is skipped. Output notes:
 - `production/session-state/review-mode.txt` contains `lean`
 - CD-GDD-ALIGN gate returns MAJOR REVISION on the Player Fantasy section
 
-**Input:** `/design-system [system-name]`
+**Input:** `/gamedev:design-system [system-name]`
 
 **Expected behavior:**
 1. Player Fantasy section is drafted
@@ -128,7 +128,7 @@ In `solo` mode: CD-GDD-ALIGN is skipped. Output notes:
 - New GDD being authored
 - `production/session-state/review-mode.txt` contains `solo`
 
-**Input:** `/design-system [system-name]`
+**Input:** `/gamedev:design-system [system-name]`
 
 **Expected behavior:**
 1. Skeleton file is created with 8 section headers
@@ -153,7 +153,7 @@ In `solo` mode: CD-GDD-ALIGN is skipped. Output notes:
 - User and skill discuss one section but do not produce any approved content
   (e.g., discussion ends without a decision, or user says "skip for now")
 
-**Input:** `/design-system [system-name]`
+**Input:** `/gamedev:design-system [system-name]`
 
 **Expected behavior:**
 1. Section discussion produces no approved content
@@ -178,7 +178,7 @@ In `solo` mode: CD-GDD-ALIGN is skipped. Output notes:
 - [ ] "May I write [section]?" asked per section (not once for the whole document)
 - [ ] MAJOR REVISION from CD-GDD-ALIGN blocks section write until resolved
 - [ ] Only approved, non-empty sections are written to the file
-- [ ] Ends with next-step handoff: `/review-all-gdds` or `/map-systems next`
+- [ ] Ends with next-step handoff: `/gamedev:review-all-gdds` or `/gamedev:map-systems next`
 
 ---
 

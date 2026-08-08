@@ -1,8 +1,8 @@
-# Skill Test Spec: /qa-plan
+# Skill Test Spec: /gamedev:qa-plan
 
 ## Skill Summary
 
-`/qa-plan` generates a structured QA test plan for a milestone (epic) or feature.
+`/gamedev:qa-plan` generates a structured QA test plan for a milestone (epic) or feature.
 It reads the story tasks for the specified milestone via `task_list` (following each
 task's `Spec:` reference to its story `.md`), extracts acceptance criteria from
 each story, cross-references test standards from `coding-standards.md` to assign
@@ -13,25 +13,25 @@ The skill asks "May I write to `production/qa/qa-plan-[milestone-slug]-[date].md
 before persisting the output. If an existing test plan for the same milestone is
 found, the skill offers to update rather than replace. The verdict is COMPLETE when
 the plan is written. No director gates are used — gate-level story readiness is
-handled by `/story-readiness`.
+handled by `/gamedev:story-readiness`.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill-test static` — no fixture needed.
+Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keyword: COMPLETE
 - [ ] Contains "May I write" collaborative protocol language before writing the plan
-- [ ] Has a next-step handoff (e.g., `/smoke-check` or `/story-readiness`)
+- [ ] Has a next-step handoff (e.g., `/gamedev:smoke-check` or `/gamedev:story-readiness`)
 
 ---
 
 ## Director Gate Checks
 
-None. `/qa-plan` is a planning utility. Story readiness gates are separate.
+None. `/gamedev:qa-plan` is a planning utility. Story readiness gates are separate.
 
 ---
 
@@ -44,7 +44,7 @@ None. `/qa-plan` is a planning utility. Story readiness gates are separate.
 - Stories span types: 1 logic (formula), 1 integration, 1 visual, 1 UI
 - `coding-standards.md` is present with test evidence table
 
-**Input:** `/qa-plan "Combat System"`
+**Input:** `/gamedev:qa-plan "Combat System"`
 
 **Expected behavior:**
 1. Skill `task_list`s the `Combat System` milestone and identifies 4 story tasks
@@ -73,7 +73,7 @@ None. `/qa-plan` is a planning utility. Story readiness gates are separate.
 - The `Enemy AI` milestone has 3 story tasks on the board; one story has an empty
   acceptance criteria section
 
-**Input:** `/qa-plan "Enemy AI"`
+**Input:** `/gamedev:qa-plan "Enemy AI"`
 
 **Expected behavior:**
 1. Skill reads all 3 stories
@@ -96,7 +96,7 @@ None. `/qa-plan` is a planning utility. Story readiness gates are separate.
 - `production/qa/qa-plan-Combat-System-[date].md` already exists from a previous run
 - The `Combat System` milestone has 2 new story tasks added since the last plan
 
-**Input:** `/qa-plan "Combat System"`
+**Input:** `/gamedev:qa-plan "Combat System"`
 
 **Expected behavior:**
 1. Skill `task_list`s the `Combat System` milestone and detects 2 stories not in the existing plan
@@ -118,17 +118,17 @@ None. `/qa-plan` is a planning utility. Story readiness gates are separate.
 **Fixture:**
 - The `Netcode` milestone has no story tasks on the board (or the milestone does not exist)
 
-**Input:** `/qa-plan "Netcode"`
+**Input:** `/gamedev:qa-plan "Netcode"`
 
 **Expected behavior:**
 1. Skill `task_list`s the `Netcode` milestone — no story tasks found
 2. Skill outputs: "No story tasks found for the Netcode milestone"
-3. Skill suggests running `/create-stories` to break the epic into story tasks first
+3. Skill suggests running `/gamedev:create-stories` to break the epic into story tasks first
 4. No plan is written; no "May I write" is asked
 
 **Assertions:**
 - [ ] Error message names the milestone with no story tasks
-- [ ] `/create-stories` is suggested as the remediation step
+- [ ] `/gamedev:create-stories` is suggested as the remediation step
 - [ ] No write tool is called
 - [ ] Verdict is not COMPLETE (error state)
 
@@ -139,7 +139,7 @@ None. `/qa-plan` is a planning utility. Story readiness gates are separate.
 **Fixture:**
 - Milestone with valid stories and AC
 
-**Input:** `/qa-plan "Combat System"`
+**Input:** `/gamedev:qa-plan "Combat System"`
 
 **Expected behavior:**
 1. Skill generates and writes QA plan

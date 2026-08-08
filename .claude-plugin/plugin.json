@@ -1,0 +1,21 @@
+{
+  "name": "gamedev",
+  "description": "Indie game studio framework for Claude Code: 72 skills and 53 coordinated subagents spanning design, engineering, art, narrative, audio, QA, and release across Godot, Unity, Unreal, and Bevy.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Kessriga Jeükal"
+  },
+  "homepage": "https://github.com/kessriga/game-studio",
+  "repository": "https://github.com/kessriga/game-studio",
+  "license": "MIT",
+  "keywords": [
+    "game-development",
+    "godot",
+    "unity",
+    "unreal",
+    "bevy",
+    "game-design",
+    "agents",
+    "workflows"
+  ]
+}

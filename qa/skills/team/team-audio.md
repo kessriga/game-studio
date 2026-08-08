@@ -1,4 +1,4 @@
-# Skill Test Spec: /team-audio
+# Skill Test Spec: /gamedev:team-audio
 
 ## Skill Summary
 
@@ -23,7 +23,7 @@ engine is configured.
 - [ ] Contains "File Write Protocol" section
 - [ ] File writes are delegated to sub-agents — orchestrator does not write files directly
 - [ ] Sub-agents enforce "May I write to [path]?" before any write
-- [ ] Has a next-step handoff at the end (references `/dev-story`, `/asset-audit`)
+- [ ] Has a next-step handoff at the end (references `/gamedev:dev-story`, `/gamedev:asset-audit`)
 - [ ] Error Recovery Protocol section is present
 - [ ] `AskUserQuestion` is used at step transitions before proceeding
 - [ ] Step 2 explicitly spawns sound-designer and accessibility-specialist in parallel
@@ -44,7 +44,7 @@ engine is configured.
 - Engine is configured in `.claude/docs/technical-preferences.md`
 - No accessibility gaps exist in the planned audio event list
 
-**Input:** `/team-audio combat`
+**Input:** `/gamedev:team-audio combat`
 
 **Expected behavior:**
 1. Context gathering: orchestrator reads `design/gdd/combat.md`, `design/gdd/sound-bible.md`, and `assets/audio/` asset list before spawning any agent
@@ -82,7 +82,7 @@ engine is configured.
 - sound-designer's audio event list includes "EnemyNearbyAlert" — a spatial audio cue that warns the player an enemy is approaching from off-screen
 - accessibility-specialist reviews the event list and finds "EnemyNearbyAlert" has no visual fallback (no on-screen indicator, no subtitle, no controller rumble specified)
 
-**Input:** `/team-audio stealth` (Step 2 scenario)
+**Input:** `/gamedev:team-audio stealth` (Step 2 scenario)
 
 **Expected behavior:**
 1. Steps 1–2 proceed; accessibility-specialist and sound-designer are spawned in parallel
@@ -110,11 +110,11 @@ engine is configured.
 **Fixture:**
 - Any project state
 
-**Input:** `/team-audio` (no argument)
+**Input:** `/gamedev:team-audio` (no argument)
 
 **Expected behavior:**
 1. Skill detects no argument is provided
-2. Outputs usage guidance: e.g., "Usage: `/team-audio [feature or area]` — specify the feature or area to design audio for (e.g., `combat`, `main menu`, `forest biome`, `boss encounter`)"
+2. Outputs usage guidance: e.g., "Usage: `/gamedev:team-audio [feature or area]` — specify the feature or area to design audio for (e.g., `combat`, `main menu`, `forest biome`, `boss encounter`)"
 3. Skill exits without spawning any agents
 
 **Assertions:**
@@ -132,7 +132,7 @@ engine is configured.
 - `design/gdd/sound-bible.md` does NOT exist
 - Engine is configured; other context files are present
 
-**Input:** `/team-audio main menu`
+**Input:** `/gamedev:team-audio main menu`
 
 **Expected behavior:**
 1. Context gathering: orchestrator reads `design/gdd/main-menu.md` and checks for `design/gdd/sound-bible.md`
@@ -158,7 +158,7 @@ engine is configured.
 - GDD for the target feature exists
 - Sound bible may or may not exist
 
-**Input:** `/team-audio boss encounter`
+**Input:** `/gamedev:team-audio boss encounter`
 
 **Expected behavior:**
 1. Context gathering: orchestrator reads `.claude/docs/technical-preferences.md` and detects no engine is configured
@@ -191,7 +191,7 @@ engine is configured.
 - [ ] A partial report is always produced when some agents complete and others block
 - [ ] Audio design document path follows the pattern `design/gdd/audio-[feature].md`
 - [ ] Verdict is exactly COMPLETE or BLOCKED — no other verdict values used
-- [ ] Next Steps handoff references `/dev-story` and `/asset-audit`
+- [ ] Next Steps handoff references `/gamedev:dev-story` and `/gamedev:asset-audit`
 
 ---
 

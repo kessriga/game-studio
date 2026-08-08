@@ -1,0 +1,22 @@
+{
+  "name": "game-studio",
+  "owner": {
+    "name": "Kessriga Jeükal",
+    "url": "https://github.com/kessriga"
+  },
+  "metadata": {
+    "description": "The gamedev plugin: a full indie game studio framework of skills and subagents for Claude Code.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "gamedev",
+      "source": "./",
+      "description": "Indie game studio framework for Claude Code: 72 skills and 53 coordinated subagents across Godot, Unity, Unreal, and Bevy.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Kessriga Jeükal"
+      }
+    }
+  ]
+}

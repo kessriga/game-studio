@@ -8,12 +8,12 @@ framework. It is self-contained and separate from any game project.
 | File | Purpose |
 |------|---------|
 | `catalog.yaml` | Master registry for all 66 skills and 53 agents. Contains category, spec path, and last-test tracking fields. Always read this first when running any test command. |
-| `quality-rubric.md` | Category-specific pass/fail metrics. Read the matching `###` section for the skill's category when running `/skill-test category`. |
+| `quality-rubric.md` | Category-specific pass/fail metrics. Read the matching `###` section for the skill's category when running `/gamedev:skill-test category`. |
 | `skills/[category]/[name].md` | Behavioral spec for a skill — 5 test cases + protocol compliance assertions. |
 | `agents/[tier]/[name].md` | Behavioral spec for an agent — 5 test cases + protocol compliance assertions. |
 | `templates/skill-test-spec.md` | Template for writing new skill spec files. |
 | `templates/agent-test-spec.md` | Template for writing new agent spec files. |
-| `results/` | Written by `/skill-test spec` when results are saved. Gitignored. |
+| `results/` | Written by `/gamedev:skill-test spec` when results are saved. Gitignored. |
 
 ## Path conventions
 
@@ -70,14 +70,14 @@ creative    → writer, world-builder, game-designer, economy-designer,
 ## Workflow for testing a skill
 
 1. Read `catalog.yaml` to get the skill's `spec:` path and `category:`
-2. Read the skill at `.claude/skills/[name]/SKILL.md`
+2. Read the skill at `skills/[name]/SKILL.md`
 3. Read the spec at the `spec:` path
 4. Evaluate assertions case by case
 5. Offer to write results to `results/` and update `catalog.yaml`
 
 ## Workflow for improving a skill
 
-Use `/skill-improve [name]`. It handles the full loop:
+Use `/gamedev:skill-improve [name]`. It handles the full loop:
 test → diagnose → propose fix → rewrite → retest → keep or revert.
 
 ## Spec validity note
@@ -90,5 +90,5 @@ Treat spec failures as "this needs investigation," not "the skill is definitivel
 ## This folder is deletable
 
 Nothing in `.claude/` imports from here. Deleting this folder has no effect on the
-CCGS skills or agents themselves. `/skill-test` and `/skill-improve` will report that
+CCGS skills or agents themselves. `/gamedev:skill-test` and `/gamedev:skill-improve` will report that
 `catalog.yaml` is missing and guide the user to initialize it.

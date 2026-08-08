@@ -16,7 +16,7 @@ qa/
 ├── README.md              ← you are here
 ├── CLAUDE.md              ← tells Claude how to use this framework
 ├── catalog.yaml           ← master registry: all 73 skills + 53 agents, coverage tracking
-├── quality-rubric.md      ← category-specific pass/fail metrics for /skill-test category
+├── quality-rubric.md      ← category-specific pass/fail metrics for /gamedev:skill-test category
 │
 ├── skills/                ← behavioral spec files for skills (one per skill)
 │   ├── gate/              ← gate category specs
@@ -43,7 +43,7 @@ qa/
 │   ├── skill-test-spec.md ← template for skill behavioral specs
 │   └── agent-test-spec.md ← template for agent behavioral specs
 │
-└── results/               ← test run outputs (written by /skill-test spec, gitignored)
+└── results/               ← test run outputs (written by /gamedev:skill-test spec, gitignored)
 ```
 
 ---
@@ -55,34 +55,34 @@ All testing is driven by two skills already in the framework:
 ### Check structural compliance
 
 ```
-/skill-test static [skill-name]     # Check one skill (7 checks)
-/skill-test static all              # Check all 73 skills
+/gamedev:skill-test static [skill-name]     # Check one skill (7 checks)
+/gamedev:skill-test static all              # Check all 73 skills
 ```
 
 ### Run a behavioral spec test
 
 ```
-/skill-test spec gate-check         # Evaluate a skill against its written spec
-/skill-test spec design-review
+/gamedev:skill-test spec gate-check         # Evaluate a skill against its written spec
+/gamedev:skill-test spec design-review
 ```
 
 ### Check against category rubric
 
 ```
-/skill-test category gate-check     # Evaluate one skill against its category metrics
-/skill-test category all            # Run rubric checks across all categorized skills
+/gamedev:skill-test category gate-check     # Evaluate one skill against its category metrics
+/gamedev:skill-test category all            # Run rubric checks across all categorized skills
 ```
 
 ### See full coverage picture
 
 ```
-/skill-test audit                   # Skills + agents: has-spec, last tested, result
+/gamedev:skill-test audit                   # Skills + agents: has-spec, last tested, result
 ```
 
 ### Improve a failing skill
 
 ```
-/skill-improve gate-check           # Test → diagnose → propose fix → retest loop
+/gamedev:skill-improve gate-check           # Test → diagnose → propose fix → retest loop
 ```
 
 ---
@@ -122,9 +122,9 @@ All testing is driven by two skills already in the framework:
 
 `catalog.yaml` tracks test coverage for every skill and agent. After running a test:
 
-- `/skill-test spec [name]` will offer to update `last_spec` and `last_spec_result`
-- `/skill-test category [name]` will offer to update `last_category` and `last_category_result`
-- `last_static` and `last_static_result` are updated manually or via `/skill-improve`
+- `/gamedev:skill-test spec [name]` will offer to update `last_spec` and `last_spec_result`
+- `/gamedev:skill-test category [name]` will offer to update `last_category` and `last_category_result`
+- `last_static` and `last_static_result` are updated manually or via `/gamedev:skill-improve`
 
 ---
 
@@ -133,7 +133,7 @@ All testing is driven by two skills already in the framework:
 1. Find the spec template at `templates/skill-test-spec.md`
 2. Copy it to `skills/[category]/[skill-name].md`
 3. Update the `spec:` field in `catalog.yaml` to point to the new file
-4. Run `/skill-test spec [skill-name]` to validate it
+4. Run `/gamedev:skill-test spec [skill-name]` to validate it
 
 ---
 
@@ -145,6 +145,6 @@ This folder has no hooks into the main project. To remove:
 rm -rf qa
 ```
 
-The skills `/skill-test` and `/skill-improve` will still function — they'll simply
-report that `catalog.yaml` is missing and suggest running `/skill-test audit` to
+The skills `/gamedev:skill-test` and `/gamedev:skill-improve` will still function — they'll simply
+report that `catalog.yaml` is missing and suggest running `/gamedev:skill-test audit` to
 initialize it.

@@ -78,4 +78,4 @@
 - Case 3 (crisis communication) is a brand-safety test — verify the agent de-escalates rather than inflames
 - Case 4 requires a brand voice document to be in context; test is incomplete without it
 - Case 5 is the most important context-awareness test for tone consistency
-- No automated runner; review manually or via `/skill-test`
+- No automated runner; review manually or via `/gamedev:skill-test`

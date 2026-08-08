@@ -1,8 +1,8 @@
-# Skill Test Spec: /test-flakiness
+# Skill Test Spec: /gamedev:test-flakiness
 
 ## Skill Summary
 
-`/test-flakiness` detects non-deterministic tests by analyzing test history logs
+`/gamedev:test-flakiness` detects non-deterministic tests by analyzing test history logs
 (if available) or scanning test source code for common flakiness patterns (random
 numbers without seeds, real-time waits, external I/O). No director gates are
 invoked. The skill does not write without user approval. Verdicts: NO FLAKINESS,
@@ -12,7 +12,7 @@ SUSPECT TESTS FOUND, or CONFIRMED FLAKY.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill-test static` — no fixture needed.
+Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
 - [ ] Has ≥2 phase headings
@@ -38,7 +38,7 @@ are invoked.
 - All tests pass consistently across all 10 runs (100% pass rate per test)
 - No test has a failure pattern
 
-**Input:** `/test-flakiness`
+**Input:** `/gamedev:test-flakiness`
 
 **Expected behavior:**
 1. Skill reads test history logs from `production/qa/test-history/`
@@ -61,7 +61,7 @@ are invoked.
 - `test_combat_damage_applies_crit_multiplier` passes 7 times, fails 3 times
 - Failure messages differ (sometimes timeout, sometimes wrong value)
 
-**Input:** `/test-flakiness`
+**Input:** `/gamedev:test-flakiness`
 
 **Expected behavior:**
 1. Skill reads test history logs — computes pass rates
@@ -89,7 +89,7 @@ are invoked.
   assert_gt(roll, 0.5, "Loot should drop above 50%")
   ```
 
-**Input:** `/test-flakiness`
+**Input:** `/gamedev:test-flakiness`
 
 **Expected behavior:**
 1. Skill finds no test history logs
@@ -115,7 +115,7 @@ are invoked.
 - Scan finds 2 tests using `OS.get_ticks_msec()` for timing assertions
 - No other flakiness patterns found
 
-**Input:** `/test-flakiness`
+**Input:** `/gamedev:test-flakiness`
 
 **Expected behavior:**
 1. Skill checks for test history — not found
@@ -138,7 +138,7 @@ are invoked.
 - Test history shows 1 CONFIRMED FLAKY test (fails 6 out of 10 runs)
 - `review-mode.txt` contains `full`
 
-**Input:** `/test-flakiness`
+**Input:** `/gamedev:test-flakiness`
 
 **Expected behavior:**
 1. Skill analyzes test history; identifies 1 confirmed flaky test

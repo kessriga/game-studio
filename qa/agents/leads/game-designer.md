@@ -10,7 +10,7 @@
 
 ## Static Assertions (Structural)
 
-Verified by reading the agent's `.claude/agents/game-designer.md` frontmatter:
+Verified by reading the agent's `agents/game-designer.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references core loop, progression, combat rules, economy, player-facing design — not generic)
 - [ ] `allowed-tools:` list is read-focused; includes Read for GDDs and design docs; no Bash unless design tooling requires it
@@ -80,5 +80,5 @@ Verified by reading the agent's `.claude/agents/game-designer.md` frontmatter:
 ## Coverage Notes
 - Economy design review (resource sinks, faucets, inflation prevention) is not covered — a dedicated case should be added.
 - Progression system review (XP curves, unlock gates, player power trajectory) is not covered.
-- Core loop validation across multiple interconnected systems (not just a single mechanic) is not covered — deferred to /review-all-gdds integration.
+- Core loop validation across multiple interconnected systems (not just a single mechanic) is not covered — deferred to /gamedev:review-all-gdds integration.
 - Coordination protocol with systems-designer on formula ownership boundary could benefit from additional cases.

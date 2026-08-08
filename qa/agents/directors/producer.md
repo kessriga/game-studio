@@ -10,7 +10,7 @@
 
 ## Static Assertions (Structural)
 
-Verified by reading the agent's `.claude/agents/producer.md` frontmatter:
+Verified by reading the agent's `agents/producer.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references scope, prioritisation, milestone, production — not generic)
 - [ ] `allowed-tools:` list is primarily read-focused; Bash only if milestone files require parsing
@@ -78,7 +78,7 @@ Verified by reading the agent's `.claude/agents/producer.md` frontmatter:
 ---
 
 ## Coverage Notes
-- PR-EPIC (epic-level prioritization) is not covered — a dedicated case should be added when the /create-epics skill produces structured epic documents.
+- PR-EPIC (epic-level prioritization) is not covered — a dedicated case should be added when the /gamedev:create-epics skill produces structured epic documents.
 - PR-MILESTONE (milestone health review) is not covered — deferred to milestone health review on the Backlog board via the PR-MILESTONE gate.
 - PR-PHASE-GATE (full production phase advancement) involving synthesis of multiple sub-gate results is deferred.
 - Multi-sprint burn-down and velocity trend analysis are not covered here.

@@ -1,8 +1,8 @@
-# Skill Test Spec: /patch-notes
+# Skill Test Spec: /gamedev:patch-notes
 
 ## Skill Summary
 
-`/patch-notes` is a Haiku-tier skill that generates player-facing patch notes
+`/gamedev:patch-notes` is a Haiku-tier skill that generates player-facing patch notes
 from existing changelog content, stripping internal task IDs and technical
 jargon in favor of plain language. It filters entries to only those relevant
 to players (visible features and bug fixes; internal refactors are excluded).
@@ -13,7 +13,7 @@ No director gates are used. The skill asks "May I write to
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill-test static` — no fixture needed.
+Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
 - [ ] Has ≥2 phase headings
@@ -42,7 +42,7 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
   - "Update dependency: Godot 4.6" (internal only)
 - Version is `v0.4.0`
 
-**Input:** `/patch-notes v0.4.0`
+**Input:** `/gamedev:patch-notes v0.4.0`
 
 **Expected behavior:**
 1. Skill reads `docs/CHANGELOG.md`
@@ -61,21 +61,21 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
 
 ---
 
-### Case 2: No Changelog Found — Directed to run /changelog first
+### Case 2: No Changelog Found — Directed to run /gamedev:changelog first
 
 **Fixture:**
 - `docs/CHANGELOG.md` does NOT exist
 
-**Input:** `/patch-notes v0.4.0`
+**Input:** `/gamedev:patch-notes v0.4.0`
 
 **Expected behavior:**
 1. Skill attempts to read `docs/CHANGELOG.md` — not found
-2. Skill outputs: "No changelog found — run /changelog first to generate one"
+2. Skill outputs: "No changelog found — run /gamedev:changelog first to generate one"
 3. No patch notes are generated; no file is written
 
 **Assertions:**
 - [ ] Skill does not crash when changelog is absent
-- [ ] Output explicitly directs user to run `/changelog`
+- [ ] Output explicitly directs user to run `/gamedev:changelog`
 - [ ] No "May I write" prompt appears (nothing to write)
 - [ ] Verdict is BLOCKED (dependency not met)
 
@@ -87,7 +87,7 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
 - `docs/CHANGELOG.md` exists with player-facing entries
 - `design/community/tone-guide.md` exists with guidance: "upbeat, encouraging tone; avoid passive voice"
 
-**Input:** `/patch-notes v0.4.0`
+**Input:** `/gamedev:patch-notes v0.4.0`
 
 **Expected behavior:**
 1. Skill reads changelog
@@ -107,10 +107,10 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
 ### Case 4: Patch Note Template Exists — Used instead of generated structure
 
 **Fixture:**
-- `.claude/docs/templates/patch-notes-template.md` exists with a structured header format
+- `../../../docs/templates/patch-notes-template.md` exists with a structured header format
 - `docs/CHANGELOG.md` exists with player-facing entries
 
-**Input:** `/patch-notes v0.4.0`
+**Input:** `/gamedev:patch-notes v0.4.0`
 
 **Expected behavior:**
 1. Skill reads changelog and detects template exists
@@ -132,7 +132,7 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
 - `docs/CHANGELOG.md` exists with player-facing entries
 - `review-mode.txt` contains `full`
 
-**Input:** `/patch-notes v0.4.0`
+**Input:** `/gamedev:patch-notes v0.4.0`
 
 **Expected behavior:**
 1. Skill compiles patch notes in full mode

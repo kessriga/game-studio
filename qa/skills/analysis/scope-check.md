@@ -1,8 +1,8 @@
-# Skill Test Spec: /scope-check
+# Skill Test Spec: /gamedev:scope-check
 
 ## Skill Summary
 
-`/scope-check` is a Haiku-tier read-only skill that analyzes a feature, sprint,
+`/gamedev:scope-check` is a Haiku-tier read-only skill that analyzes a feature, sprint,
 or story for scope creep risk. It reads sprint and story files and compares them
 against the active milestone goals. It is designed for fast, low-cost checks
 before or during planning. No director gates are invoked. No files are written.
@@ -12,7 +12,7 @@ Verdicts: ON SCOPE, CONCERNS, or SCOPE CREEP DETECTED.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill-test static` — no fixture needed.
+Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
 - [ ] Has ≥2 phase headings
@@ -37,7 +37,7 @@ None. Scope check is a read-only advisory skill; no gates are invoked.
 - `production/sprints/sprint-006.md` contains 5 stories, all tagged to one of the 3 goals
 - `production/session-state/active.md` references milestone-03 as the active milestone
 
-**Input:** `/scope-check`
+**Input:** `/gamedev:scope-check`
 
 **Expected behavior:**
 1. Skill reads active milestone goals from milestone-03
@@ -62,7 +62,7 @@ None. Scope check is a read-only advisory skill; no gates are invoked.
   - 3 stories map to milestone goals
   - 2 stories reference "online leaderboard" and "achievement system" (not in milestone-03)
 
-**Input:** `/scope-check`
+**Input:** `/gamedev:scope-check`
 
 **Expected behavior:**
 1. Skill reads milestone goals and sprint stories
@@ -85,7 +85,7 @@ None. Scope check is a read-only advisory skill; no gates are invoked.
 - `production/milestones/` directory exists but is empty
 - `production/sprints/sprint-006.md` has 4 stories
 
-**Input:** `/scope-check`
+**Input:** `/gamedev:scope-check`
 
 **Expected behavior:**
 1. Skill reads active.md — finds no milestone reference
@@ -97,7 +97,7 @@ None. Scope check is a read-only advisory skill; no gates are invoked.
 - [ ] Skill does not error when no milestone is defined
 - [ ] Output explicitly states that scope validation requires a milestone reference
 - [ ] Verdict is CONCERNS (not ON SCOPE or SCOPE CREEP DETECTED without data)
-- [ ] Output suggests creating a milestone (e.g., via `/create-epics`) or checking the Backlog board
+- [ ] Output suggests creating a milestone (e.g., via `/gamedev:create-epics`) or checking the Backlog board
 
 ---
 
@@ -109,7 +109,7 @@ None. Scope check is a read-only advisory skill; no gates are invoked.
 - `production/epics/combat/epic-combat.md` has scope: "melee combat mechanics"
 - Story title: "Implement parry timing window" — matches epic scope
 
-**Input:** `/scope-check production/epics/combat/story-parry-timing.md`
+**Input:** `/gamedev:scope-check production/epics/combat/story-parry-timing.md`
 
 **Expected behavior:**
 1. Skill reads the specified story file
@@ -131,7 +131,7 @@ None. Scope check is a read-only advisory skill; no gates are invoked.
 - Sprint has 2 SCOPE CREEP stories and 3 ON SCOPE stories
 - `review-mode.txt` contains `full`
 
-**Input:** `/scope-check`
+**Input:** `/gamedev:scope-check`
 
 **Expected behavior:**
 1. Skill reads milestone and sprint; identifies 2 scope creep items

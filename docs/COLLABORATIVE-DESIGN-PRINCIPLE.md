@@ -134,7 +134,7 @@ Every agent interaction should follow this pattern:
 11. AGENT WRITES FILE
     Agent: [Uses Write tool]
            "Created design/gdd/crafting-system.md. Would you like me to run
-            /design-review to validate it against the standard?"
+            /gamedev:design-review to validate it against the standard?"
 ```
 
 ---
@@ -215,15 +215,15 @@ Agent: [Writes code, runs through gameplay-code rule checks, fixes issues]
 
 ### 🎯 Brainstorming Tasks
 
-**Example:** `/brainstorm roguelike`
+**Example:** `/gamedev:brainstorm roguelike`
 
 ```
 ❌ WRONG:
-User: "/brainstorm roguelike"
+User: "/gamedev:brainstorm roguelike"
 Skill: [Generates 1 concept and writes it to design/concept.md]
 
 ✅ RIGHT:
-User: "/brainstorm roguelike"
+User: "/gamedev:brainstorm roguelike"
 Skill: "I'll help you brainstorm roguelike concepts using professional
        ideation frameworks. First:
 
@@ -558,10 +558,10 @@ Agents should be:
 
 ## 🎯 Applying This to Team Skills
 
-Team skills (like `/team-combat`) orchestrate multiple agents, but still collaborative:
+Team skills (like `/gamedev:team-combat`) orchestrate multiple agents, but still collaborative:
 
 ```
-User: "/team-combat 'grappling hook ability'"
+User: "/gamedev:team-combat 'grappling hook ability'"
 
 Skill (Coordinator):
 "I'll coordinate the combat team to design and implement the grappling hook.
@@ -602,7 +602,7 @@ Skill (Coordinator):
 "All 4 subsystems implemented. Would you like me to:
  A) Have gameplay-programmer integrate them now
  B) Let you test each independently first
- C) Run /code-review before integration?"
+ C) Run /gamedev:code-review before integration?"
 ```
 
 The orchestration is automated, but **decision points stay with the user**.

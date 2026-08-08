@@ -3,7 +3,7 @@
   <p align="center">
     Turn a single Claude Code session into a full game development studio.
     <br />
-    53 agents. 71 skills. One coordinated AI team.
+    53 agents. 72 skills. One coordinated AI team.
   </p>
 </p>
 
@@ -41,8 +41,8 @@ The result: you still make every decision, but now you have a team that asks the
 | Category | Count | Description |
 |----------|-------|-------------|
 | **Agents** | 53 | Specialized subagents across design, programming, art, audio, narrative, QA, and production |
-| **Skills** | 71 | Slash commands for every workflow phase (`/start`, `/design-system`, `/create-epics`, `/create-stories`, `/dev-story`, `/story-done`, etc.) |
-| **Hooks** | 12 | Automated validation on commits, pushes, asset changes, session lifecycle, agent audit trail, and gap detection |
+| **Skills** | 72 | Slash commands for every workflow phase (`/gamedev:start`, `/gamedev:design-system`, `/gamedev:create-epics`, `/gamedev:create-stories`, `/gamedev:dev-story`, `/gamedev:story-done`, etc.) |
+| **Hooks** | 11 | Automated validation on commits, pushes, asset changes, session lifecycle, agent audit trail, and gap detection |
 | **Rules** | 11 | Path-scoped coding standards enforced when editing gameplay, engine, AI, UI, network code, and more |
 | **Templates** | 41 | Document templates for GDDs, UX specs, ADRs, HUD design, accessibility, and more |
 
@@ -70,13 +70,13 @@ Tier 3 — Specialists
   live-ops-designer    community-manager
 ```
 
-Model per agent is set in `.claude/docs/coordination-rules.md`: the two directors
+Model per agent is set in the plugin's `docs/coordination-rules.md`: the two directors
 (`creative-director`, `technical-director`) run on Fable, department leads on Opus 4.8,
 and all specialists on Sonnet.
 
 ### Engine Specialists
 
-The template includes agent sets for four engines. Use the set that matches your project:
+The plugin includes agent sets for four engines. Use the set that matches your project:
 
 | Engine | Lead Agent | Sub-Specialists |
 |--------|-----------|-----------------|
@@ -87,101 +87,125 @@ The template includes agent sets for four engines. Use the set that matches your
 
 ## Slash Commands
 
-Type `/` in Claude Code to access all 71 skills:
+Type `/` in Claude Code to access all 72 skills:
 
 **Onboarding & Navigation**
-`/start` `/help` `/project-stage-detect` `/setup-engine` `/adopt`
+`/gamedev:start` `/gamedev:help` `/gamedev:project-stage-detect` `/gamedev:setup-engine` `/gamedev:adopt`
 
 **Game Design**
-`/brainstorm` `/map-systems` `/design-system` `/quick-design` `/review-all-gdds` `/propagate-design-change`
+`/gamedev:brainstorm` `/gamedev:map-systems` `/gamedev:design-system` `/gamedev:quick-design` `/gamedev:review-all-gdds` `/gamedev:propagate-design-change`
 
 **Art & Assets**
-`/art-bible` `/asset-spec` `/asset-audit`
+`/gamedev:art-bible` `/gamedev:asset-spec` `/gamedev:asset-audit`
 
 **UX & Interface Design**
-`/ux-design` `/ux-review`
+`/gamedev:ux-design` `/gamedev:ux-review`
 
 **Architecture**
-`/create-architecture` `/architecture-decision` `/architecture-review` `/create-control-manifest`
+`/gamedev:create-architecture` `/gamedev:architecture-decision` `/gamedev:architecture-review` `/gamedev:create-control-manifest`
 
 **Stories**
-`/create-epics` `/create-stories` `/dev-story` `/story-readiness` `/story-done` `/estimate`
+`/gamedev:create-epics` `/gamedev:create-stories` `/gamedev:dev-story` `/gamedev:story-readiness` `/gamedev:story-done` `/gamedev:estimate`
 
 **Reviews & Analysis**
-`/design-review` `/code-review` `/balance-check` `/content-audit` `/scope-check` `/perf-profile` `/tech-debt` `/gate-check` `/consistency-check` `/security-audit`
+`/gamedev:design-review` `/gamedev:code-review` `/gamedev:balance-check` `/gamedev:content-audit` `/gamedev:scope-check` `/gamedev:perf-profile` `/gamedev:tech-debt` `/gamedev:gate-check` `/gamedev:consistency-check` `/gamedev:security-audit`
 
 **QA & Testing**
-`/qa-plan` `/smoke-check` `/soak-test` `/regression-suite` `/test-setup` `/test-helpers` `/test-evidence-review` `/test-flakiness` `/skill-test` `/skill-improve`
+`/gamedev:qa-plan` `/gamedev:smoke-check` `/gamedev:soak-test` `/gamedev:regression-suite` `/gamedev:test-setup` `/gamedev:test-helpers` `/gamedev:test-evidence-review` `/gamedev:test-flakiness` `/gamedev:skill-test` `/gamedev:skill-improve`
 
 **Production**
-`/bug-report` `/reverse-document` `/playtest-report`
+`/gamedev:bug-report` `/gamedev:reverse-document` `/gamedev:playtest-report`
 
 **Release**
-`/release-checklist` `/launch-checklist` `/changelog` `/patch-notes` `/hotfix`
+`/gamedev:release-checklist` `/gamedev:launch-checklist` `/gamedev:changelog` `/gamedev:patch-notes` `/gamedev:hotfix`
 
 **Creative & Content**
-`/prototype` `/vertical-slice` `/localize`
+`/gamedev:prototype` `/gamedev:vertical-slice` `/gamedev:localize`
 
 **Change Management (OpenSpec)**
-`/openspec-propose` `/openspec-explore` `/openspec-apply-change` `/openspec-sync-specs` `/openspec-archive-change`
+`/gamedev:openspec-propose` `/gamedev:openspec-explore` `/gamedev:openspec-apply-change` `/gamedev:openspec-sync-specs` `/gamedev:openspec-archive-change`
 
 **Team Orchestration** (coordinate multiple agents on a single feature)
-`/team-combat` `/team-narrative` `/team-ui` `/team-release` `/team-polish` `/team-audio` `/team-level` `/team-live-ops` `/team-qa`
+`/gamedev:team-combat` `/gamedev:team-narrative` `/gamedev:team-ui` `/gamedev:team-release` `/gamedev:team-polish` `/gamedev:team-audio` `/gamedev:team-level` `/gamedev:team-live-ops` `/gamedev:team-qa`
 
 ## Getting Started
 
+> **Adoption model changed.** This project is now a **Claude Code plugin** named
+> `gamedev`, not a fork-me template. You install it into your own game project;
+> you no longer clone this repo as your game. Existing forks keep working as a
+> frozen snapshot, but new adoption uses the plugin flow below.
+
 ### Prerequisites
 
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with plugin support
+  (verified on **v2.1.226**; any recent 2.1.x should work)
 - [Git](https://git-scm.com/)
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (`npm install -g @anthropic-ai/claude-code`)
 - **Recommended**: [jq](https://jqlang.github.io/jq/) (for hook validation) and Python 3 (for JSON validation)
 
 All hooks fail gracefully if optional tools are missing — nothing breaks, you just lose validation.
 
 ### Setup
 
-1. **Clone or use as template**:
-   ```bash
-   git clone https://github.com/Donchitos/Claude-Code-Game-Studios.git my-game
-   cd my-game
+1. **Add this repo as a plugin marketplace and install the plugin** (from inside Claude Code):
+   ```
+   /plugin marketplace add kessriga/game-studio
+   /plugin install gamedev@game-studio
    ```
 
-2. **Open Claude Code** and start a session:
+2. **Open your game project** (a fresh, empty directory is fine) and start Claude Code:
    ```bash
+   cd my-game
    claude
    ```
 
-3. **Run `/start`** — the system asks where you are (no idea, vague concept,
-   clear design, existing work) and guides you to the right workflow. No assumptions.
+3. **Run `/gamedev:start`** — on a fresh project it scaffolds the project-side
+   structure (`CLAUDE.md`, `.claude/rules/`, `technical-preferences.md`, the
+   `production/`/`design/`/`docs/` tree, and your engine's reference), then asks
+   where you are (no idea, vague concept, clear design, existing work) and guides
+   you to the right workflow. Nothing existing is overwritten.
 
-   Or jump directly to a specific skill if you already know what you need:
-   - `/brainstorm` — explore game ideas from scratch
-   - `/setup-engine godot 4.6` — configure your engine if you already know
-   - `/project-stage-detect` — analyze an existing project
+   Once scaffolded, jump to any skill directly:
+   - `/gamedev:brainstorm` — explore game ideas from scratch
+   - `/gamedev:setup-engine godot 4.6` — configure your engine if you already know
+   - `/gamedev:project-stage-detect` — analyze an existing project
+   - `/gamedev:status` — quick production-stage + Epic > Feature > Task check
 
 ## Project Structure
 
+**The plugin** (this repo — installed, not cloned into your game):
+
 ```
-CLAUDE.md                           # Master configuration
+.claude-plugin/
+  plugin.json                       # Plugin manifest (name: gamedev)
+  marketplace.json                  # This repo is its own marketplace (source: ./)
+skills/                             # 72 skills — invoked as /gamedev:<name>
+agents/                             # 53 subagents — addressed as gamedev:<name>
+hooks/                              # hooks.json + 11 hook scripts (run from ${CLAUDE_PLUGIN_ROOT})
+bin/
+  gamedev-stage                     # Stage + Epic>Feature>Task detection (on the Bash PATH)
+docs/                               # Framework docs + 41 document templates (skills read via ../../docs)
+templates/                          # Project scaffold sources copied out by /gamedev:start
+.claude/                            # Dev-only, not shipped: settings.json, validate-skill-change, opsx/
+```
+
+**Your project** (scaffolded into your repo by `/gamedev:start`):
+
+```
+CLAUDE.md                           # Project config (imports technical-preferences + engine VERSION)
 .claude/
-  settings.json                     # Hooks, permissions, safety rules
-  agents/                           # 53 agent definitions (markdown + YAML frontmatter)
-  skills/                           # 71 slash commands (subdirectory per skill)
-  hooks/                            # 12 hook scripts (bash, cross-platform)
-  rules/                            # 11 path-scoped coding standards
-  statusline.sh                     # Status line script (context%, model, stage, epic breadcrumb)
-  docs/
-    workflow-catalog.yaml           # 7-phase pipeline definition (read by /help)
-    templates/                      # 41 document templates
+  rules/                            # 11 path-scoped coding standards (plugins can't ship rules)
+  docs/technical-preferences.md     # Your engine, naming, budgets (project-owned)
 src/                                # Game source code
 assets/                             # Art, audio, VFX, shaders, data files
 design/                             # GDDs, narrative docs, level designs
-docs/                               # Technical documentation and ADRs
-tests/                              # Test suites (unit, integration, performance, playtest)
-tools/                              # Build and pipeline tools
+docs/                               # ADRs, registries, your engine's reference snapshot
+production/                         # Milestones, releases, QA evidence, session state
 prototypes/                         # Throwaway prototypes (isolated from src/)
-production/                         # Production management (milestones, releases, QA evidence)
 ```
+
+> **No status line.** A plugin cannot ship a main-session status line, so the
+> production stage + breadcrumb is delivered by the SessionStart hook and on demand
+> via `/gamedev:status` instead. Your personal status line is left untouched.
 
 ## How It Works
 
@@ -217,14 +241,14 @@ You stay in control. The agents provide structure and expertise, not autonomy.
 | `validate-push.sh` | PreToolUse (Bash) | Warns on pushes to protected branches — exits early if the command is not `git push` |
 | `validate-assets.sh` | PostToolUse (Write/Edit) | Validates naming conventions and JSON structure — exits early if the file is not in `assets/` |
 | `session-start.sh` | Session open | Shows current branch and recent commits for orientation |
-| `detect-gaps.sh` | Session open | Detects fresh projects (suggests `/start`) and missing design docs when code or prototypes exist |
+| `detect-gaps.sh` | Session open | Detects fresh projects (suggests `/gamedev:start`) and missing design docs when code or prototypes exist |
 | `pre-compact.sh` | Before compaction | Preserves session progress notes |
 | `post-compact.sh` | After compaction | Reminds Claude to restore session state from `active.md` |
 | `notify.sh` | Notification event | Shows Windows toast notification via PowerShell |
 | `session-stop.sh` | Session close | Archives `active.md` to session log and records git activity |
 | `log-agent.sh` | Agent spawned | Audit trail start — logs subagent invocation |
 | `log-agent-stop.sh` | Agent stops | Audit trail stop — completes subagent record |
-| `validate-skill-change.sh` | PostToolUse (Write/Edit) | Advises running `/skill-test` after any `.claude/skills/` change |
+| `validate-skill-change.sh` | PostToolUse (Write/Edit) | Advises running `/gamedev:skill-test` after any `.claude/skills/` change |
 
 > **Note**: `validate-commit.sh`, `validate-assets.sh`, and `validate-skill-change.sh` fire on every Bash/Write tool call and exit immediately (exit 0) when the command or file path is not relevant. This is normal hook behavior — not a performance concern.
 
@@ -250,7 +274,7 @@ Coding standards are automatically enforced based on file location:
 
 ## Design Philosophy
 
-This template is grounded in professional game development practices:
+This framework is grounded in professional game development practices:
 
 - **MDA Framework** — Mechanics, Dynamics, Aesthetics analysis for game design
 - **Self-Determination Theory** — Autonomy, Competence, Relatedness for player motivation
@@ -260,7 +284,7 @@ This template is grounded in professional game development practices:
 
 ## Customization
 
-This is a **template**, not a locked framework. Everything is meant to be customized:
+The plugin is a starting point, not a locked framework. Everything you scaffold is yours to customize:
 
 - **Add/remove agents** — delete agent files you don't need, add new ones for your domains
 - **Edit agent prompts** — tune agent behavior, add project-specific knowledge
@@ -268,7 +292,7 @@ This is a **template**, not a locked framework. Everything is meant to be custom
 - **Add rules** — create new path-scoped rules for your project's directory structure
 - **Tune hooks** — adjust validation strictness, add new checks
 - **Pick your engine** — use the Godot, Unity, Unreal, or Bevy agent set (or none)
-- **Set review intensity** — `full` (all director gates), `lean` (phase gates only), or `solo` (none). Set during `/start` or edit `production/review-mode.txt`. Override per-run with `--review solo` on any skill.
+- **Set review intensity** — `full` (all director gates), `lean` (phase gates only), or `solo` (none). Set during `/gamedev:start` or edit `production/review-mode.txt`. Override per-run with `--review solo` on any skill.
 
 ## Platform Support
 

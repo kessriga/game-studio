@@ -10,7 +10,7 @@
 
 ## Static Assertions (Structural)
 
-Verified by reading the agent's `.claude/agents/narrative-director.md` frontmatter:
+Verified by reading the agent's `agents/narrative-director.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references story, character, world-building, consistency — not generic)
 - [ ] `allowed-tools:` list is read-focused; includes Read for lore documents, GDDs, and narrative docs; no Bash unless justified
@@ -79,6 +79,6 @@ Verified by reading the agent's `.claude/agents/narrative-director.md` frontmatt
 
 ## Coverage Notes
 - Dialogue quality review (distinct from world-building consistency) is not covered — a dedicated case should be added.
-- Multi-document consistency check across a full chapter set is not covered — deferred to /review-all-gdds integration.
+- Multi-document consistency check across a full chapter set is not covered — deferred to /gamedev:review-all-gdds integration.
 - Narrative impact of mechanical changes (e.g., a game mechanic that undermines story tension) requires coordination with game-designer and is not covered here.
 - Character arc review (progression, motivation coherence over time) is not covered.

@@ -10,7 +10,7 @@
 
 ## Static Assertions (Structural)
 
-Verified by reading the agent's `.claude/agents/art-director.md` frontmatter:
+Verified by reading the agent's `agents/art-director.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references visual identity, art bible, asset standards — not generic)
 - [ ] `allowed-tools:` list is read-focused; image review capability if supported; no Bash unless asset pipeline checks are justified
@@ -78,7 +78,7 @@ Verified by reading the agent's `.claude/agents/art-director.md` frontmatter:
 ---
 
 ## Coverage Notes
-- AD-PHASE-GATE (full visual phase advancement) is not covered — deferred to integration with /gate-check skill.
+- AD-PHASE-GATE (full visual phase advancement) is not covered — deferred to integration with /gamedev:gate-check skill.
 - Asset pipeline standards (file format, resolution, naming conventions) compliance checks are not covered here.
 - Shader visual output review is not covered — that interaction with the engine specialist is deferred.
 - UI component visual review (as distinct from UX flow review) could benefit from additional cases.

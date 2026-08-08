@@ -10,7 +10,7 @@
 
 ## Static Assertions (Structural)
 
-Verified by reading the agent's `.claude/agents/technical-director.md` frontmatter:
+Verified by reading the agent's `agents/technical-director.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references architecture, feasibility, ADR — not generic)
 - [ ] `allowed-tools:` list may include Read for architecture documents; Bash only if required for technical checks
@@ -78,7 +78,7 @@ Verified by reading the agent's `.claude/agents/technical-director.md` frontmatt
 ---
 
 ## Coverage Notes
-- TD-ADR (Architecture Decision Record approval) is not covered — a dedicated case should be added when the /architecture-decision skill produces ADR documents.
+- TD-ADR (Architecture Decision Record approval) is not covered — a dedicated case should be added when the /gamedev:architecture-decision skill produces ADR documents.
 - TD-ENGINE-RISK assessment for specific engine versions (e.g., Godot 4.6 post-cutoff APIs) is not covered — deferred to engine-specialist integration tests.
 - TD-PHASE-GATE (full technical phase advancement) involving synthesis of multiple sub-gate results is deferred.
 - Multi-domain architecture reviews (e.g., touching both TD-ARCHITECTURE and TD-ENGINE-RISK simultaneously) are not covered here.
