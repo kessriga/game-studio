@@ -8,7 +8,7 @@
 >
 > The pipeline has 7 phases. Each phase has a formal gate (`/gamedev:gate-check`)
 > that must pass before you advance. The authoritative phase sequence is
-> defined in `.claude/docs/workflow-catalog.yaml` and read by `/gamedev:help`.
+> defined in `workflow-catalog.yaml` and read by `/gamedev:help`.
 
 ---
 
@@ -1124,7 +1124,7 @@ Bypasses the normal production flow with a full audit trail:
 
 ```
 Ask Claude to create a post-mortem using the template at
-.claude/docs/templates/post-mortem.md
+templates/post-mortem.md
 ```
 
 ---
@@ -1203,7 +1203,7 @@ speed. You can dial review up if you want more oversight.
 The `--review` flag works on all gate-using skills. Change the global mode at any
 time by editing `production/review-mode.txt` directly or re-running `/gamedev:start`.
 
-Full gate definitions and check pattern: `.claude/docs/director-gates.md`
+Full gate definitions and check pattern: `director-gates.md`
 
 ---
 
@@ -1282,7 +1282,7 @@ The system has 12 hooks that run automatically:
 | `validate-commit.sh` | Before commit | Checks for design doc references, valid JSON, no hardcoded values |
 | `validate-push.sh` | Before push | Warns on pushes to main/develop |
 | `validate-assets.sh` | Before commit | Checks asset naming and size |
-| `validate-skill-change.sh` | Skill file written | Advises running `/gamedev:skill-test` after `.claude/skills/` changes |
+| `validate-skill-change.sh` | Skill file written | Advises running `/gamedev:skill-test` after `skills/` changes |
 | `log-agent.sh` | Agent start | Logs agent invocations for audit trail |
 | `log-agent-stop.sh` | Agent stop | Completes agent audit trail (start + stop) |
 | `session-stop.sh` | Session end | Final session logging |

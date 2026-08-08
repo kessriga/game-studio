@@ -15,7 +15,7 @@ In any skill, replace an inline director prompt with a reference:
 
 ```
 Spawn `creative-director` via Task using gate **CD-PILLARS** from
-`.claude/docs/director-gates.md`.
+`director-gates.md`.
 ```
 
 Pass the context listed under that gate's **Context to pass** field, then handle
@@ -79,7 +79,7 @@ Apply the resolved mode:
 ```
 # Apply mode check, then:
 Spawn `[agent-name]` via Task:
-- Gate: [GATE-ID] (see .claude/docs/director-gates.md)
+- Gate: [GATE-ID] (see director-gates.md)
 - Context: [fields listed under that gate]
 - Await the verdict before proceeding.
 ```

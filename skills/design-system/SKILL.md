@@ -16,7 +16,7 @@ Resolve the review mode (once, store for all gate spawns this run):
 2. Else read `production/review-mode.txt` → use that value
 3. Else → default to `solo`
 
-See `.claude/docs/director-gates.md` for the full check pattern.
+See `../../docs/director-gates.md` for the full check pattern.
 
 A system name or retrofit path is **required**. If missing:
 
@@ -215,7 +215,7 @@ Use `AskUserQuestion`:
 Once the user confirms, **immediately** create the GDD file with empty section
 headers. This ensures incremental writes have a target.
 
-Use the template structure from `.claude/docs/templates/game-design-document.md`:
+Use the template structure from `../../docs/templates/game-design-document.md`:
 
 ```markdown
 # [System Name]
@@ -689,7 +689,7 @@ the source of truth). Verify:
 - `lean` → skip (not a PHASE-GATE). Note: "CD-GDD-ALIGN skipped — Lean mode." Proceed to Step 5b.
 - `full` → spawn as normal.
 
-Before finalizing the GDD, spawn `creative-director` via Task using gate **CD-GDD-ALIGN** (`.claude/docs/director-gates.md`).
+Before finalizing the GDD, spawn `creative-director` via Task using gate **CD-GDD-ALIGN** (`../../docs/director-gates.md`).
 
 Pass: completed GDD file path, game pillars (from `design/gdd/game-concept.md` or `design/gdd/game-pillars.md`), MDA aesthetics target.
 

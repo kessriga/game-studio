@@ -29,7 +29,7 @@ There are three tiers of agents:
 - **Tier 3**: Specialists who execute within their domain
   - Designers, programmers, artists, writers, testers, engineers
 
-Exact model per agent lives in `.claude/docs/coordination-rules.md` (directors on
+Exact model per agent lives in `coordination-rules.md` (directors on
 Fable, department leads on Opus 4.8, specialists on Sonnet).
 
 ### 2. Pick the Right Agent for the Job
@@ -152,7 +152,7 @@ Ask yourself: "What department would handle this in a real studio?"
 
 ### 4. Use Templates for New Documents
 
-Templates are in `.claude/docs/templates/`:
+Templates are in `templates/`:
 
 - `game-design-document.md` -- for new mechanics and systems
 - `architecture-decision-record.md` -- for technical decisions
@@ -188,7 +188,7 @@ Templates are in `.claude/docs/templates/`:
 - `difficulty-curve.md` -- for difficulty axes, onboarding ramp, and cross-system interactions
 - `test-evidence.md` -- template for recording manual test evidence (screenshots, walkthrough notes)
 
-Also in `.claude/docs/templates/collaborative-protocols/` (used by agents, not typically edited directly):
+Also in `templates/collaborative-protocols/` (used by agents, not typically edited directly):
 
 - `design-agent-protocol.md` -- question-options-draft-approval cycle for design agents
 - `implementation-agent-protocol.md` -- story pickup through /gamedev:story-done cycle for programming agents

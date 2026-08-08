@@ -1,11 +1,11 @@
 # Agent Roster
 
 The following agents are available. Each has a dedicated definition file in
-`.claude/agents/`. Use the agent best suited to the task at hand. When a task
+`agents/`. Use the agent best suited to the task at hand. When a task
 spans multiple domains, the coordinating agent (usually `producer` or the
 domain lead) should delegate to specialists.
 
-Model per agent follows `.claude/docs/coordination-rules.md`: the two directors run
+Model per agent follows `coordination-rules.md`: the two directors run
 on Fable, department leads on Opus 4.8, and specialists on Sonnet. The tier groupings
 below are organizational roles and do not map one-to-one to those models.
 

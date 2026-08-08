@@ -313,14 +313,14 @@ For items that can't be automatically verified, **ask the user**:
 
 (Review mode was resolved in Phase 1. Use that stored value here.)
 
-Before generating the final verdict, spawn all four directors as **parallel subagents** via Task using the parallel gate protocol from `.claude/docs/director-gates.md`. Issue all four Task calls simultaneously — do not wait for one before starting the next.
+Before generating the final verdict, spawn all four directors as **parallel subagents** via Task using the parallel gate protocol from `../../docs/director-gates.md`. Issue all four Task calls simultaneously — do not wait for one before starting the next.
 
 **Spawn in parallel:**
 
-1. **`creative-director`** — gate **CD-PHASE-GATE** (`.claude/docs/director-gates.md`)
-2. **`technical-director`** — gate **TD-PHASE-GATE** (`.claude/docs/director-gates.md`)
-3. **`producer`** — gate **PR-PHASE-GATE** (`.claude/docs/director-gates.md`)
-4. **`art-director`** — gate **AD-PHASE-GATE** (`.claude/docs/director-gates.md`)
+1. **`creative-director`** — gate **CD-PHASE-GATE** (`../../docs/director-gates.md`)
+2. **`technical-director`** — gate **TD-PHASE-GATE** (`../../docs/director-gates.md`)
+3. **`producer`** — gate **PR-PHASE-GATE** (`../../docs/director-gates.md`)
+4. **`art-director`** — gate **AD-PHASE-GATE** (`../../docs/director-gates.md`)
 
 Pass to each: target phase name, list of artifacts present, and the context fields listed in that gate's definition.
 
@@ -515,8 +515,8 @@ Based on the verdict, suggest specific next steps:
 - **Tests failing?** → delegate to `lead-programmer` or `qa-tester`
 - **No playtest data?** → `/gamedev:playtest-report`
 - **No playtest sessions beyond the minimum?** → Additional sessions give more reliable signal. 3+ total is recommended before committing the full team. Use `/gamedev:playtest-report` to structure findings.
-- **No Difficulty Curve doc?** → Create `design/difficulty-curve.md` from the template at `.claude/docs/templates/difficulty-curve.md` — or use `/gamedev:quick-design "difficulty curve"` for a guided session.
-- **No player journey map?** → Create `design/player-journey.md` from the template at `.claude/docs/templates/player-journey.md` — or author it collaboratively using `/gamedev:ux-design` Phase 2b.
+- **No Difficulty Curve doc?** → Create `design/difficulty-curve.md` from the template at `../../docs/templates/difficulty-curve.md` — or use `/gamedev:quick-design "difficulty curve"` for a guided session.
+- **No player journey map?** → Create `design/player-journey.md` from the template at `../../docs/templates/player-journey.md` — or author it collaboratively using `/gamedev:ux-design` Phase 2b.
 - **Need a progress snapshot?** → check the Backlog board (filter by milestone and status)
 - **Performance unknown?** → `/gamedev:perf-profile`
 - **Not localized?** → `/gamedev:localize`
