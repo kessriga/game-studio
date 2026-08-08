@@ -48,24 +48,28 @@ utility     → all remaining skills
 
 ```
 directors   → creative-director, technical-director, producer, art-director
-leads       → lead-programmer, narrative-director, audio-director, ux-designer,
-              qa-lead, release-manager, localization-lead
-specialists → gameplay-programmer, engine-programmer, ui-programmer,
-              tools-programmer, network-programmer, ai-programmer,
-              level-designer, sound-designer, technical-artist
+leads       → lead-programmer, qa-lead, narrative-director, audio-director,
+              game-designer, systems-designer, level-designer
+specialists → gameplay-programmer, ai-programmer, technical-artist, sound-designer,
+              engine-programmer, tools-programmer, network-programmer, ux-designer,
+              ui-programmer, performance-analyst, prototyper, writer, world-builder
 godot       → godot-specialist, godot-gdscript-specialist, godot-csharp-specialist,
               godot-shader-specialist, godot-gdextension-specialist
 unity       → unity-specialist, unity-ui-specialist, unity-shader-specialist,
               unity-dots-specialist, unity-addressables-specialist
-unreal      → unreal-specialist, ue-gas-specialist, ue-replication-specialist,
-              ue-umg-specialist, ue-blueprint-specialist
+unreal      → unreal-specialist, ue-blueprint-specialist, ue-gas-specialist,
+              ue-umg-specialist, ue-replication-specialist
 bevy        → bevy-specialist, bevy-rust-specialist, bevy-render-specialist,
               bevy-ui-specialist
-operations  → devops-engineer, security-engineer, performance-analyst,
-              analytics-engineer, community-manager
-creative    → writer, world-builder, game-designer, economy-designer,
-              systems-designer, prototyper
+operations  → devops-engineer, release-manager, live-ops-designer, community-manager,
+              analytics-engineer, economy-designer, localization-lead
+qa          → qa-tester, security-engineer, accessibility-specialist
 ```
+
+Tiers mirror the `qa/agents/` directory layout and each agent's `category:` in
+`catalog.yaml`; the four engine groups live under `qa/agents/engine/`. These are
+corpus navigation groups, not model assignments — model tiers are defined in
+`docs/coordination-rules.md`.
 
 ## Workflow for testing a skill
 
