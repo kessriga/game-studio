@@ -87,46 +87,108 @@ The plugin includes agent sets for four engines. Use the set that matches your p
 
 ## Slash Commands
 
-Type `/` in Claude Code to access all 72 skills:
+Type `/` in Claude Code to access all 72 skills. Arguments in `[brackets]` are
+optional, `<angle brackets>` required. Most authoring, team, and gate skills also
+accept a review-depth flag — `--review full|lean|solo` (`--depth` for
+`/gamedev:design-review`) — omitted below for brevity.
 
 **Onboarding & Navigation**
-`/gamedev:start` `/gamedev:help` `/gamedev:project-stage-detect` `/gamedev:setup-engine` `/gamedev:adopt`
+- `/gamedev:start` — first-time onboarding: asks where you are, then routes you to the right workflow
+- `/gamedev:help [what you just finished]` — advice on what to do next, based on current project state
+- `/gamedev:status` — print the current production stage and Epic > Feature > Task breadcrumb
+- `/gamedev:project-stage-detect [role filter]` — analyze project state, detect the stage, identify gaps, recommend next steps
+- `/gamedev:setup-engine [engine] [version] | refresh | upgrade <old> <new>` — pin the project's engine and version, populate engine reference docs
+- `/gamedev:adopt [full|gdds|adrs|stories|infra]` — brownfield onboarding: audit existing artifacts for format compliance, produce a migration plan
 
 **Game Design**
-`/gamedev:brainstorm` `/gamedev:map-systems` `/gamedev:design-system` `/gamedev:quick-design` `/gamedev:review-all-gdds` `/gamedev:propagate-design-change`
+- `/gamedev:brainstorm [genre or theme hint]` — guided ideation from zero idea to a structured game concept document
+- `/gamedev:map-systems [next | system-name]` — decompose the concept into systems, map dependencies, set the design order
+- `/gamedev:design-system <system-name>` — guided, section-by-section GDD authoring for one system
+- `/gamedev:quick-design [change description]` — lightweight design spec for tuning adjustments and minor mechanics
+- `/gamedev:review-all-gdds [focus]` — holistic cross-GDD review: contradictions, stale references, design-theory violations
+- `/gamedev:propagate-design-change [path/to/gdd.md]` — find ADRs made stale by a GDD revision and guide resolution
 
 **Art & Assets**
-`/gamedev:art-bible` `/gamedev:asset-spec` `/gamedev:asset-audit`
+- `/gamedev:art-bible` — guided Art Bible authoring; the visual identity spec that gates asset production
+- `/gamedev:asset-spec [system:|level:|character:<name>]` — per-asset visual specs and AI generation prompts from GDDs
+- `/gamedev:asset-audit [category|all]` — audit assets against naming, size, format, and pipeline standards
 
 **UX & Interface Design**
-`/gamedev:ux-design` `/gamedev:ux-review`
+- `/gamedev:ux-design [screen/flow | hud | patterns]` — guided UX spec authoring for a screen, flow, or HUD
+- `/gamedev:ux-review [file | all | hud | patterns]` — validate UX specs for completeness, accessibility, and GDD alignment
 
 **Architecture**
-`/gamedev:create-architecture` `/gamedev:architecture-decision` `/gamedev:architecture-review` `/gamedev:create-control-manifest`
+- `/gamedev:create-architecture [focus-area]` — guided authoring of the master architecture document from all GDDs
+- `/gamedev:architecture-decision [title]` — record an ADR: context, alternatives considered, consequences
+- `/gamedev:architecture-review [focus]` — validate architecture against all GDDs; traceability matrix and PASS/CONCERNS/FAIL verdict
+- `/gamedev:create-control-manifest [update]` — flat must-do/never-do rules sheet for programmers, extracted from accepted ADRs
 
 **Stories**
-`/gamedev:create-epics` `/gamedev:create-stories` `/gamedev:dev-story` `/gamedev:story-readiness` `/gamedev:story-done` `/gamedev:estimate`
+- `/gamedev:create-epics [system-name | layer | all]` — translate approved GDDs and architecture into epics, one per module
+- `/gamedev:create-stories [epic-slug]` — break one epic into implementable story files with embedded GDD/ADR context
+- `/gamedev:dev-story [story-path]` — implement a story end-to-end: load context, route to the right programmer agent, code and test
+- `/gamedev:story-readiness [story | all | milestone]` — READY / NEEDS WORK / BLOCKED verdict before implementation starts
+- `/gamedev:story-done [story-path]` — end-of-story review: verify acceptance criteria, close the Backlog task, surface the next one
+- `/gamedev:estimate [task-description]` — effort estimate from complexity, dependencies, historical velocity, and risk
 
 **Reviews & Analysis**
-`/gamedev:design-review` `/gamedev:code-review` `/gamedev:balance-check` `/gamedev:content-audit` `/gamedev:scope-check` `/gamedev:perf-profile` `/gamedev:tech-debt` `/gamedev:gate-check` `/gamedev:consistency-check` `/gamedev:security-audit`
+- `/gamedev:design-review [path-to-doc]` — review one design doc for completeness, consistency, and implementability
+- `/gamedev:code-review [path]` — architectural and quality review: standards, patterns, SOLID, testability, performance
+- `/gamedev:balance-check [system | data-file]` — find outliers, broken progressions, degenerate strategies, economy imbalances
+- `/gamedev:content-audit [system | --summary]` — compare GDD-specified content counts against what's implemented
+- `/gamedev:scope-check [feature | sprint-N]` — detect scope creep against the original plan; quantify bloat, recommend cuts
+- `/gamedev:perf-profile [system | full]` — structured profiling: bottlenecks, budget comparisons, prioritized recommendations
+- `/gamedev:tech-debt [scan|add|prioritize|report]` — track and prioritize technical debt in a debt register
+- `/gamedev:gate-check [target-phase]` — phase-gate readiness verdict (PASS/CONCERNS/FAIL) with specific blockers
+- `/gamedev:consistency-check [full | entity:<name> | item:<name>]` — cross-GDD scan for conflicting stats, values, and formulas
+- `/gamedev:security-audit [full | network | save | input | quick]` — save-tampering, cheat, network, and input-validation audit
 
 **QA & Testing**
-`/gamedev:qa-plan` `/gamedev:smoke-check` `/gamedev:soak-test` `/gamedev:regression-suite` `/gamedev:test-setup` `/gamedev:test-helpers` `/gamedev:test-evidence-review` `/gamedev:test-flakiness` `/gamedev:skill-test` `/gamedev:skill-improve`
+- `/gamedev:qa-plan [milestone | feature | story]` — QA test plan: classify stories by test type, define required coverage
+- `/gamedev:smoke-check [milestone | quick]` — critical-path smoke gate before QA hand-off; PASS/FAIL report
+- `/gamedev:soak-test [duration] [focus]` — protocol for extended play sessions: slow leaks, fatigue effects, edge cases
+- `/gamedev:regression-suite [update | audit | report]` — map tests to GDD critical paths, catch fixed bugs lacking regression tests
+- `/gamedev:test-setup [force]` — scaffold the engine-specific test framework and CI pipeline (run once)
+- `/gamedev:test-helpers [system | all | scaffold]` — generate engine-specific assertion, factory, and mock helpers
+- `/gamedev:test-evidence-review [story | milestone | system]` — quality review of tests and manual evidence; verdict per story
+- `/gamedev:test-flakiness [ci-log | scan | registry]` — detect non-deterministic tests, recommend quarantine or fix
+- `/gamedev:skill-test static|spec|category|audit [skill]` — validate the plugin's own skills, structurally and behaviorally
+- `/gamedev:skill-improve [skill-name]` — improve a skill via a test-fix-retest loop
 
 **Production**
-`/gamedev:bug-report` `/gamedev:reverse-document` `/gamedev:playtest-report`
+- `/gamedev:bug-report [description] | analyze <path> | verify <id> | close <id>` — structured bug reports as Backlog tasks with repro steps
+- `/gamedev:reverse-document <type> <path>` — generate missing design or architecture docs from existing code
+- `/gamedev:playtest-report [new | analyze <path>]` — standardized playtest feedback collection and analysis
 
 **Release**
-`/gamedev:release-checklist` `/gamedev:launch-checklist` `/gamedev:changelog` `/gamedev:patch-notes` `/gamedev:hotfix`
+- `/gamedev:release-checklist [platform]` — pre-release validation: build verification, certification, store metadata
+- `/gamedev:launch-checklist [date | dry-run]` — launch readiness across every department, with go/no-go sign-offs
+- `/gamedev:changelog [version | sprint]` — internal and player-facing changelogs from commits and sprint data
+- `/gamedev:patch-notes [version] [--style brief|detailed|full]` — player-facing patch notes, translated from developer language
+- `/gamedev:hotfix [bug-id]` — emergency fix workflow with a full audit trail, bypassing the normal sprint process
 
 **Creative & Content**
-`/gamedev:prototype` `/gamedev:vertical-slice` `/gamedev:localize`
+- `/gamedev:prototype [concept] [--path html|engine|paper] [--spike]` — throwaway concept prototype with a PROCEED/PIVOT/KILL verdict
+- `/gamedev:vertical-slice` — production-quality end-to-end build gating the Pre-Production → Production transition
+- `/gamedev:localize [scan|extract|validate|status|brief|…]` — full localization pipeline, from string scan to RTL checks
 
 **Change Management (OpenSpec)**
-`/gamedev:openspec-propose` `/gamedev:openspec-explore` `/gamedev:openspec-apply-change` `/gamedev:openspec-sync-specs` `/gamedev:openspec-archive-change`
+- `/gamedev:openspec-propose` — propose a change with design, specs, and tasks generated in one step
+- `/gamedev:openspec-explore` — thinking-partner mode for exploring ideas before or during a change
+- `/gamedev:openspec-apply-change` — implement tasks from an OpenSpec change
+- `/gamedev:openspec-sync-specs` — fold a change's delta specs into the main specs without archiving
+- `/gamedev:openspec-archive-change` — archive a completed change
 
-**Team Orchestration** (coordinate multiple agents on a single feature)
-`/gamedev:team-combat` `/gamedev:team-narrative` `/gamedev:team-ui` `/gamedev:team-release` `/gamedev:team-polish` `/gamedev:team-audio` `/gamedev:team-level` `/gamedev:team-live-ops` `/gamedev:team-qa`
+**Team Orchestration** (each coordinates multiple agents on a single feature)
+- `/gamedev:team-combat [feature]` — combat feature end-to-end: design, implementation, VFX, audio, QA
+- `/gamedev:team-narrative [content]` — cohesive story content, world lore, and narrative-driven level design
+- `/gamedev:team-ui [feature]` — full UX pipeline: spec, visual design, implementation, review, polish
+- `/gamedev:team-release [version]` — execute a release from candidate to deployment
+- `/gamedev:team-polish [feature or area]` — optimize, polish, and harden a feature to release quality
+- `/gamedev:team-audio [feature or area]` — audio pipeline from direction through implementation
+- `/gamedev:team-level [level or area]` — complete area/level creation: layout, narrative, art, systems, QA
+- `/gamedev:team-live-ops [season or event]` — plan a season, event, or live content update
+- `/gamedev:team-qa [milestone | feature]` — full QA cycle: test plan, test cases, smoke gate, sign-off report
 
 ## Getting Started
 
