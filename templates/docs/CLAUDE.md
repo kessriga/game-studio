@@ -11,19 +11,19 @@ ADR Dependencies, Engine Compatibility, GDD Requirements Addressed
 
 **Status lifecycle:** `Proposed` → `Accepted` → `Superseded`
 - Never skip `Accepted` — stories referencing a `Proposed` ADR are auto-blocked
-- Use `/architecture-decision` to create ADRs through the guided flow
+- Use `/gamedev:architecture-decision` to create ADRs through the guided flow
 
 **TR Registry:** `docs/architecture/tr-registry.yaml`
 - Stable requirement IDs (e.g. `TR-MOV-001`) that link GDD requirements to stories
 - Never renumber existing IDs — only append new ones
-- Updated by `/architecture-review` Phase 8
+- Updated by `/gamedev:architecture-review` Phase 8
 
 **Control Manifest:** `docs/architecture/control-manifest.md`
 - Flat programmer rules sheet: Required / Forbidden / Guardrails per layer
 - Date-stamped `Manifest Version:` in header
-- Stories embed this version; `/story-done` checks for staleness
+- Stories embed this version; `/gamedev:story-done` checks for staleness
 
-**Validation:** Run `/architecture-review` after completing a set of ADRs.
+**Validation:** Run `/gamedev:architecture-review` after completing a set of ADRs.
 
 ## Engine Reference (`docs/engine-reference/`)
 
@@ -31,5 +31,5 @@ Version-pinned engine API snapshots. **Always check here before using any
 engine API** — the LLM's training data predates the pinned engine version.
 
 Current engine: see the `VERSION.md` under `docs/engine-reference/<engine>/`
-for your configured engine (`/setup-engine` pins this and repoints the
+for your configured engine (`/gamedev:setup-engine` pins this and repoints the
 `@` import in the root `CLAUDE.md`).

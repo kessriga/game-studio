@@ -13,11 +13,11 @@ When this skill is invoked:
 
 Four modes:
 
-- **Full spec**: `/setup-engine godot 4.6` — engine and version provided
-- **Engine only**: `/setup-engine unity` — engine provided, version will be looked up
-- **No args**: `/setup-engine` — fully guided mode (engine recommendation + version)
-- **Refresh**: `/setup-engine refresh` — update reference docs (see Section 10)
-- **Upgrade**: `/setup-engine upgrade [old-version] [new-version]` — migrate to a new engine version (see Section 11)
+- **Full spec**: `/gamedev:setup-engine godot 4.6` — engine and version provided
+- **Engine only**: `/gamedev:setup-engine unity` — engine provided, version will be looked up
+- **No args**: `/gamedev:setup-engine` — fully guided mode (engine recommendation + version)
+- **Refresh**: `/gamedev:setup-engine refresh` — update reference docs (see Section 10)
+- **Upgrade**: `/gamedev:setup-engine upgrade [old-version] [new-version]` — migrate to a new engine version (see Section 11)
 
 ---
 
@@ -27,9 +27,9 @@ If no engine is specified, run an interactive engine selection process:
 
 ### Check for existing game concept
 - Read `design/gdd/game-concept.md` if it exists — extract genre, scope, platform
-  targets, art style, team size, and any engine recommendation from `/brainstorm`
+  targets, art style, team size, and any engine recommendation from `/gamedev:brainstorm`
 - If no concept exists, inform the user:
-  > "No game concept found. Consider running `/brainstorm` first to discover what
+  > "No game concept found. Consider running `/gamedev:brainstorm` first to discover what
   > you want to build — it will also recommend an engine. Or tell me about your
   > game and I can help you pick."
 
@@ -395,7 +395,7 @@ Create a minimal `docs/engine-reference/<engine>/VERSION.md`:
 This engine version is within the LLM's training data. Engine reference
 docs are optional but can be added later if agents suggest incorrect APIs.
 
-Run `/setup-engine refresh` to populate full reference docs at any time.
+Run `/gamedev:setup-engine refresh` to populate full reference docs at any time.
 ```
 
 Do NOT create breaking-changes.md, deprecated-apis.md, etc. — they would
@@ -481,7 +481,7 @@ The section should instruct the agent to:
 
 ## 10. Refresh Subcommand
 
-If invoked as `/setup-engine refresh`:
+If invoked as `/gamedev:setup-engine refresh`:
 
 1. Read the existing `docs/engine-reference/<engine>/VERSION.md` to get
    the current engine and version
@@ -497,7 +497,7 @@ If invoked as `/setup-engine refresh`:
 
 ## 11. Upgrade Subcommand
 
-If invoked as `/setup-engine upgrade [old-version] [new-version]`:
+If invoked as `/gamedev:setup-engine upgrade [old-version] [new-version]`:
 
 ### Step 1 — Read Current Version State
 
@@ -590,11 +590,11 @@ VERSION.md updated: [engine] [old-version] → [new-version]
 
 Next steps:
 1. Migrate deprecated API usages in the [N] files listed above
-2. Run /setup-engine refresh after upgrading the actual engine binary to
+2. Run /gamedev:setup-engine refresh after upgrading the actual engine binary to
    verify no new deprecations were missed
-3. Run /architecture-review — the engine upgrade may invalidate ADRs that
+3. Run /gamedev:architecture-review — the engine upgrade may invalidate ADRs that
    reference specific APIs or engine capabilities
-4. If any ADRs are invalidated, run /propagate-design-change to update
+4. If any ADRs are invalidated, run /gamedev:propagate-design-change to update
    downstream stories
 ```
 
@@ -617,11 +617,11 @@ Agent Config:    [verified]
 
 Next Steps:
 1. Review docs/engine-reference/<engine>/VERSION.md
-2. [If from /brainstorm] Run /map-systems to decompose your concept into individual systems
-3. [If from /brainstorm] Run /design-system to author per-system GDDs (guided, section-by-section)
-4. [If from /brainstorm] Run /prototype [core-mechanic] to validate the core idea before writing GDDs
-5. [If fresh start] Run /brainstorm to discover your game concept
-6. Define your first epic (Backlog milestone): /create-epics
+2. [If from /gamedev:brainstorm] Run /gamedev:map-systems to decompose your concept into individual systems
+3. [If from /gamedev:brainstorm] Run /gamedev:design-system to author per-system GDDs (guided, section-by-section)
+4. [If from /gamedev:brainstorm] Run /gamedev:prototype [core-mechanic] to validate the core idea before writing GDDs
+5. [If fresh start] Run /gamedev:brainstorm to discover your game concept
+6. Define your first epic (Backlog milestone): /gamedev:create-epics
 ```
 
 ---

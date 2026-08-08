@@ -26,7 +26,7 @@ When in doubt, use the primary engine specialist configured in `CLAUDE.md`.
 ## Tests
 
 Tests live in `tests/` — not in `src/`.
-Run `/test-setup` to scaffold the test framework if it doesn't exist yet.
+Run `/gamedev:test-setup` to scaffold the test framework if it doesn't exist yet.
 Every gameplay system should have unit tests covering its formulas and edge cases.
 
 ## Verification-Driven Development

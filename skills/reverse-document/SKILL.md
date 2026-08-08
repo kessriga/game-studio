@@ -23,7 +23,7 @@ appropriate design or architecture documentation. Use this when:
 
 ## Phase 1: Parse Arguments
 
-**Format**: `/reverse-document <type> <path>`
+**Format**: `/gamedev:reverse-document <type> <path>`
 
 **Type options**:
 - `design` → Generate a game design document (GDD section)
@@ -37,9 +37,9 @@ appropriate design or architecture documentation. Use this when:
 
 **Examples**:
 ```bash
-/reverse-document design src/gameplay/magic-system
-/reverse-document architecture src/core/entity-component
-/reverse-document concept prototypes/vehicle-combat
+/gamedev:reverse-document design src/gameplay/magic-system
+/gamedev:reverse-document architecture src/core/entity-component
+/gamedev:reverse-document concept prototypes/vehicle-combat
 ```
 
 ## Phase 2: Analyze Implementation
@@ -184,7 +184,7 @@ After writing, suggest next steps:
 ✅ Written to design/gdd/combat-system.md
 
 FOLLOW-UP RECOMMENDED:
-1. Run /balance-check on combat formulas (exponential scaling concern)
+1. Run /gamedev:balance-check on combat formulas (exponential scaling concern)
 2. Create ADR for stamina system architecture decision
 3. Implement missing edge cases:
    - Stamina depletion mid-combo behavior
@@ -211,7 +211,7 @@ Would you like me to tackle any of these now?
 ## Example Session: Reverse-Document a System
 
 ```
-User: /reverse-document design src/gameplay/[system]
+User: /gamedev:reverse-document design src/gameplay/[system]
 
 Agent: I'll analyze your [system] implementation to create a design doc.
        [Reads code, discovers mechanics, formulas]
@@ -241,7 +241,7 @@ Agent: ✅ Written to design/gdd/[system-name].md
 
        Next steps:
        - Update [formula] to [corrected scaling]
-       - Run /balance-check to validate [curve]
+       - Run /gamedev:balance-check to validate [curve]
        - Document [mechanic] as core pillar in game-pillars.md
 ```
 

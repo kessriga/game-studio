@@ -27,7 +27,7 @@ A test framework installed at sprint four costs 3 sprints.
 1. **Read engine config**:
    - Read `.claude/docs/technical-preferences.md` and extract the `Engine:` value.
    - If engine is not configured (`[TO BE CONFIGURED]`), stop:
-     "Engine not configured. Run `/setup-engine` first, then re-run `/test-setup`."
+     "Engine not configured. Run `/gamedev:setup-engine` first, then re-run `/gamedev:test-setup`."
 
 2. **Check for existing test infrastructure**:
    - Glob `tests/` — does the directory exist?
@@ -39,7 +39,7 @@ A test framework installed at sprint four costs 3 sprints.
 3. **Report findings**:
    - "Engine: [engine]. Test directory: [found / not found]. CI workflow: [found / not found]."
    - If everything already exists AND `force` argument was not passed:
-     "Test infrastructure appears to be in place. Re-run with `/test-setup force`
+     "Test infrastructure appears to be in place. Re-run with `/gamedev:test-setup force`
      to regenerate. Proceeding will not overwrite existing test files."
 
 If the `force` argument is passed, skip the "already exists" early-exit and
@@ -98,7 +98,7 @@ After approval, create the following files:
 tests/
   unit/           # Isolated unit tests (formulas, state machines, logic)
   integration/    # Cross-system and save/load tests
-  smoke/          # Critical path test list for /smoke-check gate
+  smoke/          # Critical path test list for /gamedev:smoke-check gate
   evidence/       # Screenshot logs and manual test sign-off records
 ```
 
@@ -136,7 +136,7 @@ A failed test suite blocks merging.
 Create `tests/gdunit4_runner.gd`:
 
 ```gdscript
-# GdUnit4 test runner — invoked by CI and /smoke-check
+# GdUnit4 test runner — invoked by CI and /gamedev:smoke-check
 # Usage: godot --headless --script tests/gdunit4_runner.gd
 extends SceneTree
 
@@ -440,7 +440,7 @@ Create `tests/smoke/critical-paths.md`:
 # Smoke Test: Critical Paths
 
 **Purpose**: Run these 10-15 checks in under 15 minutes before any QA hand-off.
-**Run via**: `/smoke-check` (which reads this file)
+**Run via**: `/gamedev:smoke-check` (which reads this file)
 **Update**: Add new entries when new core systems are implemented.
 
 ## Core Stability (always run)
@@ -487,15 +487,15 @@ Files created:
 Next steps:
 1. [Engine-specific install step, e.g., "Install GdUnit4 via AssetLib"]
 2. Write your first test: create tests/unit/[first-system]/[system]_test.[ext]
-3. Run `/qa-plan sprint` before your first sprint to classify stories and set
+3. Run `/gamedev:qa-plan sprint` before your first sprint to classify stories and set
    test evidence requirements
-4. `/smoke-check` before every QA hand-off
+4. `/gamedev:smoke-check` before every QA hand-off
 
-Gate note: /gate-check Technical Setup → Pre-Production now requires:
+Gate note: /gamedev:gate-check Technical Setup → Pre-Production now requires:
 - tests/ directory with unit/ and integration/ subdirectories
 - .github/workflows/tests.yml
 - At least one example test file
-Run /test-setup and write one example test before advancing.
+Run /gamedev:test-setup and write one example test before advancing.
 
 Verdict: **COMPLETE** — test framework scaffolded and CI/CD wired up.
 ```
@@ -508,7 +508,7 @@ Verdict: **COMPLETE** — test framework scaffolded and CI/CD wired up.
   If a test runner file exists, leave it as-is.
 - **Always ask before creating files** — Phase 2 requires explicit approval.
 - **Engine detection is non-negotiable** — if the engine is not configured,
-  stop and redirect to `/setup-engine`. Do not guess.
+  stop and redirect to `/gamedev:setup-engine`. Do not guess.
 - **`force` flag skips the "already exists" early-exit but never overwrites.**
   It means "create any missing files even if the directory already exists."
 - For Unity CI, note that the `UNITY_LICENSE` secret must be configured

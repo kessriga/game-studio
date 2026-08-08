@@ -164,8 +164,8 @@ If the user declines: Verdict: **COMPLETE** — changelog generated.
 
 ## Phase 7: Next Steps
 
-- Use `/patch-notes [version]` to generate a styled, saved version for public release.
-- Use `/release-checklist` before publishing the changelog externally.
+- Use `/gamedev:patch-notes [version]` to generate a styled, saved version for public release.
+- Use `/gamedev:release-checklist` before publishing the changelog externally.
 
 ### Guidelines
 

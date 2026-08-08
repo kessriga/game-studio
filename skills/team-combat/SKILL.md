@@ -7,7 +7,7 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion, TodoW
 model: sonnet
 ---
 **Argument check:** If no combat feature description is provided, output:
-> "Usage: `/team-combat [combat feature description]` — Provide a description of the combat feature to design and implement (e.g., `melee parry system`, `ranged weapon spread`)."
+> "Usage: `/gamedev:team-combat [combat feature description]` — Provide a description of the combat feature to design and implement (e.g., `melee parry system`, `ranged weapon spread`)."
 Then stop immediately without spawning any subagents or reading any files.
 
 When this skill is invoked with a valid argument, orchestrate the combat team through a structured pipeline.
@@ -42,13 +42,13 @@ Store the resolved mode for use in all subsequent phases.
 ## How to Delegate
 
 Use the Task tool to spawn each team member as a subagent:
-- `subagent_type: game-designer` — Design the mechanic, define formulas and edge cases
-- `subagent_type: gameplay-programmer` — Implement the core gameplay code
-- `subagent_type: ai-programmer` — Implement NPC/enemy AI behavior
-- `subagent_type: technical-artist` — Create VFX, shader effects, visual feedback
-- `subagent_type: sound-designer` — Define audio events, impact sounds, ambient audio
+- `subagent_type: gamedev:game-designer` — Design the mechanic, define formulas and edge cases
+- `subagent_type: gamedev:gameplay-programmer` — Implement the core gameplay code
+- `subagent_type: gamedev:ai-programmer` — Implement NPC/enemy AI behavior
+- `subagent_type: gamedev:technical-artist` — Create VFX, shader effects, visual feedback
+- `subagent_type: gamedev:sound-designer` — Define audio events, impact sounds, ambient audio
 - `subagent_type: [primary engine specialist]` — Engine idiom validation for architecture and implementation
-- `subagent_type: qa-tester` — Write test cases and validate implementation
+- `subagent_type: gamedev:qa-tester` — Write test cases and validate implementation
 
 Always provide full context in each agent's prompt (design doc path, relevant code files, constraints). Launch independent agents in parallel where the pipeline allows it (e.g., Phase 3 agents can run simultaneously).
 
@@ -119,8 +119,8 @@ If any spawned agent (via Task) returns BLOCKED, errors, or cannot complete:
 
 Common blockers:
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/architecture-decision` first
-- Scope too large → split into two stories via `/create-stories`
+- ADR status is Proposed → do not implement; run `/gamedev:architecture-decision` first
+- Scope too large → split into two stories via `/gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## File Write Protocol
@@ -138,6 +138,6 @@ Verdict: **BLOCKED** — one or more phases could not complete; partial report p
 
 ## Next Steps
 
-- Run `/code-review` on the implemented combat code before closing stories.
-- Run `/balance-check` to validate combat formulas and tuning values.
-- Run `/team-polish` if VFX, audio, or performance polish is needed.
+- Run `/gamedev:code-review` on the implemented combat code before closing stories.
+- Run `/gamedev:balance-check` to validate combat formulas and tuning values.
+- Run `/gamedev:team-polish` if VFX, audio, or performance polish is needed.

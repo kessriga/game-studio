@@ -140,7 +140,7 @@ These should be prototyped early regardless of priority tier.]
 ## Next Steps
 
 - [ ] Review and approve this systems enumeration
-- [ ] Design MVP-tier systems first (use `/design-system [system-name]`)
-- [ ] Run `/design-review` on each completed GDD
-- [ ] Run `/gate-check pre-production` when MVP systems are designed
-- [ ] Validate the highest-risk systems with `/vertical-slice` before committing to Production
+- [ ] Design MVP-tier systems first (use `/gamedev:design-system [system-name]`)
+- [ ] Run `/gamedev:design-review` on each completed GDD
+- [ ] Run `/gamedev:gate-check pre-production` when MVP systems are designed
+- [ ] Validate the highest-risk systems with `/gamedev:vertical-slice` before committing to Production

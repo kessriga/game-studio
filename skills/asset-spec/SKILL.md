@@ -95,9 +95,9 @@ Write the file:
 
 After writing, tell the user:
 > "Entity inventory saved. Next steps:
-> - Run `/ux-design [screen name]` for each UI screen in the inventory
-> - Run `/asset-spec entity:[name]` to spec each visual entity
-> - Or run `/asset-spec` again to work through the inventory one item at a time"
+> - Run `/gamedev:ux-design [screen name]` for each UI screen in the inventory
+> - Run `/gamedev:asset-spec entity:[name]` to spec each visual entity
+> - Or run `/gamedev:asset-spec` again to work through the inventory one item at a time"
 
 ---
 
@@ -121,14 +121,14 @@ Read all source material **before** asking the user anything.
 
 ### Required reads:
 - **Art bible**: Read `design/art/art-bible.md` — fail if missing:
-  > "No art bible found. Run `/art-bible` first — asset specs are anchored to the art bible's visual rules and asset standards."
+  > "No art bible found. Run `/gamedev:art-bible` first — asset specs are anchored to the art bible's visual rules and asset standards."
   Extract: Visual Identity Statement, Color System (semantic colors), Shape Language, Asset Standards (Section 8 — dimensions, formats, polycount budgets, texture resolution tiers).
 
 - **Technical preferences**: Read `.claude/docs/technical-preferences.md` — extract performance budgets and naming conventions.
 
 ### Source doc reads (by target type):
 - **system**: Read `design/gdd/[target-name].md`. Extract the **Visual/Audio Requirements** section. If it doesn't exist or reads `[To be designed]`:
-  > "The Visual/Audio section of `design/gdd/[target-name].md` is empty. Either run `/design-system [target-name]` to complete the GDD, or describe the visual needs manually."
+  > "The Visual/Audio section of `design/gdd/[target-name].md` is empty. Either run `/gamedev:design-system [target-name]` to complete the GDD, or describe the visual needs manually."
   Use `AskUserQuestion`: `[A] Describe needs manually` / `[B] Stop — complete the GDD first`
 - **level**: Read `design/levels/[target-name].md`. Extract art requirements, asset list, VFX needs, and the art-director's production concept specs from Step 4.
 - **character** or **entity**: Read `design/narrative/characters/[target-name].md` or search `design/narrative/` and `design/assets/entity-inventory.md` for a matching entry. Extract visual description, role, and any specified distinguishing features.
@@ -287,10 +287,10 @@ Ask: "May I update `design/assets/asset-manifest.md`?"
 Use `AskUserQuestion`:
 - Prompt: "Asset specs complete for **[target]**. What's next?"
 - Options:
-  - `[A] Spec another system — /asset-spec system:[next-system]`
-  - `[B] Spec a level — /asset-spec level:[level-name]`
-  - `[C] Spec a character — /asset-spec character:[character-name]`
-  - `[D] Run /asset-audit — validate delivered assets against specs`
+  - `[A] Spec another system — /gamedev:asset-spec system:[next-system]`
+  - `[B] Spec a level — /gamedev:asset-spec level:[level-name]`
+  - `[C] Spec a character — /gamedev:asset-spec character:[character-name]`
+  - `[D] Run /gamedev:asset-audit — validate delivered assets against specs`
   - `[E] Stop here`
 
 ---
@@ -348,5 +348,5 @@ Every phase follows: **Identify → Confirm → Generate → Review → Approve 
 
 ## Recommended Next Steps
 
-- Run `/asset-spec [next-context]` to continue speccing remaining systems, levels, or characters
-- Run `/asset-audit` to validate delivered assets against the written specs and identify gaps or mismatches
+- Run `/gamedev:asset-spec [next-context]` to continue speccing remaining systems, levels, or characters
+- Run `/gamedev:asset-audit` to validate delivered assets against the written specs and identify gaps or mismatches

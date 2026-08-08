@@ -13,10 +13,10 @@ When this skill is invoked:
 
 Two modes:
 
-- **No argument**: `/map-systems` — Run the full decomposition workflow (Phases 1-5)
+- **No argument**: `/gamedev:map-systems` — Run the full decomposition workflow (Phases 1-5)
   to create or update the systems index.
-- **`next`**: `/map-systems next` — Pick the highest-priority undesigned system
-  from the index and hand off to `/design-system` (Phase 6).
+- **`next`**: `/gamedev:map-systems next` — Pick the highest-priority undesigned system
+  from the index and hand off to `/gamedev:design-system` (Phase 6).
 
 Also resolve the review mode (once, store for all gate spawns this run):
 1. If `--review [full|lean|solo]` was passed → use that
@@ -34,7 +34,7 @@ for systems decomposition.
 
 **Required:**
 - Read `design/gdd/game-concept.md` — **fail with a clear message if missing**:
-  > "No game concept found at `design/gdd/game-concept.md`. Run `/brainstorm` first
+  > "No game concept found at `design/gdd/game-concept.md`. Run `/gamedev:brainstorm` first
   > to create one, then come back to decompose it into systems."
 
 **Optional (read if they exist):**
@@ -261,12 +261,12 @@ If the user declined: **Verdict: BLOCKED** — user did not approve the write.
 
 ---
 
-## Phase 6: Design Individual Systems (Handoff to /design-system)
+## Phase 6: Design Individual Systems (Handoff to /gamedev:design-system)
 
 This phase is entered when:
 - The user says "yes" to designing systems after creating the index
-- The user invokes `/map-systems [system-name]`
-- The user invokes `/map-systems next`
+- The user invokes `/gamedev:map-systems [system-name]`
+- The user invokes `/gamedev:map-systems next`
 
 ### Step 6a: Select the System
 
@@ -279,26 +279,26 @@ This phase is entered when:
 Use `AskUserQuestion` for: "Start designing [system-name] now, pick a different
 system, or stop here?"
 
-### Step 6b: Hand Off to /design-system
+### Step 6b: Hand Off to /gamedev:design-system
 
-Once a system is selected, invoke the `/design-system [system-name]` skill.
+Once a system is selected, invoke the `/gamedev:design-system [system-name]` skill.
 
-The `/design-system` skill handles the full GDD authoring process:
+The `/gamedev:design-system` skill handles the full GDD authoring process:
 - Gathers context from game concept, systems index, and dependency GDDs
 - Creates a file skeleton immediately
 - Walks through all 8 required sections one at a time (collaborative, incremental)
 - Cross-references existing docs to prevent contradictions
 - Routes to specialist agents for domain expertise
 - Writes each section to file as soon as it's approved
-- Runs `/design-review` when complete
+- Runs `/gamedev:design-review` when complete
 - Updates the systems index
 
-**Do not duplicate the /design-system workflow here.** This skill owns the systems
-*index*; `/design-system` owns individual system *GDDs*.
+**Do not duplicate the /gamedev:design-system workflow here.** This skill owns the systems
+*index*; `/gamedev:design-system` owns individual system *GDDs*.
 
 ### Step 6c: Loop or Stop
 
-After `/design-system` completes, use `AskUserQuestion`:
+After `/gamedev:design-system` completes, use `AskUserQuestion`:
 - "Continue to the next system ([next system name])?"
 - "Pick a different system?"
 - "Stop here for this session?"
@@ -312,15 +312,15 @@ If continuing, return to Step 6a.
 After the systems index is created (or after designing some systems), present next actions using `AskUserQuestion`:
 
 - "Systems index is written. What would you like to do next?"
-  - [A] Start designing GDDs — run `/design-system [first-system-in-order]`
-  - [B] Run `/gate-check systems-design` — triggers the CD-SYSTEMS and TD-SYSTEM-BOUNDARY gates automatically for a formal director sign-off on the system set
+  - [A] Start designing GDDs — run `/gamedev:design-system [first-system-in-order]`
+  - [B] Run `/gamedev:gate-check systems-design` — triggers the CD-SYSTEMS and TD-SYSTEM-BOUNDARY gates automatically for a formal director sign-off on the system set
   - [C] Stop here for this session
 
-**The gate-check option ([B]) is worth highlighting**: running `/gate-check systems-design` triggers both the CD-SYSTEMS and TD-SYSTEM-BOUNDARY gates, catching scope issues, missing systems, and boundary problems before they're locked in across many documents. It is optional but recommended for new projects.
+**The gate-check option ([B]) is worth highlighting**: running `/gamedev:gate-check systems-design` triggers both the CD-SYSTEMS and TD-SYSTEM-BOUNDARY gates, catching scope issues, missing systems, and boundary problems before they're locked in across many documents. It is optional but recommended for new projects.
 
 After any individual GDD is completed:
-- "Run `/design-review design/gdd/[system].md` in a fresh session to validate quality"
-- "Run `/gate-check systems-design` when all MVP GDDs are complete"
+- "Run `/gamedev:design-review design/gdd/[system].md` in a fresh session to validate quality"
+- "Run `/gamedev:gate-check systems-design` when all MVP GDDs are complete"
 
 ---
 
@@ -334,10 +334,10 @@ This skill follows the collaborative design principle at every phase:
    - Phase 3: "Dependency ordering correct?"
    - Phase 4: "Priority assignments match your vision?"
    - Phase 5: "May I write the systems index?"
-   - Phase 6: "Start designing, pick different, or stop?" then hand off to `/design-system`
+   - Phase 6: "Start designing, pick different, or stop?" then hand off to `/gamedev:design-system`
 3. **"May I write to [filepath]?"** before every file write
 4. **Incremental writing**: Update the systems index after each system is designed
-5. **Handoff**: Individual GDD authoring is owned by `/design-system`, which handles
+5. **Handoff**: Individual GDD authoring is owned by `/gamedev:design-system`, which handles
    incremental section writing, cross-referencing, design review, and index updates
 6. **Session state updates**: Write to `production/session-state/active.md` after
    each milestone (index created, system designed, priorities changed)
@@ -352,13 +352,13 @@ If context reaches or exceeds 70% at any point, append this notice:
 
 > **Context is approaching the limit (≥70%).** The systems index is saved to
 > `design/gdd/systems-index.md`. Open a fresh Claude Code session to continue
-> designing individual GDDs — run `/map-systems next` to pick up where you left off.
+> designing individual GDDs — run `/gamedev:map-systems next` to pick up where you left off.
 
 ---
 
 ## Recommended Next Steps
 
-- Run `/design-system [first-system-in-order]` to author the first GDD (use design order from the index)
-- Run `/map-systems next` to always pick the highest-priority undesigned system automatically
-- Run `/design-review design/gdd/[system].md` in a fresh session after each GDD is authored
-- Run `/gate-check pre-production` when all MVP GDDs are authored and reviewed
+- Run `/gamedev:design-system [first-system-in-order]` to author the first GDD (use design order from the index)
+- Run `/gamedev:map-systems next` to always pick the highest-priority undesigned system automatically
+- Run `/gamedev:design-review design/gdd/[system].md` in a fresh session after each GDD is authored
+- Run `/gamedev:gate-check pre-production` when all MVP GDDs are authored and reviewed

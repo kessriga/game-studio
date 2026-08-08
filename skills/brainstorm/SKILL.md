@@ -241,13 +241,13 @@ Ground the concept in reality:
 
 - **Target platform**: Use `AskUserQuestion` — "What platforms are you targeting for this game?"
   Options: `PC (Steam / Epic)` / `Mobile (iOS / Android)` / `Console` / `Web / Browser` / `Multiple platforms`
-  Record the answer — it directly shapes the engine recommendation and will be passed to `/setup-engine`.
+  Record the answer — it directly shapes the engine recommendation and will be passed to `/gamedev:setup-engine`.
   Note platform implications if relevant (e.g., mobile means Unity is strongly preferred; console means Godot/Bevy have limitations; web means Godot exports cleanly and Bevy targets WebGPU/WASM).
 
 - **Engine experience**: Use `AskUserQuestion` — "Do you already have an engine you work in?"
   Options: `Godot` / `Unity` / `Unreal Engine 5` / `Bevy` / `No preference — help me decide`
   - If they pick an engine → record it as their preference and move on. Do NOT second-guess it.
-  - If "No preference" → tell them: "Run `/setup-engine` after this session — it will walk you through the full decision based on your concept and platform target." Do not make a recommendation here.
+  - If "No preference" → tell them: "Run `/gamedev:setup-engine` after this session — it will walk you through the full decision based on your concept and platform target." Do not make a recommendation here.
 - **Art pipeline**: What's the art style and how labor-intensive is it?
 - **Content scope**: Estimate level/area count, item count, gameplay hours
 - **MVP definition**: What's the absolute minimum build that tests "is the
@@ -311,23 +311,23 @@ If yes, generate the document using the template at `.claude/docs/templates/game
    pre-production pipeline). List ALL steps — do not abbreviate or truncate:
 
 **Path A — Design-First** (recommended if the concept is well-defined):
-   1. "Run `/setup-engine` to configure the engine and populate version-aware reference docs"
-   2. "Run `/art-bible` to create the visual identity specification — do this BEFORE writing GDDs. **The art bible is required before the Technical Setup gate.** It gates asset production and shapes technical architecture decisions (rendering, VFX, UI systems)."
-   3. "Use `/design-review design/gdd/game-concept.md` to validate concept completeness before going downstream"
+   1. "Run `/gamedev:setup-engine` to configure the engine and populate version-aware reference docs"
+   2. "Run `/gamedev:art-bible` to create the visual identity specification — do this BEFORE writing GDDs. **The art bible is required before the Technical Setup gate.** It gates asset production and shapes technical architecture decisions (rendering, VFX, UI systems)."
+   3. "Use `/gamedev:design-review design/gdd/game-concept.md` to validate concept completeness before going downstream"
    4. "Discuss vision with the `creative-director` agent for pillar refinement"
-   5. "Decompose the concept into individual systems with `/map-systems` — maps dependencies, assigns priorities, and creates the systems index"
-   6. "Author per-system GDDs with `/design-system` — guided, section-by-section GDD writing for each system identified in step 5"
-   7. "Plan the technical architecture with `/create-architecture` — produces the master architecture blueprint and Required ADR list"
-   8. "Record key architectural decisions with `/architecture-decision (×N)` — write one ADR per decision in the Required ADR list from `/create-architecture`"
-   9. "Run `/architecture-review` — bootstraps the TR registry and Requirements Traceability Matrix from your GDDs and ADRs (required before the Pre-Production gate)"
-   10. "Validate readiness to advance with `/gate-check` — phase gate before committing to production"
+   5. "Decompose the concept into individual systems with `/gamedev:map-systems` — maps dependencies, assigns priorities, and creates the systems index"
+   6. "Author per-system GDDs with `/gamedev:design-system` — guided, section-by-section GDD writing for each system identified in step 5"
+   7. "Plan the technical architecture with `/gamedev:create-architecture` — produces the master architecture blueprint and Required ADR list"
+   8. "Record key architectural decisions with `/gamedev:architecture-decision (×N)` — write one ADR per decision in the Required ADR list from `/gamedev:create-architecture`"
+   9. "Run `/gamedev:architecture-review` — bootstraps the TR registry and Requirements Traceability Matrix from your GDDs and ADRs (required before the Pre-Production gate)"
+   10. "Validate readiness to advance with `/gamedev:gate-check` — phase gate before committing to production"
 
 **Path B — Prototype-First** (use if the core mechanic is unproven or the concept needs validation):
-   1. "Run `/setup-engine` to configure the engine"
-   2. "Run `/prototype [core-mechanic]` — validate the core idea is fun before writing any GDDs (1–3 days throwaway code)"
-   3. "If prototype PROCEEDS: run `/art-bible`, then continue with Path A steps 5–10 above, using prototype learnings to inform your GDDs"
-   4. "If prototype PIVOTS: return to `/brainstorm` with the learnings and reshape the concept"
-   5. "After full design and architecture, build the `/vertical-slice` to validate production readiness before committing to sprints"
+   1. "Run `/gamedev:setup-engine` to configure the engine"
+   2. "Run `/gamedev:prototype [core-mechanic]` — validate the core idea is fun before writing any GDDs (1–3 days throwaway code)"
+   3. "If prototype PROCEEDS: run `/gamedev:art-bible`, then continue with Path A steps 5–10 above, using prototype learnings to inform your GDDs"
+   4. "If prototype PIVOTS: return to `/gamedev:brainstorm` with the learnings and reshape the concept"
+   5. "After full design and architecture, build the `/gamedev:vertical-slice` to validate production readiness before committing to sprints"
 
 7. **Output a summary** with the chosen concept's elevator pitch, pillars,
    primary player type, engine recommendation, biggest risk, and file path.
@@ -350,10 +350,10 @@ append this notice to the current response before continuing:
 ## Recommended Next Steps
 
 After the game concept is written, follow the pre-production pipeline in order:
-1. `/setup-engine` — configure the engine and populate version-aware reference docs
-2. `/art-bible` — establish visual identity before writing any GDDs
-3. `/map-systems` — decompose the concept into individual systems with dependencies
-4. `/design-system [first-system]` — author per-system GDDs in dependency order
-5. `/create-architecture` — produce the master architecture blueprint
-6. `/architecture-review` — bootstrap TR registry and Requirements Traceability Matrix
-7. `/gate-check pre-production` — validate readiness before committing to production
+1. `/gamedev:setup-engine` — configure the engine and populate version-aware reference docs
+2. `/gamedev:art-bible` — establish visual identity before writing any GDDs
+3. `/gamedev:map-systems` — decompose the concept into individual systems with dependencies
+4. `/gamedev:design-system [first-system]` — author per-system GDDs in dependency order
+5. `/gamedev:create-architecture` — produce the master architecture blueprint
+6. `/gamedev:architecture-review` — bootstrap TR registry and Requirements Traceability Matrix
+7. `/gamedev:gate-check pre-production` — validate readiness before committing to production

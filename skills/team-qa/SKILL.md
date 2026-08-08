@@ -36,8 +36,8 @@ Store the resolved mode for use in all subsequent phases.
 ## How to Delegate
 
 Use the Task tool to spawn each team member as a subagent:
-- `subagent_type: qa-lead` — Strategy, planning, classification, sign-off
-- `subagent_type: qa-tester` — Test case writing and bug report writing
+- `subagent_type: gamedev:qa-lead` — Strategy, planning, classification, sign-off
+- `subagent_type: gamedev:qa-tester` — Test case writing and bug report writing
 
 Always provide full context in each agent's prompt (story file paths, QA plan path, scope constraints). Launch independent qa-tester tasks in parallel where possible (e.g., multiple stories in Phase 5 can be scaffolded simultaneously).
 
@@ -67,7 +67,7 @@ Prompt the qa-lead to:
 - Identify which stories require automated test evidence vs. manual QA
 - Flag any stories with missing acceptance criteria or missing test evidence that would block QA
 - Estimate manual QA effort (number of test sessions needed)
-- **Before assessing smoke status, check for an existing smoke check report**: Glob `production/qa/smoke-*.md` and read the most recently modified file (if found). If a report exists, use its verdict and findings directly — do not re-interview the user. If no report exists, note: "No prior smoke check report found — run `/smoke-check` before proceeding." and set smoke check status to UNKNOWN (treat as PASS WITH WARNINGS for the purpose of continuing). Produce a smoke check verdict: **PASS** / **PASS WITH WARNINGS [list]** / **FAIL [list of failures]** / **UNKNOWN (no report found)**
+- **Before assessing smoke status, check for an existing smoke check report**: Glob `production/qa/smoke-*.md` and read the most recently modified file (if found). If a report exists, use its verdict and findings directly — do not re-interview the user. If no report exists, note: "No prior smoke check report found — run `/gamedev:smoke-check` before proceeding." and set smoke check status to UNKNOWN (treat as PASS WITH WARNINGS for the purpose of continuing). Produce a smoke check verdict: **PASS** / **PASS WITH WARNINGS [list]** / **FAIL [list of failures]** / **UNKNOWN (no report found)**
 - Produce a strategy summary table and smoke check result:
 
   | Story | Type | Automated Required | Manual Required | Blocker? |
@@ -85,12 +85,12 @@ options:
   - "Looks good — proceed to test plan"
   - "Adjust story types before proceeding"
   - "Skip blocked stories and proceed with the rest"
-  - "Smoke check failed — fix issues and re-run /team-qa"
+  - "Smoke check failed — fix issues and re-run /gamedev:team-qa"
   - "Cancel — resolve blockers first"
 ```
 
-If smoke check **FAIL**: do not proceed to Phase 3. Surface the failures from the smoke check report and stop. The user must fix them, re-run `/smoke-check`, and then re-run `/team-qa`.
-If smoke check **UNKNOWN**: surface a warning — "No smoke check report found. Recommend running `/smoke-check` before QA. Proceeding with caution."
+If smoke check **FAIL**: do not proceed to Phase 3. Surface the failures from the smoke check report and stop. The user must fix them, re-run `/gamedev:smoke-check`, and then re-run `/gamedev:team-qa`.
+If smoke check **UNKNOWN**: surface a warning — "No smoke check report found. Recommend running `/gamedev:smoke-check` before QA. Proceeding with caution."
 If smoke check **PASS WITH WARNINGS**: note the warnings for the sign-off report and continue.
 If blockers are present: list them explicitly. The user may choose to skip blocked stories or cancel the cycle.
 
@@ -157,7 +157,7 @@ options:
   - "BLOCKED — cannot test yet (reason)"
 ```
 
-After each FAIL result: use `AskUserQuestion` to collect the failure description, then file a bug via `/bug-report` — a Backlog task with the `bug` label (repro/severity/context in the task description). The board is the bug list; there is no `production/qa/bugs/` markdown store.
+After each FAIL result: use `AskUserQuestion` to collect the failure description, then file a bug via `/gamedev:bug-report` — a Backlog task with the `bug` label (repro/severity/context in the task description). The board is the bug list; there is no `production/qa/bugs/` markdown store.
 
 After collecting all results, summarize:
 - Stories PASS: [count]
@@ -200,9 +200,9 @@ Verdict rules:
 - **NOT APPROVED**: Any S1/S2 bugs open; or stories FAIL without documented workaround
 
 Next step guidance by verdict:
-- APPROVED: "Build is ready for the next phase. Run `/gate-check` to validate advancement."
+- APPROVED: "Build is ready for the next phase. Run `/gamedev:gate-check` to validate advancement."
 - APPROVED WITH CONDITIONS: "Resolve conditions before advancing. S3/S4 bugs may be deferred to polish."
-- NOT APPROVED: "Resolve S1/S2 bugs and re-run `/team-qa` or targeted manual QA before advancing."
+- NOT APPROVED: "Resolve S1/S2 bugs and re-run `/gamedev:team-qa` or targeted manual QA before advancing."
 
 Ask: "May I write this QA sign-off report to `production/qa/qa-signoff-[milestone]-[date].md`?"
 
@@ -222,8 +222,8 @@ If any spawned agent (via Task) returns BLOCKED, errors, or cannot complete:
 
 Common blockers:
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/architecture-decision` first
-- Scope too large → split into two stories via `/create-stories`
+- ADR status is Proposed → do not implement; run `/gamedev:architecture-decision` first
+- Scope too large → split into two stories via `/gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## Output

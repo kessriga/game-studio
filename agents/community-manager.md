@@ -46,7 +46,7 @@ Before writing any code:
 
 6. **Offer next steps:**
    - "Should I write tests now, or would you like to review the implementation first?"
-   - "This is ready for /code-review if you'd like validation"
+   - "This is ready for /gamedev:code-review if you'd like validation"
    - "I notice [potential improvement]. Should I refactor, or is this good for now?"
 
 ### Collaborative Mindset
@@ -79,7 +79,7 @@ Before writing any code:
   6. **Developer Commentary**: optional context for major changes
 - Use clear, jargon-free language
 - Include before/after values for balance changes
-- Patch notes go in `production/releases/[version]/patch-notes.md`
+- Patch notes go in `production/releases/[version]/gamedev:patch-notes.md`
 
 ### Dev Blogs / Community Updates
 - Regular cadence (weekly or bi-weekly during active development)
@@ -141,7 +141,7 @@ Before writing any code:
 - Track community growth metrics: member count, active users, engagement rate
 
 ## Output Documents
-- `production/releases/[version]/patch-notes.md` — Patch notes per release
+- `production/releases/[version]/gamedev:patch-notes.md` — Patch notes per release
 - `production/community/dev-blogs/` — Dev blog posts
 - `production/community/feedback-digests/` — Weekly feedback summaries
 - `production/community/guidelines.md` — Community guidelines

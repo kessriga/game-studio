@@ -14,7 +14,7 @@ This skill produces `docs/architecture/architecture.md` — the master architect
 document that translates all approved GDDs into a concrete technical blueprint.
 It sits between design and implementation, and must exist before sprint planning begins.
 
-**Distinct from `/architecture-decision`**: ADRs record individual point decisions.
+**Distinct from `/gamedev:architecture-decision`**: ADRs record individual point decisions.
 This skill creates the whole-system blueprint that gives ADRs their context.
 
 Resolve the review mode (once, store for all gate spawns this run):
@@ -53,7 +53,7 @@ Read the engine reference library completely:
    → Extract: current API patterns per domain
 
 If no engine is configured, stop and prompt:
-> "No engine is configured. Run `/setup-engine` first. Architecture cannot be
+> "No engine is configured. Run `/gamedev:setup-engine` first. Architecture cannot be
 > written without knowing which engine and version you are targeting."
 
 ### 0b. Design Context + Technical Requirements Extraction
@@ -262,10 +262,10 @@ not yet have a corresponding ADR, PLUS all uncovered Technical Requirements.
 Group by layer — Foundation first:
 
 **Foundation Layer (must create before any coding):**
-- `/architecture-decision [title]` → covers: TR-[id], TR-[id]
+- `/gamedev:architecture-decision [title]` → covers: TR-[id], TR-[id]
 
 **Core Layer:**
-- `/architecture-decision [title]` → covers: TR-[id]
+- `/gamedev:architecture-decision [title]` → covers: TR-[id]
 
 ---
 
@@ -395,13 +395,13 @@ Show the proposed Document Status block inline, then use `AskUserQuestion`:
 
 ## Run These ADRs Next
 
-**1. `/architecture-decision "[Title]"` → ADR-[XXXX]**
+**1. `/gamedev:architecture-decision "[Title]"` → ADR-[XXXX]**
 [One sentence: what it defines and what it unblocks.]
 
-**2. `/architecture-decision "[Title]"` → ADR-[XXXX]**
+**2. `/gamedev:architecture-decision "[Title]"` → ADR-[XXXX]**
 [One sentence.]
 
-**3. `/architecture-decision "[Title]"` → ADR-[XXXX]**
+**3. `/gamedev:architecture-decision "[Title]"` → ADR-[XXXX]**
 [One sentence.]
 
 List top 3 from Phase 6 in priority order. If fewer than 3 remain, list only what's outstanding.
@@ -410,16 +410,16 @@ List top 3 from Phase 6 in priority order. If fewer than 3 remain, list only wha
 
 ## Gate-Check Readiness
 
-> **Required before `/gate-check [stage]`:**
+> **Required before `/gamedev:gate-check [stage]`:**
 > - [ ] Accept ADRs: [list Proposed ADR IDs that must be Accepted]
 > - [ ] Write ADRs: [list ADR IDs that must still be written]
-> - [ ] Run `/test-setup` — scaffolds `tests/unit/`, `tests/integration/`, CI workflow, and an example test file
-> - [ ] Run `/ux-design` — creates `design/ux/interaction-patterns.md` and `design/accessibility-requirements.md`
+> - [ ] Run `/gamedev:test-setup` — scaffolds `tests/unit/`, `tests/integration/`, CI workflow, and an example test file
+> - [ ] Run `/gamedev:ux-design` — creates `design/ux/interaction-patterns.md` and `design/accessibility-requirements.md`
 >
-> Run `/gate-check [stage]` when all boxes are checked.
+> Run `/gamedev:gate-check [stage]` when all boxes are checked.
 
 If nothing is blocking, write instead:
-> No blockers — run `/gate-check [stage]` now.
+> No blockers — run `/gamedev:gate-check [stage]` now.
 
 ---
 
@@ -460,9 +460,9 @@ unsure, present 2-4 options with pros/cons before asking them to decide.
 
 ## Recommended Next Steps
 
-- Run `/architecture-decision [title]` for each required ADR listed in Phase 6 — Foundation layer ADRs first
-- Run `/architecture-review` — bootstraps the Requirements Traceability Matrix and TR registry from the ADRs just written. Required before the Pre-Production gate.
-- Run `/test-setup` to scaffold `tests/unit/`, `tests/integration/`, CI workflow, and an example test (required for gate-check)
-- Run `/ux-design` to initialize `design/ux/interaction-patterns.md` and `design/accessibility-requirements.md` (required for gate-check)
-- Run `/create-control-manifest` once the required ADRs are written to produce the layer rules manifest
-- Run `/gate-check pre-production` when all required ADRs, `/test-setup`, and `/ux-design` are complete
+- Run `/gamedev:architecture-decision [title]` for each required ADR listed in Phase 6 — Foundation layer ADRs first
+- Run `/gamedev:architecture-review` — bootstraps the Requirements Traceability Matrix and TR registry from the ADRs just written. Required before the Pre-Production gate.
+- Run `/gamedev:test-setup` to scaffold `tests/unit/`, `tests/integration/`, CI workflow, and an example test (required for gate-check)
+- Run `/gamedev:ux-design` to initialize `design/ux/interaction-patterns.md` and `design/accessibility-requirements.md` (required for gate-check)
+- Run `/gamedev:create-control-manifest` once the required ADRs are written to produce the layer rules manifest
+- Run `/gamedev:gate-check pre-production` when all required ADRs, `/gamedev:test-setup`, and `/gamedev:ux-design` are complete

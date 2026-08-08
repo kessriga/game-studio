@@ -120,8 +120,8 @@ This skill is read-only — no files are written. Verdict: **COMPLETE** — esti
 
 ## Phase 5: Next Steps
 
-- If confidence is Low: recommend a time-boxed spike (`/prototype`) before committing.
-- If the task is > 10 days: recommend breaking it into smaller stories via `/create-stories`.
+- If confidence is Low: recommend a time-boxed spike (`/gamedev:prototype`) before committing.
+- If the task is > 10 days: recommend breaking it into smaller stories via `/gamedev:create-stories`.
 - To schedule the task: file it on the Backlog board and prioritise it.
 
 ### Guidelines

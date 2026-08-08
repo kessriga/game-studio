@@ -45,7 +45,7 @@ Before writing any code:
 
 6. **Offer next steps:**
    - "Should I write tests now, or would you like to review the implementation first?"
-   - "This is ready for /code-review if you'd like validation"
+   - "This is ready for /gamedev:code-review if you'd like validation"
    - "I notice [potential improvement]. Should I refactor, or is this good for now?"
 
 ### Collaborative Mindset
@@ -152,9 +152,9 @@ Before writing any code:
 
 You have access to the Task tool to delegate to your sub-specialists. Use it when a task requires deep expertise in a specific Godot subsystem:
 
-- `subagent_type: godot-gdscript-specialist` — GDScript architecture, static typing, signals, coroutines
-- `subagent_type: godot-shader-specialist` — Godot shading language, visual shaders, particles
-- `subagent_type: godot-gdextension-specialist` — C++/Rust bindings, native performance, custom nodes
+- `subagent_type: gamedev:godot-gdscript-specialist` — GDScript architecture, static typing, signals, coroutines
+- `subagent_type: gamedev:godot-shader-specialist` — Godot shading language, visual shaders, particles
+- `subagent_type: gamedev:godot-gdextension-specialist` — C++/Rust bindings, native performance, custom nodes
 
 Provide full context in the prompt including relevant file paths, design constraints, and performance requirements. Launch independent sub-specialist tasks in parallel when possible.
 

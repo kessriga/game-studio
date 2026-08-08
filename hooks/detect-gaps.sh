@@ -12,7 +12,7 @@ set +e
 
 echo "=== Checking for Documentation Gaps ==="
 
-# --- Check 0: Fresh project detection (suggests /start) ---
+# --- Check 0: Fresh project detection (suggests /gamedev:start) ---
 FRESH_PROJECT=true
 
 # Check if engine is configured
@@ -39,9 +39,9 @@ fi
 if [ "$FRESH_PROJECT" = true ]; then
   echo ""
   echo "🚀 NEW PROJECT: No engine configured, no game concept, no source code."
-  echo "   This looks like a fresh start! Run: /start"
+  echo "   This looks like a fresh start! Run: /gamedev:start"
   echo ""
-  echo "💡 To get a comprehensive project analysis, run: /project-stage-detect"
+  echo "💡 To get a comprehensive project analysis, run: /gamedev:project-stage-detect"
   echo "==================================="
   exit 0
 fi
@@ -66,8 +66,8 @@ DESIGN_FILES=$(echo "$DESIGN_FILES" | tr -d ' ')
 
 if [ "$SRC_FILES" -gt 50 ] && [ "$DESIGN_FILES" -lt 5 ]; then
   echo "⚠️  GAP: Substantial codebase ($SRC_FILES source files) but sparse design docs ($DESIGN_FILES files)"
-  echo "    Suggested action: /reverse-document design src/[system]"
-  echo "    Or run: /project-stage-detect to get full analysis"
+  echo "    Suggested action: /gamedev:reverse-document design src/[system]"
+  echo "    Or run: /gamedev:project-stage-detect to get full analysis"
 fi
 
 # --- Check 2: Prototypes without documentation ---
@@ -92,7 +92,7 @@ if [ -d "prototypes" ]; then
       for proto in "${UNDOCUMENTED_PROTOS[@]}"; do
         echo "    - prototypes/$proto/ (no README or CONCEPT doc)"
       done
-      echo "    Suggested action: /reverse-document concept prototypes/[name]"
+      echo "    Suggested action: /gamedev:reverse-document concept prototypes/[name]"
     fi
   fi
 fi
@@ -101,14 +101,14 @@ fi
 if [ -d "src/core" ] || [ -d "src/engine" ]; then
   if [ ! -d "docs/architecture" ]; then
     echo "⚠️  GAP: Core engine/systems exist but no docs/architecture/ directory"
-    echo "    Suggested action: Create docs/architecture/ and run /architecture-decision"
+    echo "    Suggested action: Create docs/architecture/ and run /gamedev:architecture-decision"
   else
     ADR_COUNT=$(find docs/architecture -type f -name "*.md" 2>/dev/null | wc -l)
     ADR_COUNT=$(echo "$ADR_COUNT" | tr -d ' ')
 
     if [ "$ADR_COUNT" -lt 3 ]; then
       echo "⚠️  GAP: Core systems exist but only $ADR_COUNT ADR(s) documented"
-      echo "    Suggested action: /reverse-document architecture src/core/[system]"
+      echo "    Suggested action: /gamedev:reverse-document architecture src/core/[system]"
     fi
   fi
 fi
@@ -134,7 +134,7 @@ if [ -d "src/gameplay" ]; then
         if [ ! -f "$design_doc_1" ] && [ ! -f "$design_doc_2" ]; then
           echo "⚠️  GAP: Gameplay system 'src/gameplay/$system_name/' ($file_count files) has no design doc"
           echo "    Expected: design/gdd/${system_name}-system.md or design/gdd/${system_name}.md"
-          echo "    Suggested action: /reverse-document design src/gameplay/$system_name"
+          echo "    Suggested action: /gamedev:reverse-document design src/gameplay/$system_name"
         fi
       fi
     done <<< "$GAMEPLAY_SYSTEMS"
@@ -146,13 +146,13 @@ if [ "$SRC_FILES" -gt 100 ]; then
   # For projects with substantial code, check for a Backlog work-item store
   if [ ! -d "backlog/tasks" ] && [ ! -f "backlog/config.yml" ]; then
     echo "⚠️  GAP: Large codebase ($SRC_FILES files) but no Backlog board found"
-    echo "    Suggested action: initialise the Backlog board, or run /create-epics to set up your first milestone"
+    echo "    Suggested action: initialise the Backlog board, or run /gamedev:create-epics to set up your first milestone"
   fi
 fi
 
 # --- Summary ---
 echo ""
-echo "💡 To get a comprehensive project analysis, run: /project-stage-detect"
+echo "💡 To get a comprehensive project analysis, run: /gamedev:project-stage-detect"
 echo "==================================="
 
 exit 0

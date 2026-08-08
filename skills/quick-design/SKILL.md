@@ -10,14 +10,14 @@ model: sonnet
 # Quick Design
 
 This is the **lightweight design path** for changes that don't need a full GDD.
-Full GDD authoring via `/design-system` is the heavyweight path. Use this skill
+Full GDD authoring via `/gamedev:design-system` is the heavyweight path. Use this skill
 for work under approximately 4 hours of implementation — tuning adjustments,
 minor behavioral tweaks, small additions to existing systems, or standalone
 features too small to warrant a full document.
 
 **Output:** `design/quick-specs/[name]-[date].md`
 
-**When to run:** Anytime a change is too small for `/design-system` but too
+**When to run:** Anytime a change is too small for `/gamedev:design-system` but too
 meaningful to implement without a written rationale.
 
 ---
@@ -42,7 +42,7 @@ First, read the argument and determine which category this change falls into:
 If the change does NOT fit these categories — it introduces a new system with
 significant cross-system dependencies, requires more than one week of
 implementation, or fundamentally alters an existing system's core rules — stop
-and redirect to `/design-system` instead.
+and redirect to `/gamedev:design-system` instead.
 
 If there is no argument, ask the user to describe the change (plain text prompt), then classify it using the criteria above.
 
@@ -54,9 +54,9 @@ Present the inferred classification using `AskUserQuestion`:
   - `[C] Tweak — small behavioral change to an existing system`
   - `[D] Addition — adding a small mechanic to an existing system`
   - `[E] New Small System — standalone feature, under one week of work`
-  - `[F] This is too large — redirect me to /design-system`
+  - `[F] This is too large — redirect me to /gamedev:design-system`
 
-If [F]: stop. Verdict: **REDIRECTED** — use `/design-system` for this change.
+If [F]: stop. Verdict: **REDIRECTED** — use `/gamedev:design-system` for this change.
 Otherwise: proceed with the selected type.
 
 ---
@@ -227,10 +227,10 @@ Present the draft to the user in full. Then use `AskUserQuestion`:
 - Options:
   - `[A] Approve — write it as shown`
   - `[B] Revise — I'll describe what to change`
-  - `[C] This grew too large — redirect to /design-system instead`
+  - `[C] This grew too large — redirect to /gamedev:design-system instead`
 
 If [B]: collect the requested changes, revise the draft, and re-present this widget.
-If [C]: stop. Verdict: **REDIRECTED** — use `/design-system` for this change.
+If [C]: stop. Verdict: **REDIRECTED** — use `/gamedev:design-system` for this change.
 
 If [A]: ask "May I write this Quick Design Spec to
 `design/quick-specs/[kebab-case-title]-[YYYY-MM-DD].md`?"
@@ -263,7 +263,7 @@ Type: [Tuning / Tweak / Addition / New Small System]
 System: [system name]
 GDD update: [Required — pending approval / Applied / Not required]
 
-Next step: This spec is ready for `/story-readiness` validation before
+Next step: This spec is ready for `/gamedev:story-readiness` validation before
 implementation. Reference this spec in the story's GDD Reference field.
 ```
 
@@ -271,7 +271,7 @@ implementation. Reference this spec in the story's GDD Reference field.
 
 Verdict: **COMPLETE** — quick design spec written and ready for implementation.
 
-Quick Design Specs **bypass** `/design-review` and `/review-all-gdds` by
+Quick Design Specs **bypass** `/gamedev:design-review` and `/gamedev:review-all-gdds` by
 design. They are for small, low-risk, well-scoped changes where the cost of
 the full review pipeline exceeds the risk of the change itself.
 
@@ -284,12 +284,12 @@ Redirect to the full pipeline if any of the following are true:
 - Implementation is likely to exceed one week of work
 
 In those cases: "This change has grown beyond quick-spec scope. I recommend
-using `/design-system` to author a full GDD for this."
+using `/gamedev:design-system` to author a full GDD for this."
 
 ---
 
 ## Recommended Next Steps
 
-- Run `/story-readiness [story-path]` to validate the story before implementation begins — reference this spec in the story's GDD Reference field
-- Run `/dev-story [story-path]` to implement once the story passes readiness checks
-- If the change is larger than expected, run `/design-system [system-name]` to author a full GDD instead
+- Run `/gamedev:story-readiness [story-path]` to validate the story before implementation begins — reference this spec in the story's GDD Reference field
+- Run `/gamedev:dev-story [story-path]` to implement once the story passes readiness checks
+- If the change is larger than expected, run `/gamedev:design-system [system-name]` to author a full GDD instead

@@ -307,11 +307,11 @@ the combat-crafting loop engaging for 30+ minute sessions"]
 ## Next Steps
 
 - [ ] Get concept approval from creative-director
-- [ ] Fill in CLAUDE.md technology stack based on engine choice (`/setup-engine`)
-- [ ] Create game pillars document (`/design-review` to validate)
-- [ ] **Prototype core idea** (`/prototype [core-mechanic]`) — before writing GDDs, validate the concept is worth designing
-- [ ] If prototype PROCEEDS: Decompose concept into systems (`/map-systems`)
-- [ ] Design each system (`/design-system [system-name]`) — use prototype learnings in Tuning Knobs and Formulas sections
-- [ ] Build vertical slice in Pre-Production (`/vertical-slice`) — validate full game loop before committing to Production
-- [ ] Validate core loop with playtest (`/playtest-report`)
-- [ ] Define first epic / milestone (`/create-epics`)
+- [ ] Fill in CLAUDE.md technology stack based on engine choice (`/gamedev:setup-engine`)
+- [ ] Create game pillars document (`/gamedev:design-review` to validate)
+- [ ] **Prototype core idea** (`/gamedev:prototype [core-mechanic]`) — before writing GDDs, validate the concept is worth designing
+- [ ] If prototype PROCEEDS: Decompose concept into systems (`/gamedev:map-systems`)
+- [ ] Design each system (`/gamedev:design-system [system-name]`) — use prototype learnings in Tuning Knobs and Formulas sections
+- [ ] Build vertical slice in Pre-Production (`/gamedev:vertical-slice`) — validate full game loop before committing to Production
+- [ ] Validate core loop with playtest (`/gamedev:playtest-report`)
+- [ ] Define first epic / milestone (`/gamedev:create-epics`)

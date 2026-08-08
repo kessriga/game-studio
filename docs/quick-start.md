@@ -77,78 +77,78 @@ Ask yourself: "What department would handle this in a real studio?"
 | Build bevy_ui screens | `bevy-ui-specialist` |
 | Plan live events and seasons | `live-ops-designer` |
 | Write patch notes for players | `community-manager` |
-| Brainstorm a new game idea | Use `/brainstorm` skill |
+| Brainstorm a new game idea | Use `/gamedev:brainstorm` skill |
 
 ### 3. Use Slash Commands for Common Tasks
 
 | Command | What it does |
 |---------|-------------|
-| `/start` | First-time onboarding — asks where you are, guides you to the right workflow |
-| `/help` | Context-aware "what do I do next?" — reads your current phase and artifacts |
-| `/project-stage-detect` | Analyze project state, detect stage, identify gaps |
-| `/setup-engine` | Configure engine + version, populate reference docs |
-| `/adopt` | Brownfield audit and migration plan for existing projects |
-| `/brainstorm` | Guided game concept ideation from scratch |
-| `/map-systems` | Decompose concept into systems, map dependencies, guide per-system GDDs |
-| `/design-system` | Guided, section-by-section GDD authoring for a single game system |
-| `/quick-design` | Lightweight spec for small changes — tuning, tweaks, minor additions |
-| `/review-all-gdds` | Cross-GDD consistency and game design theory review |
-| `/propagate-design-change` | Find ADRs and stories affected by a GDD change |
-| `/art-bible` | Guided, section-by-section Art Bible authoring — creates visual identity spec before asset production |
-| `/asset-spec` | Generate per-asset visual specifications and AI generation prompts from GDDs or character profiles |
-| `/ux-design` | Author UX specs (screen/flow, HUD, interaction patterns) |
-| `/ux-review` | Validate UX specs for accessibility and GDD alignment |
-| `/create-architecture` | Master architecture document for the game |
-| `/architecture-decision` | Creates an ADR |
-| `/architecture-review` | Validate all ADRs, dependency ordering, GDD traceability |
-| `/create-control-manifest` | Flat programmer rules sheet from Accepted ADRs |
-| `/create-epics` | Translate GDDs + ADRs into epics (one per architectural module) |
-| `/create-stories` | Break a single epic into implementable story files |
-| `/dev-story` | Read a story and implement it — routes to the correct programmer agent |
-| `/story-readiness` | Validate a story is implementation-ready before pickup |
-| `/story-done` | End-of-story completion review — verifies acceptance criteria |
-| `/estimate` | Produces structured effort estimates |
-| `/design-review` | Reviews a design document |
-| `/code-review` | Reviews code for quality and architecture |
-| `/balance-check` | Analyzes game balance data |
-| `/asset-audit` | Audits assets for compliance |
-| `/content-audit` | GDD-specified content vs. implemented — find gaps |
-| `/scope-check` | Detect scope creep against plan |
-| `/perf-profile` | Performance profiling and bottleneck ID |
-| `/tech-debt` | Scan, track, and prioritize tech debt |
-| `/gate-check` | Validate phase readiness (PASS/CONCERNS/FAIL) |
-| `/consistency-check` | Scan all GDDs for cross-document inconsistencies (conflicting stats, names, rules) |
-| `/security-audit` | Audit for security vulnerabilities: save tampering, cheat vectors, network exploits, data exposure |
-| `/reverse-document` | Generate design/architecture docs from existing code |
-| `/bug-report` | File a bug as a Backlog task (bug label); verify/close via Backlog |
-| `/playtest-report` | Creates or analyzes playtest feedback |
-| `/release-checklist` | Validates pre-release checklist |
-| `/launch-checklist` | Complete launch readiness validation |
-| `/changelog` | Generates changelog from git history |
-| `/patch-notes` | Generate player-facing patch notes |
-| `/hotfix` | Emergency fix with audit trail |
-| `/prototype` | Concept prototype — validate core idea before writing GDDs (Phase 1) |
-| `/vertical-slice` | Production-quality end-to-end build — validate full game loop (Phase 4) |
-| `/localize` | Localization scan, extract, validate |
-| `/team-combat` | Orchestrate full combat team pipeline |
-| `/team-narrative` | Orchestrate full narrative team pipeline |
-| `/team-ui` | Orchestrate full UI team pipeline |
-| `/team-release` | Orchestrate full release team pipeline |
-| `/team-polish` | Orchestrate full polish team pipeline |
-| `/team-audio` | Orchestrate full audio team pipeline |
-| `/team-level` | Orchestrate full level creation pipeline |
-| `/team-live-ops` | Orchestrate live-ops team for seasons, events, and post-launch content |
-| `/team-qa` | Orchestrate full QA team cycle — test plan, test cases, smoke check, sign-off |
-| `/qa-plan` | Generate a QA test plan for a milestone or feature |
-| `/smoke-check` | Run critical path smoke test gate before QA hand-off (PASS/FAIL) |
-| `/soak-test` | Generate a soak test protocol for extended play sessions |
-| `/regression-suite` | Map coverage to GDD critical paths, flag gaps, maintain regression suite |
-| `/test-setup` | Scaffold test framework + CI pipeline for the project's engine (run once) |
-| `/test-helpers` | Generate engine-specific test helper libraries and factory functions |
-| `/test-flakiness` | Detect flaky tests from CI history, flag for quarantine or fix |
-| `/test-evidence-review` | Quality review of test files and manual evidence — ADEQUATE/INCOMPLETE/MISSING |
-| `/skill-test` | Validate skill files for compliance and correctness (static / spec / audit) |
-| `/skill-improve` | Improve a skill using a test-fix-retest loop — diagnose, propose fix, rewrite, verify |
+| `/gamedev:start` | First-time onboarding — asks where you are, guides you to the right workflow |
+| `/gamedev:help` | Context-aware "what do I do next?" — reads your current phase and artifacts |
+| `/gamedev:project-stage-detect` | Analyze project state, detect stage, identify gaps |
+| `/gamedev:setup-engine` | Configure engine + version, populate reference docs |
+| `/gamedev:adopt` | Brownfield audit and migration plan for existing projects |
+| `/gamedev:brainstorm` | Guided game concept ideation from scratch |
+| `/gamedev:map-systems` | Decompose concept into systems, map dependencies, guide per-system GDDs |
+| `/gamedev:design-system` | Guided, section-by-section GDD authoring for a single game system |
+| `/gamedev:quick-design` | Lightweight spec for small changes — tuning, tweaks, minor additions |
+| `/gamedev:review-all-gdds` | Cross-GDD consistency and game design theory review |
+| `/gamedev:propagate-design-change` | Find ADRs and stories affected by a GDD change |
+| `/gamedev:art-bible` | Guided, section-by-section Art Bible authoring — creates visual identity spec before asset production |
+| `/gamedev:asset-spec` | Generate per-asset visual specifications and AI generation prompts from GDDs or character profiles |
+| `/gamedev:ux-design` | Author UX specs (screen/flow, HUD, interaction patterns) |
+| `/gamedev:ux-review` | Validate UX specs for accessibility and GDD alignment |
+| `/gamedev:create-architecture` | Master architecture document for the game |
+| `/gamedev:architecture-decision` | Creates an ADR |
+| `/gamedev:architecture-review` | Validate all ADRs, dependency ordering, GDD traceability |
+| `/gamedev:create-control-manifest` | Flat programmer rules sheet from Accepted ADRs |
+| `/gamedev:create-epics` | Translate GDDs + ADRs into epics (one per architectural module) |
+| `/gamedev:create-stories` | Break a single epic into implementable story files |
+| `/gamedev:dev-story` | Read a story and implement it — routes to the correct programmer agent |
+| `/gamedev:story-readiness` | Validate a story is implementation-ready before pickup |
+| `/gamedev:story-done` | End-of-story completion review — verifies acceptance criteria |
+| `/gamedev:estimate` | Produces structured effort estimates |
+| `/gamedev:design-review` | Reviews a design document |
+| `/gamedev:code-review` | Reviews code for quality and architecture |
+| `/gamedev:balance-check` | Analyzes game balance data |
+| `/gamedev:asset-audit` | Audits assets for compliance |
+| `/gamedev:content-audit` | GDD-specified content vs. implemented — find gaps |
+| `/gamedev:scope-check` | Detect scope creep against plan |
+| `/gamedev:perf-profile` | Performance profiling and bottleneck ID |
+| `/gamedev:tech-debt` | Scan, track, and prioritize tech debt |
+| `/gamedev:gate-check` | Validate phase readiness (PASS/CONCERNS/FAIL) |
+| `/gamedev:consistency-check` | Scan all GDDs for cross-document inconsistencies (conflicting stats, names, rules) |
+| `/gamedev:security-audit` | Audit for security vulnerabilities: save tampering, cheat vectors, network exploits, data exposure |
+| `/gamedev:reverse-document` | Generate design/architecture docs from existing code |
+| `/gamedev:bug-report` | File a bug as a Backlog task (bug label); verify/close via Backlog |
+| `/gamedev:playtest-report` | Creates or analyzes playtest feedback |
+| `/gamedev:release-checklist` | Validates pre-release checklist |
+| `/gamedev:launch-checklist` | Complete launch readiness validation |
+| `/gamedev:changelog` | Generates changelog from git history |
+| `/gamedev:patch-notes` | Generate player-facing patch notes |
+| `/gamedev:hotfix` | Emergency fix with audit trail |
+| `/gamedev:prototype` | Concept prototype — validate core idea before writing GDDs (Phase 1) |
+| `/gamedev:vertical-slice` | Production-quality end-to-end build — validate full game loop (Phase 4) |
+| `/gamedev:localize` | Localization scan, extract, validate |
+| `/gamedev:team-combat` | Orchestrate full combat team pipeline |
+| `/gamedev:team-narrative` | Orchestrate full narrative team pipeline |
+| `/gamedev:team-ui` | Orchestrate full UI team pipeline |
+| `/gamedev:team-release` | Orchestrate full release team pipeline |
+| `/gamedev:team-polish` | Orchestrate full polish team pipeline |
+| `/gamedev:team-audio` | Orchestrate full audio team pipeline |
+| `/gamedev:team-level` | Orchestrate full level creation pipeline |
+| `/gamedev:team-live-ops` | Orchestrate live-ops team for seasons, events, and post-launch content |
+| `/gamedev:team-qa` | Orchestrate full QA team cycle — test plan, test cases, smoke check, sign-off |
+| `/gamedev:qa-plan` | Generate a QA test plan for a milestone or feature |
+| `/gamedev:smoke-check` | Run critical path smoke test gate before QA hand-off (PASS/FAIL) |
+| `/gamedev:soak-test` | Generate a soak test protocol for extended play sessions |
+| `/gamedev:regression-suite` | Map coverage to GDD critical paths, flag gaps, maintain regression suite |
+| `/gamedev:test-setup` | Scaffold test framework + CI pipeline for the project's engine (run once) |
+| `/gamedev:test-helpers` | Generate engine-specific test helper libraries and factory functions |
+| `/gamedev:test-flakiness` | Detect flaky tests from CI history, flag for quarantine or fix |
+| `/gamedev:test-evidence-review` | Quality review of test files and manual evidence — ADEQUATE/INCOMPLETE/MISSING |
+| `/gamedev:skill-test` | Validate skill files for compliance and correctness (static / spec / audit) |
+| `/gamedev:skill-improve` | Improve a skill using a test-fix-retest loop — diagnose, propose fix, rewrite, verify |
 
 ### 4. Use Templates for New Documents
 
@@ -191,7 +191,7 @@ Templates are in `.claude/docs/templates/`:
 Also in `.claude/docs/templates/collaborative-protocols/` (used by agents, not typically edited directly):
 
 - `design-agent-protocol.md` -- question-options-draft-approval cycle for design agents
-- `implementation-agent-protocol.md` -- story pickup through /story-done cycle for programming agents
+- `implementation-agent-protocol.md` -- story pickup through /gamedev:story-done cycle for programming agents
 - `leadership-agent-protocol.md` -- cross-department delegation and escalation for director-tier agents
 
 ### 5. Follow the Coordination Rules
@@ -204,51 +204,51 @@ Also in `.claude/docs/templates/collaborative-protocols/` (used by agents, not t
 
 ## First Steps for a New Project
 
-**Don't know where to begin?** Run `/start`. It asks where you are and routes
+**Don't know where to begin?** Run `/gamedev:start`. It asks where you are and routes
 you to the right workflow. No assumptions about your game, engine, or experience level.
 
 If you already know what you need, jump directly to the relevant path:
 
 ### Path A: "I have no idea what to build"
 
-1. **Run `/start`** (or `/brainstorm open`) — guided creative exploration:
+1. **Run `/gamedev:start`** (or `/gamedev:brainstorm open`) — guided creative exploration:
    what excites you, what you've played, your constraints
    - Generates 3 concepts, helps you pick one, defines core loop and pillars
    - Produces a game concept document and recommends an engine
-2. **Set up the engine** — Run `/setup-engine` (uses the brainstorm recommendation)
+2. **Set up the engine** — Run `/gamedev:setup-engine` (uses the brainstorm recommendation)
    - Configures CLAUDE.md, detects knowledge gaps, populates reference docs
    - Creates `.claude/docs/technical-preferences.md` with naming conventions,
      performance budgets, and engine-specific defaults
    - If the engine version is newer than the LLM's training data, it fetches
      current docs from the web so agents suggest correct APIs
-3. **Validate the concept** — Run `/design-review design/gdd/game-concept.md`
-4. **Decompose into systems** — Run `/map-systems` to map all systems and dependencies
-5. **Design each system** — Run `/design-system [system-name]` (or `/map-systems next`)
+3. **Validate the concept** — Run `/gamedev:design-review design/gdd/game-concept.md`
+4. **Decompose into systems** — Run `/gamedev:map-systems` to map all systems and dependencies
+5. **Design each system** — Run `/gamedev:design-system [system-name]` (or `/gamedev:map-systems next`)
    to write GDDs in dependency order
-6. **Prototype the mechanic** — Run `/prototype [core-mechanic]` (1–3 days — before writing GDDs)
-7. **Design each system** — Run `/design-system [system-name]` to write GDDs, informed by prototype findings
-8. **Define the first epic** — After architecture and `/vertical-slice`, run `/create-epics` then `/create-stories` to fill the Backlog board
+6. **Prototype the mechanic** — Run `/gamedev:prototype [core-mechanic]` (1–3 days — before writing GDDs)
+7. **Design each system** — Run `/gamedev:design-system [system-name]` to write GDDs, informed by prototype findings
+8. **Define the first epic** — After architecture and `/gamedev:vertical-slice`, run `/gamedev:create-epics` then `/gamedev:create-stories` to fill the Backlog board
 9. Start building
 
 ### Path B: "I know what I want to build"
 
 If you already have a game concept and engine choice:
 
-1. **Set up the engine** — Run `/setup-engine [engine] [version]`
-   (e.g., `/setup-engine godot 4.6`) — also creates technical preferences
+1. **Set up the engine** — Run `/gamedev:setup-engine [engine] [version]`
+   (e.g., `/gamedev:setup-engine godot 4.6`) — also creates technical preferences
 2. **Write the Game Pillars** — delegate to `creative-director`
-3. **Decompose into systems** — Run `/map-systems` to enumerate systems and dependencies
-4. **Design each system** — Run `/design-system [system-name]` for GDDs in dependency order
-5. **Create the initial ADR** — Run `/architecture-decision`
-6. **Define the first epic** — Run `/create-epics` (mints a Backlog milestone)
-7. **Break it into stories** — Run `/create-stories [epic]` to fill the board
+3. **Decompose into systems** — Run `/gamedev:map-systems` to enumerate systems and dependencies
+4. **Design each system** — Run `/gamedev:design-system [system-name]` for GDDs in dependency order
+5. **Create the initial ADR** — Run `/gamedev:architecture-decision`
+6. **Define the first epic** — Run `/gamedev:create-epics` (mints a Backlog milestone)
+7. **Break it into stories** — Run `/gamedev:create-stories [epic]` to fill the board
 8. Start building
 
 ### Path C: "I know the game but not the engine"
 
 If you have a concept but don't know which engine fits:
 
-1. **Run `/setup-engine`** with no arguments — it will ask about your game's
+1. **Run `/gamedev:setup-engine`** with no arguments — it will ask about your game's
    needs (2D/3D, platforms, team size, language preferences) and recommend
    an engine based on your answers
 2. Follow Path B from step 2 onward
@@ -257,13 +257,13 @@ If you have a concept but don't know which engine fits:
 
 If you have design docs, prototypes, or code already:
 
-1. **Run `/start`** (or `/project-stage-detect`) — analyzes what exists,
+1. **Run `/gamedev:start`** (or `/gamedev:project-stage-detect`) — analyzes what exists,
    identifies gaps, and recommends next steps
-2. **Run `/adopt`** if you have existing GDDs, ADRs, or stories — audits
+2. **Run `/gamedev:adopt`** if you have existing GDDs, ADRs, or stories — audits
    internal format compliance and builds a numbered migration plan to fill gaps
    without overwriting your existing work
-3. **Configure engine if needed** — Run `/setup-engine` if not yet configured
-4. **Validate phase readiness** — Run `/gate-check` to see where you stand
+3. **Configure engine if needed** — Run `/gamedev:setup-engine` if not yet configured
+4. **Validate phase readiness** — Run `/gamedev:gate-check` to see where you stand
 5. **Pick up work** — check the Backlog board for the next ready task
 
 ## File Structure Reference
@@ -278,12 +278,12 @@ CLAUDE.md                          -- Master config (read this first, ~60 lines)
   rules/                           -- 11 path-specific rule files
   docs/
     quick-start.md                 -- This file
-    technical-preferences.md       -- Project-specific standards (populated by /setup-engine)
+    technical-preferences.md       -- Project-specific standards (populated by /gamedev:setup-engine)
     coding-standards.md            -- Coding and design doc standards
     coordination-rules.md          -- Agent coordination rules
     context-management.md          -- Context budgets and compaction instructions
     directory-structure.md         -- Project directory layout
-    workflow-catalog.yaml          -- 7-phase pipeline definition (read by /help)
+    workflow-catalog.yaml          -- 7-phase pipeline definition (read by /gamedev:help)
     setup-requirements.md          -- System prerequisites (Git Bash, jq, Python)
     settings-local-template.md     -- Personal settings.local.json guide
     templates/                     -- 41 document templates

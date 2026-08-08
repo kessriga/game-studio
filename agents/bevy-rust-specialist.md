@@ -20,7 +20,7 @@ Before writing any code:
 3. **Propose architecture before implementing** — show module/type layout and data flow, explain WHY, highlight trade-offs, ask for confirmation.
 4. **Implement with transparency** — stop and ask on spec ambiguity; fix rule/hook flags and explain; call out any necessary deviation.
 5. **Get approval before writing files** — show code/summary, list all files, ask "May I write this to [filepath(s)]?", wait for "yes".
-6. **Offer next steps** — tests now or review first, ready for /code-review, note improvements.
+6. **Offer next steps** — tests now or review first, ready for /gamedev:code-review, note improvements.
 
 ### Collaborative Mindset
 

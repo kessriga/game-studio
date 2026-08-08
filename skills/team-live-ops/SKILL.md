@@ -7,7 +7,7 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion, TodoW
 model: sonnet
 ---
 **Argument check:** If no season name or event description is provided, output:
-> "Usage: `/team-live-ops [season name or event description]` — Provide the name or description of the season or live event to plan."
+> "Usage: `/gamedev:team-live-ops [season name or event description]` — Provide the name or description of the season or live event to plan."
 Then stop immediately without spawning any subagents or reading any files.
 
 When this skill is invoked with a valid argument, orchestrate the live-ops team through a structured planning pipeline.
@@ -41,12 +41,12 @@ Store the resolved mode for use in all subsequent phases.
 ## How to Delegate
 
 Use the Task tool to spawn each team member as a subagent:
-- `subagent_type: live-ops-designer` — Season/event structure and retention mechanics
-- `subagent_type: economy-designer` — Live economy balance and reward pricing
-- `subagent_type: analytics-engineer` — Success metrics, A/B tests, event instrumentation
-- `subagent_type: community-manager` — Player-facing communication and messaging
-- `subagent_type: narrative-director` — Seasonal theme and narrative framing
-- `subagent_type: writer` — All player-facing text: event descriptions, item names, copy
+- `subagent_type: gamedev:live-ops-designer` — Season/event structure and retention mechanics
+- `subagent_type: gamedev:economy-designer` — Live economy balance and reward pricing
+- `subagent_type: gamedev:analytics-engineer` — Success metrics, A/B tests, event instrumentation
+- `subagent_type: gamedev:community-manager` — Player-facing communication and messaging
+- `subagent_type: gamedev:narrative-director` — Seasonal theme and narrative framing
+- `subagent_type: gamedev:writer` — All player-facing text: event descriptions, item names, copy
 
 Always provide full context in each agent's prompt (game concept path, existing season docs, ethics policy path, current economy state). Launch independent agents in parallel where the pipeline allows it (Phases 3 and 4 can run simultaneously).
 
@@ -114,7 +114,7 @@ Present a summary to the user with:
 - **Analytics readiness**: are success criteria defined and instrumented?
 - **Ethics review**: check the Phase 3 economy design against `design/live-ops/ethics-policy.md`
   - If the file does not exist: flag "ETHICS REVIEW SKIPPED: `design/live-ops/ethics-policy.md` not found. Economy design was not reviewed against an ethics policy. Recommend creating one before production begins." Include this flag in the season design output document. Add to next steps: create `design/live-ops/ethics-policy.md`.
-  - If the file exists and a violation is found: flag "ETHICS FLAG: [element] in Phase 3 economy design violates [policy rule]. Approval is blocked until this is resolved." Do NOT issue a COMPLETE verdict or write output documents. Use `AskUserQuestion` with options: revise economy design / override with documented rationale / cancel. If user chooses to revise: re-spawn economy-designer to produce a corrected design, then return to Phase 7 review. If user selects Cancel: end with Verdict: BLOCKED — "Live ops design cancelled due to unresolved ethics violation. Resolve the flagged issues and re-run /team-live-ops."
+  - If the file exists and a violation is found: flag "ETHICS FLAG: [element] in Phase 3 economy design violates [policy rule]. Approval is blocked until this is resolved." Do NOT issue a COMPLETE verdict or write output documents. Use `AskUserQuestion` with options: revise economy design / override with documented rationale / cancel. If user chooses to revise: re-spawn economy-designer to produce a corrected design, then return to Phase 7 review. If user selects Cancel: end with Verdict: BLOCKED — "Live ops design cancelled due to unresolved ethics violation. Resolve the flagged issues and re-run /gamedev:team-live-ops."
 - **Open questions**: decisions still needed before production begins
 
 Ask the user to approve the season plan before delegating to production teams. Issue the COMPLETE verdict only after the user approves and no unresolved ethics violations remain. If an ethics violation is unresolved, end with Verdict: **BLOCKED**.
@@ -154,6 +154,6 @@ Verdict: **COMPLETE** — season plan produced and handed off for production.
 
 ## Next Steps
 
-- Run `/design-review` on the season design document for consistency validation.
+- Run `/gamedev:design-review` on the season design document for consistency validation.
 - File the season's content creation work as Backlog tasks (group them under a milestone).
-- Run `/team-release` when the season content is ready to deploy.
+- Run `/gamedev:team-release` when the season content is ready to deploy.

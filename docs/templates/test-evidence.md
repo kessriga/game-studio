@@ -65,7 +65,7 @@ If nothing notable: *No significant observations.*
 
 ## Sign-Off
 
-All roles must sign off before the story can be marked COMPLETE via `/story-done`.
+All roles must sign off before the story can be marked COMPLETE via `/gamedev:story-done`.
 Visual/Feel stories require the designer or art-lead sign-off. UI stories require
 the UX lead or designer sign-off.
 

@@ -43,14 +43,14 @@ Store the resolved mode for use in all subsequent phases.
 ## How to Delegate
 
 Use the Task tool to spawn each team member as a subagent:
-- `subagent_type: release-manager` — Release branch, versioning, changelog, deployment
-- `subagent_type: qa-lead` — Test sign-off, regression suite, release quality gate
-- `subagent_type: devops-engineer` — Build pipeline, artifacts, deployment automation
-- `subagent_type: security-engineer` — Security audit for online/multiplayer/data features
-- `subagent_type: analytics-engineer` — Telemetry event verification and dashboard readiness
-- `subagent_type: community-manager` — Patch notes and launch communication
-- `subagent_type: producer` — Go/no-go decision, stakeholder communication
-- `subagent_type: network-programmer` — Netcode stability sign-off (invoke if game has multiplayer)
+- `subagent_type: gamedev:release-manager` — Release branch, versioning, changelog, deployment
+- `subagent_type: gamedev:qa-lead` — Test sign-off, regression suite, release quality gate
+- `subagent_type: gamedev:devops-engineer` — Build pipeline, artifacts, deployment automation
+- `subagent_type: gamedev:security-engineer` — Security audit for online/multiplayer/data features
+- `subagent_type: gamedev:analytics-engineer` — Telemetry event verification and dashboard readiness
+- `subagent_type: gamedev:community-manager` — Patch notes and launch communication
+- `subagent_type: gamedev:producer` — Go/no-go decision, stakeholder communication
+- `subagent_type: gamedev:network-programmer` — Netcode stability sign-off (invoke if game has multiplayer)
 
 Always provide full context in each agent's prompt (version number, milestone status, known issues). Launch independent agents in parallel where the pipeline allows it (e.g., Phase 3 agents can run simultaneously).
 
@@ -67,7 +67,7 @@ Delegate to **producer**:
 Delegate to **release-manager**:
 - Cut release branch from the agreed commit
 - Bump version numbers in all relevant files
-- Generate the release checklist using `/release-checklist`
+- Generate the release checklist using `/gamedev:release-checklist`
 - Freeze the branch — no feature changes, bug fixes only
 - Output: release branch name and checklist
 
@@ -111,13 +111,13 @@ After the user selects "Override NO-GO with documented rationale":
 ### Phase 6: Deployment (if GO)
 Delegate to **release-manager** + **devops-engineer**:
 - Tag the release in version control
-- Generate changelog using `/changelog`
+- Generate changelog using `/gamedev:changelog`
 - Deploy to staging for final smoke test
 - Deploy to production
 - Human team action: Monitor dashboards and error rates for 48 hours post-release. Capture any follow-up work as Backlog tasks at the 48-hour mark.
 
 Delegate to **community-manager** (in parallel with deployment):
-- Finalize patch notes using `/patch-notes [version]`
+- Finalize patch notes using `/gamedev:patch-notes [version]`
 - Prepare launch announcement (store page updates, social media, community post)
 - Draft known issues post if any S3+ issues shipped
 - Output: all player-facing release communication, ready to publish on deploy confirmation
@@ -144,8 +144,8 @@ If any spawned agent (via Task) returns BLOCKED, errors, or cannot complete:
 
 Common blockers:
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/architecture-decision` first
-- Scope too large → split into two stories via `/create-stories`
+- ADR status is Proposed → do not implement; run `/gamedev:architecture-decision` first
+- Scope too large → split into two stories via `/gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## File Write Protocol

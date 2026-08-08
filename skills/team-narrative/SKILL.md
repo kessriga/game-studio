@@ -7,7 +7,7 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Task, AskUserQuestion, TodoWrite
 model: sonnet
 ---
 If no argument is provided, output usage guidance and exit without spawning any agents:
-> Usage: `/team-narrative [narrative content description]` — describe the story content, scene, or narrative area to work on (e.g., `boss encounter cutscene`, `faction intro dialogue`, `tutorial narrative`). Do not use `AskUserQuestion` here; output the guidance directly.
+> Usage: `/gamedev:team-narrative [narrative content description]` — describe the story content, scene, or narrative area to work on (e.g., `boss encounter cutscene`, `faction intro dialogue`, `tutorial narrative`). Do not use `AskUserQuestion` here; output the guidance directly.
 
 When this skill is invoked with an argument, orchestrate the narrative team through a structured pipeline.
 
@@ -40,12 +40,12 @@ Store the resolved mode for use in all subsequent phases.
 ## How to Delegate
 
 Use the Task tool to spawn each team member as a subagent:
-- `subagent_type: narrative-director` — Story arcs, character design, narrative vision
-- `subagent_type: writer` — Dialogue writing, lore entries, in-game text
-- `subagent_type: world-builder` — World rules, faction design, history, geography
-- `subagent_type: art-director` — Character visual profiles, environmental visual storytelling, cinematic tone
-- `subagent_type: level-designer` — Level layouts that serve the narrative, pacing
-- `subagent_type: localization-lead` — Localization readiness — flags non-localizable strings, cultural assumptions, and i18n gaps
+- `subagent_type: gamedev:narrative-director` — Story arcs, character design, narrative vision
+- `subagent_type: gamedev:writer` — Dialogue writing, lore entries, in-game text
+- `subagent_type: gamedev:world-builder` — World rules, faction design, history, geography
+- `subagent_type: gamedev:art-director` — Character visual profiles, environmental visual storytelling, cinematic tone
+- `subagent_type: gamedev:level-designer` — Level layouts that serve the narrative, pacing
+- `subagent_type: gamedev:localization-lead` — Localization readiness — flags non-localizable strings, cultural assumptions, and i18n gaps
 
 Always provide full context in each agent's prompt (narrative brief, lore dependencies, character profiles). Launch independent agents in parallel where the pipeline allows it (e.g., Phase 2 agents can run simultaneously).
 
@@ -99,8 +99,8 @@ If any spawned agent (via Task) returns BLOCKED, errors, or cannot complete:
 
 Common blockers:
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/architecture-decision` first
-- Scope too large → split into two stories via `/create-stories`
+- ADR status is Proposed → do not implement; run `/gamedev:architecture-decision` first
+- Scope too large → split into two stories via `/gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## File Write Protocol
@@ -121,6 +121,6 @@ Verdict: **BLOCKED** — [reason]
 
 ## Next Steps
 
-- Run `/design-review` on the narrative documents for consistency validation.
-- Run `/localize extract` to extract new strings for translation after dialogue is finalized.
-- Run `/dev-story` to implement dialogue triggers and narrative events in-engine.
+- Run `/gamedev:design-review` on the narrative documents for consistency validation.
+- Run `/gamedev:localize extract` to extract new strings for translation after dialogue is finalized.
+- Run `/gamedev:dev-story` to implement dialogue triggers and narrative events in-engine.

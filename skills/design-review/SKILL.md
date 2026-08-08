@@ -208,9 +208,9 @@ After all revisions are complete, show a summary table (blocker → fix applied)
 - Prompt: "Revisions complete — [N] blockers resolved. What next?"
 - Note current context usage: if context is above ~50%, add: "(Recommended: /clear before re-review — this session has used X% context. A full re-review runs 5 agents and needs clean context.)"
 - Options:
-  - `[A] Re-review in a new session — run /design-review [doc-path] after /clear`
+  - `[A] Re-review in a new session — run /gamedev:design-review [doc-path] after /clear`
   - `[B] Accept revisions and mark Approved — update systems index, skip re-review`
-  - `[C] Move to next system — /design-system [next-system] (#N in design order)`
+  - `[C] Move to next system — /gamedev:design-system [next-system] (#N in design order)`
   - `[D] Stop here`
 
 Never end the revision flow with plain text. Always close with this widget.
@@ -253,14 +253,14 @@ Once the systems-index and review-log widgets are answered, check project state 
 
 Before building options, read:
 - `design/gdd/systems-index.md` — find any system with Status: In Review or NEEDS REVISION (other than the one just reviewed)
-- Count `.md` files in `design/gdd/` (excluding game-concept.md, systems-index.md) to determine if `/review-all-gdds` is worth offering (≥2 GDDs)
+- Count `.md` files in `design/gdd/` (excluding game-concept.md, systems-index.md) to determine if `/gamedev:review-all-gdds` is worth offering (≥2 GDDs)
 - Find the next system with Status: Not Started in design order
 
 Build the option list dynamically — only include options that are genuinely next:
-- `[_] Run /design-review [other-gdd-path] — [system name] is still [In Review / NEEDS REVISION]` (include if another GDD needs review)
-- `[_] Run /consistency-check — verify this GDD's values don't conflict with existing GDDs` (always include if ≥1 other GDD exists)
-- `[_] Run /review-all-gdds — holistic design-theory review across all designed systems` (include if ≥2 GDDs exist)
-- `[_] Run /design-system [next-system] — next in design order` (always include, name the actual system)
+- `[_] Run /gamedev:design-review [other-gdd-path] — [system name] is still [In Review / NEEDS REVISION]` (include if another GDD needs review)
+- `[_] Run /gamedev:consistency-check — verify this GDD's values don't conflict with existing GDDs` (always include if ≥1 other GDD exists)
+- `[_] Run /gamedev:review-all-gdds — holistic design-theory review across all designed systems` (include if ≥2 GDDs exist)
+- `[_] Run /gamedev:design-system [next-system] — next in design order` (always include, name the actual system)
 - `[_] Stop here`
 
 Assign letters A, B, C… only to included options. Mark the most pipeline-advancing option as `(recommended)`.

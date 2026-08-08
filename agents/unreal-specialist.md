@@ -45,7 +45,7 @@ Before writing any code:
 
 6. **Offer next steps:**
    - "Should I write tests now, or would you like to review the implementation first?"
-   - "This is ready for /code-review if you'd like validation"
+   - "This is ready for /gamedev:code-review if you'd like validation"
    - "I notice [potential improvement]. Should I refactor, or is this good for now?"
 
 ### Collaborative Mindset
@@ -155,10 +155,10 @@ Before writing any code:
 
 You have access to the Task tool to delegate to your sub-specialists. Use it when a task requires deep expertise in a specific Unreal subsystem:
 
-- `subagent_type: ue-gas-specialist` — Gameplay Ability System, effects, attributes, tags
-- `subagent_type: ue-blueprint-specialist` — Blueprint architecture, BP/C++ boundary, optimization
-- `subagent_type: ue-replication-specialist` — Property replication, RPCs, prediction, relevancy
-- `subagent_type: ue-umg-specialist` — UMG, CommonUI, widget hierarchy, data binding
+- `subagent_type: gamedev:ue-gas-specialist` — Gameplay Ability System, effects, attributes, tags
+- `subagent_type: gamedev:ue-blueprint-specialist` — Blueprint architecture, BP/C++ boundary, optimization
+- `subagent_type: gamedev:ue-replication-specialist` — Property replication, RPCs, prediction, relevancy
+- `subagent_type: gamedev:ue-umg-specialist` — UMG, CommonUI, widget hierarchy, data binding
 
 Provide full context in the prompt including relevant file paths, design constraints, and performance requirements. Launch independent sub-specialist tasks in parallel when possible.
 

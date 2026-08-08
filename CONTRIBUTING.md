@@ -74,9 +74,9 @@ what the output looked like.
 Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-feat: add /playtest-report skill for structured playtest capture
+feat: add /gamedev:playtest-report skill for structured playtest capture
 fix: correct grep -P usage in session-start hook
-docs: update skills-reference with new /qa-plan entry
+docs: update skills-reference with new /gamedev:qa-plan entry
 ```
 
 Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`

@@ -1,6 +1,6 @@
 ---
 name: adopt
-description: "Brownfield onboarding — audits existing project artifacts for template format compliance (not just existence), classifies gaps by impact, and produces a numbered migration plan. Run this when joining an in-progress project or upgrading from an older template version. Distinct from /project-stage-detect (which checks what exists) — this checks whether what exists will actually work with the template's skills."
+description: "Brownfield onboarding — audits existing project artifacts for template format compliance (not just existence), classifies gaps by impact, and produces a numbered migration plan. Run this when joining an in-progress project or upgrading from an older template version. Distinct from /gamedev:project-stage-detect (which checks what exists) — this checks whether what exists will actually work with the template's skills."
 argument-hint: "[focus: full | gdds | adrs | stories | infra]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
@@ -13,9 +13,9 @@ agent: technical-director
 This skill audits an existing project's artifacts for **format compliance** with
 the template's skill pipeline, then produces a prioritised migration plan.
 
-**This is not `/project-stage-detect`.**
-`/project-stage-detect` answers: *what exists?*
-`/adopt` answers: *will what exists actually work with the template's skills?*
+**This is not `/gamedev:project-stage-detect`.**
+`/gamedev:project-stage-detect` answers: *what exists?*
+`/gamedev:adopt` answers: *will what exists actually work with the template's skills?*
 
 A project can have GDDs, ADRs, and stories — and every format-sensitive skill
 will still fail silently or produce wrong results if those artifacts are in the
@@ -54,18 +54,18 @@ Then read silently before presenting anything else.
 - Glob `docs/adoption-plan-*.md` — note the filename of the most recent prior plan if any exist
 
 ### Infer phase (if no stage.txt)
-Use the same heuristic as `/project-stage-detect`:
+Use the same heuristic as `/gamedev:project-stage-detect`:
 - 10+ source files in `src/` → Production
 - Stories in `production/epics/` → Pre-Production
 - ADRs exist → Technical Setup
 - systems-index.md exists → Systems Design
 - game-concept.md exists → Concept
-- Nothing → Fresh (not a brownfield project — suggest `/start`)
+- Nothing → Fresh (not a brownfield project — suggest `/gamedev:start`)
 
 If the project appears fresh (no artifacts at all), use `AskUserQuestion`:
-- "This looks like a fresh project — no existing artifacts found. `/adopt` is for
+- "This looks like a fresh project — no existing artifacts found. `/gamedev:adopt` is for
   projects with work to migrate. What would you like to do?"
-  - "Run `/start` — begin guided first-time onboarding"
+  - "Run `/gamedev:start` — begin guided first-time onboarding"
   - "My artifacts are in a non-standard location — help me find them"
   - "Cancel"
 
@@ -111,8 +111,8 @@ For each ADR file found, check for these critical sections:
 
 | Section | Impact if missing |
 |---|---|
-| `## Status` | **BLOCKING** — `/story-readiness` ADR status check silently passes everything |
-| `## ADR Dependencies` | HIGH — dependency ordering in `/architecture-review` breaks |
+| `## Status` | **BLOCKING** — `/gamedev:story-readiness` ADR status check silently passes everything |
+| `## ADR Dependencies` | HIGH — dependency ordering in `/gamedev:architecture-review` breaks |
 | `## Engine Compatibility` | HIGH — post-cutoff API risk is unknown |
 | `## GDD Requirements Addressed` | MEDIUM — traceability matrix loses coverage |
 | `## Performance Implications` | LOW — not pipeline-critical |
@@ -126,8 +126,8 @@ If `design/gdd/systems-index.md` exists:
 
 1. **Parenthetical status values** — Grep for any Status cell containing
    parentheses: `"Needs Revision ("`, `"In Progress ("`, etc.
-   These break exact-string matching in `/gate-check`, `/create-stories`,
-   and `/architecture-review`. **BLOCKING.**
+   These break exact-string matching in `/gamedev:gate-check`, `/gamedev:create-stories`,
+   and `/gamedev:architecture-review`. **BLOCKING.**
 
 2. **Valid status values** — check that Status column values are only from:
    `Not Started`, `In Progress`, `In Review`, `Designed`, `Approved`, `Needs Revision`
@@ -214,19 +214,19 @@ and the exact replacement text. Offer to fix this immediately before writing the
 
 **Special case — ADRs missing Status field:**
 For each affected ADR, the fix is:
-`/architecture-decision retrofit docs/architecture/adr-[NNNN]-[slug].md`
+`/gamedev:architecture-decision retrofit docs/architecture/adr-[NNNN]-[slug].md`
 List each ADR as a separate checkable item.
 
 **Special case — GDDs missing sections:**
 For each affected GDD, list which sections are missing and the fix:
-`/design-system retrofit design/gdd/[filename].md`
+`/gamedev:design-system retrofit design/gdd/[filename].md`
 
 **Infrastructure bootstrap ordering** — always present in this sequence:
 1. Fix ADR formats first (registry depends on reading ADR Status fields)
-2. Run `/architecture-review` → bootstraps `tr-registry.yaml`
-3. Run `/create-control-manifest` → creates manifest with version stamp
+2. Run `/gamedev:architecture-review` → bootstraps `tr-registry.yaml`
+3. Run `/gamedev:create-control-manifest` → creates manifest with version stamp
 4. Initialise the Backlog board (`backlog/config.yml`) → work-item store for stories/bugs
-5. Run `/gate-check [phase]` → writes `stage.txt` authoritatively
+5. Run `/gamedev:gate-check [phase]` → writes `stage.txt` authoritatively
 
 **Existing stories** — note explicitly:
 > "Existing stories continue to work with all template skills — all new format
@@ -250,7 +250,7 @@ Stories audited: [N]
 
 Gap counts:
   BLOCKING: [N] — template skills will malfunction without these fixes
-  HIGH:     [N] — unsafe to run /create-stories or /story-readiness
+  HIGH:     [N] — unsafe to run /gamedev:create-stories or /gamedev:story-readiness
   MEDIUM:   [N] — quality degradation
   LOW:      [N] — optional improvements
 
@@ -293,7 +293,7 @@ If approved, write `docs/adoption-plan-[date].md` with this structure:
 > **Template version**: v1.0+
 
 Work through these steps in order. Check off each item as you complete it.
-Re-run `/adopt` anytime to check remaining gaps.
+Re-run `/gamedev:adopt` anytime to check remaining gaps.
 
 ---
 
@@ -312,13 +312,13 @@ Re-run `/adopt` anytime to check remaining gaps.
 ## Step 3: Bootstrap Infrastructure
 
 ### 3a. Register existing requirements (creates tr-registry.yaml)
-Run `/architecture-review` — even if ADRs already exist, this run bootstraps
+Run `/gamedev:architecture-review` — even if ADRs already exist, this run bootstraps
 the TR registry from your existing GDDs and ADRs.
 **Time**: 1 session (review can be long for large codebases)
 - [ ] tr-registry.yaml created
 
 ### 3b. Create control manifest
-Run `/create-control-manifest`
+Run `/gamedev:create-control-manifest`
 **Time**: 30 min
 - [ ] docs/architecture/control-manifest.md created
 
@@ -328,7 +328,7 @@ Ensure `backlog/config.yml` exists (statuses To Do/In Progress/Done; labels bloc
 - [ ] backlog/ board initialised for work-item tracking
 
 ### 3d. Set authoritative project stage
-Run `/gate-check [current-phase]`
+Run `/gamedev:gate-check [current-phase]`
 **Time**: 5 min
 - [ ] production/stage.txt written
 
@@ -357,7 +357,7 @@ regenerated. Do not regenerate stories that are in progress or done.
 
 ## Re-run
 
-Run `/adopt` again after completing Step 3 to verify all blocking and high gaps
+Run `/gamedev:adopt` again after completing Step 3 to verify all blocking and high gaps
 are resolved. The new run will reflect the current state of the project.
 ```
 
@@ -375,7 +375,7 @@ After writing the adoption plan (or if the user cancels writing), check whether
 - **Prompt**: "One more setup step: how much design review would you like as you work through the workflow?"
 - **Options**:
   - `Full` — Director specialists review at each key workflow step. Best for teams, learning the workflow, or when you want thorough feedback on every decision.
-  - `Lean (recommended)` — Directors only at phase gate transitions (/gate-check). Skips per-skill reviews. Balanced for solo devs and small teams.
+  - `Lean (recommended)` — Directors only at phase gate transitions (/gamedev:gate-check). Skips per-skill reviews. Balanced for solo devs and small teams.
   - `Solo` — No director reviews at all. Maximum speed. Best for game jams, prototypes, or if reviews feel like overhead.
 
 Write the choice to `production/review-mode.txt` immediately after selection — no separate "May I write?" needed:
@@ -396,8 +396,8 @@ branch that applies:
 **If there are parenthetical status values in systems-index.md:**
 Use `AskUserQuestion`:
 - "The most urgent fix is `systems-index.md` — [N] rows have parenthetical status
-  values (e.g. `Needs Revision (see notes)`) that break /gate-check,
-  /create-stories, and /architecture-review right now. I can fix these in-place."
+  values (e.g. `Needs Revision (see notes)`) that break /gamedev:gate-check,
+  /gamedev:create-stories, and /gamedev:architecture-review right now. I can fix these in-place."
   - "Fix it now — edit systems-index.md"
   - "I'll fix it myself"
   - "Done — leave me with the plan"
@@ -405,7 +405,7 @@ Use `AskUserQuestion`:
 **If ADRs are missing `## Status` (and no parenthetical issue):**
 Use `AskUserQuestion`:
 - "The most urgent fix is adding `## Status` to [N] ADR(s): [list filenames].
-  Without it, /story-readiness silently passes all ADR checks. Start with
+  Without it, /gamedev:story-readiness silently passes all ADR checks. Start with
   [first affected filename]?"
   - "Yes — retrofit [first affected filename] now"
   - "Retrofit all [N] ADRs one by one"
@@ -414,7 +414,7 @@ Use `AskUserQuestion`:
 **If GDDs are missing Acceptance Criteria (and no blocking issues above):**
 Use `AskUserQuestion`:
 - "The most urgent gap is missing Acceptance Criteria in [N] GDD(s):
-  [list filenames]. Without them, /create-stories can't generate stories.
+  [list filenames]. Without them, /gamedev:create-stories can't generate stories.
   Start with [highest-priority GDD filename]?"
   - "Yes — add Acceptance Criteria to [GDD filename] now"
   - "Do all [N] GDDs one by one"
@@ -424,10 +424,10 @@ Use `AskUserQuestion`:
 Use `AskUserQuestion`:
 - "No blocking gaps — this project is template-compatible. What next?"
   - "Walk me through the medium-priority improvements"
-  - "Run /project-stage-detect for a broader health check"
+  - "Run /gamedev:project-stage-detect for a broader health check"
   - "Done — I'll work through the plan at my own pace"
 
-> **Adoption plan saved to `docs/adoption-plan-[date].md`.** Re-run `/adopt` at any time to re-check remaining gaps as you complete them.
+> **Adoption plan saved to `docs/adoption-plan-[date].md`.** Re-run `/gamedev:adopt` at any time to re-check remaining gaps as you complete them.
 
 ---
 

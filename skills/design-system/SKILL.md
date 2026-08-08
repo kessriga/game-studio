@@ -26,9 +26,9 @@ A system name or retrofit path is **required**. If missing:
    - Options: `[A] Yes — design [system-name]` / `[B] Pick a different system` / `[C] Stop here`
    - If [A]: proceed with that system name. If [B]: ask which system to design (plain text). If [C]: exit.
 3. If no systems index exists, fail with:
-   > "Usage: `/design-system <system-name>` — e.g., `/design-system movement`
-   > Or to fill gaps in an existing GDD: `/design-system retrofit design/gdd/[system-name].md`
-   > No systems index found. Run `/map-systems` first to map your systems and get the design order."
+   > "Usage: `/gamedev:design-system <system-name>` — e.g., `/gamedev:design-system movement`
+   > Or to fill gaps in an existing GDD: `/gamedev:design-system retrofit design/gdd/[system-name].md`
+   > No systems index found. Run `/gamedev:map-systems` first to map your systems and get the design order."
 
 **Detect retrofit mode:**
 If the argument starts with `retrofit` or the argument is a file path to an
@@ -74,9 +74,9 @@ primary advantage over ad-hoc design — it arrives informed.
 ### 2a: Required Reads
 
 - **Game concept**: Read `design/gdd/game-concept.md` — fail if missing:
-  > "No game concept found. Run `/brainstorm` first."
+  > "No game concept found. Run `/gamedev:brainstorm` first."
 - **Systems index**: Read `design/gdd/systems-index.md` — fail if missing:
-  > "No systems index found. Run `/map-systems` first to map your systems."
+  > "No systems index found. Run `/gamedev:map-systems` first to map your systems."
 - **Target system**: Find the system in the index. If not listed, warn:
   > "[system-name] is not in the systems index. Would you like to add it, or
   > design it as an off-index system?"
@@ -194,7 +194,7 @@ Domain: [domain]
 
 If no engine reference docs exist (engine not yet configured), show a short note:
 > "No engine configured yet — skipping technical feasibility check. Run
-> `/setup-engine` before moving to architecture if you haven't already."
+> `/gamedev:setup-engine` before moving to architecture if you haven't already."
 
 **Step 4 — Ask before proceeding:**
 
@@ -283,7 +283,7 @@ Use the template structure from `.claude/docs/templates/game-design-document.md`
 Ask: "May I create the skeleton file at `design/gdd/[system-name].md`?"
 
 If the user declines: Stop with the following message:
-> "Verdict: **BLOCKED** — skeleton creation declined. The design session cannot proceed without the skeleton file, as all subsequent phases use it as the base. Re-run `/design-system [system]` when ready to create the file."
+> "Verdict: **BLOCKED** — skeleton creation declined. The design session cannot proceed without the skeleton file, as all subsequent phases use it as the base. Re-run `/gamedev:design-system [system]` when ready to create the file."
 Do not proceed to Section A.
 
 After writing, update `production/session-state/active.md`:
@@ -394,7 +394,7 @@ describes it. Flag discrepancies.
 level — what the system *does*, not *how it is built*. If implementation questions
 arise during the Overview (e.g., "Should this use an Autoload singleton or a signal
 bus?"), note them as "→ becomes an ADR" and move on. Implementation patterns belong
-in `/architecture-decision`, not the GDD. The GDD describes behavior; the ADR
+in `/gamedev:architecture-decision`, not the GDD. The GDD describes behavior; the ADR
 describes the technical approach used to achieve it.
 
 ---
@@ -649,7 +649,7 @@ Use `AskUserQuestion`:
 For **Visual/Audio** (non-required systems): Coordinate with `art-director` and `audio-director` if detail is needed. Often a brief note suffices at the GDD stage.
 
 > **Asset Spec Flag**: After the Visual/Audio section is written with real content, output this notice:
-> "📌 **Asset Spec** — Visual/Audio requirements are defined. After the art bible is approved, run `/asset-spec system:[system-name]` to produce per-asset visual descriptions, dimensions, and generation prompts from this section."
+> "📌 **Asset Spec** — Visual/Audio requirements are defined. After the art bible is approved, run `/gamedev:asset-spec system:[system-name]` to produce per-asset visual descriptions, dimensions, and generation prompts from this section."
 
 For **UI Requirements**: Coordinate with `ux-designer` for complex UI systems.
 After writing this section, check whether it contains real content (not just
@@ -657,7 +657,7 @@ After writing this section, check whether it contains real content (not just
 UI requirements, output this flag immediately:
 
 > **📌 UX Flag — [System Name]**: This system has UI requirements. In Phase 4
-> (Pre-Production), run `/ux-design` to create a UX spec for each screen or
+> (Pre-Production), run `/gamedev:ux-design` to create a UX spec for each screen or
 > HUD element this system contributes to **before** writing epics. Stories that
 > reference UI should cite `design/ux/[screen].md`, not the GDD directly.
 >
@@ -738,13 +738,13 @@ Present a completion summary:
 > - Cross-system conflicts found: [list or "none"]
 
 > **To validate this GDD, open a fresh Claude Code session and run:**
-> `/design-review design/gdd/[system-name].md`
+> `/gamedev:design-review design/gdd/[system-name].md`
 >
-> **Never run `/design-review` in the same session as `/design-system`.** The reviewing
+> **Never run `/gamedev:design-review` in the same session as `/gamedev:design-system`.** The reviewing
 > agent must be independent of the authoring context. Running it here would inherit
 > the full design history, making independent critique impossible.
 
-**NEVER offer to run `/design-review` inline.** Always direct the user to a fresh window.
+**NEVER offer to run `/gamedev:design-review` inline.** Always direct the user to a fresh window.
 
 ### 5d: Update Systems Index
 
@@ -775,11 +775,11 @@ Update `production/session-state/active.md` with:
 Use `AskUserQuestion`:
 - "What's next?"
   - Options:
-    - "Run `/consistency-check` — verify this GDD's values don't conflict with existing GDDs (recommended before designing the next system)"
+    - "Run `/gamedev:consistency-check` — verify this GDD's values don't conflict with existing GDDs (recommended before designing the next system)"
     - "Design next system ([next-in-order])" — if undesigned systems remain
     - "Fix review findings" — if design-review flagged issues
     - "Stop here for this session"
-    - "Run `/gate-check`" — if enough MVP systems are designed
+    - "Run `/gamedev:gate-check`" — if enough MVP systems are designed
 
 ---
 
@@ -858,14 +858,14 @@ shows context at or above 70%. If so, append this notice to the response:
 
 > **Context is approaching the limit (≥70%).** Your progress is saved — all approved
 > sections are written to `design/gdd/[system-name].md`. When you're ready to continue,
-> open a fresh Claude Code session and run `/design-system [system-name]` — it will
+> open a fresh Claude Code session and run `/gamedev:design-system [system-name]` — it will
 > detect which sections are complete and resume from the next one.
 
 ---
 
 ## Recommended Next Steps
 
-- Run `/design-review design/gdd/[system-name].md` in a **fresh session** to validate the completed GDD independently
-- Run `/consistency-check` to verify this GDD's values don't conflict with other GDDs
-- Run `/map-systems next` to move to the next highest-priority undesigned system
-- Run `/gate-check pre-production` when all MVP GDDs are authored and reviewed
+- Run `/gamedev:design-review design/gdd/[system-name].md` in a **fresh session** to validate the completed GDD independently
+- Run `/gamedev:consistency-check` to verify this GDD's values don't conflict with other GDDs
+- Run `/gamedev:map-systems next` to move to the next highest-priority undesigned system
+- Run `/gamedev:gate-check pre-production` when all MVP GDDs are authored and reviewed

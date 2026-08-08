@@ -7,7 +7,7 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion
 model: sonnet
 ---
 
-> **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/hotfix`. Do not auto-invoke based on context matching.
+> **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/gamedev:hotfix`. Do not auto-invoke based on context matching.
 
 ## Phase 1: Assess Severity
 
@@ -99,9 +99,9 @@ Update the hotfix record with root cause, fix details, and test results.
 
 Use the Task tool to request sign-off in parallel:
 
-- `subagent_type: lead-programmer` — Review the fix for correctness and side effects
-- `subagent_type: qa-tester` — Run targeted regression tests on the affected system
-- `subagent_type: producer` — Approve deployment timing and communication plan
+- `subagent_type: gamedev:lead-programmer` — Review the fix for correctness and side effects
+- `subagent_type: gamedev:qa-tester` — Run targeted regression tests on the affected system
+- `subagent_type: gamedev:producer` — Approve deployment timing and communication plan
 
 All three must return APPROVE before proceeding. If any returns CONCERNS or REJECT, do not deploy — surface the issue and resolve it first.
 
@@ -117,9 +117,9 @@ After approvals, determine the QA scope required before deploying the hotfix. Sp
 Ask qa-lead: **Is a full smoke check sufficient, or does this fix require a targeted team-qa pass?**
 
 Apply the verdict:
-- **Smoke check sufficient** — run `/smoke-check` against the hotfix build. If PASS, proceed to Phase 6.
-- **Targeted QA pass required** — run `/team-qa [affected-system]` scoped to the changed system only. If QA returns APPROVED or APPROVED WITH CONDITIONS, proceed to Phase 6.
-- **Full QA required** — S1 fixes that touch core systems may require a full `/team-qa sprint`. This delays deployment but prevents a bad patch.
+- **Smoke check sufficient** — run `/gamedev:smoke-check` against the hotfix build. If PASS, proceed to Phase 6.
+- **Targeted QA pass required** — run `/gamedev:team-qa [affected-system]` scoped to the changed system only. If QA returns APPROVED or APPROVED WITH CONDITIONS, proceed to Phase 6.
+- **Full QA required** — S1 fixes that touch core systems may require a full `/gamedev:team-qa sprint`. This delays deployment but prevents a bad patch.
 
 Do not skip this gate. A hotfix that breaks something else is worse than the original bug.
 
@@ -151,7 +151,7 @@ Output a deployment summary:
 **Rollback plan**: [from Phase 2 record]
 
 Merge to: release branch AND development branch
-Next: /bug-report verify [TASK-ID] after deploy to confirm resolution
+Next: /gamedev:bug-report verify [TASK-ID] after deploy to confirm resolution
 ```
 
 ### Rules
@@ -165,9 +165,9 @@ Next: /bug-report verify [TASK-ID] after deploy to confirm resolution
 
 ## Phase 7: Post-Deploy Verification
 
-After deploying, run `/bug-report verify [TASK-ID]` to confirm the fix resolved the issue in the deployed build.
+After deploying, run `/gamedev:bug-report verify [TASK-ID]` to confirm the fix resolved the issue in the deployed build.
 
-If VERIFIED FIXED: run `/bug-report close [TASK-ID]` to formally close it.
+If VERIFIED FIXED: run `/gamedev:bug-report close [TASK-ID]` to formally close it.
 If STILL PRESENT: the hotfix failed — immediately re-open, assess rollback, and escalate.
 
 Schedule a post-incident review within 48 hours (capture findings as Backlog tasks if follow-up work is needed).
@@ -175,6 +175,6 @@ Schedule a post-incident review within 48 hours (capture findings as Backlog tas
 Use `AskUserQuestion`:
 - Prompt: "Hotfix complete. What's the next step?"
 - Options:
-  - `[A] Run /smoke-check to verify the fix`
-  - `[B] Run /patch-notes to document this hotfix`
+  - `[A] Run /gamedev:smoke-check to verify the fix`
+  - `[B] Run /gamedev:patch-notes to document this hotfix`
   - `[C] Stop here`

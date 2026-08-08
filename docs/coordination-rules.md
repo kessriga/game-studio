@@ -47,10 +47,10 @@ Skills declare a floating alias in frontmatter (or none = Sonnet):
 | `sonnet` | latest Sonnet | Implementation, design authoring, analysis of individual systems — default for most work |
 | `opus` | latest Opus | Multi-document synthesis, high-stakes phase gate verdicts, cross-system holistic review |
 
-Skills with `model: haiku`: `/help`, `/story-readiness`, `/scope-check`,
-`/project-stage-detect`, `/changelog`, `/patch-notes`
+Skills with `model: haiku`: `/gamedev:help`, `/gamedev:story-readiness`, `/gamedev:scope-check`,
+`/gamedev:project-stage-detect`, `/gamedev:changelog`, `/gamedev:patch-notes`
 
-Skills with `model: opus`: `/review-all-gdds`, `/architecture-review`, `/gate-check`
+Skills with `model: opus`: `/gamedev:review-all-gdds`, `/gamedev:architecture-review`, `/gamedev:gate-check`
 
 All other skills default to Sonnet. When creating new skills, assign Haiku if the
 skill only reads and formats; assign Opus if it must synthesize 5+ documents with
@@ -67,7 +67,7 @@ sequentially or in parallel within the session, and return results to the parent
 
 **When to spawn in parallel**: If two subagents' inputs are independent (neither
 needs the other's output to begin), spawn both Task calls simultaneously rather
-than waiting. Example: `/review-all-gdds` Phase 1 (consistency) and Phase 2
+than waiting. Example: `/gamedev:review-all-gdds` Phase 1 (consistency) and Phase 2
 (design theory) are independent — spawn both at the same time.
 
 ### Agent Teams (experimental — opt-in)

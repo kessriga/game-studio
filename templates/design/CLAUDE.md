@@ -20,13 +20,13 @@ Every GDD must include all **8 required sections** in this order:
 
 **Design order:** Foundation → Core → Feature → Presentation → Polish
 
-**Validation:** Run `/design-review [path]` after authoring any GDD.
-Run `/review-all-gdds` after completing a set of related GDDs.
+**Validation:** Run `/gamedev:design-review [path]` after authoring any GDD.
+Run `/gamedev:review-all-gdds` after completing a set of related GDDs.
 
 ## Quick Specs (`design/quick-specs/`)
 
 Lightweight specs for tuning changes, minor mechanics, or balance adjustments.
-Use `/quick-design` to author.
+Use `/gamedev:quick-design` to author.
 
 ## UX Specs (`design/ux/`)
 
@@ -35,4 +35,4 @@ Use `/quick-design` to author.
 - Interaction pattern library: `design/ux/interaction-patterns.md`
 - Accessibility requirements: `design/ux/accessibility-requirements.md`
 
-Use `/ux-design` to author. Validate with `/ux-review` before passing to `/team-ui`.
+Use `/gamedev:ux-design` to author. Validate with `/gamedev:ux-review` before passing to `/gamedev:team-ui`.

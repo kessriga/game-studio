@@ -18,13 +18,13 @@ reviews that cannot be done per-GDD in isolation:
    together: dominant strategies, broken economies, cognitive overload, pillar
    drift, competing progression loops
 
-**This is distinct from `/design-review`**, which reviews one GDD for internal
+**This is distinct from `/gamedev:design-review`**, which reviews one GDD for internal
 completeness. This skill reviews the *relationships* between all GDDs.
 
 **When to run:**
 - After all MVP-tier GDDs are individually approved
 - After any GDD is significantly revised mid-production
-- Before `/create-architecture` begins (architecture built on inconsistent GDDs
+- Before `/gamedev:create-architecture` begins (architecture built on inconsistent GDDs
   inherits those inconsistencies)
 
 **Argument modes:**
@@ -78,7 +78,7 @@ what to look for.
 
 If the registry is empty or absent: proceed without it. Note in the report:
 "Entity registry is empty — consistency checks rely on full GDD reads only.
-Run `/consistency-check` after this review to populate the registry."
+Run `/gamedev:consistency-check` after this review to populate the registry."
 
 ### Phase 1c — L1/L2: Full Document Load
 
@@ -94,7 +94,7 @@ Report: "Loaded [N] system GDDs covering [M] systems. Pillars: [list]. Anti-pill
 
 If fewer than 2 system GDDs exist, stop:
 > "Cross-GDD review requires at least 2 system GDDs. Write more GDDs first,
-> then re-run `/review-all-gdds`."
+> then re-run `/gamedev:review-all-gdds`."
 
 ---
 
@@ -568,7 +568,7 @@ If any GDDs are flagged for revision, use a second `AskUserQuestion`:
 After writing the report (and updating systems index if approved), silently
 append to `production/session-state/active.md`:
 
-    ## Session Extract — /review-all-gdds [date]
+    ## Session Extract — /gamedev:review-all-gdds [date]
     - Verdict: [PASS / CONCERNS / FAIL]
     - GDDs reviewed: [N]
     - Flagged for revision: [comma-separated list, or "None"]
@@ -590,18 +590,18 @@ After all file writes are complete, use `AskUserQuestion` for a closing widget.
 
 Before building options, check project state:
 - Are there any Warning-level items that are simple edits (flagged with "30-second edit", "brief addition", or similar)? → offer inline quick-fix option
-- Are any GDDs in the "Flagged for Revision" table? → offer /design-review option for each
-- Read systems-index.md for the next system with Status: Not Started → offer /design-system option
-- Is the verdict PASS or CONCERNS? → offer /gate-check or /create-architecture
+- Are any GDDs in the "Flagged for Revision" table? → offer /gamedev:design-review option for each
+- Read systems-index.md for the next system with Status: Not Started → offer /gamedev:design-system option
+- Is the verdict PASS or CONCERNS? → offer /gamedev:gate-check or /gamedev:create-architecture
 
 Build the option list dynamically — only include options that apply:
 
 **Option pool:**
 - `[_] Apply quick fix: [W-XX description] in [gdd-name].md — [effort estimate]` (one option per simple-edit warning; only for Warning-level, not Blocking)
-- `[_] Run /design-review [flagged-gdd-path] — address flagged warnings` (one per flagged GDD, if any)
-- `[_] Run /design-system [next-system] — next in design order` (always include, name the actual system)
-- `[_] Run /create-architecture — begin architecture (verdict is PASS/CONCERNS)` (include if verdict is not FAIL)
-- `[_] Run /gate-check — validate Systems Design phase gate` (include if verdict is PASS)
+- `[_] Run /gamedev:design-review [flagged-gdd-path] — address flagged warnings` (one per flagged GDD, if any)
+- `[_] Run /gamedev:design-system [next-system] — next in design order` (always include, name the actual system)
+- `[_] Run /gamedev:create-architecture — begin architecture (verdict is PASS/CONCERNS)` (include if verdict is not FAIL)
+- `[_] Run /gamedev:gate-check — validate Systems Design phase gate` (include if verdict is PASS)
 - `[_] Stop here`
 
 Assign letters A, B, C… only to included options. Mark the most pipeline-advancing option as `(recommended)`.

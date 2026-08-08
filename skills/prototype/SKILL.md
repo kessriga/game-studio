@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: "Concept prototype — validate the core idea is worth designing before writing GDDs. Run right after /brainstorm and /setup-engine. Routes to HTML, Engine, or Paper path based on game type. Produces a throwaway build and a PROCEED/PIVOT/KILL verdict."
+description: "Concept prototype — validate the core idea is worth designing before writing GDDs. Run right after /gamedev:brainstorm and /gamedev:setup-engine. Routes to HTML, Engine, or Paper path based on game type. Produces a throwaway build and a PROCEED/PIVOT/KILL verdict."
 argument-hint: "[concept-description] [--path html|engine|paper] [--review full|lean|solo] [--spike]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion
@@ -14,7 +14,7 @@ isolation: worktree
 This is the **concept prototype** — a fast, throwaway build that answers one question:
 *"Is this core idea actually fun to interact with?"*
 
-**Default use** — run right after `/brainstorm` and `/setup-engine`, before writing
+**Default use** — run right after `/gamedev:brainstorm` and `/gamedev:setup-engine`, before writing
 GDDs or architecture docs. Its verdict determines whether the concept is worth the
 investment of full design documentation.
 
@@ -23,7 +23,7 @@ design change, or technical question. Pass `--spike` to activate spike mode: a
 lightweight ~4-hour build with no GDD prerequisites and no phase gate implications.
 
 **Already have GDDs and architecture complete?** To validate the full game loop
-before committing to Production, run `/vertical-slice` instead.
+before committing to Production, run `/gamedev:vertical-slice` instead.
 
 ---
 
@@ -48,7 +48,7 @@ Otherwise, use `AskUserQuestion` to confirm intent before proceeding:
 **If "Skip — concept already proven":**
 Ask (plain text, not a widget): "What evidence do you have that the concept works?"
 Record the one-line answer, then stop. Note: "Concept prototype skipped — evidence:
-[answer]." Suggest next step: `/map-systems` or `/design-system [mechanic]`.
+[answer]." Suggest next step: `/gamedev:map-systems` or `/gamedev:design-system [mechanic]`.
 
 **If "Mid-production spike"**: skip to the **Spike Mode** section below.
 
@@ -439,13 +439,13 @@ Your concept prototype validated the core idea. Now design it properly, informed
 what you just learned.
 
 Recommended path (in order):
-1. `/design-review design/gdd/game-concept.md` — validate the concept doc against what the prototype revealed
-2. `/gate-check` — confirm readiness to advance to Systems Design
-3. `/art-bible` — define visual identity (optional but worth doing before GDDs)
-4. `/map-systems` — decompose the concept into all game systems
-5. `/design-system [mechanic]` — GDD for each MVP system; use prototype learnings
+1. `/gamedev:design-review design/gdd/game-concept.md` — validate the concept doc against what the prototype revealed
+2. `/gamedev:gate-check` — confirm readiness to advance to Systems Design
+3. `/gamedev:art-bible` — define visual identity (optional but worth doing before GDDs)
+4. `/gamedev:map-systems` — decompose the concept into all game systems
+5. `/gamedev:design-system [mechanic]` — GDD for each MVP system; use prototype learnings
    in the Tuning Knobs and Formulas sections
-6. `/review-all-gdds` — cross-system consistency check
+6. `/gamedev:review-all-gdds` — cross-system consistency check
 
 **Note:** If you used the HTML path and feel is still uncertain, consider running
 a quick engine path prototype targeting feel before writing GDDs.
@@ -461,12 +461,12 @@ two questions (plain text, one at a time):
 Ask: "May I write this to `prototypes/[concept-name]-concept/PIVOT-NOTE.md`?"
 
 If yes, write the file with: original hypothesis, what to keep, what to change, and
-the revised hypothesis for the next prototype. When `/prototype` is next run, check
+the revised hypothesis for the next prototype. When `/gamedev:prototype` is next run, check
 `prototypes/` for any `PIVOT-NOTE.md` files — if found, read them and use the
 revised hypothesis as the starting point rather than forming one from scratch.
 
-- Run `/prototype [revised-concept]` to test the adjusted direction
-- Or `/brainstorm [hint]` if the concept needs more fundamental rethinking
+- Run `/gamedev:prototype [revised-concept]` to test the adjusted direction
+- Or `/gamedev:brainstorm [hint]` if the concept needs more fundamental rethinking
 
 **If KILL:**
 
@@ -493,7 +493,7 @@ Ask: "May I append this concept to `prototypes/GRAVEYARD.md`?" If yes, add one e
 
 This file exists so the same mistake doesn't get made twice on the next concept.
 
-- Run `/brainstorm open` or `/brainstorm [new-hint]` to explore a different concept
+- Run `/gamedev:brainstorm open` or `/gamedev:brainstorm [new-hint]` to explore a different concept
 - The prototype report is the deliverable — no further action needed
 
 ---

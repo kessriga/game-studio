@@ -1,6 +1,6 @@
 ---
 name: create-stories
-description: "Break a single epic into implementable story files. Reads the epic, its GDD, governing ADRs, and control manifest. Each story embeds its GDD requirement TR-ID, ADR guidance, acceptance criteria, story type, and test evidence path. Run after /create-epics for each epic."
+description: "Break a single epic into implementable story files. Reads the epic, its GDD, governing ADRs, and control manifest. Each story embeds its GDD requirement TR-ID, ADR guidance, acceptance criteria, story type, and test evidence path. Run after /gamedev:create-epics for each epic."
 argument-hint: "[epic-slug | epic-path] [--review full|lean|solo]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Task, AskUserQuestion, mcp__backlog__task_create
@@ -20,8 +20,8 @@ then Core, and so on — matching the dependency order.
 
 **Output:** `production/epics/[epic-slug]/story-NNN-[slug].md` files
 
-**Previous step:** `/create-epics [system]`
-**Next step after stories exist:** `/story-readiness [story-path]` then `/dev-story [story-path]`
+**Previous step:** `/gamedev:create-epics [system]`
+**Next step after stories exist:** `/gamedev:story-readiness [story-path]` then `/gamedev:dev-story [story-path]`
 
 ---
 
@@ -33,8 +33,8 @@ override for this run. If not provided, read `production/review-mode.txt`
 in this skill — apply the check pattern from `.claude/docs/director-gates.md`
 before every gate invocation.
 
-- `/create-stories [epic-slug]` — e.g. `/create-stories combat`
-- `/create-stories production/epics/combat/EPIC.md` — full path also accepted
+- `/gamedev:create-stories [epic-slug]` — e.g. `/gamedev:create-stories combat`
+- `/gamedev:create-stories production/epics/combat/EPIC.md` — full path also accepted
 - No argument — ask: "Which epic would you like to break into stories?"
   Glob `production/epics/*/EPIC.md` and list available epics with their status.
 
@@ -53,7 +53,7 @@ Read in full:
 **ADR existence validation**: After reading the governing ADRs list from the epic, confirm each ADR file exists on disk. If any ADR file cannot be found, **stop immediately** before decomposing any story:
 
 > "Epic references [ADR-NNNN: title] but `docs/architecture/[adr-file].md` was not found.
-> Check the filename in the epic's Governing ADRs list, or run `/architecture-decision`
+> Check the filename in the epic's Governing ADRs list, or run `/gamedev:architecture-decision`
 > to create it. Cannot create stories until all referenced ADR files are present."
 
 Do not proceed to Step 3 until all referenced ADR files are confirmed present.
@@ -75,7 +75,7 @@ Report: "Loaded epic [name], GDD [filename], [N] governing ADRs (all confirmed p
 | **Config/Data** | Balance tuning values, data file changes only — no new code logic |
 
 Mixed stories: assign the type that carries the highest implementation risk.
-The type determines what test evidence is required before `/story-done` can close the story.
+The type determines what test evidence is required before `/gamedev:story-done` can close the story.
 
 ---
 
@@ -95,7 +95,7 @@ For each story, determine:
 - **TR-ID**: look up in `tr-registry.yaml`. Use the stable ID. If no match, use `TR-[system]-???` and warn.
 - **Governing ADR**: which ADR governs how to implement this?
   - `Status: Accepted` → embed normally
-  - `Status: Proposed` → mark the story blocked: its Backlog task (minted in Step 6) gets the `blocked` label, with an Implementation Note: "BLOCKED: ADR-NNNN is Proposed — run `/architecture-decision` to advance it"
+  - `Status: Proposed` → mark the story blocked: its Backlog task (minted in Step 6) gets the `blocked` label, with an Implementation Note: "BLOCKED: ADR-NNNN is Proposed — run `/gamedev:architecture-decision` to advance it"
   - **Multiple ADRs apply**: List all governing ADRs in the story's `Governing ADRs:` field. Designate the one most directly controlling the implementation pattern as primary (first in the list). Others are listed as secondary references.
   - **No ADR applies at all**: Write `ADR: N/A — [brief reason, e.g. "pure data configuration, no architectural pattern required"]` in the story's ADR field. Do NOT leave the field blank — a blank ADR field means "not checked", not "not applicable".
 - **Story Type**: from Step 3 classification
@@ -125,7 +125,7 @@ Present the QA lead's assessment. For each story flagged as GAPS or INADEQUATE, 
     - `Skip test spec generation — I'll fill in ## QA Test Cases manually`
 - If "Use existing specs": extract the test case specs from the qa-plan for each matching story and embed them directly into the `## QA Test Cases` section. No qa-lead spawn needed for those stories. Only spawn qa-lead for stories with no coverage in the qa-plan.
 - If "Generate fresh": proceed with the qa-lead spawn below as normal.
-- If "Skip": leave `## QA Test Cases` with a placeholder: `*Test cases not yet defined — run /qa-plan to generate them.*`
+- If "Skip": leave `## QA Test Cases` with a placeholder: `*Test cases not yet defined — run /gamedev:qa-plan to generate them.*`
 
 **After ADEQUATE** (or after qa-plan import): for every Logic and Integration story, ask the qa-lead to produce concrete test case specifications — one per acceptance criterion — in this format:
 
@@ -190,7 +190,7 @@ For each story, write `production/epics/[epic-slug]/story-[NNN]-[slug].md`:
 > **Type**: [Logic | Integration | Visual/Feel | UI | Config/Data]
 > **Estimate**: [hours or t-shirt size — optional]
 > **Manifest Version**: [date from control-manifest.md header]
-> **Last Updated**: [set by /story-done when Completion Notes are appended]
+> **Last Updated**: [set by /gamedev:story-done when Completion Notes are appended]
 
 ## Context
 
@@ -286,7 +286,7 @@ For each story `.md` just written, create the tracking task with `mcp__backlog__
 - `title`: the story title (e.g. "Story 001: Damage calculator")
 - `description`: 1–2 line summary + a `Spec:` pointer to the story file path (`production/epics/[epic-slug]/story-NNN-[slug].md`) — this is the forward-pointer to the frozen spec
 - `acceptanceCriteria`: the story's acceptance criteria (verbatim from the GDD-derived list)
-- `milestone`: the epic name (the milestone `/create-epics` minted)
+- `milestone`: the epic name (the milestone `/gamedev:create-epics` minted)
 - `labels`: `blocked` if the story's governing ADR is Proposed (Step 4); otherwise none. Never a `bug` label (these are stories)
 - `status`: `To Do` (a task exists ⇒ the story is ready; `Draft` is only for stories still being authored)
 - `priority`: derive from layer/dependency order if known, else leave default
@@ -307,7 +307,7 @@ Replace the "Stories: Not yet created" line with a populated table. **No Status 
 | 002 | [title] | Integration | TASK-M | ADR-MMMM |
 ```
 
-Do **not** write a story roster or status count into `production/epics/index.md` — that file is a static prose navigation map (see `/create-epics`); the live roster is the Backlog milestone and board.
+Do **not** write a story roster or status count into `production/epics/index.md` — that file is a static prose navigation map (see `/gamedev:create-epics`); the live roster is the Backlog milestone and board.
 
 ---
 
@@ -321,8 +321,8 @@ Check:
 Widget:
 - Prompt: "[N] stories written to `production/epics/[epic-slug]/` and [N] Backlog tasks minted under milestone [epic]. What next?"
 - Options (include all that apply):
-  - `[A] Start implementing — run /story-readiness [first-story-path]` (Recommended)
-  - `[B] Create stories for [next-epic-slug] — run /create-stories [slug]` (only if other epics have no stories yet)
+  - `[A] Start implementing — run /gamedev:story-readiness [first-story-path]` (Recommended)
+  - `[B] Create stories for [next-epic-slug] — run /gamedev:create-stories [slug]` (only if other epics have no stories yet)
   - `[C] Stop here for this session`
 
 Note in output: "Work through stories in order — each story's `Depends on:` field tells you what must be DONE before you can start it."
@@ -340,5 +340,5 @@ Note in output: "Work through stories in order — each story's `Depends on:` fi
 
 After writing (or declining):
 
-- **Verdict: COMPLETE** — [N] stories written to `production/epics/[epic-slug]/`. Run `/story-readiness` → `/dev-story` to begin implementation.
+- **Verdict: COMPLETE** — [N] stories written to `production/epics/[epic-slug]/`. Run `/gamedev:story-readiness` → `/gamedev:dev-story` to begin implementation.
 - **Verdict: BLOCKED** — user declined. No story files written.

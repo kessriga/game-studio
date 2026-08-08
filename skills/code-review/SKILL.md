@@ -29,7 +29,7 @@ If the section reads `[TO BE CONFIGURED]`, no engine is pinned — skip engine s
 
 ## Phase 3: ADR Compliance Check
 
-**Argument:** `/code-review [file(s)]` may optionally include a story file path as the last argument (e.g., `/code-review src/combat/attack.gd production/epics/combat/story-001.md`). If a story path is provided, read it to extract the governing ADR reference.
+**Argument:** `/gamedev:code-review [file(s)]` may optionally include a story file path as the last argument (e.g., `/gamedev:code-review src/combat/attack.gd production/epics/combat/story-001.md`). If a story path is provided, read it to extract the governing ADR reference.
 
 Search for ADR references in, in priority order:
 1. The story file (if provided as argument)
@@ -38,7 +38,7 @@ Search for ADR references in, in priority order:
 
 Look for patterns like `ADR-NNN` or `docs/architecture/ADR-`.
 
-If no ADR references found, note: "No ADR references found — ADR compliance check skipped. For full ADR compliance review, provide the story path: `/code-review [files] [story-path]`."
+If no ADR references found, note: "No ADR references found — ADR compliance check skipped. For full ADR compliance review, provide the story path: `/gamedev:code-review [files] [story-path]`."
 
 For each referenced ADR: read the file, extract the **Decision** and **Consequences** sections, then classify any deviation:
 
@@ -173,13 +173,13 @@ Use `AskUserQuestion`:
 - Prompt: "Code review complete — verdict: [APPROVED / CHANGES REQUIRED / MAJOR REVISION]. How would you like to proceed?"
 - Options (adjust based on verdict):
   - If APPROVED:
-    - `[A] Run /story-done to mark the story complete`
+    - `[A] Run /gamedev:story-done to mark the story complete`
     - `[B] Stop here`
   - If CHANGES REQUIRED or MAJOR REVISION:
-    - `[A] Fix the issues and re-run /code-review`
-    - `[B] Run /story-done anyway with noted exceptions`
+    - `[A] Fix the issues and re-run /gamedev:code-review`
+    - `[B] Run /gamedev:story-done anyway with noted exceptions`
     - `[C] Stop here`
 
 If an ARCHITECTURAL VIOLATION is found:
-- If the violation contradicts an **existing ADR**: fix the implementation to comply with `docs/architecture/[adr-file].md`. If the design has legitimately changed, run `/architecture-decision` to formally *revise* the existing ADR — do not create a competing one.
-- If **no ADR exists** for the pattern that was violated: run `/architecture-decision` to document the correct approach before fixing the code.
+- If the violation contradicts an **existing ADR**: fix the implementation to comply with `docs/architecture/[adr-file].md`. If the design has legitimately changed, run `/gamedev:architecture-decision` to formally *revise* the existing ADR — do not create a competing one.
+- If **no ADR exists** for the pattern that was violated: run `/gamedev:architecture-decision` to document the correct approach before fixing the code.

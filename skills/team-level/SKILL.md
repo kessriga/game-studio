@@ -40,13 +40,13 @@ Store the resolved mode for use in all subsequent phases.
 ## How to Delegate
 
 Use the Task tool to spawn each team member as a subagent:
-- `subagent_type: narrative-director` — Narrative purpose, characters, emotional arc
-- `subagent_type: world-builder` — Lore context, environmental storytelling, world rules
-- `subagent_type: level-designer` — Spatial layout, pacing, encounters, navigation
-- `subagent_type: systems-designer` — Enemy compositions, loot tables, difficulty balance
-- `subagent_type: art-director` — Visual theme, color palette, lighting, asset requirements
-- `subagent_type: accessibility-specialist` — Navigation clarity, colorblind safety, cognitive load
-- `subagent_type: qa-tester` — Test cases, boundary testing, playtest checklist
+- `subagent_type: gamedev:narrative-director` — Narrative purpose, characters, emotional arc
+- `subagent_type: gamedev:world-builder` — Lore context, environmental storytelling, world rules
+- `subagent_type: gamedev:level-designer` — Spatial layout, pacing, encounters, navigation
+- `subagent_type: gamedev:systems-designer` — Enemy compositions, loot tables, difficulty balance
+- `subagent_type: gamedev:art-director` — Visual theme, color palette, lighting, asset requirements
+- `subagent_type: gamedev:accessibility-specialist` — Navigation clarity, colorblind safety, cognitive load
+- `subagent_type: gamedev:qa-tester` — Test cases, boundary testing, playtest checklist
 
 Always provide full context in each agent's prompt (game concept, pillars, existing level docs, narrative docs).
 
@@ -96,7 +96,7 @@ The level-designer should:
 
 Use `AskUserQuestion` with options:
 - (a) Proceed with a placeholder reference — mark the connection as UNRESOLVED in the level doc and list it in the open cross-level dependencies section of the summary report
-- (b) Pause and run `/team-level [area-name]` first to establish that area
+- (b) Pause and run `/gamedev:team-level [area-name]` first to establish that area
 
 Do NOT invent content for the missing adjacent area.
 
@@ -171,9 +171,9 @@ Verdict: **BLOCKED** — one or more agents blocked; partial report produced wit
 
 ## Next Steps
 
-- Run `/design-review design/levels/[level-name].md` to validate the completed level design doc.
-- Run `/dev-story` to implement level content once the design is approved.
-- Run `/qa-plan` to generate a QA test plan for this level.
+- Run `/gamedev:design-review design/levels/[level-name].md` to validate the completed level design doc.
+- Run `/gamedev:dev-story` to implement level content once the design is approved.
+- Run `/gamedev:qa-plan` to generate a QA test plan for this level.
 
 ## Error Recovery Protocol
 
@@ -189,6 +189,6 @@ If any spawned agent (via Task) returns BLOCKED, errors, or cannot complete:
 
 Common blockers:
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/architecture-decision` first
-- Scope too large → split into two stories via `/create-stories`
+- ADR status is Proposed → do not implement; run `/gamedev:architecture-decision` first
+- Scope too large → split into two stories via `/gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess

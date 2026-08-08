@@ -19,8 +19,8 @@ test → fix → retest → keep or revert.
 Read the skill name from the first argument. If missing, output usage and stop:
 
 ```
-Usage: /skill-improve [skill-name]
-Example: /skill-improve tech-debt
+Usage: /gamedev:skill-improve [skill-name]
+Example: /gamedev:skill-improve tech-debt
 ```
 
 Verify `.claude/skills/[name]/SKILL.md` exists. If not, stop with:
@@ -30,7 +30,7 @@ Verify `.claude/skills/[name]/SKILL.md` exists. If not, stop with:
 
 ## Phase 2: Baseline Test
 
-Run `/skill-test static [name]` and record the baseline score:
+Run `/gamedev:skill-test static [name]` and record the baseline score:
 - Count of FAILs
 - Count of WARNs
 - Which specific checks failed (Check 1–7)
@@ -51,7 +51,7 @@ If no `category:` field is found, display:
 "Category: not yet assigned — skipping category checks."
 and skip to Phase 3.
 
-If category is found, run `/skill-test category [name]` and record the category baseline:
+If category is found, run `/gamedev:skill-test category [name]` and record the category baseline:
 - Count of FAILs
 - Count of WARNs
 - Which specific category rubric metrics failed
@@ -110,8 +110,8 @@ Record the current content of the skill file (for revert if needed).
 
 Write the improved skill to `.claude/skills/[name]/SKILL.md`.
 
-Re-run `/skill-test static [name]` and record the new static score.
-If a category was assigned, also re-run `/skill-test category [name]` and record the new category score.
+Re-run `/gamedev:skill-test static [name]` and record the new static score.
+If a category was assigned, also re-run `/gamedev:skill-test category [name]` and record the new category score.
 
 Display the comparison:
 ```
@@ -140,6 +140,6 @@ If yes: run `git checkout -- .claude/skills/[name]/SKILL.md`
 
 ## Phase 7: Next Steps
 
-- Run `/skill-test static all` to find the next skill with failures.
-- Run `/skill-improve [next-name]` to continue the loop on another skill.
-- Run `/skill-test audit` to see overall coverage progress.
+- Run `/gamedev:skill-test static all` to find the next skill with failures.
+- Run `/gamedev:skill-improve [next-name]` to continue the loop on another skill.
+- Run `/gamedev:skill-test audit` to see overall coverage progress.

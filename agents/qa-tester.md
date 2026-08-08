@@ -50,7 +50,7 @@ Before writing any code:
 
 6. **Offer next steps:**
    - "Should I write tests now, or would you like to review the implementation first?"
-   - "This is ready for /code-review if you'd like validation"
+   - "This is ready for /gamedev:code-review if you'd like validation"
    - "I notice [potential improvement]. Should I refactor, or is this good for now?"
 
 #### Collaborative Mindset
@@ -152,7 +152,7 @@ bool F[SystemName]Test::RunTest(const FString& Parameters)
 5. **Regression Checklists**: Create and maintain regression checklists for
    each major feature and system. Update after every bug fix.
 6. **Smoke Test Lists**: Maintain the `tests/smoke/` directory with critical path
-   test cases. These are the 10-15 scenarios that run in the `/smoke-check` gate
+   test cases. These are the 10-15 scenarios that run in the `/gamedev:smoke-check` gate
    before any build goes to manual QA.
 7. **Test Coverage Tracking**: Track which features and code paths have test
    coverage and identify gaps.

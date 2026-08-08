@@ -19,18 +19,18 @@ If no version is provided, ask the user before proceeding.
 
 ## Phase 2: Gather Change Data
 
-- Read the internal changelog at `production/releases/[version]/changelog.md` if it exists
+- Read the internal changelog at `production/releases/[version]/gamedev:changelog.md` if it exists
 - Also check `docs/CHANGELOG.md` for the relevant version entry
 - Run `git log` between the previous release tag and current tag/HEAD as a fallback
 - Review the relevant completed Backlog tasks (`backlog/tasks/`) for context
 - Read any balance change documents in `design/balance/`
 - Read bug fix records from QA if available
 
-**If no changelog data is available** (neither `production/releases/[version]/changelog.md`
+**If no changelog data is available** (neither `production/releases/[version]/gamedev:changelog.md`
 nor a `docs/CHANGELOG.md` entry for this version exists, and git log is empty or unavailable):
 
-> "No changelog data found for [version]. Run `/changelog [version]` first to generate the
-> internal changelog, then re-run `/patch-notes [version]`."
+> "No changelog data found for [version]. Run `/gamedev:changelog [version]` first to generate the
+> internal changelog, then re-run `/gamedev:patch-notes [version]`."
 
 Verdict: **BLOCKED** — stop here without generating notes.
 
@@ -173,7 +173,7 @@ Present the completed patch notes to the user along with: a count of changes by 
 Ask: "May I write these patch notes to `docs/patch-notes/[version].md`?"
 
 If yes, write the file to `docs/patch-notes/[version].md`, creating the directory
-if needed. Also write to `production/releases/[version]/patch-notes.md` as the
+if needed. Also write to `production/releases/[version]/gamedev:patch-notes.md` as the
 internal archive copy.
 
 ---
@@ -182,5 +182,5 @@ internal archive copy.
 
 Verdict: **COMPLETE** — patch notes generated and saved.
 
-- Run `/release-checklist` to verify all other release gates are met before publishing.
+- Run `/gamedev:release-checklist` to verify all other release gates are met before publishing.
 - Share the patch notes draft with the community-manager for tone review before posting publicly.

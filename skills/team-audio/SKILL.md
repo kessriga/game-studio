@@ -8,7 +8,7 @@ model: sonnet
 ---
 
 If no argument is provided, output usage guidance and exit without spawning any agents:
-> Usage: `/team-audio [feature or area]` — specify the feature or area to design audio for (e.g., `combat`, `main menu`, `forest biome`, `boss encounter`). Do not use `AskUserQuestion` here; output the guidance directly.
+> Usage: `/gamedev:team-audio [feature or area]` — specify the feature or area to design audio for (e.g., `combat`, `main menu`, `forest biome`, `boss encounter`). Do not use `AskUserQuestion` here; output the guidance directly.
 
 When this skill is invoked with an argument, orchestrate the audio team through a structured pipeline.
 
@@ -42,11 +42,11 @@ Store the resolved mode for use in all subsequent phases.
 ## How to Delegate
 
 Use the Task tool to spawn each team member as a subagent:
-- `subagent_type: audio-director` — Sonic identity, emotional tone, audio palette
-- `subagent_type: sound-designer` — SFX specifications, audio events, mixing groups
-- `subagent_type: technical-artist` — Audio middleware, bus structure, memory budgets
+- `subagent_type: gamedev:audio-director` — Sonic identity, emotional tone, audio palette
+- `subagent_type: gamedev:sound-designer` — SFX specifications, audio events, mixing groups
+- `subagent_type: gamedev:technical-artist` — Audio middleware, bus structure, memory budgets
 - `subagent_type: [primary engine specialist]` — Validate audio integration patterns for the engine
-- `subagent_type: gameplay-programmer` — Audio manager, gameplay triggers, adaptive music
+- `subagent_type: gamedev:gameplay-programmer` — Audio manager, gameplay triggers, adaptive music
 
 Always provide full context in each agent's prompt (feature description, existing audio assets, design doc references).
 
@@ -123,8 +123,8 @@ protocol. This orchestrator does not write files directly.
 ## Next Steps
 
 - Review the audio design doc with the audio-director before implementation begins.
-- Use `/dev-story` to implement the audio manager and event system once the design is approved.
-- Run `/asset-audit` after audio assets are created to verify naming and format compliance.
+- Use `/gamedev:dev-story` to implement the audio manager and event system once the design is approved.
+- Run `/gamedev:asset-audit` after audio assets are created to verify naming and format compliance.
 
 ## Error Recovery Protocol
 
@@ -140,6 +140,6 @@ If any spawned agent (via Task) returns BLOCKED, errors, or cannot complete:
 
 Common blockers:
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/architecture-decision` first
-- Scope too large → split into two stories via `/create-stories`
+- ADR status is Proposed → do not implement; run `/gamedev:architecture-decision` first
+- Scope too large → split into two stories via `/gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess

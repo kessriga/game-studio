@@ -7,7 +7,7 @@ allowed-tools: Read, Glob, Grep, Write
 model: sonnet
 ---
 
-> **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/launch-checklist`. Do not auto-invoke based on context matching.
+> **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/gamedev:launch-checklist`. Do not auto-invoke based on context matching.
 
 ## Phase 1: Parse Arguments
 
@@ -236,5 +236,5 @@ If yes, write the file, creating directories as needed.
 
 ## Phase 6: Next Steps
 
-- Run `/gate-check` to get a formal PASS/CONCERNS/FAIL verdict before launch.
-- Coordinate sign-offs via `/team-release`.
+- Run `/gamedev:gate-check` to get a formal PASS/CONCERNS/FAIL verdict before launch.
+- Coordinate sign-offs via `/gamedev:team-release`.

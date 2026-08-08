@@ -7,7 +7,7 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion, TodoW
 model: sonnet
 ---
 If no argument is provided, output usage guidance and exit without spawning any agents:
-> Usage: `/team-polish [feature or area]` — specify the feature or area to polish (e.g., `combat`, `main menu`, `inventory system`, `level-1`). Do not use `AskUserQuestion` here; output the guidance directly.
+> Usage: `/gamedev:team-polish [feature or area]` — specify the feature or area to polish (e.g., `combat`, `main menu`, `inventory system`, `level-1`). Do not use `AskUserQuestion` here; output the guidance directly.
 
 When this skill is invoked with an argument, orchestrate the polish team through a structured pipeline.
 
@@ -42,12 +42,12 @@ Store the resolved mode for use in all subsequent phases.
 ## How to Delegate
 
 Use the Task tool to spawn each team member as a subagent:
-- `subagent_type: performance-analyst` — Profiling, optimization, memory analysis
-- `subagent_type: engine-programmer` — Engine-level fixes for rendering, memory, resource loading
-- `subagent_type: technical-artist` — VFX polish, shader optimization, visual quality
-- `subagent_type: sound-designer` — Audio polish, mixing, ambient layers
-- `subagent_type: tools-programmer` — Content pipeline and editor tool verification
-- `subagent_type: qa-tester` — Edge case testing, regression testing, soak testing
+- `subagent_type: gamedev:performance-analyst` — Profiling, optimization, memory analysis
+- `subagent_type: gamedev:engine-programmer` — Engine-level fixes for rendering, memory, resource loading
+- `subagent_type: gamedev:technical-artist` — VFX polish, shader optimization, visual quality
+- `subagent_type: gamedev:sound-designer` — Audio polish, mixing, ambient layers
+- `subagent_type: gamedev:tools-programmer` — Content pipeline and editor tool verification
+- `subagent_type: gamedev:qa-tester` — Edge case testing, regression testing, soak testing
 
 Always provide full context in each agent's prompt (target feature/area, performance budgets, known issues). Launch independent agents in parallel where the pipeline allows it (e.g., Phases 3 and 4 can run simultaneously).
 
@@ -55,7 +55,7 @@ Always provide full context in each agent's prompt (target feature/area, perform
 
 ### Phase 1: Assessment
 Delegate to **performance-analyst**:
-- Profile the target feature/area using `/perf-profile`
+- Profile the target feature/area using `/gamedev:perf-profile`
 - Identify performance bottlenecks and frame budget violations
 - Measure memory usage and check for leaks
 - Benchmark against target hardware specs
@@ -119,8 +119,8 @@ If any spawned agent (via Task) returns BLOCKED, errors, or cannot complete:
 
 Common blockers:
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/architecture-decision` first
-- Scope too large → split into two stories via `/create-stories`
+- ADR status is Proposed → do not implement; run `/gamedev:architecture-decision` first
+- Scope too large → split into two stories via `/gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## File Write Protocol
@@ -135,6 +135,6 @@ A summary report covering: performance before/after metrics, visual polish chang
 
 ## Next Steps
 
-- If READY FOR RELEASE: run `/release-checklist` for the final pre-release validation.
-- If NEEDS MORE WORK: file the remaining issues as Backlog tasks and re-run `/team-polish` after fixes.
-- Run `/gate-check` for a formal phase gate verdict before handing off to release.
+- If READY FOR RELEASE: run `/gamedev:release-checklist` for the final pre-release validation.
+- If NEEDS MORE WORK: file the remaining issues as Backlog tasks and re-run `/gamedev:team-polish` after fixes.
+- Run `/gamedev:gate-check` for a formal phase gate verdict before handing off to release.

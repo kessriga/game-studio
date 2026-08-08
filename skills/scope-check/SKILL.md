@@ -113,10 +113,10 @@ After presenting the report, offer concrete follow-up:
 
 - **PASS** → no action required. Suggest re-running before next milestone.
 - **CONCERNS** → offer to identify the 2–3 additions with best cut ratio. Reprioritise the Backlog board to formally re-scope.
-- **FAIL** → recommend escalating to producer. Reprioritise the board (defer tasks to a later milestone) or run `/estimate` to re-baseline timeline.
+- **FAIL** → recommend escalating to producer. Reprioritise the board (defer tasks to a later milestone) or run `/gamedev:estimate` to re-baseline timeline.
 
 Always end with:
-> "Run `/scope-check [name]` again after cuts are made to verify the verdict improves."
+> "Run `/gamedev:scope-check [name]` again after cuts are made to verify the verdict improves."
 
 ---
 

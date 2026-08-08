@@ -106,13 +106,13 @@ Produce a verification verdict:
 - **STILL PRESENT** — bug reproduces as described; fix did not resolve the issue
 - **CANNOT VERIFY** — automated checks inconclusive; manual playtest required
 
-If STILL PRESENT: `task_edit` the task back to `In Progress` (or `To Do`), append a comment with the evidence, and suggest `/hotfix [TASK-ID]`. If VERIFIED FIXED: proceed to Close Mode (or tell the user to run `close`).
+If STILL PRESENT: `task_edit` the task back to `In Progress` (or `To Do`), append a comment with the evidence, and suggest `/gamedev:hotfix [TASK-ID]`. If VERIFIED FIXED: proceed to Close Mode (or tell the user to run `close`).
 
 ---
 
 ## Phase 2D: Close Mode
 
-`task_view` the `TASK-ID` and confirm verification passed (Phase 2C returned VERIFIED FIXED, or the user confirms). If not verified, stop: "Bug [TASK-ID] must be verified fixed before closing. Run `/bug-report verify [TASK-ID]` first."
+`task_view` the `TASK-ID` and confirm verification passed (Phase 2C returned VERIFIED FIXED, or the user confirms). If not verified, stop: "Bug [TASK-ID] must be verified fixed before closing. Run `/gamedev:bug-report verify [TASK-ID]` first."
 
 Ask: "May I set [TASK-ID] to Done with a closure note?" If yes, `task_edit`:
 - `status`: `Done`
@@ -126,11 +126,11 @@ Verdict: **COMPLETE** — bug [TASK-ID] closed.
 
 **After filing (Description/Analyze mode):**
 - Review the board filtered by `bug`, sorted by priority, to triage alongside existing open bugs
-- If S1 or S2: run `/hotfix [TASK-ID]` for the emergency fix workflow
+- If S1 or S2: run `/gamedev:hotfix [TASK-ID]` for the emergency fix workflow
 
 **After fixing the bug (developer confirms fix is in):**
-- Run `/bug-report verify [TASK-ID]` — confirm the fix actually works before closing
+- Run `/gamedev:bug-report verify [TASK-ID]` — confirm the fix actually works before closing
 - Never mark a bug Done without verification — a fix that doesn't verify is still open
 
 **After verify returns VERIFIED FIXED:**
-- Run `/bug-report close [TASK-ID]` — set the task Done and write the closure note
+- Run `/gamedev:bug-report close [TASK-ID]` — set the task Done and write the closure note

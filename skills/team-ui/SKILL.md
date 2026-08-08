@@ -1,6 +1,6 @@
 ---
 name: team-ui
-description: "Orchestrate the UI team through the full UX pipeline: from UX spec authoring through visual design, implementation, review, and polish. Integrates with /ux-design, /ux-review, and studio UX templates."
+description: "Orchestrate the UI team through the full UX pipeline: from UX spec authoring through visual design, implementation, review, and polish. Integrates with /gamedev:ux-design, /gamedev:ux-review, and studio UX templates."
 argument-hint: "[UI feature description] [--review full|lean|solo]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion, TodoWrite
@@ -44,11 +44,11 @@ Store the resolved mode for use in all subsequent phases.
 ## How to Delegate
 
 Use the Task tool to spawn each team member as a subagent:
-- `subagent_type: ux-designer` — User flows, wireframes, accessibility, input handling
-- `subagent_type: ui-programmer` — UI framework, screens, widgets, data binding
-- `subagent_type: art-director` — Visual style, layout polish, art bible consistency
+- `subagent_type: gamedev:ux-designer` — User flows, wireframes, accessibility, input handling
+- `subagent_type: gamedev:ui-programmer` — UI framework, screens, widgets, data binding
+- `subagent_type: gamedev:art-director` — Visual style, layout polish, art bible consistency
 - `subagent_type: [UI engine specialist]` — Engine-specific UI pattern validation (e.g., unity-ui-specialist, ue-umg-specialist, godot-specialist)
-- `subagent_type: accessibility-specialist` — Accessibility compliance audit
+- `subagent_type: gamedev:accessibility-specialist` — Accessibility compliance audit
 
 Always provide full context in each agent's prompt (feature requirements, existing UI patterns, platform targets). Launch independent agents in parallel where the pipeline allows it (e.g., Phase 4 review agents can run simultaneously).
 
@@ -67,7 +67,7 @@ Before designing anything, read and synthesize:
 > "interaction-patterns.md does not exist — no existing patterns to reuse."
 
 Then use `AskUserQuestion` with options:
-- (a) Run `/ux-design patterns` first to establish the pattern library, then continue
+- (a) Run `/gamedev:ux-design patterns` first to establish the pattern library, then continue
 - (b) Proceed without the pattern library — ui-programmer will treat all patterns created as new and add each to a new `design/ux/interaction-patterns.md` at completion
 
 Do NOT invent or assume patterns from the feature name or GDD alone. If the user chooses (b), explicitly instruct ui-programmer in Phase 3 to treat all patterns as new and document them in `design/ux/interaction-patterns.md` when implementation is complete. Note the pattern library status (created / absent / updated) in the final summary report.
@@ -76,19 +76,19 @@ Summarize the context in a brief for the ux-designer: what the player is doing, 
 
 ### Phase 1b: UX Spec Authoring
 
-Invoke `/ux-design [feature name]` skill OR delegate directly to ux-designer to produce `design/ux/[feature-name].md` following the `ux-spec.md` template.
+Invoke `/gamedev:ux-design [feature name]` skill OR delegate directly to ux-designer to produce `design/ux/[feature-name].md` following the `ux-spec.md` template.
 
 If designing the HUD, use the `hud-design.md` template instead of `ux-spec.md`.
 
 > **Notes on special cases:**
-> - For HUD design specifically, invoke `/ux-design` with `argument: hud` (e.g., `/ux-design hud`).
-> - For the interaction pattern library, run `/ux-design patterns` once at project start and update it whenever new patterns are introduced during later phases.
+> - For HUD design specifically, invoke `/gamedev:ux-design` with `argument: hud` (e.g., `/gamedev:ux-design hud`).
+> - For the interaction pattern library, run `/gamedev:ux-design patterns` once at project start and update it whenever new patterns are introduced during later phases.
 
 Output: `design/ux/[feature-name].md` with all required spec sections filled.
 
 ### Phase 1c: UX Review
 
-After the spec is complete, invoke `/ux-review design/ux/[feature-name].md`.
+After the spec is complete, invoke `/gamedev:ux-review design/ux/[feature-name].md`.
 
 **Gate**: Do not proceed to Phase 2 until the verdict is APPROVED. If the verdict is NEEDS REVISION, the ux-designer must address the flagged issues and re-run the review. The user may explicitly accept a NEEDS REVISION risk and proceed, but this must be a conscious decision — present the specific concerns via `AskUserQuestion` before asking whether to proceed.
 
@@ -143,10 +143,10 @@ All three review streams must report before proceeding to Phase 5.
 
 ## Quick Reference — When to Use Which Skill
 
-- `/ux-design` — Author a new UX spec for a screen, flow, or HUD from scratch
-- `/ux-review` — Validate a completed UX spec before implementation
-- `/team-ui [feature]` — Full pipeline from concept through polish (calls `/ux-design` and `/ux-review` internally)
-- `/quick-design` — Small UI changes that don't need a full new UX spec
+- `/gamedev:ux-design` — Author a new UX spec for a screen, flow, or HUD from scratch
+- `/gamedev:ux-review` — Validate a completed UX spec before implementation
+- `/gamedev:team-ui [feature]` — Full pipeline from concept through polish (calls `/gamedev:ux-design` and `/gamedev:ux-review` internally)
+- `/gamedev:quick-design` — Small UI changes that don't need a full new UX spec
 
 ## Error Recovery Protocol
 
@@ -162,14 +162,14 @@ If any spawned agent (via Task) returns BLOCKED, errors, or cannot complete:
 
 Common blockers:
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/architecture-decision` first
-- Scope too large → split into two stories via `/create-stories`
+- ADR status is Proposed → do not implement; run `/gamedev:architecture-decision` first
+- Scope too large → split into two stories via `/gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## File Write Protocol
 
 All file writes (UX specs, interaction pattern library updates, implementation files) are
-delegated to sub-agents and sub-skills (`/ux-design`, `ui-programmer`). Each enforces the
+delegated to sub-agents and sub-skills (`/gamedev:ux-design`, `ui-programmer`). Each enforces the
 "May I write to [path]?" protocol. This orchestrator does not write files directly.
 
 ## Output
@@ -181,6 +181,6 @@ Verdict: **BLOCKED** — pipeline halted; surface the blocker and its phase befo
 
 ## Next Steps
 
-- Run `/ux-review` on the final spec if not yet approved.
-- Run `/code-review` on the UI implementation before closing stories.
-- Run `/team-polish` if visual or audio polish pass is needed.
+- Run `/gamedev:ux-review` on the final spec if not yet approved.
+- Run `/gamedev:code-review` on the UI implementation before closing stories.
+- Run `/gamedev:team-polish` if visual or audio polish pass is needed.

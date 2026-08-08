@@ -45,7 +45,7 @@ Before writing any code:
 
 6. **Offer next steps:**
    - "Should I write tests now, or would you like to review the implementation first?"
-   - "This is ready for /code-review if you'd like validation"
+   - "This is ready for /gamedev:code-review if you'd like validation"
    - "I notice [potential improvement]. Should I refactor, or is this good for now?"
 
 ### Collaborative Mindset
@@ -133,9 +133,9 @@ Before writing any code:
 
 You have access to the Task tool to delegate to your sub-specialists. Use it when a task requires deep expertise in a specific area:
 
-- `subagent_type: bevy-rust-specialist` — Rust idioms, ownership/borrowing, error handling, system & query design
-- `subagent_type: bevy-render-specialist` — wgpu/WGSL, materials, render systems, post-processing
-- `subagent_type: bevy-ui-specialist` — bevy_ui layout, widgets, Parley text, accessibility
+- `subagent_type: gamedev:bevy-rust-specialist` — Rust idioms, ownership/borrowing, error handling, system & query design
+- `subagent_type: gamedev:bevy-render-specialist` — wgpu/WGSL, materials, render systems, post-processing
+- `subagent_type: gamedev:bevy-ui-specialist` — bevy_ui layout, widgets, Parley text, accessibility
 
 Provide full context in the prompt including relevant file paths, design constraints, and performance requirements. Launch independent sub-specialist tasks in parallel when possible.
 

@@ -108,7 +108,7 @@ String freeze: [Active / Not yet called / Lifted]
 | [locale] | [N] | [N] | [N] | [N] | [X]% |
 
 ### Issues
-- [N] hardcoded strings found in source code (run /localize scan)
+- [N] hardcoded strings found in source code (run /gamedev:localize scan)
 - [N] strings exceeding character limits
 - [N] placeholder mismatches
 - [N] orphaned keys
@@ -327,8 +327,8 @@ Pre-Freeze Checklist
 [ ] All planned UI screens are implemented
 [ ] All dialogue lines are final (no further narrative revisions planned)
 [ ] All system strings (error messages, tutorial text) are complete
-[ ] /localize scan shows zero hardcoded strings
-[ ] /localize validate shows no placeholder mismatches in source (en)
+[ ] /gamedev:localize scan shows zero hardcoded strings
+[ ] /gamedev:localize validate shows no placeholder mismatches in source (en)
 [ ] Marketing strings (store description, achievements) are final
 ```
 
@@ -347,7 +347,7 @@ If [A]: Write `production/localization/freeze-status.md`:
 **Total strings at freeze**: [N]
 
 ## Post-Freeze Changes
-[Any strings added or modified after freeze are listed here automatically by /localize extract]
+[Any strings added or modified after freeze are listed here automatically by /gamedev:localize extract]
 ```
 
 ### freeze lift
@@ -369,8 +369,8 @@ before any locale ships. This is not the same as `/validate` (which checks compl
 
 Spawn `localization-lead` via Task with:
 - The target locale(s) to QA
-- The list of all screens/flows in the game (from `design/gdd/` or `/content-audit` output)
-- The current `/localize validate` report
+- The list of all screens/flows in the game (from `design/gdd/` or `/gamedev:content-audit` output)
+- The current `/gamedev:localize validate` report
 - The cultural review report (if it exists)
 
 Ask the localization-lead to produce a QA plan covering:
@@ -426,16 +426,16 @@ Ask: "May I write this localization QA report to `production/localization/loc-qa
 ### Recommended Workflow
 
 ```
-/localize scan            → find hardcoded strings
-/localize extract         → build string table
-/localize freeze          → lock source before sending to translators
-/localize brief           → generate translator briefing document
+/gamedev:localize scan            → find hardcoded strings
+/gamedev:localize extract         → build string table
+/gamedev:localize freeze          → lock source before sending to translators
+/gamedev:localize brief           → generate translator briefing document
 [Send to translators]
-/localize validate        → check returned translations
-/localize cultural-review → flag culturally sensitive content
-/localize rtl-check       → if shipping Arabic / Hebrew / Persian
-/localize vo-pipeline     → if shipping dubbed VO
-/localize qa              → full localization QA pass
+/gamedev:localize validate        → check returned translations
+/gamedev:localize cultural-review → flag culturally sensitive content
+/gamedev:localize rtl-check       → if shipping Arabic / Hebrew / Persian
+/gamedev:localize vo-pipeline     → if shipping dubbed VO
+/gamedev:localize qa              → full localization QA pass
 ```
 
-After `qa` returns PASS for all shipping locales, include the QA report path when running `/gate-check release`.
+After `qa` returns PASS for all shipping locales, include the QA report path when running `/gamedev:gate-check release`.

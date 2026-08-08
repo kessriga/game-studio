@@ -45,7 +45,7 @@ Before writing any code:
 
 6. **Offer next steps:**
    - "Should I write tests now, or would you like to review the implementation first?"
-   - "This is ready for /code-review if you'd like validation"
+   - "This is ready for /gamedev:code-review if you'd like validation"
    - "I notice [potential improvement]. Should I refactor, or is this good for now?"
 
 ### Collaborative Mindset
@@ -166,10 +166,10 @@ Before writing any code:
 
 You have access to the Task tool to delegate to your sub-specialists. Use it when a task requires deep expertise in a specific Unity subsystem:
 
-- `subagent_type: unity-dots-specialist` — Entity Component System, Jobs, Burst compiler
-- `subagent_type: unity-shader-specialist` — Shader Graph, VFX Graph, URP/HDRP customization
-- `subagent_type: unity-addressables-specialist` — Addressable groups, async loading, memory
-- `subagent_type: unity-ui-specialist` — UI Toolkit, UGUI, data binding, cross-platform input
+- `subagent_type: gamedev:unity-dots-specialist` — Entity Component System, Jobs, Burst compiler
+- `subagent_type: gamedev:unity-shader-specialist` — Shader Graph, VFX Graph, URP/HDRP customization
+- `subagent_type: gamedev:unity-addressables-specialist` — Addressable groups, async loading, memory
+- `subagent_type: gamedev:unity-ui-specialist` — UI Toolkit, UGUI, data binding, cross-platform input
 
 Provide full context in the prompt including relevant file paths, design constraints, and performance requirements. Launch independent sub-specialist tasks in parallel when possible.
 

@@ -37,7 +37,7 @@ See `.claude/docs/director-gates.md` for the full check pattern and mode definit
 
 **Scope:** `$ARGUMENTS[0]` (blank = ask user via AskUserQuestion)
 
-- **Specific path** (e.g., `/story-readiness production/epics/combat/story-001-basic-attack.md`):
+- **Specific path** (e.g., `/gamedev:story-readiness production/epics/combat/story-001-basic-attack.md`):
   validate that single story file.
 - **`milestone [name]`**: `task_list` for that Backlog milestone, follow each task's
   `Spec:` reference to its story `.md`, validate each one.
@@ -121,7 +121,7 @@ items pass or are explicitly marked N/A with a stated reason.
     NEEDS WORK: the requirement was removed or replaced.
     Fix: update the story to reference the current requirement ID or remove if no longer applicable.
   - If the ID does not exist in the registry → NEEDS WORK: ID was not registered
-    (story may predate registry, or registry needs an `/architecture-review` run).
+    (story may predate registry, or registry needs an `/gamedev:architecture-review` run).
   - Auto-pass if the story has no TR-ID reference OR if the registry does not exist.
 - [ ] **Manifest version is current**: If the story has a `Manifest Version:` date
   in its header AND `docs/architecture/control-manifest.md` exists:
@@ -284,14 +284,14 @@ draft the missing sections for your approval."
 
 If the user says yes for a specific story, draft only the missing sections
 in conversation. Do not use Write or Edit tools — the user (or
-`/create-stories`) handles writing.
+`/gamedev:create-stories`) handles writing.
 
 **Redirect rules:**
 - If a story file does not exist at all: "This story file is missing entirely.
-  Run `/create-epics [layer]` then `/create-stories [epic-slug]` to generate stories from the GDD and ADR."
+  Run `/gamedev:create-epics [layer]` then `/gamedev:create-stories [epic-slug]` to generate stories from the GDD and ADR."
 - If a story has no GDD reference and the work appears small: "This story has
   no GDD reference. If the change is small (under ~4 hours), run
-  `/quick-design [description]` to create a Quick Design Spec, then reference
+  `/gamedev:quick-design [description]` to create a Quick Design Spec, then reference
   that spec in the story."
 - If a story's scope has grown beyond its original sizing: "This story appears
   to have expanded in scope. Consider splitting it or escalating to the producer
@@ -317,7 +317,7 @@ If any are found, surface up to 3:
 1. [Story name] — [1-line description] — [priority]
 2. [Story name] — [1-line description] — [priority]
 
-Run `/story-readiness [path]` to validate before starting.
+Run `/gamedev:story-readiness [path]` to validate before starting.
 ```
 
 If no other ready tasks are found, skip this section silently.
@@ -350,6 +350,6 @@ Handle the verdict per standard rules in `director-gates.md`:
 
 ## Recommended Next Steps
 
-- Run `/dev-story [story-path]` to begin implementation once the story is READY
-- Run `/story-readiness milestone [name]` to check all stories in a milestone at once
-- Run `/create-stories [epic-slug]` if a story file is missing entirely
+- Run `/gamedev:dev-story [story-path]` to begin implementation once the story is READY
+- Run `/gamedev:story-readiness milestone [name]` to check all stories in a milestone at once
+- Run `/gamedev:create-stories [epic-slug]` if a story file is missing entirely

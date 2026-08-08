@@ -7,7 +7,7 @@ allowed-tools: Read, Glob, Grep, Write
 model: sonnet
 ---
 
-> **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/release-checklist`. Do not auto-invoke based on context matching.
+> **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/gamedev:release-checklist`. Do not auto-invoke based on context matching.
 
 ## Phase 1: Parse Arguments
 
@@ -178,5 +178,5 @@ If yes, write the file, creating the directory if needed.
 
 ## Phase 6: Next Steps
 
-- Run `/gate-check` for a formal phase gate verdict before proceeding to release.
-- Coordinate final sign-offs via `/team-release`.
+- Run `/gamedev:gate-check` for a formal phase gate verdict before proceeding to release.
+- Coordinate final sign-offs via `/gamedev:team-release`.
