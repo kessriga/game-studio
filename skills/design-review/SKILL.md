@@ -63,6 +63,8 @@ Evaluate against the Design Document Standard checklist:
 - Does this create unintended interactions with other systems?
 - Is this consistent with the game's established tone and pillars?
 
+**Design-theory audit:** Before forming the verdict, run the Quick Audit from `../../docs/game-design-lenses.md` against the reviewed document — it surfaces missing triangularity, dominant strategies, flat interest curves, and unfair judgment that the structural checks above don't catch. At `--depth lean` or `solo` this is the only design-theory pass, since Phase 3b does not run.
+
 ---
 
 ## Phase 3b: Adversarial Specialist Review (full mode only)

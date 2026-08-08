@@ -87,6 +87,8 @@ Use the appropriate spec format for the change category.
 
 ### For Tuning changes
 
+When proposing new values, apply the tuning rule from the Decision Rules in `../../docs/game-design-lenses.md` — double or halve to find the feel, never nudge 10%, then bisect — and state that reasoning in the Rationale column.
+
 Produce a single table:
 
 ```markdown

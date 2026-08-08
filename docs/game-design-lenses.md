@@ -4,8 +4,11 @@ Distilled from Jesse Schell, *The Art of Game Design: A Book of Lenses* (3rd ed.
 CRC Press, 2019). A **lens** is a small set of questions you ask about a design to
 examine it from one perspective; good design happens when you view the game through
 as many lenses as possible. This file is the working reference for the
-`game-designer` agent; design skills (`/gamedev:design-review`,
-`/gamedev:balance-check`, `/gamedev:brainstorm`) may read it too. Lens numbers
+`game-designer` agent and the design skills that consult it: `/gamedev:design-review`
+(Quick Audit), `/gamedev:design-system` (concept + balance lenses, Quick Audit),
+`/gamedev:balance-check` (balance lenses + decision rules), `/gamedev:review-all-gdds`
+(design-theory pass), `/gamedev:brainstorm` (concept lenses), `/gamedev:quick-design`
+(tuning rule), and `/gamedev:playtest-report` (playtest discipline). Lens numbers
 follow the book so humans can look up the full treatment.
 
 ## Core Principles

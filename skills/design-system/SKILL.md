@@ -424,6 +424,8 @@ Use the answer to frame the Player Fantasy section appropriately. Do NOT assume 
 **Cross-reference**: Must align with the game pillars. If the system serves a pillar,
 quote the relevant pillar text.
 
+**Lens check**: Frame this section with the concept & experience lenses in `../../docs/game-design-lenses.md` (#1 emotion, #2 essential experience, #17 the toy) — state the essential experience before the mechanics that deliver it.
+
 **Review mode check** (apply before spawning):
 - `solo` → skip this agent spawn. Draft the section without the specialist. Add a note: "`creative-director` not consulted — Solo mode. Review manually before production."
 - `lean` → skip unless this is a section with HIGH implementation risk (Sections D and H only). For other sections, draft without the agent.
@@ -508,6 +510,8 @@ table. A formula without defined variables cannot be implemented without guesswo
 - What are the core calculations this system performs?
 - Should scaling be linear, logarithmic, or stepped?
 - What should the output ranges be at early/mid/late game?
+
+**Lens check**: Test proposed values against the Balance lenses and Decision Rules in `../../docs/game-design-lenses.md` — ensure triangularity (safe-small vs. risky-big), no dominant strategy, and reward over punishment.
 
 **Review mode check** (apply before spawning):
 - `solo` → skip this agent spawn. Draft the section without the specialist. Add a note: "`systems-designer` not consulted — Solo mode. Review manually before production."
@@ -681,6 +685,7 @@ the source of truth). Verify:
 - Edge cases have resolutions
 - Dependencies are listed with interfaces
 - Acceptance criteria are testable
+- Quick Audit passed — run the Quick Audit from `../../docs/game-design-lenses.md` against the assembled GDD (this is the only design-theory pass in `solo`/`lean` mode, where 5a-bis is skipped)
 
 ### 5a-bis: Creative Director Pillar Review
 

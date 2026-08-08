@@ -110,6 +110,7 @@ starting Phase 3. Collect both results before writing the combined report.
 - The full TR registry contents if loaded in Phase 1b (paste the registry text, not just a file path)
 - The specific checklist items assigned to that agent's phase (Phase 2 gets 2a–2f; Phase 3 gets 3a–3g)
 - The engine name and version from `.claude/docs/technical-preferences.md` and `docs/engine-reference/[engine]/VERSION.md`
+- **For the Phase 3 (Design Theory) agent only:** read `../../docs/game-design-lenses.md` in the main session and paste its Decision Rules plus the lens summaries the Phase 3 checklist doesn't already cover (#40 triangularity, #68/69 interest curve, #21 flow) into the prompt as review vocabulary. Paste the text — a subagent cannot resolve this plugin-relative path itself.
 
 Do not rely on the subagent to re-read these files — it has its own context window and cannot access Phase 1 results unless they are explicitly passed in the Task prompt.
 
