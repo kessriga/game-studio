@@ -14,6 +14,7 @@ Or check `README.md` for the version badge.
 ## Table of Contents
 
 - [Upgrade Strategies](#upgrade-strategies)
+- [v1.1 → v1.2 (Agent model tiers)](#v11--v12-agent-model-tiers)
 - [v1.0 → v1.1 (Backlog planning reconciliation)](#v10--v11-backlog-planning-reconciliation)
 - [v1.0.0-beta → v1.0](#v100-beta--v10)
 - [v0.4.x → v1.0](#v04x--v10)
@@ -79,6 +80,40 @@ Best when: you didn't use git to set up the template (just downloaded a zip).
 2. Copy the files listed under **"Safe to overwrite"** directly.
 3. For files under **"Merge carefully"**, open both versions side-by-side
    and manually merge the structural changes while keeping your content.
+
+---
+
+## v1.1 → v1.2 (Agent model tiers)
+
+**Released:** 2026-08-08
+**Branch:** `chore/5-set-agent-model-tiers`
+**Key themes:** Deliberate, version-pinned agent model tiers — two directors on Fable, department leads on Opus 4.8, specialists on Sonnet
+
+### What Changed
+
+| Category | Changes |
+|----------|---------|
+| **Directors → Fable** | `creative-director` and `technical-director` now pin `model: claude-fable-5` (was the `opus` alias). |
+| **Department leads → Opus 4.8** | `producer`, `art-director`, `narrative-director`, `audio-director`, `lead-programmer`, `qa-lead`, `release-manager`, `localization-lead`, `ux-designer` now pin `model: claude-opus-4-8`. **Cost note:** these nine agents move up a tier and cost more per invocation than before — an intended trade for stronger leadership judgement. |
+| **Specialist floor → Sonnet** | `community-manager` and `devops-engineer` move `haiku → sonnet`; the other 40 specialists keep the floating `sonnet` alias. No agent runs on Haiku anymore. |
+| **Why pinned** | An alias names a model *family*, not a version, so it cannot express "Opus 4.8"; and there is no `fable` alias. Leadership is therefore version-pinned; specialists intentionally float on the `sonnet` alias so they track the current everyday model. |
+| **Docs** | `coordination-rules.md` splits its tier table into agent tiers (pinned) vs skill tiers (aliases); `README.md`, `quick-start.md`, `agent-roster.md`, `director-gates.md`, and the `qa/` test corpus are updated to match. |
+| **New change record** | OpenSpec change `set-agent-model-tiers` documents the proposal, design, spec, and task breakdown. |
+
+---
+
+### Files: Safe to Overwrite
+
+**Existing files to overwrite (no user content):**
+- `.claude/agents/*.md` — the 13 changed agents (`model:` frontmatter only)
+- `.claude/docs/coordination-rules.md`, `.claude/docs/agent-roster.md`, `.claude/docs/director-gates.md`, `.claude/docs/quick-start.md`, `README.md`
+- `qa/agents/**`, `qa/quality-rubric.md`, `qa/catalog.yaml`
+
+---
+
+### Files: Merge Carefully
+
+- None. This change only touches agent `model:` frontmatter and tier documentation; it does not alter agent tools, behaviour, or any user content.
 
 ---
 

@@ -3,7 +3,7 @@
 ## Agent Summary
 **Domain owned:** Scope management, Backlog prioritisation validation, milestone tracking, epic prioritization, production phase gate.
 **Does NOT own:** Game design decisions (creative-director / game-designer), technical architecture (technical-director), creative direction.
-**Model tier:** Opus (multi-document synthesis, high-stakes phase gate verdicts).
+**Model tier:** Opus 4.8 (department lead — multi-document synthesis, high-stakes phase gate verdicts).
 **Gate IDs handled:** PR-SCOPE, PR-MILESTONE, PR-EPIC, PR-PHASE-GATE.
 
 ---
@@ -14,7 +14,7 @@ Verified by reading the agent's `.claude/agents/producer.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references scope, prioritisation, milestone, production — not generic)
 - [ ] `allowed-tools:` list is primarily read-focused; Bash only if milestone files require parsing
-- [ ] Model tier is `claude-opus-4-6` per coordination-rules.md (directors with gate synthesis = Opus)
+- [ ] Model tier is `claude-opus-4-8` per coordination-rules.md (department lead → Opus 4.8)
 - [ ] Agent definition does not claim authority over design decisions or technical architecture
 
 ---

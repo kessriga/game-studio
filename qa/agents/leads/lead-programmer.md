@@ -3,7 +3,7 @@
 ## Agent Summary
 **Domain owned:** Code architecture decisions, LP-FEASIBILITY gate, LP-CODE-REVIEW gate, coding standards enforcement, tech stack decisions within the approved engine.
 **Does NOT own:** Game design decisions (game-designer), creative direction (creative-director), production scheduling (producer), visual art direction (art-director).
-**Model tier:** Sonnet (implementation-level analysis of individual systems).
+**Model tier:** Opus 4.8 (department lead).
 **Gate IDs handled:** LP-FEASIBILITY, LP-CODE-REVIEW.
 
 ---
@@ -14,7 +14,7 @@ Verified by reading the agent's `.claude/agents/lead-programmer.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references code architecture, feasibility, code review, coding standards — not generic)
 - [ ] `allowed-tools:` list includes Read for source files; Bash may be included for static analysis or test runs; no write access outside `src/` without explicit delegation
-- [ ] Model tier is `claude-sonnet-4-6` per coordination-rules.md
+- [ ] Model tier is `claude-opus-4-8` per coordination-rules.md (department lead → Opus 4.8)
 - [ ] Agent definition does not claim authority over game design, creative direction, or production scheduling
 
 ---

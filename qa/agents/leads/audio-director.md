@@ -3,7 +3,7 @@
 ## Agent Summary
 **Domain owned:** Music direction and palette, sound design philosophy, audio implementation strategy, mix balance, audio aspects of phase gates.
 **Does NOT own:** Visual design (art-director), code implementation (lead-programmer), narrative story content (narrative-director), UX interaction flows (ux-designer).
-**Model tier:** Sonnet (individual system analysis — audio direction and spec review).
+**Model tier:** Opus 4.8 (department lead).
 **Gate IDs handled:** AD-VISUAL (audio aspect of the phase gate; may be referenced as part of AD-PHASE-GATE in the audio dimension).
 
 ---
@@ -14,7 +14,7 @@ Verified by reading the agent's `.claude/agents/audio-director.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references music direction, sound design, mix, audio implementation — not generic)
 - [ ] `allowed-tools:` list is read-focused; no Bash unless audio asset pipeline checks are justified
-- [ ] Model tier is `claude-sonnet-4-6` per coordination-rules.md
+- [ ] Model tier is `claude-opus-4-8` per coordination-rules.md (department lead → Opus 4.8)
 - [ ] Agent definition does not claim authority over visual design, code implementation, or narrative content
 
 ---

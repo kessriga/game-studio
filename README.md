@@ -63,15 +63,15 @@ The result: you still make every decision, but now you have a team that asks the
 Agents are organized into three tiers, matching how real studios operate:
 
 ```
-Tier 1 — Directors (Opus)
+Tier 1 — Directors
   creative-director    technical-director    producer
 
-Tier 2 — Department Leads (Sonnet)
+Tier 2 — Department Leads
   game-designer        lead-programmer       art-director
   audio-director       narrative-director    qa-lead
   release-manager      localization-lead
 
-Tier 3 — Specialists (Sonnet/Haiku)
+Tier 3 — Specialists
   gameplay-programmer  engine-programmer     ai-programmer
   network-programmer   tools-programmer      ui-programmer
   systems-designer     level-designer        economy-designer
@@ -81,6 +81,10 @@ Tier 3 — Specialists (Sonnet/Haiku)
   security-engineer    qa-tester             accessibility-specialist
   live-ops-designer    community-manager
 ```
+
+Model per agent is set in `.claude/docs/coordination-rules.md`: the two directors
+(`creative-director`, `technical-director`) run on Fable, department leads on Opus 4.8,
+and all specialists on Sonnet.
 
 ### Engine Specialists
 
