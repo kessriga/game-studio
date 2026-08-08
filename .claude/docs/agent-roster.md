@@ -5,14 +5,18 @@ The following agents are available. Each has a dedicated definition file in
 spans multiple domains, the coordinating agent (usually `producer` or the
 domain lead) should delegate to specialists.
 
-## Tier 1 -- Leadership Agents (Opus)
+Model per agent follows `.claude/docs/coordination-rules.md`: the two directors run
+on Fable, department leads on Opus 4.8, and specialists on Sonnet. The tier groupings
+below are organizational roles and do not map one-to-one to those models.
+
+## Tier 1 -- Leadership Agents
 | Agent | Domain | When to Use |
 |-------|--------|-------------|
 | `creative-director` | High-level vision | Major creative decisions, pillar conflicts, tone/direction |
 | `technical-director` | Technical vision | Architecture decisions, tech stack choices, performance strategy |
 | `producer` | Production management | Sprint planning, milestone tracking, risk management, coordination |
 
-## Tier 2 -- Department Lead Agents (Sonnet)
+## Tier 2 -- Department Lead Agents
 | Agent | Domain | When to Use |
 |-------|--------|-------------|
 | `game-designer` | Game design | Mechanics, systems, progression, economy, balancing |
@@ -24,7 +28,7 @@ domain lead) should delegate to specialists.
 | `release-manager` | Release pipeline | Build management, versioning, changelogs, deployment, rollbacks |
 | `localization-lead` | Internationalization | String externalization, translation pipeline, locale testing |
 
-## Tier 3 -- Specialist Agents (Sonnet or Haiku)
+## Tier 3 -- Specialist Agents
 | Agent | Domain | Model | When to Use |
 |-------|--------|-------|-------------|
 | `systems-designer` | Systems design | Sonnet | Specific mechanic implementation, formula design, loops |
@@ -40,16 +44,16 @@ domain lead) should delegate to specialists.
 | `sound-designer` | Sound design | Sonnet | SFX design docs, audio event lists, mixing notes |
 | `writer` | Dialogue/lore | Sonnet | Dialogue writing, lore entries, item descriptions |
 | `world-builder` | World/lore design | Sonnet | World rules, faction design, history, geography |
-| `qa-tester` | Test execution | Haiku | Writing test cases, bug reports, test checklists |
+| `qa-tester` | Test execution | Sonnet | Writing test cases, bug reports, test checklists |
 | `performance-analyst` | Performance | Sonnet | Profiling, optimization recs, memory analysis |
-| `devops-engineer` | Build/deploy | Haiku | CI/CD, build scripts, version control workflow |
+| `devops-engineer` | Build/deploy | Sonnet | CI/CD, build scripts, version control workflow |
 | `analytics-engineer` | Telemetry | Sonnet | Event tracking, dashboards, A/B test design |
-| `ux-designer` | UX flows | Sonnet | User flows, wireframes, accessibility, input handling |
+| `ux-designer` | UX flows | Opus 4.8 | User flows, wireframes, accessibility, input handling |
 | `prototyper` | Rapid prototyping | Sonnet | Throwaway prototypes, mechanic testing, feasibility validation |
 | `security-engineer` | Security | Sonnet | Anti-cheat, exploit prevention, save encryption, network security |
-| `accessibility-specialist` | Accessibility | Haiku | WCAG compliance, colorblind modes, remapping, text scaling |
+| `accessibility-specialist` | Accessibility | Sonnet | WCAG compliance, colorblind modes, remapping, text scaling |
 | `live-ops-designer` | Live operations | Sonnet | Seasons, events, battle passes, retention, live economy |
-| `community-manager` | Community | Haiku | Patch notes, player feedback, crisis comms, community health |
+| `community-manager` | Community | Sonnet | Patch notes, player feedback, crisis comms, community health |
 
 ## Engine-Specific Agents (use the set matching your engine)
 

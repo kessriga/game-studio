@@ -3,7 +3,7 @@
 ## Agent Summary
 **Domain owned:** Test strategy, QL-STORY-READY gate, QL-TEST-COVERAGE gate, bug severity triage, release quality gates.
 **Does NOT own:** Feature implementation (programmers), game design decisions, creative direction, production scheduling.
-**Model tier:** Sonnet (individual system analysis — story readiness and coverage assessment).
+**Model tier:** Opus 4.8 (department lead).
 **Gate IDs handled:** QL-STORY-READY, QL-TEST-COVERAGE.
 
 ---
@@ -14,7 +14,7 @@ Verified by reading the agent's `.claude/agents/qa-lead.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references test strategy, story readiness, coverage, bug triage — not generic)
 - [ ] `allowed-tools:` list is read-focused; may include Read for story files, test files, and coding-standards; Bash only if running test commands is required
-- [ ] Model tier is `claude-sonnet-4-6` per coordination-rules.md
+- [ ] Model tier is `claude-opus-4-8` per coordination-rules.md (department lead → Opus 4.8)
 - [ ] Agent definition does not claim authority over implementation decisions or game design
 
 ---

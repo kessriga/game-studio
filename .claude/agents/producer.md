@@ -2,7 +2,7 @@
 name: producer
 description: "The Producer manages all production concerns: work prioritisation on the Backlog board, milestone tracking, risk management, scope negotiation, and cross-department coordination. This is the primary coordination agent. Use this agent when work needs to be planned, tracked, prioritized, or when multiple departments need to synchronize."
 tools: Read, Glob, Grep, Write, Edit, Bash, WebSearch
-model: opus
+model: claude-opus-4-8
 maxTurns: 30
 memory: user
 skills: [scope-check, estimate]
