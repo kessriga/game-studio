@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# gamedev-stage — print the current production stage and, in Production+, the
+# Epic > Feature > Task breadcrumb for the game project in the current directory.
+#
+# Output: "<stage>" optionally followed by " | Epic > Feature > Task".
+# Consumed by the SessionStart hook and the /gamedev:status skill. This is the
+# stage-detection half of the former status line; the ctx%/model segments are
+# provided by Claude Code's own UI and are not reproduced here.
+
+# Resolve against the user's project when invoked from the plugin install.
+cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
+
+# --- Production stage -------------------------------------------------------
+# Priority 1: explicit override in production/stage.txt
+stage=""
+if [ -f "production/stage.txt" ]; then
+  stage=$(head -1 "production/stage.txt" | tr -d '\r\n')
+fi
+
+# Priority 2: auto-detect from artifacts
+if [ -z "$stage" ]; then
+  has_concept=false
+  has_systems=false
+  engine_configured=false
+  has_adrs=false
+  src_count=0
+
+  [ -f "design/gdd/game-concept.md" ] && has_concept=true
+  [ -f "design/gdd/systems-index.md" ] && has_systems=true
+
+  if [ -f ".claude/docs/technical-preferences.md" ]; then
+    engine_line=$(grep -m1 '^\*\*Engine\*\*:' ".claude/docs/technical-preferences.md" 2>/dev/null || true)
+    if [ -n "$engine_line" ] && ! echo "$engine_line" | grep -q "TO BE CONFIGURED"; then
+      engine_configured=true
+    fi
+  fi
+
+  if [ -d "src" ]; then
+    src_count=$(find "src" -type f \( -name "*.gd" -o -name "*.cs" -o -name "*.cpp" \
+      -o -name "*.h" -o -name "*.py" -o -name "*.rs" -o -name "*.lua" -o -name "*.wgsl" \
+      -o -name "*.tscn" -o -name "*.tres" \) 2>/dev/null | wc -l | tr -d ' ')
+  fi
+
+  if ls "docs/architecture/"adr-*.md >/dev/null 2>&1; then
+    has_adrs=true
+  fi
+
+  if [ "${src_count:-0}" -ge 10 ] 2>/dev/null; then
+    stage="Production"
+  elif [ "$has_adrs" = true ]; then
+    stage="Pre-Production"
+  elif [ "$engine_configured" = true ]; then
+    stage="Technical Setup"
+  elif [ "$has_systems" = true ]; then
+    stage="Systems Design"
+  else
+    stage="Concept"
+  fi
+fi
+
+# --- Epic > Feature > Task breadcrumb (Production+ only) ---------------------
+breadcrumb=""
+case "$stage" in
+  Production|Polish|Release)
+    state_file="production/session-state/active.md"
+    if [ -f "$state_file" ]; then
+      in_block=false
+      epic="" feature="" task=""
+      while IFS= read -r line; do
+        case "$line" in
+          *"<!-- STATUS -->"*) in_block=true; continue ;;
+          *"<!-- /STATUS -->"*) break ;;
+        esac
+        if [ "$in_block" = true ]; then
+          case "$line" in
+            Epic:*)    epic=$(echo "$line" | sed 's/^Epic: *//') ;;
+            Feature:*) feature=$(echo "$line" | sed 's/^Feature: *//') ;;
+            Task:*)    task=$(echo "$line" | sed 's/^Task: *//') ;;
+          esac
+        fi
+      done < "$state_file"
+      parts=""
+      [ -n "$epic" ] && parts="$epic"
+      [ -n "$feature" ] && parts="${parts:+$parts > }$feature"
+      [ -n "$task" ] && parts="${parts:+$parts > }$task"
+      [ -n "$parts" ] && breadcrumb=" | $parts"
+    fi
+    ;;
+esac
+
+printf '%s%s\n' "$stage" "$breadcrumb"

@@ -48,7 +48,7 @@ Skills declare a floating alias in frontmatter (or none = Sonnet):
 | `opus` | latest Opus | Multi-document synthesis, high-stakes phase gate verdicts, cross-system holistic review |
 
 Skills with `model: haiku`: `/gamedev:help`, `/gamedev:story-readiness`, `/gamedev:scope-check`,
-`/gamedev:project-stage-detect`, `/gamedev:changelog`, `/gamedev:patch-notes`
+`/gamedev:project-stage-detect`, `/gamedev:changelog`, `/gamedev:patch-notes`, `/gamedev:status`
 
 Skills with `model: opus`: `/gamedev:review-all-gdds`, `/gamedev:architecture-review`, `/gamedev:gate-check`
 

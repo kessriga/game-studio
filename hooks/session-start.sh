@@ -9,6 +9,17 @@ cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 
 echo "=== Claude Code Game Studios — Session Context ==="
 
+# Production stage + breadcrumb (from the plugin's bin/gamedev-stage).
+# ${CLAUDE_PLUGIN_ROOT} is set for plugin hooks; fall back to PATH for dev use.
+if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -x "${CLAUDE_PLUGIN_ROOT}/bin/gamedev-stage" ]; then
+    STAGE=$("${CLAUDE_PLUGIN_ROOT}/bin/gamedev-stage" 2>/dev/null)
+elif command -v gamedev-stage >/dev/null 2>&1; then
+    STAGE=$(gamedev-stage 2>/dev/null)
+else
+    STAGE=""
+fi
+[ -n "$STAGE" ] && echo "Stage: $STAGE"
+
 # Current branch
 BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 if [ -n "$BRANCH" ]; then
