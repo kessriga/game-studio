@@ -5,7 +5,7 @@ user-invocable: true
 allowed-tools: Read
 model: haiku
 context: |
-  !gamedev-stage 2>/dev/null || echo "Stage: (run /gamedev:start to scaffold this project)"
+  !bash -c '{ [ -x "${CLAUDE_PLUGIN_ROOT}/bin/gamedev-stage" ] && "${CLAUDE_PLUGIN_ROOT}/bin/gamedev-stage"; } || gamedev-stage' 2>/dev/null || echo "Stage: (run /gamedev:start to scaffold this project)"
 ---
 
 # Status
