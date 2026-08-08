@@ -16,7 +16,10 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 ## Project Structure
 
-@.claude/docs/directory-structure.md
+> Directory layout, agent coordination rules, coding standards, and context
+> management are defined by the **gamedev plugin** and applied by its skills and
+> agents when relevant — they are not duplicated here. Install/manage the plugin
+> with `/plugin`; scaffold or refresh this project with `/gamedev:start`.
 
 ## Engine Version Reference
 
@@ -25,10 +28,6 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 ## Technical Preferences
 
 @.claude/docs/technical-preferences.md
-
-## Coordination Rules
-
-@.claude/docs/coordination-rules.md
 
 ## Collaboration Protocol
 
@@ -40,18 +39,18 @@ Every task follows: **Question -> Options -> Decision -> Draft -> Approval**
 - Multi-file changes require explicit approval for the full changeset
 - No commits without user instruction
 
-See `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md` for full protocol and examples.
+The full protocol and examples ship with the gamedev plugin
+(`COLLABORATIVE-DESIGN-PRINCIPLE.md`); its skills apply it automatically.
 
 > **First session?** If the project has no engine configured and no game concept,
 > run `/gamedev:start` to begin the guided onboarding flow.
 
-## Coding Standards
-
-@.claude/docs/coding-standards.md
-
-## Context Management
-
-@.claude/docs/context-management.md
+> **Project-owned files.** This `CLAUDE.md`, `.claude/rules/`,
+> `.claude/docs/technical-preferences.md`, and `docs/engine-reference/` were
+> scaffolded into this repo by `/gamedev:start` and are yours to edit. Framework
+> guidance (coding standards, coordination rules, context management) lives in the
+> plugin, not here. Re-run `/gamedev:start` any time to add missing scaffold files
+> (it never overwrites what already exists).
 
 <!-- BACKLOG.MD MCP GUIDELINES START -->
 

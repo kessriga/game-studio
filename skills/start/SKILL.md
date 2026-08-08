@@ -3,15 +3,48 @@ name: start
 description: "First-time onboarding — asks where you are, then guides you to the right workflow. No assumptions."
 argument-hint: "[no arguments]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+allowed-tools: Read, Glob, Grep, Write, Bash, AskUserQuestion
 model: sonnet
 ---
 
 # Guided Onboarding
 
-This skill writes one file: `production/review-mode.txt` (review mode config set in Phase 3b).
+This skill is the entry point for new users. It does NOT assume you have a game idea, an engine preference, or any prior experience. When the `gamedev` plugin is freshly installed into an empty project, it first **scaffolds** the project-side files a plugin cannot ship (Phase 0), then asks where the user is and routes them to the right workflow.
 
-This skill is the entry point for new users. It does NOT assume you have a game idea, an engine preference, or any prior experience. It asks first, then routes you to the right workflow.
+Files it may write: the project scaffold (Phase 0), `production/stage.txt` (Phase 3c), and `production/review-mode.txt` (Phase 3b).
+
+---
+
+## Phase 0: Scaffold the Project (first run only)
+
+A Claude Code plugin cannot ship the project `CLAUDE.md`, the `.claude/rules/`, `.claude/docs/technical-preferences.md`, or the `production/`–`design/`–`docs/` tree — those must be created **into the user's repository**. This phase does that, once.
+
+**Detect first.** If `.claude/docs/technical-preferences.md` already exists in the project, it is already scaffolded — say nothing about scaffolding and go straight to Phase 1.
+
+**If not scaffolded:**
+
+1. **Locate the scaffold sources.** They ship in the plugin at `templates/`, which is two directories up from this `SKILL.md` (`../../templates/`). Resolve that to an absolute path — call it `$TPL` below.
+2. **Ask consent** with `AskUserQuestion`:
+   - **Prompt**: "This looks like a fresh project. I can scaffold the game-studio structure here — project `CLAUDE.md`, `.claude/rules/`, `technical-preferences.md`, and the `production/`/`design/`/`docs/` directories. Nothing existing is overwritten. Proceed?"
+   - **Options**: `Yes, scaffold it` / `No, skip scaffolding`
+   - If they decline, note that some skills expect these files and continue to Phase 1.
+3. **Ask which engine** with `AskUserQuestion` (so only the relevant engine reference is copied):
+   - **Prompt**: "Which engine will this project use? (You can change this later with `/gamedev:setup-engine`.)"
+   - **Options**: `Godot` / `Unity` / `Unreal` / `Bevy` — plus let them pick "Decide later" via the free-text option, in which case skip the engine-reference copy.
+4. **Copy, never overwriting** (`cp` with `-n`). Create parent directories as needed. Run these from the project root:
+   - Project config & rules:
+     - `cp -n "$TPL/CLAUDE.md" ./CLAUDE.md`
+     - `mkdir -p .claude/docs && cp -Rn "$TPL/.claude/rules" ./.claude/ && cp -n "$TPL/.claude/docs/technical-preferences.md" ./.claude/docs/`
+   - Directory tree & seeds (design registry, architecture registry):
+     - `cp -Rn "$TPL/design" "$TPL/production" "$TPL/src" ./`
+     - `mkdir -p docs && cp -Rn "$TPL/docs/architecture" "$TPL/docs/registry" ./docs/`
+   - Engine reference (chosen engine only), e.g. for Godot:
+     - `mkdir -p docs/engine-reference && cp -Rn "$TPL/docs/engine-reference/godot" ./docs/engine-reference/`
+     - If the user chose a different engine, copy that engine's directory instead; if "Decide later", skip this step and tell them `/gamedev:setup-engine` will add it.
+5. **Fix the engine import.** The scaffolded `CLAUDE.md` imports `@docs/engine-reference/godot/VERSION.md`. If the chosen engine is not Godot, update that line to the chosen engine's `VERSION.md`; if "Decide later", leave it and note `/gamedev:setup-engine` will set it.
+6. **Report** concisely what was created vs. what already existed (from `cp -n` — files that already exist are left untouched). Do not dump every path; summarize by group ("project CLAUDE.md, 11 rules, technical-preferences, production/design/docs tree, Godot engine reference").
+
+Then continue to Phase 1. Do not re-ask consent on later runs — the detect step guards it.
 
 ---
 
