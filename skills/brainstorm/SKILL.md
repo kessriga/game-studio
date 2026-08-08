@@ -42,6 +42,8 @@ When this skill is invoked:
    - Use constraints as creative fuel — limitations often produce the best ideas
    - Time-box each phase — keep momentum, don't over-deliberate early
 
+   Throughout, consult the concept & experience lenses in `../../docs/game-design-lenses.md` (#1 emotion, #2 essential experience, #14 problem statement, #17 the toy, and #30/31 for the core verb) to generate and stress-test concepts.
+
 ---
 
 ### Phase 1: Creative Discovery

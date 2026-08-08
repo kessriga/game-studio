@@ -38,6 +38,8 @@ tuning knobs, and expected value ranges. This is the baseline for "correct" beha
 
 ## Phase 4: Perform Analysis
 
+Before the domain checks, consult the Balance lenses (#37–#53) and Decision Rules in `../../docs/game-design-lenses.md`: hunt triangularity (safe-small vs. risky-big) and dominant strategies first, prefer reward over punishment, and tune by doubling or halving rather than nudging 10%. Carry these into the checks and the Recommendations table below.
+
 Run domain-specific checks:
 
 **Combat balance:**

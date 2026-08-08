@@ -21,6 +21,8 @@ Determine the mode:
 - `new` → generate a blank playtest report template
 - `analyze [path]` → read raw notes and fill in the template with structured findings
 
+For both modes, follow the Playtest Discipline in `../../docs/game-design-lenses.md`: every test answers a *stated question* (not "is it fun?"), watch faces not screens, and debrief with FFWWDD (Frustrating / Favorite / Wanted-but-couldn't / magic-Wand / were-Doing / Describe-to-a-friend). Cadence is WUBALEW — when useful, at least weekly.
+
 ---
 
 ## Phase 2A: New Template Mode
