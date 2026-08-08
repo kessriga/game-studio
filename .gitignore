@@ -147,3 +147,4 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 *.lnk
+templates/production/session-logs/

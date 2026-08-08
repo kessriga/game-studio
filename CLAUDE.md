@@ -1,83 +1,49 @@
-# Claude Code Game Studios -- Game Studio Agent Architecture
+# gamedev plugin — development workspace
 
-Indie game development managed through 53 coordinated Claude Code subagents.
-Each agent owns a specific domain, enforcing separation of concerns and quality.
+This repository **is** the `gamedev` Claude Code plugin and its marketplace. It is
+no longer a fork-me template: end users install it with `/plugin marketplace add`
+and `/plugin install gamedev`, then run `/gamedev:start` to scaffold a project.
+See `README.md` for the adoption story and `CONTRIBUTING.md` for the dev workflow.
 
-## Technology Stack
+> This file is loaded only when a contributor opens the repo directly. When the
+> framework is installed as a plugin, a plugin-root `CLAUDE.md` is **not** loaded —
+> the project-side `CLAUDE.md` the user gets comes from `templates/CLAUDE.md` via
+> `/gamedev:start`.
 
-- **Engine**: [CHOOSE: Godot 4 / Unity / Unreal Engine 5 / Bevy]
-- **Language**: [CHOOSE: GDScript / C# / C++ / Blueprint / Rust]
-- **Version Control**: Git with trunk-based development
-- **Build System**: [SPECIFY after choosing engine]
-- **Asset Pipeline**: [SPECIFY after choosing engine]
+## Layout
 
-> **Note**: Engine-specialist agents exist for Godot, Unity, Unreal, and Bevy with
-> dedicated sub-specialists. Use the set matching your engine.
+| Path | What it is |
+|------|------------|
+| `.claude-plugin/` | `plugin.json` + `marketplace.json` (this repo is its own marketplace) |
+| `skills/` | 72 plugin skills — invoked as `/gamedev:<name>` |
+| `agents/` | 53 subagents — addressed as `gamedev:<name>` |
+| `hooks/` | shipped hooks (`hooks.json` + scripts), run from `${CLAUDE_PLUGIN_ROOT}` |
+| `bin/` | plugin executables on the Bash `PATH` (e.g. `gamedev-stage`) |
+| `docs/` | framework docs + document templates; skills read them via `../../docs/…` |
+| `templates/` | project scaffold sources `/gamedev:start` copies into a user's repo (project `CLAUDE.md`, rules, engine references, directory seeds) |
+| `.claude/` | **dev-only**, not shipped: `settings.json`, `hooks/validate-skill-change.sh`, `commands/opsx/`, `agent-memory/` |
+| `qa/`, `openspec/`, `backlog/` | validation corpus and planning — not shipped |
 
-## Project Structure
+## Dogfooding
 
-@.claude/docs/directory-structure.md
+To exercise the framework while developing it, install this repo as a local plugin:
 
-## Engine Version Reference
+```
+claude plugin marketplace add ./
+claude plugin install gamedev@game-studio
+```
 
-@docs/engine-reference/godot/VERSION.md
+Because the local marketplace uses `source: "./"`, `${CLAUDE_PLUGIN_ROOT}` points at
+this repo, so edits under `skills/`, `agents/`, `hooks/`, and `docs/` are live in the
+next session.
 
-## Technical Preferences
+## Conventions
 
-@.claude/docs/technical-preferences.md
-
-## Coordination Rules
-
-@.claude/docs/coordination-rules.md
-
-## Collaboration Protocol
-
-**User-driven collaboration, not autonomous execution.**
-Every task follows: **Question -> Options -> Decision -> Draft -> Approval**
-
-- Agents MUST ask "May I write this to [filepath]?" before using Write/Edit tools
-- Agents MUST show drafts or summaries before requesting approval
-- Multi-file changes require explicit approval for the full changeset
-- No commits without user instruction
-
-See `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md` for full protocol and examples.
-
-> **First session?** If the project has no engine configured and no game concept,
-> run `/start` to begin the guided onboarding flow.
-
-## Coding Standards
-
-@.claude/docs/coding-standards.md
-
-## Context Management
-
-@.claude/docs/context-management.md
-
-<!-- BACKLOG.MD MCP GUIDELINES START -->
-
-<CRITICAL_INSTRUCTION>
-
-## BACKLOG WORKFLOW INSTRUCTIONS
-
-This project uses Backlog.md MCP for all task and project management activities.
-
-**CRITICAL GUIDANCE**
-
-- If your client supports MCP resources, read `backlog://workflow/overview` to understand when and how to use Backlog for this project.
-- If your client only supports tools or the above request fails, call `backlog.get_backlog_instructions()` to load the tool-oriented overview. Use the `instruction` selector when you need `task-creation`, `task-execution`, or `task-finalization`.
-
-- **First time working here?** Read the overview resource IMMEDIATELY to learn the workflow
-- **Already familiar?** You should have the overview cached ("## Backlog.md Overview (MCP)")
-- **When to read it**: BEFORE creating tasks, or when you're unsure whether to track work
-
-These guides cover:
-- Decision framework for when to create tasks
-- Search-first workflow to avoid duplicates
-- Links to detailed guides for task creation, execution, and finalization
-- MCP tools reference
-
-You MUST read the overview resource to understand the complete workflow. The information is NOT summarized here.
-
-</CRITICAL_INSTRUCTION>
-
-<!-- BACKLOG.MD MCP GUIDELINES END -->
+- Skill/agent frontmatter `name:` stays **bare**; Claude Code applies the `gamedev:`
+  prefix automatically. Never hardcode the prefix in a `name:` field.
+- Cross-references between skills/agents/docs use the namespaced form
+  (`/gamedev:<skill>`, `gamedev:<agent>`); Claude Code built-ins (`/plugin`, `/clear`,
+  `/compact`, `/config`) stay bare.
+- Skills reference framework docs by path relative to the skill's own `SKILL.md`
+  (`../../docs/<file>.md`), and project-side files by their project path.
+- Commit messages follow Conventional Commits and reference the task ID.

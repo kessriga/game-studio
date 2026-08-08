@@ -41,6 +41,8 @@ Read from installed plugin trees on disk (`superpowers` 6.2.0, `codex` 1.0.6, `f
 
 `skills/`, `agents/`, `hooks/`, `scripts/`, `bin/`, `templates/`, framework docs at the plugin root; `.claude-plugin/plugin.json` + `marketplace.json`. The manifest *could* remap paths into the existing `.claude/` layout with less churn, but remapping only hides the restructure: the repo's `.claude/` would then half-work as a project (bare-name skills whose bodies reference namespaced names), and framework devs with the plugin installed would load all 71 skills twice. The honest layout also re-keys `validate-skill-change.sh` trivially (`skills/<name>/`). Moves use `git mv` to preserve history.
 
+**Example-project layer (discovered during apply, 2026-08-08).** Because the repo is currently a fork template, its root also carries skeleton project content — `src/`, `design/`, `production/` seeds, `docs/engine-reference/` (all four engines), architecture seed, and directory-scoped `CLAUDE.md` files (`src/CLAUDE.md`, `design/CLAUDE.md`, `docs/CLAUDE.md`) — and the root `docs/` name collides with the planned plugin framework-docs dir. Resolution: this project/scaffold content moves into `templates/` (scaffold sources `/gamedev:start` copies out), freeing `docs/` for the framework docs; the current root `CLAUDE.md` becomes `templates/CLAUDE.md` (the scaffold source) and a short dev-oriented `CLAUDE.md` is written at the repo root (loaded only when a framework dev opens the repo directly — not when installed as a plugin). `scripts/` (pull-main dev tooling) stays repo-side.
+
 What ships vs stays repo-side:
 
 | Ships in plugin | Stays repo-side (`.claude/`, unshipped) |
