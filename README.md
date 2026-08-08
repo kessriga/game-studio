@@ -71,8 +71,9 @@ Tier 3 — Specialists
 ```
 
 Model per agent is set in the plugin's `docs/coordination-rules.md`: the two directors
-(`creative-director`, `technical-director`) run on Fable, department leads on Opus 4.8,
-and all specialists on Sonnet.
+(`creative-director`, `technical-director`) and `game-designer` — a load-bearing role
+in any studio — run on Fable, the other department leads on Opus 4.8, and all
+specialists on Sonnet.
 
 ### Engine Specialists
 

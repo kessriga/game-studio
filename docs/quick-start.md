@@ -29,8 +29,9 @@ There are three tiers of agents:
 - **Tier 3**: Specialists who execute within their domain
   - Designers, programmers, artists, writers, testers, engineers
 
-Exact model per agent lives in `coordination-rules.md` (directors on
-Fable, department leads on Opus 4.8, specialists on Sonnet).
+Exact model per agent lives in `coordination-rules.md` (directors and
+`game-designer` on Fable, other department leads on Opus 4.8, specialists
+on Sonnet).
 
 ### 2. Pick the Right Agent for the Job
 

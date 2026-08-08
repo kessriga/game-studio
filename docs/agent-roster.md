@@ -5,8 +5,9 @@ The following agents are available. Each has a dedicated definition file in
 spans multiple domains, the coordinating agent (usually `producer` or the
 domain lead) should delegate to specialists.
 
-Model per agent follows `coordination-rules.md`: the two directors run
-on Fable, department leads on Opus 4.8, and specialists on Sonnet. The tier groupings
+Model per agent follows `coordination-rules.md`: the two directors and
+`game-designer` run on Fable, other department leads on Opus 4.8, and
+specialists on Sonnet. The tier groupings
 below are organizational roles and do not map one-to-one to those models.
 
 ## Tier 1 -- Leadership Agents

@@ -29,11 +29,14 @@ apply, and the distinction is deliberate:**
 | Tier | `model:` value | Agents |
 |------|----------------|--------|
 | **Director** (top-2 authority) | `claude-fable-5` — pinned | creative-director, technical-director |
+| **Game design lead** | `claude-fable-5` — pinned | game-designer |
 | **Department lead** | `claude-opus-4-8` — pinned | producer, art-director, narrative-director, audio-director, lead-programmer, qa-lead, release-manager, localization-lead, ux-designer |
-| **Specialist** | `sonnet` — floating alias | the other 42 agents — every engine specialist (godot/unity/unreal/bevy), game/systems/level/economy designers, live-ops-designer, analytics-engineer, all programmers, qa-tester, and the operations/creative specialists |
+| **Specialist** | `sonnet` — floating alias | the other 41 agents — every engine specialist (godot/unity/unreal/bevy), systems/level/economy designers, live-ops-designer, analytics-engineer, all programmers, qa-tester, and the operations/creative specialists |
 
 Leadership is pinned because the intent is a *specific* model — Fable for the two
-directors, Opus 4.8 for the leads — and the bare `opus` alias names a model family,
+directors and for game-designer (game design is a load-bearing creative role, so it
+rides the strongest model alongside the directors), Opus 4.8 for the other leads —
+and the bare `opus` alias names a model family,
 not a specific version, so it cannot express "Opus 4.8". Note `narrative-director` and `audio-director` are department
 leads despite their names; only the two top authorities are "directors".
 
