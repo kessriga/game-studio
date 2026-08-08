@@ -75,6 +75,6 @@
 ---
 
 ## Coverage Notes
-- No automated runner exists for agent behavior tests — these are reviewed manually or via `/skill-test`
+- No automated runner exists for agent behavior tests — these are reviewed manually or via `/gamedev:skill-test`
 - Version-awareness (Case 3, Case 5) is the highest-risk failure mode for this agent; test regularly when engine version changes
 - Case 4 integration with lead-programmer is a coordination test, not a technical correctness test

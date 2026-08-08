@@ -1,8 +1,8 @@
-# Skill Test Spec: /design-review
+# Skill Test Spec: /gamedev:design-review
 
 ## Skill Summary
 
-`/design-review` reads a game design document (GDD) and evaluates it against
+`/gamedev:design-review` reads a game design document (GDD) and evaluates it against
 the project's 8-section design standard (Overview, Player Fantasy, Detailed
 Rules, Formulas, Edge Cases, Dependencies, Tuning Knobs, Acceptance Criteria).
 It checks for internal consistency, implementability, and cross-system
@@ -14,7 +14,7 @@ REVISION NEEDED. It is a read-only skill (no file writes) and runs as a
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill-test static` — no fixture needed.
+Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
 - [ ] Has ≥2 phase headings or numbered steps
@@ -35,7 +35,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 - Formulas section contains at least one formula with defined variables
 - Acceptance Criteria section contains at least 3 testable criteria
 
-**Input:** `/design-review design/gdd/light-manipulation.md`
+**Input:** `/gamedev:design-review design/gdd/light-manipulation.md`
 
 **Expected behavior:**
 1. Skill reads the target document in full
@@ -63,7 +63,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
   `tests/skills/_fixtures/incomplete-gdd.md` (4 of 8 sections populated;
   Formulas, Edge Cases, Tuning Knobs, Acceptance Criteria are missing)
 
-**Input:** `/design-review design/gdd/light-manipulation.md`
+**Input:** `/gamedev:design-review design/gdd/light-manipulation.md`
 
 **Expected behavior:**
 1. Skill reads the document
@@ -88,7 +88,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 - The described behavior mentions numeric values but no formulas are defined
 - Acceptance Criteria exist but are vague ("feels good" rather than measurable)
 
-**Input:** `/design-review design/gdd/[document].md`
+**Input:** `/gamedev:design-review design/gdd/[document].md`
 
 **Expected behavior:**
 1. Skill identifies missing Formulas section
@@ -109,7 +109,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 **Fixture:**
 - The path provided does not exist in the project
 
-**Input:** `/design-review design/gdd/nonexistent.md`
+**Input:** `/gamedev:design-review design/gdd/nonexistent.md`
 
 **Expected behavior:**
 1. Skill attempts to read the file
@@ -133,7 +133,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 - `design/gdd/light-manipulation.md` exists with all 8 sections
 - `production/session-state/review-mode.txt` exists with `full` (most permissive mode)
 
-**Input:** `/design-review design/gdd/light-manipulation.md` (with full review mode active)
+**Input:** `/gamedev:design-review design/gdd/light-manipulation.md` (with full review mode active)
 
 **Expected behavior:**
 1. Skill reads the GDD document
@@ -156,7 +156,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 - [ ] Does NOT use Write or Edit tools (read-only skill)
 - [ ] Presents complete findings before any verdict
 - [ ] Does not ask for approval before producing output (no writes to approve)
-- [ ] Ends with recommended next step (e.g., fix issues and re-run, or proceed to `/map-systems`)
+- [ ] Ends with recommended next step (e.g., fix issues and re-run, or proceed to `/gamedev:map-systems`)
 
 ---
 
@@ -164,7 +164,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 
 - Cross-system consistency checking (Case 3 in the skill's own phase list) is
   not directly tested here because it requires multiple GDD files to compare;
-  this is covered by the `/review-all-gdds` spec instead.
+  this is covered by the `/gamedev:review-all-gdds` spec instead.
 - The skill's `context: fork` behavior (running as a subagent) is not tested
   at the spec level — this is a runtime behavior verified manually.
 - Performance and edge cases involving very large GDD files are not in scope.

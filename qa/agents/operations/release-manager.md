@@ -4,7 +4,7 @@
 - **Domain**: Release pipeline management, platform certification checklists (Nintendo, Sony, Microsoft, Apple, Google), store submission workflows, platform technical requirements compliance, semantic version numbering, release branch management
 - **Does NOT own**: Game design decisions, QA test strategy or test case design (qa-lead), QA test execution (qa-tester), build infrastructure (devops-engineer)
 - **Model tier**: Opus 4.8 (department lead)
-- **Gate IDs**: May be invoked by `/gate-check` during Release phase; LAUNCH BLOCKED verdict is release-manager's primary escalation output
+- **Gate IDs**: May be invoked by `/gamedev:gate-check` during Release phase; LAUNCH BLOCKED verdict is release-manager's primary escalation output
 
 ---
 
@@ -77,4 +77,4 @@
 - Case 3 (LAUNCH BLOCKED verdict) is the most critical test — this agent's primary safety output is blocking bad launches
 - Case 5 requires current date and release date context; verify the agent uses actual dates, not placeholder estimates
 - Certification requirements change over time — flag if the agent produces specific requirement IDs that may be outdated
-- No automated runner; review manually or via `/skill-test`
+- No automated runner; review manually or via `/gamedev:skill-test`

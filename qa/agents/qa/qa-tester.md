@@ -84,4 +84,4 @@
 - Case 3 (ambiguous criterion) is a coordination test — qa-tester must not silently accept untestable criteria
 - Case 5 requires coding-standards.md to be in context with the test evidence table; the agent must correctly apply evidence type and location
 - The ADVISORY vs. BLOCKING gate level (Case 5) is a detail that affects story completion — verify the agent reports it
-- No automated runner; review manually or via `/skill-test`
+- No automated runner; review manually or via `/gamedev:skill-test`

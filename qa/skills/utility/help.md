@@ -1,13 +1,13 @@
-# Skill Test Spec: /help
+# Skill Test Spec: /gamedev:help
 
 ## Skill Summary
 
-`/help` analyzes what has been done and what comes next in the project workflow.
+`/gamedev:help` analyzes what has been done and what comes next in the project workflow.
 It runs on the Haiku model (read-only, formatting task) and reads `production/stage.txt`
 and recent session state to produce a concise situational guidance summary. Because it
 is Haiku/read-only it cannot call the Backlog tools, so it reports the current focus from
 the session-state STATUS block rather than enumerating board work items. The skill
-optionally accepts a context query (e.g., `/help testing`) to surface relevant skills for
+optionally accepts a context query (e.g., `/gamedev:help testing`) to surface relevant skills for
 a specific topic.
 
 The output is always informational — no files are written and no director gates
@@ -18,7 +18,7 @@ navigator, suggesting 2-3 next skills based on the current project state.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill-test static` — no fixture needed.
+Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
 - [ ] Has ≥2 phase headings
@@ -30,7 +30,7 @@ Verified automatically by `/skill-test static` — no fixture needed.
 
 ## Director Gate Checks
 
-None. `/help` is a read-only navigation skill. No director gates apply.
+None. `/gamedev:help` is a read-only navigation skill. No director gates apply.
 
 ---
 
@@ -43,13 +43,13 @@ None. `/help` is a read-only navigation skill. No director gates apply.
 - `production/sprints/sprint-004.md` exists with in-progress stories
 - `production/session-state/active.md` has a recent checkpoint
 
-**Input:** `/help`
+**Input:** `/gamedev:help`
 
 **Expected behavior:**
 1. Skill reads stage.txt and session-state active.md
 2. Skill reads the current focus (epic/feature/task) from the session-state STATUS block
 3. Skill outputs: current stage, current focus, and 3 suggested next skills
-   (e.g., `/dev-story`, `/story-done`, `/story-readiness`)
+   (e.g., `/gamedev:dev-story`, `/gamedev:story-done`, `/gamedev:story-readiness`)
 4. Suggestions are ranked by relevance to current project state
 5. Verdict is HELP COMPLETE
 
@@ -70,18 +70,18 @@ None. `/help` is a read-only navigation skill. No director gates apply.
 - No sprint files, no GDD files
 - `technical-preferences.md` is configured (engine selected)
 
-**Input:** `/help`
+**Input:** `/gamedev:help`
 
 **Expected behavior:**
 1. Skill reads stage.txt — detects Concept stage
 2. Skill outputs the Concept-stage workflow: brainstorm → map-systems → design-system
-3. Suggested skills are: `/brainstorm`, `/map-systems` (if concept exists)
+3. Suggested skills are: `/gamedev:brainstorm`, `/gamedev:map-systems` (if concept exists)
 4. Current progress is noted: "Engine configured, concept not yet created"
 
 **Assertions:**
 - [ ] Stage is identified as Concept
 - [ ] Workflow path shows the expected sequence for this stage
-- [ ] Suggestions do not include Production-stage skills (e.g., `/dev-story`)
+- [ ] Suggestions do not include Production-stage skills (e.g., `/gamedev:dev-story`)
 - [ ] Verdict is HELP COMPLETE
 
 ---
@@ -93,19 +93,19 @@ None. `/help` is a read-only navigation skill. No director gates apply.
 - No sprint files
 - `technical-preferences.md` has placeholders
 
-**Input:** `/help`
+**Input:** `/gamedev:help`
 
 **Expected behavior:**
 1. Skill cannot determine stage from stage.txt
 2. Skill runs project-stage-detect logic to infer stage from artifacts
 3. If stage cannot be inferred: outputs the full workflow overview from
    Concept through Release as a reference map
-4. Primary suggestion is `/start` to begin configuration
+4. Primary suggestion is `/gamedev:start` to begin configuration
 
 **Assertions:**
 - [ ] Skill does not crash when stage.txt is absent
 - [ ] Full workflow overview is shown when stage cannot be determined
-- [ ] `/start` or `/project-stage-detect` is a top suggestion
+- [ ] `/gamedev:start` or `/gamedev:project-stage-detect` is a top suggestion
 - [ ] Verdict is HELP COMPLETE
 
 ---
@@ -116,12 +116,12 @@ None. `/help` is a read-only navigation skill. No director gates apply.
 - `production/stage.txt` contains `Production`
 - Active sprint has a story with `Status: In Review`
 
-**Input:** `/help testing`
+**Input:** `/gamedev:help testing`
 
 **Expected behavior:**
 1. Skill reads context query: "testing"
-2. Skill surfaces skills relevant to testing: `/qa-plan`, `/smoke-check`,
-   `/regression-suite`, `/test-setup`, `/test-evidence-review`
+2. Skill surfaces skills relevant to testing: `/gamedev:qa-plan`, `/gamedev:smoke-check`,
+   `/gamedev:regression-suite`, `/gamedev:test-setup`, `/gamedev:test-evidence-review`
 3. Output is focused on testing workflow, not general sprint navigation
 4. Currently in-review story is highlighted as a testing candidate
 
@@ -138,7 +138,7 @@ None. `/help` is a read-only navigation skill. No director gates apply.
 **Fixture:**
 - Any project state
 
-**Input:** `/help`
+**Input:** `/gamedev:help`
 
 **Expected behavior:**
 1. Skill produces workflow guidance summary
@@ -168,7 +168,7 @@ None. `/help` is a read-only navigation skill. No director gates apply.
 
 - The case where all work in the current milestone is Done is not separately
   tested; the skill would point to the next `To Do` work on the Backlog board.
-- The `/help` skill does not validate whether suggested skills are available —
+- The `/gamedev:help` skill does not validate whether suggested skills are available —
   it assumes standard skill catalog availability.
 - Stage detection fallback (when stage.txt is absent) delegates to the same
-  logic as `/project-stage-detect` and is not re-tested here in detail.
+  logic as `/gamedev:project-stage-detect` and is not re-tested here in detail.

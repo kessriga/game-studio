@@ -10,7 +10,7 @@
 
 ## Static Assertions (Structural)
 
-Verified by reading the agent's `.claude/agents/lead-programmer.md` frontmatter:
+Verified by reading the agent's `agents/lead-programmer.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references code architecture, feasibility, code review, coding standards — not generic)
 - [ ] `allowed-tools:` list includes Read for source files; Bash may be included for static analysis or test runs; no write access outside `src/` without explicit delegation
@@ -80,6 +80,6 @@ Verified by reading the agent's `.claude/agents/lead-programmer.md` frontmatter:
 
 ## Coverage Notes
 - Multi-file code review spanning several interdependent systems is not covered — deferred to integration tests.
-- Tech debt assessment and prioritization are not covered here — deferred to /tech-debt skill integration.
+- Tech debt assessment and prioritization are not covered here — deferred to /gamedev:tech-debt skill integration.
 - Coding standards document updates (adding a new forbidden pattern) are not covered.
 - Interaction with qa-lead on what constitutes a testable unit (LP vs QL boundary) is not covered.

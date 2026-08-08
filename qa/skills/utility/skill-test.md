@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill-test
+# Skill Test Spec: /gamedev:skill-test
 
 ## Skill Summary
 
-`/skill-test` validates skill files for structural correctness, behavioral
+`/gamedev:skill-test` validates skill files for structural correctness, behavioral
 compliance, and category-rubric scoring. It operates in three modes:
 
 - **static**: Checks a single skill file for structural requirements
@@ -11,8 +11,8 @@ compliance, and category-rubric scoring. It operates in three modes:
   table.
 - **spec**: Reads a test spec file from `tests/skills/` and evaluates the skill
   against each test case assertion, producing a case-by-case verdict.
-- **audit**: Produces a coverage table of all skills in `.claude/skills/` and
-  all agents in `.claude/agents/`, showing which have spec files and which do not.
+- **audit**: Produces a coverage table of all skills in `skills/` and
+  all agents in `agents/`, showing which have spec files and which do not.
 
 An additional **category** mode reads the quality rubric for a skill category
 (e.g., gate skills) and scores the skill against rubric criteria. The verdict
@@ -22,19 +22,19 @@ system differs by mode.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill-test static` — no fixture needed.
+Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdicts: COMPLIANT, NON-COMPLIANT, WARNINGS (static mode); PASS, FAIL, PARTIAL (spec mode); COMPLETE (audit mode)
 - [ ] Does NOT contain "May I write" language (skill is read-only in all modes)
-- [ ] Has a next-step handoff (e.g., `/skill-improve` to fix issues found)
+- [ ] Has a next-step handoff (e.g., `/gamedev:skill-improve` to fix issues found)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill-test` is a meta-utility skill. No director gates apply.
+None. `/gamedev:skill-test` is a meta-utility skill. No director gates apply.
 
 ---
 
@@ -43,7 +43,7 @@ None. `/skill-test` is a meta-utility skill. No director gates apply.
 ### Case 1: Static Mode — Well-formed skill, all 7 checks pass, COMPLIANT
 
 **Fixture:**
-- `.claude/skills/brainstorm/SKILL.md` exists and is well-formed:
+- `skills/brainstorm/SKILL.md` exists and is well-formed:
   - Has all required frontmatter fields
   - Has ≥2 phase headings
   - Has verdict keywords
@@ -52,10 +52,10 @@ None. `/skill-test` is a meta-utility skill. No director gates apply.
   - Documents director gates
   - Documents gate mode behavior (lean/solo skips)
 
-**Input:** `/skill-test static brainstorm`
+**Input:** `/gamedev:skill-test static brainstorm`
 
 **Expected behavior:**
-1. Skill reads `.claude/skills/brainstorm/SKILL.md`
+1. Skill reads `skills/brainstorm/SKILL.md`
 2. Skill runs all 7 structural checks
 3. All 7 checks pass
 4. Skill outputs a PASS/FAIL table with all 7 checks marked PASS
@@ -72,10 +72,10 @@ None. `/skill-test` is a meta-utility skill. No director gates apply.
 ### Case 2: Static Mode — Skill Missing "May I Write" Despite Write Tool in allowed-tools
 
 **Fixture:**
-- `.claude/skills/some-skill/SKILL.md` has `Write` in `allowed-tools` frontmatter
+- `skills/some-skill/SKILL.md` has `Write` in `allowed-tools` frontmatter
 - The skill body has no "May I write" or "May I update" language
 
-**Input:** `/skill-test static some-skill`
+**Input:** `/gamedev:skill-test static some-skill`
 
 **Expected behavior:**
 1. Skill reads `some-skill/SKILL.md`
@@ -97,9 +97,9 @@ None. `/skill-test` is a meta-utility skill. No director gates apply.
 
 **Fixture:**
 - `tests/skills/gate-check.md` exists with 5 test cases
-- `.claude/skills/gate-check/SKILL.md` exists
+- `skills/gate-check/SKILL.md` exists
 
-**Input:** `/skill-test spec gate-check`
+**Input:** `/gamedev:skill-test spec gate-check`
 
 **Expected behavior:**
 1. Skill reads both the skill file and the spec file
@@ -119,14 +119,14 @@ None. `/skill-test` is a meta-utility skill. No director gates apply.
 ### Case 4: Audit Mode — Coverage Table of All Skills and Agents
 
 **Fixture:**
-- `.claude/skills/` contains 72+ skill directories
-- `.claude/agents/` contains 49+ agent files
+- `skills/` contains 72+ skill directories
+- `agents/` contains 49+ agent files
 - `tests/skills/` contains spec files for a subset of skills
 
-**Input:** `/skill-test audit`
+**Input:** `/gamedev:skill-test audit`
 
 **Expected behavior:**
-1. Skill enumerates all skills in `.claude/skills/` and all agents in `.claude/agents/`
+1. Skill enumerates all skills in `skills/` and all agents in `agents/`
 2. Skill checks `tests/skills/` for a corresponding spec file for each
 3. Skill produces a coverage table:
    - Each skill/agent listed
@@ -147,9 +147,9 @@ None. `/skill-test` is a meta-utility skill. No director gates apply.
 **Fixture:**
 - `tests/skills/quality-rubric.md` exists with a "Gate Skills" section defining
   criteria G1-G5 (e.g., G1: has mode guard, G2: has verdict table, etc.)
-- `.claude/skills/gate-check/SKILL.md` is a gate skill
+- `skills/gate-check/SKILL.md` is a gate skill
 
-**Input:** `/skill-test category gate-check`
+**Input:** `/gamedev:skill-test category gate-check`
 
 **Expected behavior:**
 1. Skill reads `quality-rubric.md` and identifies the Gate Skills section
@@ -173,7 +173,7 @@ None. `/skill-test` is a meta-utility skill. No director gates apply.
 - [ ] Audit mode covers all skills AND agents (not just one category)
 - [ ] Category mode reads quality-rubric.md to get criteria (not hardcoded)
 - [ ] Does not write any files in any mode
-- [ ] Suggests `/skill-improve` as the next step when issues are found
+- [ ] Suggests `/gamedev:skill-improve` as the next step when issues are found
 
 ---
 

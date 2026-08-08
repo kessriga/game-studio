@@ -77,4 +77,4 @@
 - Case 3 (contradiction detection) requires existing lore to be in context — this is the most important consistency test
 - Case 4 (world rule/mechanic coordination) tests cross-domain awareness; verify the agent identifies the mechanic boundary without crossing it
 - Case 5 is the most important context-awareness test; the agent must use established facts, not creative alternatives
-- No automated runner; review manually or via `/skill-test`
+- No automated runner; review manually or via `/gamedev:skill-test`

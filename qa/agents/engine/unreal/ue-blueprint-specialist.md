@@ -77,4 +77,4 @@
 ## Coverage Notes
 - Case 3 (null pointer safety) is a safety-critical test — this is a common source of shipping crashes
 - Case 5 requires that project conventions include a stated node budget; if none is configured, the agent should note the absence and recommend setting one
-- No automated runner; review manually or via `/skill-test`
+- No automated runner; review manually or via `/gamedev:skill-test`

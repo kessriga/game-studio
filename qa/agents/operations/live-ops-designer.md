@@ -78,4 +78,4 @@
 - Case 3 (monetization ethics) is a brand-safety test — failure here could result in harmful live ops designs shipping
 - Case 4 (escalation behavior) is a coordination test — verify the agent actually escalates rather than deciding independently
 - Case 5 is the most important context-awareness test; agent must target the specific drop-off point, not a generic solution
-- No automated runner; review manually or via `/skill-test`
+- No automated runner; review manually or via `/gamedev:skill-test`
