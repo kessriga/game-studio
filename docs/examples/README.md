@@ -352,6 +352,5 @@ If the agent skips any of these, remind it:
 ## 📝 **Additional Resources**
 
 - **Full Principle Documentation:** [docs/COLLABORATIVE-DESIGN-PRINCIPLE.md](../COLLABORATIVE-DESIGN-PRINCIPLE.md)
-- **Workflow Guide:** [docs/WORKFLOW-GUIDE.md](../WORKFLOW-GUIDE.md)
 - **Agent Roster:** [../agent-roster.md](../../../agent-roster.md)
 - **CLAUDE.md (Collaboration Protocol):** [CLAUDE.md](../../CLAUDE.md#collaboration-protocol)
