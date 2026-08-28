@@ -12,9 +12,11 @@
 # The positive half asserts the same hook still does its job inside one, which is what stops a
 # regression to "the guard bails everywhere" from passing this suite.
 #
-# notify.sh and validate-assets.sh are deliberately absent: neither resolves the project directory,
-# and both already self-limit (a message-only toast; an assets/ path filter), so a guard would add
-# a project lookup to hooks that currently need none.
+# notify.sh is the only hook deliberately absent. It never touches the project: it turns a
+# notification message into a desktop toast, which is session-level, not project-level, so silencing
+# it outside a gamedev project would suppress notifications the user still wants. validate-assets.sh
+# IS covered -- its assets/ test matches at any depth, so a Next.js public/assets/ or a Vite
+# src/assets/ reaches it, and its naming rule then lectures a repo that never asked for gamedev.
 #
 # Usage: scripts/hooks-project-guard.test.sh
 
@@ -45,12 +47,14 @@ trap 'rm -rf "$TMP"' EXIT INT TERM
 AGENT_JSON='{"session_id":"s","agent_id":"a","agent_type":"Explore"}'
 COMMIT_JSON='{"tool_name":"Bash","tool_input":{"command":"git commit -m test"}}'
 PUSH_JSON='{"tool_name":"Bash","tool_input":{"command":"git push origin main"}}'
+ASSET_JSON='{"tool_name":"Write","tool_input":{"file_path":"assets/img/Hero-Banner.png"}}'
 
 stdin_for() {
     case "$1" in
         log-agent.sh | log-agent-stop.sh) printf '%s' "$AGENT_JSON" ;;
         validate-commit.sh) printf '%s' "$COMMIT_JSON" ;;
         validate-push.sh) printf '%s' "$PUSH_JSON" ;;
+        validate-assets.sh) printf '%s' "$ASSET_JSON" ;;
         *) : ;;
     esac
 }
@@ -90,7 +94,7 @@ assert_nonempty() {
 }
 
 GUARDED="detect-gaps.sh log-agent.sh log-agent-stop.sh post-compact.sh pre-compact.sh
-         session-start.sh session-stop.sh validate-commit.sh validate-push.sh"
+         session-start.sh session-stop.sh validate-assets.sh validate-commit.sh validate-push.sh"
 
 # --- Negative: inert in a repository that is not a gamedev project ------------------------------
 
@@ -173,6 +177,12 @@ assert_nonempty "$(run_hook "$dir" validate-commit.sh err)" "validate-commit.sh 
 # validate-push.sh warns when the push targets a protected branch.
 dir=$(project validate-push)
 assert_nonempty "$(run_hook "$dir" validate-push.sh err)" "validate-push.sh warns inside a project"
+
+# validate-assets.sh warns about a filename that is not lowercase-with-underscores.
+dir=$(project validate-assets)
+mkdir -p "$dir/assets/img"
+: > "$dir/assets/img/Hero-Banner.png"
+assert_nonempty "$(run_hook "$dir" validate-assets.sh err)" "validate-assets.sh warns inside a project"
 
 
 # --- Fail closed when CLAUDE_PLUGIN_ROOT is missing ----------------------------------------------

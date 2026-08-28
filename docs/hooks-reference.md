@@ -35,6 +35,15 @@ The `2> /dev/null` matters: if `CLAUDE_PLUGIN_ROOT` were ever unset the path res
 `/bin/gamedev-is-project`, and bash's "No such file or directory" would reach the user as
 hook output. A missing predicate means *do nothing*, quietly.
 
+The cost of that quiet is worth knowing when debugging: a predicate that cannot run — deleted,
+un-executable after a bad checkout, permission-denied — is indistinguishable from a negative
+verdict, so **every** hook goes silent in **every** repository, including real game projects.
+If the plugin seems to do nothing at all, check the predicate first:
+
+```sh
+"${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project"; echo "exit=$?"   # 0 or 1 = healthy, 126/127 = broken install
+```
+
 `bin/gamedev-is-project` exits 0 when the current project carries at least one marker that a
 skill or the `/gamedev:start` scaffold creates:
 
@@ -50,9 +59,18 @@ Nothing a *hook* writes is a marker. `production/session-logs/` and
 accepting either would let one stray session in a repository mint permission for every
 session after it.
 
-`notify.sh` and `validate-assets.sh` are unguarded on purpose: neither resolves the project
-directory, and both already self-limit — `notify.sh` only echoes a notification message, and
-`validate-assets.sh` ignores any path outside `assets/`.
+Ten of the eleven shipped hooks carry the guard. `notify.sh` is the exception, and the reason is
+not that it is harmless: it never touches the project. It turns a notification message into a
+desktop toast, which is session-level rather than project-level, so silencing it outside a gamedev
+project would suppress notifications the user still wants. (It has a separate defect — it shells
+out to `powershell.exe` unconditionally, so it fails on macOS and Linux. That is a bug to fix, not
+a reason to guard it.)
+
+`validate-assets.sh` **is** guarded, and its own `assets/` test is not a substitute. That test is
+`grep -qE '(^|/)assets/'`, which matches at any depth: a Next.js `public/assets/`, a Rails
+`app/assets/` and a Vite `src/assets/` all reach it, and CamelCase or dashed filenames are the
+norm in those trees. Ungated, it answered an ordinary save in an unrelated repo with a gamedev
+naming lecture, and a mid-edit invalid JSON under any `assets/data/` with a blocking exit 1.
 
 **If your project is not recognised**, run `/gamedev:adopt`, or write its phase to
 `production/stage.txt` by hand — that file is a marker as well as a stage override.
