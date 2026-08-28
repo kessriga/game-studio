@@ -28,8 +28,12 @@ code that has nothing to do with a game.
 Every hook that touches the project therefore begins with:
 
 ```sh
-"${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project" || exit 0
+"${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project" 2> /dev/null || exit 0
 ```
+
+The `2> /dev/null` matters: if `CLAUDE_PLUGIN_ROOT` were ever unset the path resolves to
+`/bin/gamedev-is-project`, and bash's "No such file or directory" would reach the user as
+hook output. A missing predicate means *do nothing*, quietly.
 
 `bin/gamedev-is-project` exits 0 when the current project carries at least one marker that a
 skill or the `/gamedev:start` scaffold creates:

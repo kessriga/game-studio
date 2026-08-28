@@ -174,4 +174,19 @@ assert_nonempty "$(run_hook "$dir" validate-commit.sh err)" "validate-commit.sh 
 dir=$(project validate-push)
 assert_nonempty "$(run_hook "$dir" validate-push.sh err)" "validate-push.sh warns inside a project"
 
+
+# --- Fail closed when CLAUDE_PLUGIN_ROOT is missing ----------------------------------------------
+
+# The guard reaches the predicate through CLAUDE_PLUGIN_ROOT. Claude Code always sets it for plugin
+# hooks, but if it were ever empty the path resolves to /bin/gamedev-is-project and the hook must do
+# nothing *quietly* -- bash's "No such file or directory" on stderr is hook output the user sees.
+# Run inside a real project so nothing but the missing predicate can be what stops the hook.
+for hook in $GUARDED; do
+    dir=$(project "unset-root-$hook")
+    st=0
+    out=$(cd "$dir" && stdin_for "$hook" | env -u CLAUDE_PLUGIN_ROOT bash "$HOOKS/$hook" 2>&1) || st=$?
+    assert_status "$hook exits 0 with CLAUDE_PLUGIN_ROOT unset" 0 "$st"
+    assert_empty "$out" "$hook is silent with CLAUDE_PLUGIN_ROOT unset"
+done
+
 finish

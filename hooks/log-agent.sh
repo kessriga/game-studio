@@ -18,7 +18,10 @@ INPUT=$(cat)
 # plugin per scope, so this hook also runs in every unrelated repo the user opens.
 # Placed after the stdin read, not before it, so Claude Code's write to this
 # hook always completes even when the hook has nothing to do.
-"${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project" || exit 0
+# The 2>/dev/null is not decoration: if CLAUDE_PLUGIN_ROOT is ever unset this resolves to
+# /bin/gamedev-is-project, and bash's "No such file or directory" would surface to the user
+# as hook output. Missing predicate means "do nothing", quietly.
+"${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project" 2> /dev/null || exit 0
 
 # Parse agent name -- use jq if available, fall back to grep
 if command -v jq >/dev/null 2>&1; then
