@@ -7,6 +7,13 @@ cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # Purpose: Detect missing documentation when code/prototypes exist
 # Cross-platform: Windows Git Bash compatible (uses grep -E, not -P)
 
+# Stay out of repositories that are not gamedev projects: Claude Code enables a
+# plugin per scope, so this hook also runs in every unrelated repo the user opens.
+# The 2>/dev/null is not decoration: if CLAUDE_PLUGIN_ROOT is ever unset this resolves to
+# /bin/gamedev-is-project, and bash's "No such file or directory" would surface to the user
+# as hook output. Missing predicate means "do nothing", quietly.
+"${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project" 2> /dev/null || exit 0
+
 # Exit on error for debugging (but don't fail the session)
 set +e
 

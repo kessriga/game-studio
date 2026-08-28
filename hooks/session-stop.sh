@@ -5,6 +5,13 @@ cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # Claude Code Stop hook: Log session summary when Claude finishes
 # Records what was worked on for audit trail and progress tracking
 
+# Stay out of repositories that are not gamedev projects: Claude Code enables a
+# plugin per scope, so this hook also runs in every unrelated repo the user opens.
+# The 2>/dev/null is not decoration: if CLAUDE_PLUGIN_ROOT is ever unset this resolves to
+# /bin/gamedev-is-project, and bash's "No such file or directory" would surface to the user
+# as hook output. Missing predicate means "do nothing", quietly.
+"${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project" 2> /dev/null || exit 0
+
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 SESSION_LOG_DIR="production/session-logs"
 

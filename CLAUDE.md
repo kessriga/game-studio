@@ -18,7 +18,7 @@ See `README.md` for the adoption story and `CONTRIBUTING.md` for the dev workflo
 | `skills/` | 72 plugin skills — invoked as `/gamedev:<name>` |
 | `agents/` | 53 subagents — addressed as `gamedev:<name>` |
 | `hooks/` | shipped hooks (`hooks.json` + scripts), run from `${CLAUDE_PLUGIN_ROOT}` |
-| `bin/` | plugin executables on the Bash `PATH` (e.g. `gamedev-stage`) |
+| `bin/` | plugin executables on the Bash `PATH` (`gamedev-stage`, `gamedev-is-project` — every project-touching hook bails on the latter, see `docs/hooks-reference.md`) |
 | `docs/` | framework docs + document templates; skills read them via `../../docs/…` |
 | `templates/` | project scaffold sources `/gamedev:start` copies into a user's repo (project `CLAUDE.md`, rules, engine references, directory seeds) |
 | `.claude/` | **dev-only**, not shipped: `settings.json`, `hooks/validate-skill-change.sh`, `commands/opsx/`, `agent-memory/` |

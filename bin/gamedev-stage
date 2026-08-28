@@ -2,13 +2,23 @@
 # gamedev-stage — print the current production stage and, in Production+, the
 # Epic > Feature > Task breadcrumb for the game project in the current directory.
 #
-# Output: "<stage>" optionally followed by " | Epic > Feature > Task".
+# Output: "<stage>" optionally followed by " | Epic > Feature > Task", exit 0.
+# Prints nothing and exits 1 when the directory is not a gamedev project at all
+# (bin/gamedev-is-project decides), which is distinct from a real project sitting
+# at the Concept stage.
 # Consumed by the SessionStart hook and the /gamedev:status skill. This is the
 # stage-detection half of the former status line; the ctx%/model segments are
 # provided by Claude Code's own UI and are not reproduced here.
 
+# Resolve sibling executables before the cd below changes what a relative $0 means.
+bin_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
 # Resolve against the user's project when invoked from the plugin install.
 cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
+
+# A project gamedev does not recognise has no stage. Print nothing and fail, so a
+# caller can tell "not a game project" apart from a real project still at Concept.
+"$bin_dir/gamedev-is-project" || exit 1
 
 # --- Production stage -------------------------------------------------------
 # Priority 1: explicit override in production/stage.txt

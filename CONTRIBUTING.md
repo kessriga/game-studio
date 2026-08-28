@@ -92,8 +92,13 @@ Two things a plugin cannot ship, delivered instead by `/gamedev:start` scaffoldi
 
 Run it in a Claude Code session and confirm it works end-to-end. For skills,
 invoke the skill and verify the output matches what the skill claims to do.
-For hooks, trigger the relevant event and confirm the hook fires correctly
-and exits cleanly.
+
+For hooks, run `just test` — the suites drive every hook against throwaway
+project and non-project fixtures, which is stronger than triggering an event by
+hand. Triggering the event still works, but only from a real game project: the
+hooks deliberately do nothing in a repository that is not one, and *this* repo
+is not one, so nothing fires while you sit in the plugin checkout. See
+"Hooks only run inside a gamedev project" in `docs/hooks-reference.md`.
 
 Include a brief note in your PR description describing what you tested and
 what the output looked like.

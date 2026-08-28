@@ -11,6 +11,15 @@
 
 INPUT=$(cat)
 
+# Stay out of repositories that are not gamedev projects: Claude Code enables a
+# plugin per scope, so this hook also runs in every unrelated repo the user opens.
+# The assets/ test below is not a substitute -- it matches at any depth, so a
+# Next.js public/assets/, a Rails app/assets/ and a Vite src/assets/ all reach it,
+# and CamelCase filenames are the norm there. Placed after the stdin read so
+# Claude Code's write always completes; stderr discarded so a missing predicate
+# means "do nothing" quietly rather than printing bash's error as hook output.
+"${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project" 2> /dev/null || exit 0
+
 # Parse file path -- use jq if available, fall back to grep
 if command -v jq >/dev/null 2>&1; then
     FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
