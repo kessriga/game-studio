@@ -31,3 +31,5 @@ pull:
 # Run the scripts' own test suite.
 test:
     sh scripts/pull-main.test.sh
+    sh scripts/gamedev-is-project.test.sh
+    sh scripts/hooks-project-guard.test.sh

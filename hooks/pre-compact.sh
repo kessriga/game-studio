@@ -6,6 +6,10 @@ cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # This output appears in the conversation right before compaction, ensuring
 # critical state survives the summarization process.
 
+# Stay out of repositories that are not gamedev projects: Claude Code enables a
+# plugin per scope, so this hook also runs in every unrelated repo the user opens.
+"${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project" || exit 0
+
 echo "=== SESSION STATE BEFORE COMPACTION ==="
 echo "Timestamp: $(date)"
 

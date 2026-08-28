@@ -323,6 +323,7 @@ agents/                             # 53 subagents — addressed as gamedev:<nam
 hooks/                              # hooks.json + 11 hook scripts (run from ${CLAUDE_PLUGIN_ROOT})
 bin/
   gamedev-stage                     # Stage + Epic>Feature>Task detection (on the Bash PATH)
+  gamedev-is-project                # Is this a gamedev project? Every hook bails when it is not
 docs/                               # Framework docs + 41 document templates (skills read via ../../docs)
 templates/                          # Project scaffold sources copied out by /gamedev:start
 .claude/                            # Dev-only, not shipped: settings.json, validate-skill-change, opsx/

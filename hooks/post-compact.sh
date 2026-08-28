@@ -5,6 +5,10 @@ cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # post-compact.sh — fires after conversation compaction
 # Reminds Claude to restore session state from the file-backed checkpoint.
 
+# Stay out of repositories that are not gamedev projects: Claude Code enables a
+# plugin per scope, so this hook also runs in every unrelated repo the user opens.
+"${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project" || exit 0
+
 ACTIVE="production/session-state/active.md"
 
 echo "=== Context Restored After Compaction ==="
