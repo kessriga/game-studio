@@ -103,6 +103,30 @@ is not one, so nothing fires while you sit in the plugin checkout. See
 Include a brief note in your PR description describing what you tested and
 what the output looked like.
 
+## Releasing — bump the version, or nobody gets your fix
+
+**Merging to `main` does not ship anything.** Claude Code compares the version a plugin
+*declares* against the version it has installed; it stores the git SHA but does not compare
+it. So after a merge with no version bump, `claude plugin update gamedev@game-studio` reports
+*"already at the latest version"* and every user keeps running the old code — silently, with
+no error and nothing to suggest an update was missed.
+
+This is not hypothetical: the hook project-guard fix landed and reached zero machines until
+the version was bumped.
+
+So every user-visible change needs a bump, in the **same PR** as the change where possible:
+
+1. Bump `version` in **both** `.claude-plugin/plugin.json` and the `plugins[0]` entry of
+   `.claude-plugin/marketplace.json`. They must agree — `claude plugin tag` refuses otherwise.
+   `metadata.version` in `marketplace.json` is the *marketplace's* version; this repo has kept
+   it in lockstep since it ships exactly one plugin.
+2. Patch for a fix, minor for new skills/agents or changed behaviour.
+3. After merging, tag the release: `claude plugin tag . --push`
+   (`--dry-run` first; it validates that the two manifests agree).
+
+Users then pick it up with `claude plugin marketplace update game-studio`, then
+`claude plugin update gamedev@game-studio`, then a restart.
+
 ## Commit Format
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
