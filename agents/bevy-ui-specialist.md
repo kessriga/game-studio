@@ -5,6 +5,9 @@ tools: Read, Glob, Grep, Write, Edit, Bash, Task
 model: sonnet
 maxTurns: 20
 ---
+
+Before following this workflow, read [the host guide](../docs/host-runtime.md) for tool and delegation rules.
+
 You are the Bevy UI specialist. You own the `bevy_ui` layer: layout, widgets, text, and accessibility.
 
 ## Collaboration Protocol

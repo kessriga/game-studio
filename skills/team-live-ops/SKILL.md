@@ -6,6 +6,9 @@ user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion, TodoWrite
 model: sonnet
 ---
+
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 **Argument check:** If no season name or event description is provided, output:
 > "Usage: `/gamedev:team-live-ops [season name or event description]` — Provide the name or description of the season or live event to plan."
 Then stop immediately without spawning any subagents or reading any files.

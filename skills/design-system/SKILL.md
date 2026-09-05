@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Task, AskUserQuestion, TodoWrite
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 When this skill is invoked:
 
 ## 1. Parse Arguments & Validate

@@ -1,5 +1,10 @@
 # Setup Requirements
 
+Choose Claude Code or Codex as the host. See [Codex setup](codex.md) for its
+installation. Python 3 is required for project scaffolding in either host;
+Bash is required for stage reporting. Backlog.md and OpenSpec are separate
+integrations required only by workflows that use them.
+
 This template requires a few tools to be installed for full functionality.
 All hooks fail gracefully if tools are missing — nothing will break, but
 you'll lose validation features.
@@ -9,14 +14,14 @@ you'll lose validation features.
 | Tool | Purpose | Install |
 | ---- | ---- | ---- |
 | **Git** | Version control, branch management | [git-scm.com](https://git-scm.com/) |
-| **Claude Code** | AI agent CLI | `npm install -g @anthropic-ai/claude-code` |
+| **Claude Code or Codex** | AI host; choose one | Claude: `npm install -g @anthropic-ai/claude-code`; Codex: [setup guide](codex.md) |
+| **Python 3** | Project scaffolding | [python.org](https://www.python.org/) |
 
 ## Recommended
 
 | Tool | Used By | Purpose | Install |
 | ---- | ---- | ---- | ---- |
 | **jq** | Hooks (7 of 12) | JSON parsing in commit/push/asset/agent hooks | See below |
-| **Python 3** | Hooks (2 of 12) | JSON validation for data files | [python.org](https://www.python.org/) |
 | **Bash** | All hooks | Shell script execution | Included with Git for Windows |
 
 ### Installing jq
@@ -61,7 +66,7 @@ Run these commands to check prerequisites:
 git --version          # Should show git version
 bash --version         # Should show bash version
 jq --version           # Should show jq version (optional)
-python3 --version      # Should show python version (optional)
+python3 --version      # Required for scaffolding; also used by JSON validation hooks
 ```
 
 ## What Happens Without Optional Tools

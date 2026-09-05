@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Task, AskUserQuestion
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Phase 0: Parse Arguments
 
 Extract `--depth [full|lean|solo]` if present. Default is `full` when no flag is given.

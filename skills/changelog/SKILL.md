@@ -4,11 +4,10 @@ description: "Auto-generates a changelog from git commits, sprint data, and desi
 argument-hint: "[version|sprint-number]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write
-context: |
-  !git log --oneline -30 2>/dev/null
-  !git tag --list --sort=-v:refname 2>/dev/null | head -5
 model: haiku
 ---
+
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
 ## Phase 1: Parse Arguments
 
@@ -20,7 +19,8 @@ Verify the repository is initialized: run `git rev-parse --is-inside-work-tree` 
 
 ## Phase 2: Gather Change Data
 
-Read the git log since the last tag or release:
+List release tags with `git tag --list --sort=-v:refname`, then read the git log
+since the last tag or release. Run these commands explicitly in the game repository:
 
 ```
 git log --oneline [last-tag]..HEAD

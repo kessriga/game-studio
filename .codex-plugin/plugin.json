@@ -1,0 +1,38 @@
+{
+  "name": "gamedev",
+  "description": "Game development workflows for Codex: 72 skills and 53 specialist role guides for Godot, Unity, Unreal, and Bevy.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Kessriga Jeükal"
+  },
+  "homepage": "https://github.com/kessriga/game-studio",
+  "repository": "https://github.com/kessriga/game-studio",
+  "license": "MIT",
+  "keywords": [
+    "game-development",
+    "godot",
+    "unity",
+    "unreal",
+    "bevy",
+    "game-design",
+    "agents",
+    "workflows"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Game Studio",
+    "shortDescription": "Plan, build, and ship your game",
+    "longDescription": "Guided game development from first concept to release, with design, programming, art, audio, narrative, and QA workflows.",
+    "developerName": "Kessriga Jeükal",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/kessriga/game-studio",
+    "defaultPrompt": [
+      "Use gamedev's start skill to set up my game project.",
+      "Use gamedev's help skill to suggest my next step."
+    ]
+  }
+}

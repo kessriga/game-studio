@@ -1,5 +1,9 @@
 # Agent Coordination Rules
 
+Read [the host guide](host-runtime.md) before delegating. The model assignments
+in this document apply to Claude Code. Codex uses its configured models and
+loads these agent definitions as role instructions.
+
 1. **Vertical Delegation**: Leadership agents delegate to department leads, who
    delegate to specialists. Never skip a tier for complex decisions.
 2. **Horizontal Consultation**: Agents at the same tier may consult each other

@@ -1,5 +1,9 @@
 # Directory Structure
 
+For the plugin package and shared project instruction layout, see
+[AGENTS.md](../AGENTS.md) and [Codex setup](codex.md). Project AGENTS.md files are
+shared; their sibling CLAUDE.md files import them for Claude Code.
+
 The skills, agents, and hooks are provided by the installed `gamedev` plugin.
 Your project holds only the game and its project-side config, scaffolded by
 `/gamedev:start`:

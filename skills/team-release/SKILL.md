@@ -6,6 +6,9 @@ user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion, TodoWrite
 model: sonnet
 ---
+
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 **Argument check:** If no version number is provided:
 1. Read `production/session-state/active.md` and the most recent file in `production/milestones/` (if they exist) to infer the target version.
 2. If a version is found: report "No version argument provided — inferred [version] from milestone data. Proceeding." Then confirm with `AskUserQuestion`: "Releasing [version]. Is this correct?"

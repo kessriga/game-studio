@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Test Evidence Review
 
 `/gamedev:smoke-check` verifies that test files **exist** and **pass**. This skill

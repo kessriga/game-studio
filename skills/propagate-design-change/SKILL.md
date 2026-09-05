@@ -8,6 +8,8 @@ model: sonnet
 agent: technical-director
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Propagate Design Change
 
 When a GDD changes, architectural decisions written against it may no longer be

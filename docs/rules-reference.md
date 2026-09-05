@@ -1,5 +1,9 @@
 # Path-Specific Rules
 
+Claude Code loads the scaffolded `.claude/rules/` files automatically. Codex
+reads the applicable rules explicitly, as required by project `AGENTS.md`.
+See [the host guide](host-runtime.md).
+
 Rules in `.claude/rules/` are automatically enforced when editing files in matching paths:
 
 | Rule File | Path Pattern | Enforces |

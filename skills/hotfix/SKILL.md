@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 > **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/gamedev:hotfix`. Do not auto-invoke based on context matching.
 
 ## Phase 1: Assess Severity

@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Phase 1: Understand the Task
 
 Read the task description from the argument. If the description is too vague to estimate meaningfully, ask for clarification before proceeding.

@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Skill Test
 
 Validates `skills/*/SKILL.md` files for structural compliance and

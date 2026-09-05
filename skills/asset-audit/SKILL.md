@@ -8,6 +8,8 @@ model: sonnet
 # Read-only diagnostic skill — no specialist agent delegation needed
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Phase 1: Read Standards
 
 Read the art bible or asset standards from the relevant design docs and the CLAUDE.md naming conventions.

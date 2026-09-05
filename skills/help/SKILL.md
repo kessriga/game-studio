@@ -4,10 +4,10 @@ description: "Analyzes what is done and the users query and offers advice on wha
 argument-hint: "[optional: what you just finished, e.g. 'finished design-review' or 'stuck on ADRs']"
 user-invocable: true
 allowed-tools: Read, Glob, Grep
-context: |
-  !echo "=== Live Project State ===" && echo "Stage: $(cat production/stage.txt 2>/dev/null | tr -d '[:space:]' || echo 'not set')" && echo "Review mode: $(cat production/review-mode.txt 2>/dev/null | tr -d '[:space:]' || echo 'solo (default)')" && echo "Session state: $(head -5 production/session-state/active.md 2>/dev/null || echo 'none')" && echo "(work items live on the Backlog board)"
 model: haiku
 ---
+
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
 # Studio Help — What Do I Do Next?
 

@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Regression Suite
 
 This skill ensures that every bug fix is backed by a test that would have

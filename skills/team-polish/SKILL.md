@@ -6,6 +6,9 @@ user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion, TodoWrite
 model: sonnet
 ---
+
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 If no argument is provided, output usage guidance and exit without spawning any agents:
 > Usage: `/gamedev:team-polish [feature or area]` — specify the feature or area to polish (e.g., `combat`, `main menu`, `inventory system`, `level-1`). Do not use `AskUserQuestion` here; output the guidance directly.
 

@@ -1,6 +1,10 @@
 # Active Hooks
 
-Hooks are configured in `.claude/settings.json` and fire automatically:
+These hooks are registered for Claude Code through
+`.claude-plugin/plugin.json` and `hooks/claude-hooks.json`. Codex does not load
+them; its workflows use the explicit checks in [the host guide](host-runtime.md).
+
+Claude hooks fire automatically inside a recognized game project:
 
 | Hook | Event | Trigger | Action |
 | ---- | ----- | ------- | ------ |

@@ -8,6 +8,8 @@ model: haiku
 agent: community-manager
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Phase 1: Parse Arguments
 
 - `version`: the release version to generate notes for (e.g., `1.2.0`)

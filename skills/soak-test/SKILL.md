@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Soak Test
 
 A soak test (also called an endurance test) is an extended play session run

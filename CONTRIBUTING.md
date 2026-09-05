@@ -1,6 +1,6 @@
 # Contributing to Claude Code Game Studios
 
-CCGS is a coordination framework for indie game development using Claude Code.
+CCGS is a coordination framework for indie game development using Claude Code or Codex.
 Contributions are welcome — bug fixes, new skills that fill a real gap, agent
 improvements, and hook fixes. PRs that don't fit the framework's direction will
 be closed without lengthy explanation.
@@ -25,10 +25,11 @@ merged here — keep those in your own repo.
 These are the things that will get your PR rejected if you miss them.
 
 **Skill files**
-- Skills live in `.claude/skills/<name>/SKILL.md` — the subdirectory format is
+- Skills live in `skills/<name>/SKILL.md` — the subdirectory format is
   required. Flat `.md` files are silently ignored by Claude Code.
-- SKILL.md must include YAML frontmatter: `name`, `description`,
-  `argument-hint`, `allowed-tools`, and `model`
+- SKILL.md must include YAML frontmatter: `name` and `description`.
+  Keep the Claude-specific fields used by existing workflows. Codex ignores
+  their configuration semantics; the host guide explains how to run the workflow.
 - Model tier: `haiku` for read-only status checks, `opus` for multi-document
   synthesis and phase gates, `sonnet` for everything else
 
@@ -55,8 +56,9 @@ These are the things that will get your PR rejected if you miss them.
 CCGS is not an autonomous system. Every workflow follows:
 **Question → Options → Decision → Draft → Approval → Write**
 
-Skills and agents must ask before acting. Nothing writes to files without
-explicit user confirmation. If your contribution has an agent making decisions
+Skills and agents present creative choices to the user. A request to implement
+a concrete change authorizes that work; ask when a needed decision or scope
+change is still unresolved. If your contribution has an agent making decisions
 or writing files unilaterally, it won't be merged.
 
 ## Developing the plugin (dogfooding)
@@ -83,6 +85,10 @@ in the next session. Two conventions the CI-style gate enforces:
   (`../../docs/<file>.md`); project-side files (`.claude/rules/`,
   `.claude/docs/technical-preferences.md`) keep their project paths.
 
+For Codex installation and runtime differences, read [docs/codex.md](docs/codex.md).
+Every skill and role links to [the host guide](docs/host-runtime.md). Shared
+project instructions belong in AGENTS.md; CLAUDE.md imports that file.
+
 Two things a plugin cannot ship, delivered instead by `/gamedev:start` scaffolding:
 `.claude/rules/` (no rules component exists) and the production-stage status line
 (no plugin main-session `statusLine`; surfaced by the SessionStart hook and
@@ -90,18 +96,30 @@ Two things a plugin cannot ship, delivered instead by `/gamedev:start` scaffoldi
 
 ## Testing Your Changes
 
-Run it in a Claude Code session and confirm it works end-to-end. For skills,
-invoke the skill and verify the output matches what the skill claims to do.
+Install the development dependencies in a virtual environment, then run the gate:
 
-For hooks, run `just test` — the suites drive every hook against throwaway
-project and non-project fixtures, which is stronger than triggering an event by
-hand. Triggering the event still works, but only from a real game project: the
-hooks deliberately do nothing in a repository that is not one, and *this* repo
-is not one, so nothing fires while you sit in the plugin checkout. See
-"Hooks only run inside a gamedev project" in `docs/hooks-reference.md`.
+```sh
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install -r requirements-dev.txt
+just gate
+```
 
-Include a brief note in your PR description describing what you tested and
-what the output looked like.
+On Windows, run the recipes in Git Bash and activate `.venv/Scripts/activate`.
+The gate checks shell syntax, workflow namespacing, both manifests, shared
+instruction links, Python lint and formatting, scaffolding, and the existing
+hook and Git-helper tests. There is no compiled application to build. Ruff covers
+the new Python scaffold, native reader check, and contract tests; the older
+namespacing script remains checked through its own output.
+
+For host-specific verification, run `python3 scripts/check-codex.py` and
+`claude plugin validate .claude-plugin/plugin.json`. The Codex check uses the
+installed CLI's native plugin reader and does not install anything. Also exercise
+changed workflows in the relevant host when available. Record what actually ran;
+metadata discovery is distinct from a full conversational or engine test.
+
+GitHub Actions runs `just gate` on Linux, macOS, and Windows. Include the local
+and hosted results separately in the PR description.
 
 ## Releasing — bump the version, or nobody gets your fix
 
@@ -116,7 +134,7 @@ the version was bumped.
 
 So every user-visible change needs a bump, in the **same PR** as the change where possible:
 
-1. Bump `version` in **both** `.claude-plugin/plugin.json` and the `plugins[0]` entry of
+1. Bump `version` in `.codex-plugin/plugin.json`, `.claude-plugin/plugin.json`, and the `plugins[0]` entry of
    `.claude-plugin/marketplace.json`. They must agree — `claude plugin tag` refuses otherwise.
    `metadata.version` in `marketplace.json` is the *marketplace's* version; this repo has kept
    it in lockstep since it ships exactly one plugin.

@@ -1,13 +1,26 @@
 <p align="center">
   <h1 align="center">Claude Code Game Studios</h1>
   <p align="center">
-    Turn a single Claude Code session into a full game development studio.
+    Turn a Claude Code or Codex session into a game development studio.
     <br />
-    53 agents. 72 skills. One coordinated AI team.
+    53 specialist roles. 72 skills. One shared workflow.
   </p>
 </p>
 
 ---
+
+## Codex support
+
+Install from this checkout with `codex plugin marketplace add ./`, then
+`codex plugin add gamedev@game-studio`. Open a new Codex session in your game
+repository and run `$gamedev:start`. See [Codex setup](docs/codex.md) for the full
+instructions and capability differences, and [STATUS.md](STATUS.md) for what has
+been verified.
+
+The skill catalog below uses Claude command notation. In Codex,
+`/gamedev:brainstorm` becomes `$gamedev:brainstorm`, and the same mapping applies
+to every skill. Claude agents become role guides for available Codex subagents
+or sequential role passes. Claude hooks remain Claude-only.
 
 ## Why This Exists
 
@@ -68,7 +81,7 @@ Tier 3 — Specialists
   live-ops-designer    community-manager
 ```
 
-Model per agent is set in the plugin's `docs/coordination-rules.md`: the two directors
+In Claude Code, model per agent is set in the plugin's `docs/coordination-rules.md`: the two directors
 (`creative-director`, `technical-director`) and `game-designer` — a load-bearing role
 in any studio — run on Fable, the other department leads on Opus 4.8, and all
 specialists on Sonnet.
@@ -270,17 +283,20 @@ accept a review-depth flag — `--review full|lean|solo` (`--depth` for
 
 ## Getting Started
 
-> **Adoption model changed.** This project is now a **Claude Code plugin** named
+> **Adoption model changed.** This project is a **Claude Code and Codex plugin** named
 > `gamedev`, not a fork-me template. You install it into your own game project;
 > you no longer clone this repo as your game. Existing forks keep working as a
 > frozen snapshot, but new adoption uses the plugin flow below.
 
-### Prerequisites
+### Claude Code prerequisites
+
+For Codex, follow [Codex setup](docs/codex.md).
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with plugin support
   (verified on **v2.1.226**; any recent 2.1.x should work)
 - [Git](https://git-scm.com/)
-- **Recommended**: [jq](https://jqlang.github.io/jq/) (for hook validation) and Python 3 (for JSON validation)
+- Python 3 (for scaffolding) and Bash (Git Bash on Windows)
+- **Recommended**: [jq](https://jqlang.github.io/jq/) for Claude hook validation
 
 All hooks fail gracefully if optional tools are missing — nothing breaks, you just lose validation.
 
@@ -299,7 +315,7 @@ All hooks fail gracefully if optional tools are missing — nothing breaks, you 
    ```
 
 3. **Run `/gamedev:start`** — on a fresh project it scaffolds the project-side
-   structure (`CLAUDE.md`, `.claude/rules/`, `technical-preferences.md`, the
+   structure (`AGENTS.md`, Claude import files, `.claude/rules/`, `technical-preferences.md`, the
    `production/`/`design/`/`docs/` tree, and your engine's reference), then asks
    where you are (no idea, vague concept, clear design, existing work) and guides
    you to the right workflow. Nothing existing is overwritten.
@@ -315,12 +331,14 @@ All hooks fail gracefully if optional tools are missing — nothing breaks, you 
 **The plugin** (this repo — installed, not cloned into your game):
 
 ```
+.codex-plugin/plugin.json           # Codex manifest
+.agents/plugins/marketplace.json     # Codex repository marketplace
 .claude-plugin/
   plugin.json                       # Plugin manifest (name: gamedev)
   marketplace.json                  # This repo is its own marketplace (source: ./)
 skills/                             # 72 skills — invoked as /gamedev:<name>
 agents/                             # 53 subagents — addressed as gamedev:<name>
-hooks/                              # hooks.json + 11 hook scripts (run from ${CLAUDE_PLUGIN_ROOT})
+hooks/                              # claude-hooks.json + 11 Claude hook scripts (run from ${CLAUDE_PLUGIN_ROOT})
 bin/
   gamedev-stage                     # Stage + Epic>Feature>Task detection (on the Bash PATH)
   gamedev-is-project                # Is this a gamedev project? Every hook bails when it is not
@@ -332,7 +350,8 @@ templates/                          # Project scaffold sources copied out by /ga
 **Your project** (scaffolded into your repo by `/gamedev:start`):
 
 ```
-CLAUDE.md                           # Project config (imports technical-preferences + engine VERSION)
+AGENTS.md                           # Shared project guidance and sources of truth
+CLAUDE.md                           # Imports AGENTS.md for Claude Code
 .claude/
   rules/                            # 11 path-scoped coding standards (plugins can't ship rules)
   docs/technical-preferences.md     # Your engine, naming, budgets (project-owned)
@@ -389,7 +408,7 @@ You stay in control. The agents provide structure and expertise, not autonomy.
 | `session-stop.sh` | Session close | Archives `active.md` to session log and records git activity |
 | `log-agent.sh` | Agent spawned | Audit trail start — logs subagent invocation |
 | `log-agent-stop.sh` | Agent stops | Audit trail stop — completes subagent record |
-| `validate-skill-change.sh` | PostToolUse (Write/Edit) | Advises running `/gamedev:skill-test` after any `.claude/skills/` change |
+| `validate-skill-change.sh` | PostToolUse (Write/Edit) | Advises running `/gamedev:skill-test` after any `skills/` change |
 
 > **Note**: `validate-commit.sh`, `validate-assets.sh`, and `validate-skill-change.sh` fire on every Bash/Write tool call and exit immediately (exit 0) when the command or file path is not relevant. This is normal hook behavior — not a performance concern.
 

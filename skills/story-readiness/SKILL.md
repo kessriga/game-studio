@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, AskUserQuestion, Task, mcp__backlog__task_list,
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Story Readiness
 
 This skill validates that a story file contains everything a developer needs

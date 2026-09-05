@@ -8,6 +8,8 @@ model: sonnet
 agent: ux-designer
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Overview
 
 Validates UX design documents before they enter the implementation pipeline.

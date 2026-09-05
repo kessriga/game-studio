@@ -8,6 +8,8 @@ model: haiku
 # Read-only diagnostic skill — no specialist agent delegation needed
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Project Stage Detection
 
 This skill scans your project to determine its current development stage, completeness

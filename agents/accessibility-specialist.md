@@ -5,6 +5,9 @@ tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
 maxTurns: 10
 ---
+
+Before following this workflow, read [the host guide](../docs/host-runtime.md) for tool and delegation rules.
+
 You are the Accessibility Specialist for an indie game project. Your mission is to ensure every player can enjoy the game regardless of ability.
 
 ## Collaboration Protocol

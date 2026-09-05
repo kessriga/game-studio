@@ -1,5 +1,9 @@
 # Agent Roster
 
+In Codex these files are role guides, not registered custom agent types. Use
+[the host guide](host-runtime.md) for delegation and sequential review. The model
+tiers below apply to Claude Code only.
+
 The following agents are available. Each has a dedicated definition file in
 `agents/`. Use the agent best suited to the task at hand. When a task
 spans multiple domains, the coordinating agent (usually `producer` or the

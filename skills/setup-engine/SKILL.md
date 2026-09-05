@@ -1,11 +1,13 @@
 ---
 name: setup-engine
-description: "Configure the project's game engine and version. Pins the engine in CLAUDE.md, detects knowledge gaps, and populates engine reference docs via WebSearch when the version is beyond the LLM's training data."
+description: "Configure the project's game engine and version. Pins the engine in the shared project guide, detects knowledge gaps, and populates engine reference docs via WebSearch when the version is beyond the LLM's training data."
 argument-hint: "[engine] | [engine version] | refresh | upgrade [old-version] [new-version] | no args for guided selection"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, WebSearch, WebFetch, Task, AskUserQuestion
 model: sonnet
 ---
+
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
 When this skill is invoked:
 
@@ -134,7 +136,7 @@ Once the engine is chosen:
 
 ---
 
-## 4. Update CLAUDE.md Technology Stack
+## 4. Update the Project Technology Stack
 
 ### Language Selection (Godot only)
 
@@ -148,16 +150,17 @@ If Godot was chosen, ask the user which language to use **before** showing the p
 >
 > Which will this project primarily use?"
 
-Record the choice. It determines the CLAUDE.md template, naming conventions, specialist routing, and which agent is spawned for code files throughout the project.
+Record the choice. It determines the shared project-guide template, naming conventions, specialist routing, and which agent is spawned for code files throughout the project.
 
 ---
 
-Read `CLAUDE.md` and show the user the proposed Technology Stack changes.
-Ask: "May I write these engine settings to `CLAUDE.md`?"
+Read `AGENTS.md` and show the proposed Technology Stack changes there. If the
+project still keeps its full guide only in `CLAUDE.md`, follow the migration
+instructions in the host guide before editing. Obtain approval for unresolved
+choices; an existing request to configure these settings already authorizes the
+edits. Keep the Claude import file pointing to the shared guide.
 
-Wait for confirmation before making any edits.
-
-Update the Technology Stack section, replacing the `[CHOOSE]` placeholders with the actual values:
+Update the Technology Stack section, replacing the unconfigured placeholders with the actual values:
 
 **For Godot** — use the template matching the language chosen above. See **Appendix A** at the bottom of this skill for all three variants (GDScript, C#, Both).
 
@@ -193,7 +196,7 @@ Update the Technology Stack section, replacing the `[CHOOSE]` placeholders with 
 
 ## 5. Populate Technical Preferences
 
-After updating CLAUDE.md, create or update `.claude/docs/technical-preferences.md` with
+After updating the shared project guide, create or update `.claude/docs/technical-preferences.md` with
 engine-appropriate defaults. Read the existing template first, then fill in:
 
 ### Engine & Language Section
@@ -439,43 +442,32 @@ Wait for confirmation before writing any files.
 
 ---
 
-## 8. Update CLAUDE.md Import
+## 8. Update the Engine Reference
 
-Ask: "May I update the `@` import in `CLAUDE.md` to point to the new engine reference?"
-
-Wait for confirmation, then update the `@` import under "Engine Version Reference" to point to the
-correct engine:
+In the shared `AGENTS.md`, point the Engine Version Reference section to the
+selected engine with an explicit reading instruction:
 
 ```markdown
 ## Engine Version Reference
 
-@docs/engine-reference/<engine>/VERSION.md
+Read `docs/engine-reference/<engine>/VERSION.md` before using engine APIs.
 ```
 
-If the previous import pointed to a different engine (e.g., switching from
-Godot to Unity), update it.
+Replace any previous engine reference. Keep `CLAUDE.md` as `@AGENTS.md`; Codex
+does not expand Claude's file imports. For a legacy project that has not migrated,
+update the existing Claude import as well so the two hosts do not read different
+engine versions. Show the changes before asking about any unresolved choice.
 
 ---
 
-## 9. Update Agent Instructions
+## 9. Verify Specialist Guidance
 
-Ask: "May I add a Version Awareness section to the engine specialist agent files?" before making any edits.
-
-For the chosen engine's specialist agents, verify they have a
-"Version Awareness" section. If not, add one following the pattern in
-the existing Godot specialist agents.
-
-> **Bevy note**: the four Bevy agents (`bevy-specialist`, `bevy-rust-specialist`,
-> `bevy-render-specialist`, `bevy-ui-specialist`) already ship with a Version
-> Awareness section pointing at `docs/engine-reference/bevy/`, because Bevy's
-> fast release cadence makes an unversioned agent wrong within months. For Bevy
-> this step is a no-op verification — confirm the section is present, add nothing.
-
-The section should instruct the agent to:
-1. Read `docs/engine-reference/<engine>/VERSION.md`
-2. Check deprecated APIs before suggesting code
-3. Check breaking changes for relevant version transitions
-4. Use WebSearch to verify uncertain APIs
+Read the chosen engine's specialist role files from the installed plugin and
+check their Version Awareness guidance. Do not modify installed plugin files.
+Keep any missing project-specific guidance in the project's `AGENTS.md` or
+technical-preferences file. It should require reading the pinned engine version,
+checking deprecated APIs and breaking changes, and verifying uncertain APIs
+against official documentation. Follow the host guide when delegating these roles.
 
 ---
 
@@ -611,7 +603,7 @@ Engine:          [name] [version]
 Language:        [GDScript | C# | GDScript + C# | C# | C++ + Blueprint | Rust]
 Knowledge Risk:  [LOW/MEDIUM/HIGH]
 Reference Docs:  [created/skipped]
-CLAUDE.md:       [updated]
+AGENTS.md:       [updated]
 Tech Prefs:      [created/updated]
 Agent Config:    [verified]
 
@@ -633,9 +625,9 @@ Verdict: **COMPLETE** — engine configured and reference docs populated.
 - NEVER guess an engine version — always verify via WebSearch or user confirmation
 - NEVER overwrite existing reference docs without asking — append or update
 - If reference docs already exist for a different engine, ask before replacing
-- Always show the user what you're about to change before making CLAUDE.md edits
+- Always show the user what you're about to change before editing the shared project guide
 - If WebSearch returns ambiguous results, show the user and let them decide
-- When the user chose **GDScript**: copy the GDScript CLAUDE.md template from Appendix A1 exactly. NEVER add "C++ via GDExtension" to the Language field. GDScript projects may use GDExtension, but it is not a primary project language. The `godot-gdextension-specialist` in the routing table is available for when native extensions are needed — it does not make C++ a project language.
+- When the user chose **GDScript**: copy the GDScript project-guide template from Appendix A1 exactly. NEVER add "C++ via GDExtension" to the Language field. GDScript projects may use GDExtension, but it is not a primary project language. The `godot-gdextension-specialist` in the routing table is available for when native extensions are needed — it does not make C++ a project language.
 
 ---
 
@@ -645,7 +637,7 @@ All Godot-specific variants for language-dependent configuration. Referenced fro
 
 ---
 
-### A1. CLAUDE.md Technology Stack Templates
+### A1. Project Technology Stack Templates
 
 **GDScript:**
 ```markdown

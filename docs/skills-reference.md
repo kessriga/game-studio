@@ -1,5 +1,9 @@
 # Available Skills (Slash Commands)
 
+All skills also run in Codex. Select `gamedev:<skill>` from its skill picker or
+use `$gamedev:<skill>`. The commands below use Claude notation; see
+[Codex setup](codex.md) and [the host guide](host-runtime.md).
+
 73 slash commands organized by phase. Type `/` in Claude Code to access any of them.
 
 ## Onboarding & Navigation

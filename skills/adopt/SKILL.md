@@ -8,6 +8,8 @@ model: sonnet
 agent: technical-director
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Adopt — Brownfield Template Adoption
 
 This skill audits an existing project's artifacts for **format compliance** with

@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Bash, Write
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Test Setup
 
 This skill scaffolds the automated testing infrastructure for the project.

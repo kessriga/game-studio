@@ -8,6 +8,8 @@ model: sonnet
 agent: security-engineer
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Security Audit
 
 Security is not optional for any shipped game. Even single-player games have

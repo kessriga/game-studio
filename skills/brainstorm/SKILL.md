@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, WebSearch, Task, AskUserQuestion
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 When this skill is invoked:
 
 1. **Parse the argument** for an optional genre/theme hint (e.g., `roguelike`,

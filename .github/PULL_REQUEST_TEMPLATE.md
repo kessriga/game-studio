@@ -19,7 +19,9 @@ Brief description of what this PR does.
 
 ## Checklist
 
-- [ ] I've tested this in a Claude Code session
+- [ ] `just gate` passes
+- [ ] Host-specific checks are recorded for Claude Code and/or Codex
+- [ ] Hosted CI is green
 - [ ] New agents include the Collaboration Protocol section
 - [ ] New skills use the subdirectory format (`skills/<name>/SKILL.md`)
 - [ ] Reference docs are updated (agent-roster, skills-reference, hooks-reference, rules-reference)

@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Phase 1: Parse Subcommand
 
 Determine the mode from the argument:

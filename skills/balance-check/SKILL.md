@@ -8,6 +8,8 @@ model: sonnet
 agent: economy-designer
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Phase 1: Identify Balance Domain
 
 Determine the balance domain from `$ARGUMENTS[0]`:

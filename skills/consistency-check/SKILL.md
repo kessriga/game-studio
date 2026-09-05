@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Consistency Check
 
 Detects cross-document inconsistencies by comparing all GDDs against the

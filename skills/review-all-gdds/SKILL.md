@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Bash, AskUserQuestion, Task
 model: opus
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Review All GDDs
 
 This skill reads every system GDD simultaneously and performs two complementary

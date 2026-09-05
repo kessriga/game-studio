@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Bash, Task, AskUserQuestion, mcp__backlo
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Dev Story
 
 This skill bridges planning and code. It reads a story file in full, assembles

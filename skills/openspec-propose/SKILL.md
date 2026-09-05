@@ -10,6 +10,8 @@ metadata:
   generatedBy: "1.6.0"
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 Propose a new change - create the change and generate all artifacts in one step.
 
 I'll create a change with artifacts:

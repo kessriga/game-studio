@@ -1,7 +1,7 @@
 # The repo's command surface: every repeated command line, defined once.
 #
 # This repo is mostly markdown (skills, agents, docs, backlog, OpenSpec changes) driven by Claude
-# Code, so the surface is deliberately small: there is no build, no CI gate, and the .claude/hooks
+# Code and Codex. There is no compiled build; CI runs the gate below. The .claude/hooks
 # scripts are invoked by Claude Code itself, never by hand. Skill/agent quality checks are
 # model-driven (/skill-test and the skill/agent testing framework in qa/), so no recipe can wrap them.
 # Add a recipe when a command line starts being repeated, not before.
@@ -12,6 +12,9 @@
 #   just test     the scripts' own test suite
 
 # List the available recipes.
+python := "python3"
+maintained_python := "scripts/scaffold-project.py scripts/check-codex.py scripts/test_scaffold_project.py scripts/test_plugin_contract.py"
+
 default:
     @just --list --unsorted
 
@@ -33,3 +36,18 @@ test:
     sh scripts/pull-main.test.sh
     sh scripts/gamedev-is-project.test.sh
     sh scripts/hooks-project-guard.test.sh
+    {{python}} -m unittest discover -s scripts -p 'test_*.py' -v
+
+# Validate manifests, workflows, shell syntax, and maintained Python tools.
+lint:
+    {{python}} scripts/check-namespacing.py
+    {{python}} -m ruff check {{maintained_python}}
+    bash -c 'for script in bin/* hooks/*.sh scripts/*.sh scripts/test/*.sh; do bash -n "$script" || exit; done'
+
+# Check formatting without rewriting existing files.
+format-check:
+    {{python}} -m ruff format --check {{maintained_python}}
+    git diff --check
+
+# Full portable gate; host-specific reader checks are documented in CONTRIBUTING.md.
+gate: lint format-check test

@@ -9,6 +9,8 @@ agent: prototyper
 isolation: worktree
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Purpose
 
 This is the **concept prototype** — a fast, throwaway build that answers one question:

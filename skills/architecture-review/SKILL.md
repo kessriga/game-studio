@@ -8,6 +8,8 @@ agent: technical-director
 model: opus
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Architecture Review
 
 The architecture review validates that the complete body of architectural decisions

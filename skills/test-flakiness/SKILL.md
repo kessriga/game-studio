@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Test Flakiness Detection
 
 A flaky test is one that sometimes passes and sometimes fails without any code
