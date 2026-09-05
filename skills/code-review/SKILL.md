@@ -12,7 +12,7 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 
 ## Phase 1: Load Target Files
 
-Read the target file(s) in full. Read CLAUDE.md for project coding standards.
+Read the target file(s) in full. Read AGENTS.md for project coding standards.
 
 ---
 

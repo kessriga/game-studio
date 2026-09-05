@@ -1,10 +1,10 @@
 # QA — Skill & Agent Testing Framework
 
-Quality assurance infrastructure for the **Claude Code Game Studios** framework.
+Quality assurance infrastructure for the **Game Studio** framework.
 Tests the skills and agents themselves — not any game built with them.
 
 > **This folder is self-contained and optional.**
-> Game developers using CCGS don't need it. To remove it entirely:
+> Game developers using Game Studio don't need it. To remove it entirely:
 > `rm -rf qa` — nothing in `.claude/` depends on it.
 
 ---
@@ -14,8 +14,9 @@ Tests the skills and agents themselves — not any game built with them.
 ```
 qa/
 ├── README.md              ← you are here
-├── CLAUDE.md              ← tells Claude how to use this framework
-├── catalog.yaml           ← master registry: all 73 skills + 53 agents, coverage tracking
+├── AGENTS.md              ← shared contributor instructions
+├── CLAUDE.md              ← imports AGENTS.md for Claude Code
+├── catalog.yaml           ← registry: 65 skill specs + 53 agent specs, coverage tracking
 ├── quality-rubric.md      ← category-specific pass/fail metrics for /gamedev:skill-test category
 │
 ├── skills/                ← behavioral spec files for skills (one per skill)
@@ -50,13 +51,15 @@ qa/
 
 ## How to use it
 
-All testing is driven by two skills already in the framework:
+Two skills drive these checks. Read [AGENTS.md](AGENTS.md#host-specific-checks)
+for host-specific metadata and execution rules. The examples below use Claude
+invocation syntax; in Codex use `$gamedev:<name>`.
 
 ### Check structural compliance
 
 ```
 /gamedev:skill-test static [skill-name]     # Check one skill (7 checks)
-/gamedev:skill-test static all              # Check all 73 skills
+/gamedev:skill-test static all              # Check all installed skills
 ```
 
 ### Run a behavioral spec test

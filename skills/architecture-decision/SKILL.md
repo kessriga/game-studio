@@ -448,7 +448,7 @@ If there are no remaining priority ADRs and no undesigned GDD systems, offer onl
 
 **Always include this fixed notice in the closing output (do NOT omit it):**
 
-> To validate ADR coverage against your GDDs, open a **fresh Claude Code session**
+> To validate ADR coverage against your GDDs, open a **fresh session**
 > and run `/gamedev:architecture-review`.
 >
 > **Never run `/gamedev:architecture-review` in the same session as `/gamedev:architecture-decision`.**

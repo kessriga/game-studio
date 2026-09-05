@@ -23,7 +23,7 @@ Extract `--depth [full|lean|solo]` if present. Default is `full` when no flag is
 
 ## Phase 1: Load Documents
 
-Read the target design document in full. Read CLAUDE.md to understand project context and standards. Read related design documents referenced or implied by the target doc (check `design/gdd/` for related systems).
+Read the target design document in full. Read AGENTS.md to understand project context and standards. Read related design documents referenced or implied by the target doc (check `design/gdd/` for related systems).
 
 **Dependency graph validation:** For every system listed in the Dependencies section, use Glob to check whether its GDD file exists in `design/gdd/`. Flag any that don't exist yet — these are broken references that downstream authors will hit.
 
@@ -106,12 +106,13 @@ These are the most common baselines — but not required for pure UI specs, audi
 
 ### Step 2 — Spawn all relevant specialists in parallel
 
-**CRITICAL: Task in this skill spawns a SUBAGENT — a separate independent Claude session
-with its own context window. It is NOT task tracking. Do NOT simulate specialist
-perspectives internally. Do NOT reason through domain views yourself. You MUST issue
-actual Task calls. A simulated review is not a specialist review.**
+**This review requires independent specialist subagents with their own context.**
+Use the delegation tools described in the host guide; task tracking does not
+start a reviewer. Do not present internal role passes as independent reviews.
+If delegation is unavailable or prohibited, report that this part of the review
+could not run and provide only the checks actually completed.
 
-Issue all Task calls simultaneously. Do NOT spawn one at a time.
+Start independent specialist calls together when the host permits parallel work.
 
 **Prompt each specialist adversarially:**
 > "Here is the GDD for [system] and the main review's structural findings so far.
@@ -210,9 +211,9 @@ Work through all blocking items, asking for design decisions only where you cann
 After all revisions are complete, show a summary table (blocker → fix applied) and use `AskUserQuestion` for a **post-revision closing widget**:
 
 - Prompt: "Revisions complete — [N] blockers resolved. What next?"
-- Note current context usage: if context is above ~50%, add: "(Recommended: /clear before re-review — this session has used X% context. A full re-review runs 5 agents and needs clean context.)"
+- Note current context usage: if context is above ~50%, add: "(Recommended: start a fresh session before re-review; specialist reviews need room for their inputs and findings.)"
 - Options:
-  - `[A] Re-review in a new session — run /gamedev:design-review [doc-path] after /clear`
+  - `[A] Re-review in a new session — run /gamedev:design-review [doc-path] in a fresh session`
   - `[B] Accept revisions and mark Approved — update systems index, skip re-review`
   - `[C] Move to next system — /gamedev:design-system [next-system] (#N in design order)`
   - `[D] Stop here`

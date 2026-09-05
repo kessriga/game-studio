@@ -2,6 +2,9 @@
 
 ## Working now
 
+- Game Studio is the shared product name. The README and skill catalog cover
+  both hosts; shared guidance uses AGENTS.md and host-neutral session language.
+  Claude model metadata and setup live in a separate host guide.
 - Claude Code and Codex manifests expose the shared 72 skills and 53 specialist
   role guides. The release version is 0.2.0 in both host manifests.
 - Root and nested game-project instructions use AGENTS.md, with CLAUDE.md imports.
@@ -26,6 +29,10 @@
 - The Codex plugin validator passed. Claude's manifest validator passed, with
   its expected advisory that plugin-root CLAUDE.md is contributor context and
   does not supply instructions to installed game projects.
+- The branding audit found no old product name in current public docs, skills,
+  templates, QA guidance, manifests, or hooks. Both public catalogs list all 72
+  skills. New local documentation links resolve, and the 125 skill/role
+  frontmatter blocks are unchanged by the documentation cleanup.
 
 - Hosted CI passed on Linux, macOS, and Windows at `0e3a708`: see the
   [successful run](https://github.com/kessriga/game-studio/actions/runs/33963760315).
@@ -49,5 +56,7 @@
 
 - 0.2.0: added Codex discovery, shared project guidance, portable scaffolding,
   host-aware workflows, explicit stage reporting, and the repository gate.
+  Unified the Game Studio name and updated shared workflows, QA guidance,
+  catalog counts, and host-specific documentation.
 - Earlier releases established Claude plugin packaging, model tiers, and the
   guard that keeps hooks out of unrelated repositories.

@@ -10,7 +10,8 @@ Your project holds only the game and its project-side config, scaffolded by
 
 ```text
 /
-├── CLAUDE.md                    # Project config (imports technical-preferences + engine VERSION)
+├── AGENTS.md                    # Shared project guidance, engine references, and sources of truth
+├── CLAUDE.md                    # Imports AGENTS.md for Claude Code
 ├── .claude/
 │   ├── rules/                   # Path-scoped coding standards (scaffolded — plugins can't ship rules)
 │   └── docs/
@@ -24,8 +25,8 @@ Your project holds only the game and its project-side config, scaffolded by
 ├── tools/                       # Build and pipeline tools (ci, build, asset-pipeline)
 ├── prototypes/                  # Throwaway prototypes (isolated from src/)
 └── production/                  # Production management (milestones, releases, QA evidence)
-    ├── session-state/           # Ephemeral session state (active.md — gitignored)
-    └── session-logs/            # Session audit trail (gitignored)
+    ├── session-state/           # Session checkpoint shared across hosts (active.md — gitignored)
+    └── session-logs/            # Claude hook audit trail (gitignored)
 ```
 
 > The plugin itself (skills, agents, hooks, framework docs, scaffold templates)

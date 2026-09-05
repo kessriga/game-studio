@@ -353,4 +353,4 @@ If the agent skips any of these, remind it:
 
 - **Full Principle Documentation:** [docs/COLLABORATIVE-DESIGN-PRINCIPLE.md](../COLLABORATIVE-DESIGN-PRINCIPLE.md)
 - **Agent Roster:** [../agent-roster.md](../../../agent-roster.md)
-- **CLAUDE.md (Collaboration Protocol):** [CLAUDE.md](../../CLAUDE.md#collaboration-protocol)
+- **Project collaboration guidance:** [AGENTS.md template](../../templates/AGENTS.md#collaboration)

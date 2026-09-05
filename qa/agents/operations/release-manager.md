@@ -3,7 +3,7 @@
 ## Agent Summary
 - **Domain**: Release pipeline management, platform certification checklists (Nintendo, Sony, Microsoft, Apple, Google), store submission workflows, platform technical requirements compliance, semantic version numbering, release branch management
 - **Does NOT own**: Game design decisions, QA test strategy or test case design (qa-lead), QA test execution (qa-tester), build infrastructure (devops-engineer)
-- **Model tier**: Opus 4.8 (department lead)
+- **Claude model metadata**: Opus 4.8 (department lead)
 - **Gate IDs**: May be invoked by `/gamedev:gate-check` during Release phase; LAUNCH BLOCKED verdict is release-manager's primary escalation output
 
 ---
@@ -12,7 +12,7 @@
 
 - [ ] `description:` field is present and domain-specific (references release pipeline, certification, store submission)
 - [ ] `allowed-tools:` list matches the agent's role (Read/Write for production/releases/ directory; no game source or test tools)
-- [ ] Model tier is `claude-opus-4-8` per coordination-rules.md (department lead → Opus 4.8)
+- [ ] Claude model metadata is `claude-opus-4-8` per docs/claude-code.md (department lead → Opus 4.8)
 - [ ] Agent definition does not claim authority over QA strategy, game design, or build infrastructure
 
 ---

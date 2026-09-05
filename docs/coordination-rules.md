@@ -1,8 +1,8 @@
 # Agent Coordination Rules
 
-Read [the host guide](host-runtime.md) before delegating. The model assignments
-in this document apply to Claude Code. Codex uses its configured models and
-loads these agent definitions as role instructions.
+Read [the host guide](host-runtime.md) before delegating. These rules describe
+role responsibilities in either supported host. Host configuration determines
+which models and delegation tools are available.
 
 1. **Vertical Delegation**: Leadership agents delegate to department leads, who
    delegate to specialists. Never skip a tier for complex decisions.
@@ -16,90 +16,36 @@ loads these agent definitions as role instructions.
 5. **No Unilateral Cross-Domain Changes**: An agent must never modify files
    outside its designated directories without explicit delegation.
 
-## Model Tier Assignment
+## Model selection
 
-Agents and skills are assigned to models by task complexity. **Two mechanisms
-apply, and the distinction is deliberate:**
+Choose models through the host's supported configuration. Shared workflows
+require the same evidence and respect the same domain boundaries regardless
+of model. Claude's checked-in model fields are documented in
+[the Claude Code guide](claude-code.md#model-configuration); Codex uses its
+configured model and treats agent definitions as role instructions.
 
-- **Agent leadership tiers are version-pinned** — the `model:` frontmatter carries a
-  full model ID so the agent runs a *specific* model that does not drift when a new
-  family release ships. Specialists deliberately ride the floating `sonnet` alias
-  instead, so they track the current everyday model without manual bumps.
-- **Skill tiers use floating aliases** (`haiku` / `sonnet` / `opus`), each resolved
-  to the latest model of that family at run time.
+## Delegation
 
-### Agent model tiers
+Use subagents when the host provides them and the user's authorization permits
+it. Pass the relevant role definition, task, inputs, permitted edit scope, and
+expected evidence to each subagent. Follow the host guide's tool mapping;
+`Task` in an existing workflow means delegation, not tracker task creation.
 
-| Tier | `model:` value | Agents |
-|------|----------------|--------|
-| **Director** (top-2 authority) | `claude-fable-5` — pinned | creative-director, technical-director |
-| **Game design lead** | `claude-fable-5` — pinned | game-designer |
-| **Department lead** | `claude-opus-4-8` — pinned | producer, art-director, narrative-director, audio-director, lead-programmer, qa-lead, release-manager, localization-lead, ux-designer |
-| **Specialist** | `sonnet` — floating alias | the other 41 agents — every engine specialist (godot/unity/unreal/bevy), systems/level/economy designers, live-ops-designer, analytics-engineer, all programmers, qa-tester, and the operations/creative specialists |
-
-Leadership is pinned because the intent is a *specific* model — Fable for the two
-directors and for game-designer (game design is a load-bearing creative role, so it
-rides the strongest model alongside the directors), Opus 4.8 for the other leads —
-and the bare `opus` alias names a model family,
-not a specific version, so it cannot express "Opus 4.8". Note `narrative-director` and `audio-director` are department
-leads despite their names; only the two top authorities are "directors".
-
-### Skill model tiers
-
-Skills declare a floating alias in frontmatter (or none = Sonnet):
-
-| Alias | Resolves to (family latest) | When to use |
-|-------|-----------------------------|-------------|
-| `haiku` | Haiku 4.5 (`claude-haiku-4-5-20251001`) | Read-only status checks, formatting, simple lookups — no creative judgment needed |
-| `sonnet` | latest Sonnet | Implementation, design authoring, analysis of individual systems — default for most work |
-| `opus` | latest Opus | Multi-document synthesis, high-stakes phase gate verdicts, cross-system holistic review |
-
-Skills with `model: haiku`: `/gamedev:help`, `/gamedev:story-readiness`, `/gamedev:scope-check`,
-`/gamedev:project-stage-detect`, `/gamedev:changelog`, `/gamedev:patch-notes`, `/gamedev:status`
-
-Skills with `model: opus`: `/gamedev:review-all-gdds`, `/gamedev:architecture-review`, `/gamedev:gate-check`
-
-All other skills default to Sonnet. When creating new skills, assign Haiku if the
-skill only reads and formats; assign Opus if it must synthesize 5+ documents with
-high-stakes output; otherwise leave unset (Sonnet).
-
-## Subagents vs Agent Teams
-
-This project uses two distinct multi-agent patterns:
-
-### Subagents (current, always active)
-Spawned via `Task` within a single Claude Code session. Used by all `team-*` skills
-and orchestration skills. Subagents share the session's permission context, run
-sequentially or in parallel within the session, and return results to the parent.
-
-**When to spawn in parallel**: If two subagents' inputs are independent (neither
-needs the other's output to begin), spawn both Task calls simultaneously rather
-than waiting. Example: `/gamedev:review-all-gdds` Phase 1 (consistency) and Phase 2
-(design theory) are independent — spawn both at the same time.
-
-### Agent Teams (experimental — opt-in)
-Multiple independent Claude Code *sessions* running simultaneously, coordinated
-via a shared task list. Each session has its own context window and token budget.
-Requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable.
-
-**Use agent teams when**:
-- Work spans multiple subsystems that will not touch the same files
-- Each workstream would take >30 minutes and benefits from true parallelism
-- A senior agent (technical-director, producer) needs to coordinate 3+ specialist
-  sessions working on different epics simultaneously
-
-**Do not use agent teams when**:
-- One session's output is required as input for another (use sequential subagents)
-- The task fits in a single session's context (use subagents instead)
-- Cost is a concern — each team member burns tokens independently
-
-**Current status**: Opt-in via `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Document first usage here when adopted.
+When delegation is unavailable, follow role instructions sequentially and
+identify the result as a role pass. If a workflow requires independent review,
+report that requirement as unmet. Self-review cannot satisfy it.
 
 ## Parallel Task Protocol
 
-When an orchestration skill spawns multiple independent agents:
+When an orchestration skill requests independent subagents and the host permits
+parallel work:
 
-1. Issue all independent Task calls before waiting for any result
-2. Collect all results before proceeding to dependent phases
-3. If any agent is BLOCKED, surface it immediately — do not silently skip
-4. Always produce a partial report if some agents complete and others block
+1. Start independent calls before waiting for their results.
+2. Collect results before proceeding to dependent phases.
+3. Surface blocked work immediately; do not silently skip it.
+4. Report completed checks separately from checks that could not run.
+
+For example, consistency and design-theory reviews can run together when each
+has all required inputs. A feasibility review that needs the revised design
+must wait for that revision. Do not let parallel agents edit overlapping files
+without an explicit coordination plan.

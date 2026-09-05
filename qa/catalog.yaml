@@ -720,7 +720,7 @@ skills:
     category: utility
 
 agents:
-  # Tier 1 Directors (Fable + Opus 4.8)
+  # Tier 1 Directors
   - name: creative-director
     spec: qa/agents/directors/creative-director.md
     last_spec: ""
@@ -745,7 +745,7 @@ agents:
     last_spec_result: ""
     category: director
 
-  # Tier 2 Leads (Opus 4.8; game-designer on Fable)
+  # Tier 2 Leads
   - name: lead-programmer
     spec: qa/agents/leads/lead-programmer.md
     last_spec: ""
@@ -788,7 +788,7 @@ agents:
     last_spec_result: ""
     category: lead
 
-  # Core Specialists (Sonnet)
+  # Core Specialists
   - name: gameplay-programmer
     spec: qa/agents/specialists/gameplay-programmer.md
     last_spec: ""

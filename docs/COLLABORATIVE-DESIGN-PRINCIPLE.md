@@ -676,12 +676,12 @@ WHEN implementing:
 
 ---
 
-## Implementation Status
+## Where the guidance lives
 
-This principle has been fully embedded across the project:
-
-- **CLAUDE.md** — Collaboration protocol section added
-- **All 48 agent definitions** — Updated to enforce question-asking and approval
-- **All skills** — Updated to require approval before writing
-- **README.md** — Clarifies collaborative (not autonomous) design
-- **AskUserQuestion tool** — Integrated into 16 skills for structured option UI
+- [Project AGENTS.md template](../templates/AGENTS.md#collaboration) defines
+  how the assistant handles creative decisions and authorized implementation.
+- Role definitions in `agents/` and the skill workflows apply those boundaries
+  to their domains.
+- [The host guide](host-runtime.md) maps user-input and delegation tools to the
+  current assistant. A named tool is not a requirement to use a particular host.
+- [STATUS.md](../STATUS.md) records what has actually been verified.

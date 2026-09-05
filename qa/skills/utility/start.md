@@ -1,173 +1,116 @@
-# Skill Test Spec: /gamedev:start
+# Skill Test Spec: gamedev:start
 
 ## Skill Summary
 
-`/gamedev:start` is the first-time onboarding skill for new projects. It guides the
-user through naming the project, choosing a game engine, and setting up the
-initial directory structure. It creates stub configuration files (CLAUDE.md,
-technical-preferences.md) and then routes to `/gamedev:setup-engine` with the chosen
-engine as an argument. Each file or directory created is gated behind a
-"May I write" ask, following the collaborative protocol.
+The start skill adds missing project files, reads existing work, and asks the
+user where to begin. It supports Godot, Unity, Unreal, Bevy, and deferred engine
+selection. The Python scaffold preserves existing files. Shared guidance lives
+in `AGENTS.md`; sibling `CLAUDE.md` files import it for Claude Code.
 
-The skill detects whether a project is already configured and whether a
-partial setup exists, offering to resume or restart as appropriate. It has
-no director gates — it is a utility setup skill that runs before any agent
-hierarchy exists.
+The skill records the chosen starting stage and review mode, then recommends
+and hands off to the next skill. It does not run director gates. Use the host's
+invocation syntax and input tools, as described in `docs/host-runtime.md`.
 
----
+## Static Assertions
 
-## Static Assertions (Structural)
-
-Verified automatically by `/gamedev:skill-test static` — no fixture needed.
-
-- [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
-- [ ] Has ≥2 phase headings
-- [ ] Contains verdict keywords: COMPLETE, BLOCKED
-- [ ] Contains "May I write" collaborative protocol language for each config file
-- [ ] Has a next-step handoff at the end (routes to `/gamedev:setup-engine`)
-
----
-
-## Director Gate Checks
-
-None. `/gamedev:start` is a utility setup skill. No director agents exist yet at the
-point this skill runs.
-
----
+- [ ] Frontmatter names the skill `start` and describes onboarding
+- [ ] The workflow loads the host guide before following its steps
+- [ ] Scaffold paths resolve from the installed skill, not an assumed cache location
+- [ ] Existing authorization is respected; unresolved setup choices go to the user
+- [ ] The skill ends with a next-step handoff and COMPLETE when onboarding finishes
 
 ## Test Cases
 
-### Case 1: Happy Path — Fresh repo, no engine, full onboarding flow
+### Case 1: Fresh project with an engine choice
 
-**Fixture:**
-- Empty repository: no CLAUDE.md overrides, no `production/stage.txt`, no
-  `technical-preferences.md` content beyond placeholders
-- No existing design docs or source code
-
-**Input:** `/gamedev:start`
+**Fixture:** Empty game repository, Python available, user requests setup and
+chooses Bevy. The user has a vague game concept.
 
 **Expected behavior:**
-1. Skill detects no existing configuration and begins fresh onboarding
-2. Skill asks for project name
-3. Skill presents 3 engine options: Godot 4, Unity, Unreal Engine 5
-4. User selects an engine
-5. Skill asks "May I write the initial directory structure?"
-6. Skill creates all directories defined in `directory-structure.md`
-7. Skill asks "May I write CLAUDE.md stub?" and writes it on approval
-8. Skill routes to `/gamedev:setup-engine [chosen-engine]` to complete technical config
+
+1. Resolve the scaffold script relative to the skill and run it against the game repository.
+2. Offer the four supported engines and the option to decide later.
+3. Use `--engine bevy` after the user's choice.
+4. Read the resulting shared guides and report created and preserved files.
+5. Ask about the user's starting point, stage, and review mode as the workflow requires.
+6. Recommend the appropriate concept workflow and wait for the user's next-step choice.
 
 **Assertions:**
-- [ ] Project name is captured before any file is written
-- [ ] Exactly 3 engine options are presented
-- [ ] "May I write" is asked for each config file individually
-- [ ] No file is written without explicit user approval
-- [ ] Handoff to `/gamedev:setup-engine` occurs at the end with the chosen engine argument
-- [ ] Verdict is COMPLETE after all files are written and handoff is issued
 
----
+- [ ] Root and nested shared guides are created with Claude import files
+- [ ] Only the Bevy engine reference is copied
+- [ ] The guide names the copied engine reference
+- [ ] No per-file permission loop repeats authorization already given for setup
+- [ ] The final skill invocation matches the current host
 
-### Case 2: Already Configured — Detects existing config, offers to skip or reconfigure
+### Case 2: Existing project with a legacy guide
 
-**Fixture:**
-- `technical-preferences.md` has engine already set (not placeholder)
-- `production/stage.txt` exists with `Concept`
-
-**Input:** `/gamedev:start`
+**Fixture:** The game has a full `CLAUDE.md`, a configured Godot engine, and
+project files. Root or nested `AGENTS.md` files are missing.
 
 **Expected behavior:**
-1. Skill reads `technical-preferences.md` and detects configured engine
-2. Skill reports: "This project is already configured with [engine]"
-3. Skill presents options: skip (exit), reconfigure engine, or reconfigure specific sections
-4. If user selects skip: skill exits cleanly with a summary of current config
-5. If user selects reconfigure: skill proceeds to the engine-selection step
+
+1. Detect missing scaffold files despite the existing technical-preferences marker.
+2. Preserve existing bytes while adding missing files for the configured engine.
+3. Read the legacy guide and shared guide; propose a concrete merge if needed.
+4. Preserve unrelated project instructions and any Backlog guidance.
 
 **Assertions:**
-- [ ] Skill does NOT overwrite existing config without user choosing reconfigure
-- [ ] Detected engine name is shown to the user in the status message
-- [ ] User is offered at least 2 options (skip or reconfigure)
-- [ ] Verdict is COMPLETE whether user skips or reconfigures
 
----
+- [ ] A configured marker does not skip the missing-file check
+- [ ] The scaffold script does not overwrite the legacy guide or project files
+- [ ] Replacing a full Claude guide with an import follows a reviewed merge
+- [ ] Remaining migration decisions are reported accurately
 
-### Case 3: Engine Choice — User picks Godot 4, routes to /gamedev:setup-engine godot
+### Case 3: Engine selection deferred
 
-**Fixture:**
-- Fresh repo — no existing configuration
+**Fixture:** Fresh game repository; user wants to explore ideas before choosing an engine.
 
-**Input:** `/gamedev:start`
-
-**Expected behavior:**
-1. Skill presents engine options and user selects Godot 4
-2. Skill writes initial stubs (directory structure, CLAUDE.md) after approval
-3. Skill explicitly routes to `/gamedev:setup-engine godot` as the next step
-4. Handoff message clearly names the engine and the next skill invocation
+**Expected behavior:** Run the scaffold with `--engine undecided`, then route
+from the user's starting point.
 
 **Assertions:**
-- [ ] Handoff command is `/gamedev:setup-engine godot` (not generic `/gamedev:setup-engine`)
-- [ ] Handoff is issued after all initial stubs are written, not before
-- [ ] Engine choice is echoed back to user before writing begins
 
----
+- [ ] No engine reference is copied by default
+- [ ] AGENTS.md states that no engine has been selected
+- [ ] No import points to an uncopied Godot reference
+- [ ] The user can proceed to concept work without choosing an engine
 
-### Case 4: Interrupted Setup — Partial config detected, offers resume or restart
+### Case 4: Interrupted scaffold and rerun
 
-**Fixture:**
-- Directory structure exists (was created) but `technical-preferences.md` is
-  still all placeholders (engine was never chosen — setup was interrupted)
-- No `production/stage.txt`
+**Fixture:** Some scaffold files exist, including user-edited guides. The user
+requests continuation. Some nested guides are still missing.
 
-**Input:** `/gamedev:start`
-
-**Expected behavior:**
-1. Skill detects partial state: directories exist but engine is unconfigured
-2. Skill reports: "A partial setup was detected — directories exist but engine is not configured"
-3. Skill offers: resume from engine selection, or restart from scratch
-4. If resume: skill skips directory creation, proceeds to engine choice
-5. If restart: skill asks "May I overwrite existing structure?" before proceeding
+**Expected behavior:** Add only missing files, preserve edits, and ask only
+about unresolved choices. If Python is unavailable or a destination path
+conflicts with a required directory, report that limit without claiming success.
 
 **Assertions:**
-- [ ] Partial state is correctly identified (directories present, engine absent)
-- [ ] User is offered resume vs. restart choice — not forced into one path
-- [ ] Resume path skips re-creating directories (no redundant "May I write" for structure)
-- [ ] Restart path asks for permission to overwrite before touching any files
 
----
+- [ ] Existing files remain byte-for-byte intact after the scaffold script
+- [ ] Missing nested guides are added when paths permit
+- [ ] No restart or overwrite is required to fill gaps
+- [ ] A failed scaffold is not reported as complete
 
-### Case 5: Director Gate Check — No gate; start is a utility setup skill
+### Case 5: Review mode and host-specific handoff
 
-**Fixture:**
-- Any fixture
+**Fixture:** Scaffolding is complete, the starting path is chosen, and the user
+selects `lean` review mode. No independent review is requested during onboarding.
 
-**Input:** `/gamedev:start`
-
-**Expected behavior:**
-1. Skill completes full onboarding flow
-2. No director agents are spawned at any point
-3. No gate IDs (CD-*, TD-*, AD-*, PR-*) appear in the output
+**Expected behavior:** Save the chosen mode and stage, confirm the recommended
+next step, and return a short handoff in the current host's syntax.
 
 **Assertions:**
-- [ ] No director gate is invoked during the skill execution
-- [ ] No gate skip messages appear (gates are absent, not suppressed)
-- [ ] Skill reaches COMPLETE without any gate verdict
 
----
-
-## Protocol Compliance
-
-- [ ] Asks for project name before any file is written
-- [ ] Presents engine options as a structured choice (not free text)
-- [ ] Asks "May I write" separately for directory structure and for CLAUDE.md stub
-- [ ] Ends with a handoff to `/gamedev:setup-engine` with the engine name as argument
-- [ ] Verdict is clearly stated (COMPLETE or BLOCKED) at end of output
-
----
+- [ ] `production/review-mode.txt` records `lean`
+- [ ] An existing review mode is read without asking the user to choose again
+- [ ] No director gate is invoked by the start skill
+- [ ] Claude Code receives `/gamedev:<skill>`; Codex receives `$gamedev:<skill>`
+- [ ] The next skill is recommended, not automatically run
 
 ## Coverage Notes
 
-- The case where the user rejects all engine options and provides a custom
-  engine name is not tested — the skill is designed for the three supported
-  engines only.
-- Git initialization (if any) is not tested here; that is an infrastructure
-  concern outside the skill boundary.
-- Solo vs. lean mode behavior is not applicable — this skill has no gates and
-  mode selection is irrelevant.
+`scripts/test_scaffold_project.py` executes the filesystem contracts for engine
+selection, reruns, legacy guides, path conflicts, symlinks, and relocated plugin
+paths. The scenarios here review the surrounding conversational instructions;
+they do not establish that a conversation or engine build ran successfully.

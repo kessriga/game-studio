@@ -41,8 +41,11 @@ its docs without renewed permission. Preserve existing project files during
 scaffolding. Ask before adding unrelated work or changing global configuration.
 Follow the user's Git and task conventions; never commit directly to main.
 
-- Keep skill and agent frontmatter `name:` bare. Shared cross-references use
-  `/gamedev:<skill>` and `gamedev:<agent>`; the host guide explains Codex usage.
+- Keep skill and agent frontmatter `name:` bare. Identify skills and roles as
+  `gamedev:<name>` in shared prose. Existing `/gamedev:<skill>` references are
+  translated by the host guide; use each host's actual syntax in install examples.
+- Call the product Game Studio and the plugin gamedev. Put host-specific model,
+  installation, and runtime details in `docs/claude-code.md` or `docs/codex.md`.
 - Every skill and role must link to the host guide before its workflow body.
 - Resolve framework docs relative to the skill or role file. Project paths
   such as `.claude/docs/technical-preferences.md` remain project-relative.

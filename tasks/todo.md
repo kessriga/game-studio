@@ -34,3 +34,25 @@ Windows CI uses cp1252 for implicit Python text reads; repository files and Code
 The remaining Windows failure was native process search selecting WSL Bash despite PATH lookup finding Git Bash. The test now launches the resolved absolute executable. Encoding lint requires Ruff preview mode; the gate runs that rule explicitly alongside the normal lint selection.
 
 PR #17 is open. Hosted CI run 33963760315 passed on Linux, macOS, and Windows at 0e3a708. The full local gate and native Codex reader also pass. No merge or source-branch deletion was requested or performed.
+
+## Shared branding and documentation
+
+INTENT: the plugin supports Claude Code and Codex, but its public name and shared workflows still assume Claude; the user wants agent-neutral documentation and skills.
+
+- [x] Present Game Studio consistently in the README, contribution guide, and plugin descriptions, with installation and invocation for both hosts.
+- [x] Make shared skill, role, setup, context, and QA guidance host-neutral; isolate actual Claude configuration and preserve compatible file paths and metadata.
+- [ ] Review the complete audit, run the local gate and native discovery checks, and update PR #17 with the changes and hosted CI results.
+
+Baseline: `just gate` passed before these edits. Audit runtime and current reference docs; keep historical task records intact. Verify wording and references directly without adding tests that only mirror prose. Existing contract and hook checks must keep passing.
+
+Local review: the full gate, native Codex discovery of all 72 skills, and both
+plugin validators pass. Both public catalogs cover all skills; new local links
+resolve. All 72 skill and 53 role frontmatter blocks remain byte-for-byte
+unchanged. Shared references to AGENTS.md preserve the host guide's legacy
+migration path. The onboarding spec now follows the implemented scaffold and
+the user's authorization rules; model assertions inspect Claude metadata,
+not an assumed runtime. No executable tests were removed or weakened.
+
+Verification remains limited to document review, metadata discovery, and the
+repository gate; conversational runs and engine builds remain unverified.
+Hosted CI for this documentation update will be checked after pushing.

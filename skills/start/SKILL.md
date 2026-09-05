@@ -17,7 +17,7 @@ Files it may write: the project scaffold (Phase 0), `production/stage.txt` (Phas
 
 ---
 
-## Phase 0: Scaffold the Project (first run only)
+## Phase 0: Add Missing Project Files
 
 A plugin cannot install project instructions or settings into a game repository
 by itself. Run this phase in the user's game repository, never the plugin checkout.
@@ -76,7 +76,8 @@ Store these findings internally to validate the user's self-assessment and tailo
 
 ## Phase 2: Ask Where the User Is
 
-This is the first thing the user sees. Use `AskUserQuestion` with these exact options so the user can click rather than type:
+After any scaffold questions, use the host's user-input tool with these options
+so the user can choose a starting path:
 
 - **Prompt**: "Welcome to Game Studio! Before I suggest anything, I'd like to understand where you're starting from. Where are you at with your game idea right now?"
 - **Options**:
@@ -222,7 +223,7 @@ Stage mapping:
 
 Do this silently — no "May I write?" needed for this single-line file.
 
-Say: "I've set `production/stage.txt` to `[stage]` — this anchors your status line and stage detection."
+Say: "I've set `production/stage.txt` to `[stage]` — this records the stage for status reporting."
 
 ---
 

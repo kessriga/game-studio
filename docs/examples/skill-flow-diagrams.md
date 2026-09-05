@@ -11,7 +11,7 @@ These show what runs before and after each skill, and what artifacts flow betwee
 PHASE 1: CONCEPT
   /gamedev:start ──────────────────────────────────────────────────────► routes to A/B/C/D
   /gamedev:brainstorm ──────────────────────────────────────────────────► design/gdd/game-concept.md
-  /gamedev:setup-engine ────────────────────────────────────────────────► CLAUDE.md + technical-preferences.md
+  /gamedev:setup-engine ────────────────────────────────────────────────► AGENTS.md + technical-preferences.md
   /gamedev:prototype [core-mechanic] ───────────────────────────────────► prototypes/[name]-concept/REPORT.md
         │ PROCEED                                                  (validate idea BEFORE writing GDDs)
         ▼

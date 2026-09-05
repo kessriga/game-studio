@@ -4,7 +4,9 @@ These hooks are registered for Claude Code through
 `.claude-plugin/plugin.json` and `hooks/claude-hooks.json`. Codex does not load
 them; its workflows use the explicit checks in [the host guide](host-runtime.md).
 
-Claude hooks fire automatically inside a recognized game project:
+The eleven shipped hooks run on their configured Claude events. Hooks that
+touch project files require a recognized game project. The final table row is
+an additional development hook used only in this repository.
 
 | Hook | Event | Trigger | Action |
 | ---- | ----- | ------- | ------ |
@@ -25,7 +27,7 @@ Claude hooks fire automatically inside a recognized game project:
 
 Claude Code enables a plugin **per scope**, not per project. A plugin enabled in your user
 settings is enabled in *every* repository you open, so without a guard these hooks would run
-in all of them — creating `production/session-logs/`, printing the Game Studios banner over
+in all of them — creating `production/session-logs/`, printing the Game Studio banner over
 an unrelated project's session context, and applying gamedev commit and push conventions to
 code that has nothing to do with a game.
 

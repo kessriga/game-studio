@@ -15,23 +15,26 @@ cache to configure a game.
 The project guide is `AGENTS.md`. Claude Code reads it through `@AGENTS.md` in
 `CLAUDE.md`. When an older project has a full guide only in `CLAUDE.md`, read that
 too; propose merging its guidance into `AGENTS.md` before replacing anything.
-When a workflow says to update the Technology Stack in `CLAUDE.md`, update the
-shared guide if the Claude file imports it. Engine settings remain in
+When a workflow reads or updates project guidance, use the shared guide and
+any applicable legacy instructions. Engine settings remain in
 `.claude/docs/technical-preferences.md` for compatibility with existing projects.
 This path holds shared data even when Codex runs the workflow.
 
 ## Claude Code
 
-Use `/gamedev:<skill>` and the registered `gamedev:<agent>` subagents. Claude
+Shared docs identify skills as `gamedev:<skill>`. Use `/gamedev:<skill>` and the
+registered `gamedev:<agent>` subagents in Claude Code. Claude
 frontmatter controls its tools and model choices. The Claude plugin manifest
 explicitly loads `hooks/claude-hooks.json`.
+See [the Claude Code guide](claude-code.md) for installation and model metadata.
 
 ## Codex
 
 - Select a gamedev skill from `/skills`, or mention the skill with `$` using the
   name shown by Codex. For ambiguous names such as `start`, select the entry
   belonging to gamedev. Natural language also works: “Use gamedev's start skill.”
-  Translate `/gamedev:<skill>` references into this host's skill picker or a
+  Translate `gamedev:<skill>` and existing `/gamedev:<skill>` references into
+  `$gamedev:<skill>`, this host's skill picker, or a
   natural-language request; do not tell users to run Claude slash commands here.
 - Treat `argument-hint` as usage guidance. `$ARGUMENTS` means the text after the
   invocation; `[0]` means its first argument. Parse that text yourself. These are

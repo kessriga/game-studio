@@ -174,7 +174,10 @@ gates, the gate mode logic must also be correct.
 
 ## Agent Categories
 
-Used to validate agent spec files in `tests/agents/`.
+Used to validate agent spec files in `qa/agents/`. Model checks inspect Claude
+frontmatter as described in `docs/claude-code.md`; they do not assert that a
+particular model ran. Codex uses the configured host model and loads the role
+instructions through the host guide.
 
 ### `director`
 
@@ -185,7 +188,7 @@ Used to validate agent spec files in `tests/agents/`.
 | **D1 — Correct verdict vocabulary** | Returns APPROVE / CONCERNS / REJECT (or domain equivalent: REALISTIC/CONCERNS/UNREALISTIC for producer) |
 | **D2 — Domain boundary respected** | Does not make binding decisions outside its declared domain |
 | **D3 — Conflict escalation** | When two departments conflict, escalates to correct parent (creative-director or technical-director) rather than unilaterally deciding |
-| **D4 — Leadership model tier** | Agent runs the pinned model coordination-rules.md assigns it — Fable for the two directors (creative/technical), Opus 4.8 for other leads |
+| **D4 — Host model configuration** | Claude frontmatter matches `docs/claude-code.md`; Codex uses its configured model without passing Claude model IDs |
 
 ### `lead`
 
@@ -196,7 +199,7 @@ systems-designer, level-designer
 |---|---|
 | **L1 — Domain verdict** | Returns a domain-specific verdict (e.g., FEASIBLE/INFEASIBLE for lead-programmer, PASS/FAIL for qa-lead) |
 | **L2 — Escalates to shared parent** | Out-of-domain conflicts escalate to creative-director (design) or technical-director (tech) |
-| **L3 — Lead/specialist model tier** | Agent runs the model coordination-rules.md assigns it — Fable (pinned) for game-designer, Opus 4.8 for other department leads, Sonnet (floating alias) for specialists |
+| **L3 — Host model configuration** | Claude frontmatter matches `docs/claude-code.md`; Codex uses its configured model without passing Claude model IDs |
 
 ### `specialist`
 

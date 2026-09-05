@@ -1,13 +1,13 @@
 # QA — Skill & Agent Testing Framework — Contributor Instructions
 
-This folder is the quality assurance layer for the Claude Code Game Studios skill/agent
+This folder is the quality assurance layer for the Game Studio skill/agent
 framework. It is self-contained and separate from any game project.
 
 ## Key files
 
 | File | Purpose |
 |------|---------|
-| `catalog.yaml` | Master registry for all 66 skills and 53 agents. Contains category, spec path, and last-test tracking fields. Always read this first when running any test command. |
+| `catalog.yaml` | Registry of 65 skill specs and 53 agent specs; run the coverage audit to find untracked skills. Contains category, spec path, and last-test tracking fields. Always read this first when running any test command. |
 | `quality-rubric.md` | Category-specific pass/fail metrics. Read the matching `###` section for the skill's category when running `/gamedev:skill-test category`. |
 | `skills/[category]/[name].md` | Behavioral spec for a skill — 5 test cases + protocol compliance assertions. |
 | `agents/[tier]/[name].md` | Behavioral spec for an agent — 5 test cases + protocol compliance assertions. |
@@ -68,16 +68,32 @@ qa          → qa-tester, security-engineer, accessibility-specialist
 
 Tiers mirror the `qa/agents/` directory layout and each agent's `category:` in
 `catalog.yaml`; the four engine groups live under `qa/agents/engine/`. These are
-corpus navigation groups, not model assignments — model tiers are defined in
-`docs/coordination-rules.md`.
+corpus navigation groups, not model assignments — Claude model metadata is documented in
+`docs/claude-code.md`. Shared delegation rules are in `docs/coordination-rules.md`.
 
 ## Workflow for testing a skill
 
 1. Read `catalog.yaml` to get the skill's `spec:` path and `category:`
 2. Read the skill at `skills/[name]/SKILL.md`
 3. Read the spec at the `spec:` path
-4. Evaluate assertions case by case
+4. Evaluate assertions case by case using the host rules below
 5. Offer to write results to `results/` and update `catalog.yaml`
+
+## Host-specific checks
+
+Read `docs/host-runtime.md` before interpreting tool names in a spec. Skill
+references use the same `gamedev:<name>` identity in either host; add `/` in
+Claude Code or `$` in Codex when invoking them.
+
+Claude model and tool frontmatter assertions inspect compatibility metadata.
+They can be checked from either host, but do not prove a model ran or a tool
+was available. For Codex execution, verify that the configured model and actual
+host tools were used without sending Claude model IDs or custom agent types.
+
+Apply shared behavior assertions in both hosts. If required independent review
+cannot run, mark it blocked. Do not count sequential role passes as independent
+reviews. Written-spec analysis is distinct from running a workflow; name which
+kind of evidence the result contains.
 
 ## Workflow for improving a skill
 
@@ -94,5 +110,5 @@ Treat spec failures as "this needs investigation," not "the skill is definitivel
 ## This folder is deletable
 
 Nothing in `.claude/` imports from here. Deleting this folder has no effect on the
-CCGS skills or agents themselves. `/gamedev:skill-test` and `/gamedev:skill-improve` will report that
+Game Studio skills or agents themselves. `/gamedev:skill-test` and `/gamedev:skill-improve` will report that
 `catalog.yaml` is missing and guide the user to initialize it.

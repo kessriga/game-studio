@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">Claude Code Game Studios</h1>
+  <h1 align="center">Game Studio</h1>
   <p align="center">
     Turn a Claude Code or Codex session into a game development studio.
     <br />
@@ -9,24 +9,30 @@
 
 ---
 
-## Codex support
+## Choose your coding assistant
 
-Install from this checkout with `codex plugin marketplace add ./`, then
-`codex plugin add gamedev@game-studio`. Open a new Codex session in your game
-repository and run `$gamedev:start`. See [Codex setup](docs/codex.md) for the full
-instructions and capability differences, and [STATUS.md](STATUS.md) for what has
-been verified.
+Game Studio ships as the `gamedev` plugin for **Claude Code and Codex**. Both
+use the same skills, specialist roles, and project documents. See
+[Getting Started](#getting-started) for installation and [STATUS.md](STATUS.md)
+for verified capabilities.
 
-The skill catalog below uses Claude command notation. In Codex,
-`/gamedev:brainstorm` becomes `$gamedev:brainstorm`, and the same mapping applies
-to every skill. Claude agents become role guides for available Codex subagents
-or sequential role passes. Claude hooks remain Claude-only.
+This guide identifies skills by name, such as `gamedev:brainstorm`. Add the
+prefix your assistant uses when invoking one:
+
+| Host | Start a project | Run a skill with arguments |
+|------|-----------------|----------------------------|
+| Claude Code | `/gamedev:start` | `/gamedev:brainstorm cozy farming` |
+| Codex | `$gamedev:start` | `$gamedev:brainstorm cozy farming` |
+
+You can also select the skill from your assistant's skill picker. Host-specific
+setup and runtime behavior are documented in the [Claude Code guide](docs/claude-code.md)
+and [Codex guide](docs/codex.md).
 
 ## Why This Exists
 
 Building a game solo with AI is powerful — but a single chat session has no structure. No one stops you from hardcoding magic numbers, skipping design docs, or writing spaghetti code. There's no QA pass, no design review, no one asking "does this actually fit the game's vision?"
 
-**Claude Code Game Studios** solves this by giving your AI session the structure of a real studio. Instead of one general-purpose assistant, you get 53 specialized agents organized into a studio hierarchy — directors who guard the vision, department leads who own their domains, and specialists who do the hands-on work. Each agent has defined responsibilities, escalation paths, and quality gates.
+**Game Studio** gives your AI session the structure of a real studio, with 53 specialist roles organized into a hierarchy: directors who guard the vision, department leads who own their domains, and specialists who do the hands-on work. Each role has defined responsibilities, escalation paths, and quality gates.
 
 The result: you still make every decision, but now you have a team that asks the right questions, catches mistakes early, and keeps your project organized from first brainstorm to launch.
 
@@ -37,7 +43,7 @@ The result: you still make every decision, but now you have a team that asks the
 - [What's Included](#whats-included)
 - [Studio Hierarchy](#studio-hierarchy)
 - [Usage Guide](#usage-guide)
-- [Slash Commands](#slash-commands)
+- [Skill Catalog](#skill-catalog)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
 - [How It Works](#how-it-works)
@@ -51,15 +57,15 @@ The result: you still make every decision, but now you have a team that asks the
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| **Agents** | 53 | Specialized subagents across design, programming, art, audio, narrative, QA, and production |
-| **Skills** | 72 | Slash commands for every workflow phase (`/gamedev:start`, `/gamedev:design-system`, `/gamedev:create-epics`, `/gamedev:create-stories`, `/gamedev:dev-story`, `/gamedev:story-done`, etc.) |
-| **Hooks** | 11 | Automated validation on commits, pushes, asset changes, session lifecycle, agent audit trail, and gap detection |
-| **Rules** | 11 | Path-scoped coding standards enforced when editing gameplay, engine, AI, UI, network code, and more |
-| **Templates** | 41 | Document templates for GDDs, UX specs, ADRs, HUD design, accessibility, and more |
+| **Specialist roles** | 53 | Design, programming, art, audio, narrative, QA, and production expertise; delegated or followed as role passes according to host capabilities |
+| **Skills** | 72 | Workflows for every phase (`gamedev:start`, `gamedev:design-system`, `gamedev:create-epics`, `gamedev:create-stories`, `gamedev:dev-story`, `gamedev:story-done`, etc.) |
+| **Hooks** | 11 | Claude Code automation for validation, session state, notifications, and audit logs; Codex follows explicit checks |
+| **Rules** | 11 | Coding standards for matching project paths; loaded automatically by Claude Code and read explicitly in Codex |
+| **Templates** | 39 | Document templates for GDDs, UX specs, ADRs, HUD design, accessibility, and more |
 
 ## Studio Hierarchy
 
-Agents are organized into three tiers, matching how real studios operate:
+Specialist roles are organized into three tiers, matching how real studios operate:
 
 ```
 Tier 1 — Directors
@@ -81,10 +87,9 @@ Tier 3 — Specialists
   live-ops-designer    community-manager
 ```
 
-In Claude Code, model per agent is set in the plugin's `docs/coordination-rules.md`: the two directors
-(`creative-director`, `technical-director`) and `game-designer` — a load-bearing role
-in any studio — run on Fable, the other department leads on Opus 4.8, and all
-specialists on Sonnet.
+The tiers define responsibility and review authority. Follow the
+[coordination rules](docs/coordination-rules.md) when delegating work. Each host
+controls model selection; it does not change a role's responsibilities.
 
 ### Engine Specialists
 
@@ -108,21 +113,21 @@ reach for only when the situation calls.
 
 | Command | Answers |
 |---------|---------|
-| `/gamedev:start` | *"I'm new — where do I begin?"* Routes a fresh or existing project into the right phase. |
-| `/gamedev:status` | *"Where am I?"* Prints the current production stage and Epic > Feature > Task breadcrumb. |
-| `/gamedev:help [what you just finished]` | *"What's next?"* Reads your phase and artifacts, then names the next command. |
-| `/gamedev:project-stage-detect` | *"What am I missing?"* Full gap analysis — deeper than `help`. |
+| `gamedev:start` | *"I'm new — where do I begin?"* Routes a fresh or existing project into the right phase. |
+| `gamedev:status` | *"Where am I?"* Prints the current production stage and Epic > Feature > Task breadcrumb. |
+| `gamedev:help [what you just finished]` | *"What's next?"* Reads your phase and artifacts, then names the next command. |
+| `gamedev:project-stage-detect` | *"What am I missing?"* Full gap analysis — deeper than `help`. |
 
-The rhythm is: run a command → run `/gamedev:help` → it names the next one → repeat.
+The rhythm is: run a command → run `gamedev:help` → it names the next one → repeat.
 You never have to hold the whole map in your head — `help` keeps your place.
 
 ### Set your review mode first
 
-On a fresh project, `/gamedev:start` asks one question that shapes every later step:
+On a fresh project, `gamedev:start` asks one question that shapes every later step:
 how much director review do you want as you work?
 
 - **`solo`** (default) — no director reviews. Maximum speed; best for solo devs, game jams, and prototypes.
-- **`lean`** — directors review only at phase-gate transitions (`/gamedev:gate-check`).
+- **`lean`** — directors review only at phase-gate transitions (`gamedev:gate-check`).
 - **`full`** — director specialists review at each key step. Best for teams, or for learning the workflow.
 
 Your choice is saved to `production/review-mode.txt`. Override it for any single run
@@ -136,15 +141,15 @@ where the risk justifies it (a first mechanic, a large team, a shaky concept).
 
 | Phase | You produce | Minimum path | Optional adds |
 |-------|-------------|--------------|---------------|
-| **1. Concept** | Game concept, art bible, systems map | `/gamedev:brainstorm` → `/gamedev:setup-engine` → `/gamedev:art-bible` → `/gamedev:map-systems` | `/gamedev:design-review` on the concept |
-| **2. Systems Design** | One approved GDD per system | `/gamedev:design-system` (once per system) → `/gamedev:review-all-gdds` | `/gamedev:consistency-check` |
-| **3. Technical Setup** | Architecture, ADRs, control manifest | `/gamedev:create-architecture` → `/gamedev:architecture-decision` (×3+) → `/gamedev:architecture-review` → `/gamedev:create-control-manifest` | — |
-| **4. Pre-Production** | UX + accessibility specs, a filled Backlog board | `/gamedev:ux-design` → `/gamedev:ux-review` → `/gamedev:create-epics` → `/gamedev:create-stories` | `/gamedev:asset-spec`, `/gamedev:prototype`, `/gamedev:test-setup`, `/gamedev:vertical-slice` |
-| **5. Production** | Implemented, reviewed features | the daily loop below | `/gamedev:story-readiness`, `/gamedev:code-review`, `/gamedev:qa-plan`, `/gamedev:team-*` |
-| **6. Polish** | Shippable quality | `/gamedev:playtest-report` (×3) → `/gamedev:team-polish` | `/gamedev:perf-profile`, `/gamedev:balance-check`, `/gamedev:asset-audit` |
-| **7. Release** | A shipped game | `/gamedev:release-checklist` → `/gamedev:launch-checklist` | `/gamedev:patch-notes`, `/gamedev:changelog` |
+| **1. Concept** | Game concept, art bible, systems map | `gamedev:brainstorm` → `gamedev:setup-engine` → `gamedev:art-bible` → `gamedev:map-systems` | `gamedev:design-review` on the concept |
+| **2. Systems Design** | One approved GDD per system | `gamedev:design-system` (once per system) → `gamedev:review-all-gdds` | `gamedev:consistency-check` |
+| **3. Technical Setup** | Architecture, ADRs, control manifest | `gamedev:create-architecture` → `gamedev:architecture-decision` (×3+) → `gamedev:architecture-review` → `gamedev:create-control-manifest` | — |
+| **4. Pre-Production** | UX + accessibility specs, a filled Backlog board | `gamedev:ux-design` → `gamedev:ux-review` → `gamedev:create-epics` → `gamedev:create-stories` | `gamedev:asset-spec`, `gamedev:prototype`, `gamedev:test-setup`, `gamedev:vertical-slice` |
+| **5. Production** | Implemented, reviewed features | the daily loop below | `gamedev:story-readiness`, `gamedev:code-review`, `gamedev:qa-plan`, `gamedev:team-*` |
+| **6. Polish** | Shippable quality | `gamedev:playtest-report` (×3) → `gamedev:team-polish` | `gamedev:perf-profile`, `gamedev:balance-check`, `gamedev:asset-audit` |
+| **7. Release** | A shipped game | `gamedev:release-checklist` → `gamedev:launch-checklist` | `gamedev:patch-notes`, `gamedev:changelog` |
 
-Phase gates are **advisory**: `/gamedev:help` and `/gamedev:gate-check` tell you when a
+Phase gates are **advisory**: `gamedev:help` and `gamedev:gate-check` tell you when a
 phase looks complete, but you always decide when to advance.
 
 ### The daily loop (Phase 5)
@@ -153,207 +158,208 @@ You spend most of the project here, repeating one short cycle per story off the
 Backlog board:
 
 ```
-/gamedev:dev-story [story]     # implement — routes to the right programmer agent
+gamedev:dev-story [story]     # implement — routes to the right programmer agent
       ↓
-/gamedev:code-review           # optional architectural pass
+gamedev:code-review           # optional architectural pass
       ↓
-/gamedev:story-done [story]    # verify acceptance criteria, close it, surface the next story
+gamedev:story-done [story]    # verify acceptance criteria, close it, surface the next story
 ```
 
-`/gamedev:story-done` hands you the next ready story, so the loop feeds itself. When a
+`gamedev:story-done` hands you the next ready story, so the loop feeds itself. When a
 feature spans several domains at once — combat, a full UI flow, an audio pass — reach
-for a **team** command (`/gamedev:team-combat`, `/gamedev:team-ui`, `/gamedev:team-audio`,
+for a **team** command (`gamedev:team-combat`, `gamedev:team-ui`, `gamedev:team-audio`,
 and the rest) to coordinate all the relevant agents in one go.
 
 ### Everything else is on-demand
 
 The remaining commands aren't part of the linear walk — reviews and analysis
-(`/gamedev:balance-check`, `/gamedev:scope-check`, `/gamedev:security-audit`), QA
-(`/gamedev:qa-plan`, `/gamedev:smoke-check`, `/gamedev:regression-suite`), bug and
+(`gamedev:balance-check`, `gamedev:scope-check`, `gamedev:security-audit`), QA
+(`gamedev:qa-plan`, `gamedev:smoke-check`, `gamedev:regression-suite`), bug and
 hotfix flows, and localization. You run them when the situation calls for it, and
-`/gamedev:help` will point at the relevant ones for your current phase. The complete
+`gamedev:help` will point at the relevant ones for your current phase. The complete
 reference is below.
 
-## Slash Commands
+## Skill Catalog
 
 This is the complete reference; see the [Usage Guide](#usage-guide) above for the
-workflow that decides which to run when. Type `/` in Claude Code to access all 72
-skills. Arguments in `[brackets]` are
+workflow that decides which to run when. Use the invocation prefix shown above
+or select a skill from your host's picker. Arguments in `[brackets]` are
 optional, `<angle brackets>` required. Most authoring, team, and gate skills also
 accept a review-depth flag — `--review full|lean|solo` (`--depth` for
-`/gamedev:design-review`) — omitted below for brevity.
+`gamedev:design-review`) — omitted below for brevity.
 
 **Onboarding & Navigation**
-- `/gamedev:start` — first-time onboarding: asks where you are, then routes you to the right workflow
-- `/gamedev:help [what you just finished]` — advice on what to do next, based on current project state
-- `/gamedev:status` — print the current production stage and Epic > Feature > Task breadcrumb
-- `/gamedev:project-stage-detect [role filter]` — analyze project state, detect the stage, identify gaps, recommend next steps
-- `/gamedev:setup-engine [engine] [version] | refresh | upgrade <old> <new>` — pin the project's engine and version, populate engine reference docs
-- `/gamedev:adopt [full|gdds|adrs|stories|infra]` — brownfield onboarding: audit existing artifacts for format compliance, produce a migration plan
+- `gamedev:start` — first-time onboarding: asks where you are, then routes you to the right workflow
+- `gamedev:help [what you just finished]` — advice on what to do next, based on current project state
+- `gamedev:status` — print the current production stage and Epic > Feature > Task breadcrumb
+- `gamedev:project-stage-detect [role filter]` — analyze project state, detect the stage, identify gaps, recommend next steps
+- `gamedev:setup-engine [engine] [version] | refresh | upgrade <old> <new>` — pin the project's engine and version, populate engine reference docs
+- `gamedev:adopt [full|gdds|adrs|stories|infra]` — brownfield onboarding: audit existing artifacts for format compliance, produce a migration plan
 
 **Game Design**
-- `/gamedev:brainstorm [genre or theme hint]` — guided ideation from zero idea to a structured game concept document
-- `/gamedev:map-systems [next | system-name]` — decompose the concept into systems, map dependencies, set the design order
-- `/gamedev:design-system <system-name>` — guided, section-by-section GDD authoring for one system
-- `/gamedev:quick-design [change description]` — lightweight design spec for tuning adjustments and minor mechanics
-- `/gamedev:review-all-gdds [focus]` — holistic cross-GDD review: contradictions, stale references, design-theory violations
-- `/gamedev:propagate-design-change [path/to/gdd.md]` — find ADRs made stale by a GDD revision and guide resolution
+- `gamedev:brainstorm [genre or theme hint]` — guided ideation from zero idea to a structured game concept document
+- `gamedev:map-systems [next | system-name]` — decompose the concept into systems, map dependencies, set the design order
+- `gamedev:design-system <system-name>` — guided, section-by-section GDD authoring for one system
+- `gamedev:quick-design [change description]` — lightweight design spec for tuning adjustments and minor mechanics
+- `gamedev:review-all-gdds [focus]` — holistic cross-GDD review: contradictions, stale references, design-theory violations
+- `gamedev:propagate-design-change [path/to/gdd.md]` — find ADRs made stale by a GDD revision and guide resolution
 
 **Art & Assets**
-- `/gamedev:art-bible` — guided Art Bible authoring; the visual identity spec that gates asset production
-- `/gamedev:asset-spec [system:|level:|character:<name>]` — per-asset visual specs and AI generation prompts from GDDs
-- `/gamedev:asset-audit [category|all]` — audit assets against naming, size, format, and pipeline standards
+- `gamedev:art-bible` — guided Art Bible authoring; the visual identity spec that gates asset production
+- `gamedev:asset-spec [system:|level:|character:<name>]` — per-asset visual specs and AI generation prompts from GDDs
+- `gamedev:asset-audit [category|all]` — audit assets against naming, size, format, and pipeline standards
 
 **UX & Interface Design**
-- `/gamedev:ux-design [screen/flow | hud | patterns]` — guided UX spec authoring for a screen, flow, or HUD
-- `/gamedev:ux-review [file | all | hud | patterns]` — validate UX specs for completeness, accessibility, and GDD alignment
+- `gamedev:ux-design [screen/flow | hud | patterns]` — guided UX spec authoring for a screen, flow, or HUD
+- `gamedev:ux-review [file | all | hud | patterns]` — validate UX specs for completeness, accessibility, and GDD alignment
 
 **Architecture**
-- `/gamedev:create-architecture [focus-area]` — guided authoring of the master architecture document from all GDDs
-- `/gamedev:architecture-decision [title]` — record an ADR: context, alternatives considered, consequences
-- `/gamedev:architecture-review [focus]` — validate architecture against all GDDs; traceability matrix and PASS/CONCERNS/FAIL verdict
-- `/gamedev:create-control-manifest [update]` — flat must-do/never-do rules sheet for programmers, extracted from accepted ADRs
+- `gamedev:create-architecture [focus-area]` — guided authoring of the master architecture document from all GDDs
+- `gamedev:architecture-decision [title]` — record an ADR: context, alternatives considered, consequences
+- `gamedev:architecture-review [focus]` — validate architecture against all GDDs; traceability matrix and PASS/CONCERNS/FAIL verdict
+- `gamedev:create-control-manifest [update]` — flat must-do/never-do rules sheet for programmers, extracted from accepted ADRs
 
 **Stories**
-- `/gamedev:create-epics [system-name | layer | all]` — translate approved GDDs and architecture into epics, one per module
-- `/gamedev:create-stories [epic-slug]` — break one epic into implementable story files with embedded GDD/ADR context
-- `/gamedev:dev-story [story-path]` — implement a story end-to-end: load context, route to the right programmer agent, code and test
-- `/gamedev:story-readiness [story | all | milestone]` — READY / NEEDS WORK / BLOCKED verdict before implementation starts
-- `/gamedev:story-done [story-path]` — end-of-story review: verify acceptance criteria, close the Backlog task, surface the next one
-- `/gamedev:estimate [task-description]` — effort estimate from complexity, dependencies, historical velocity, and risk
+- `gamedev:create-epics [system-name | layer | all]` — translate approved GDDs and architecture into epics, one per module
+- `gamedev:create-stories [epic-slug]` — break one epic into implementable story files with embedded GDD/ADR context
+- `gamedev:dev-story [story-path]` — implement a story end-to-end: load context, route to the right programmer agent, code and test
+- `gamedev:story-readiness [story | all | milestone]` — READY / NEEDS WORK / BLOCKED verdict before implementation starts
+- `gamedev:story-done [story-path]` — end-of-story review: verify acceptance criteria, close the Backlog task, surface the next one
+- `gamedev:estimate [task-description]` — effort estimate from complexity, dependencies, historical velocity, and risk
 
 **Reviews & Analysis**
-- `/gamedev:design-review [path-to-doc]` — review one design doc for completeness, consistency, and implementability
-- `/gamedev:code-review [path]` — architectural and quality review: standards, patterns, SOLID, testability, performance
-- `/gamedev:balance-check [system | data-file]` — find outliers, broken progressions, degenerate strategies, economy imbalances
-- `/gamedev:content-audit [system | --summary]` — compare GDD-specified content counts against what's implemented
-- `/gamedev:scope-check [feature | sprint-N]` — detect scope creep against the original plan; quantify bloat, recommend cuts
-- `/gamedev:perf-profile [system | full]` — structured profiling: bottlenecks, budget comparisons, prioritized recommendations
-- `/gamedev:tech-debt [scan|add|prioritize|report]` — track and prioritize technical debt in a debt register
-- `/gamedev:gate-check [target-phase]` — phase-gate readiness verdict (PASS/CONCERNS/FAIL) with specific blockers
-- `/gamedev:consistency-check [full | entity:<name> | item:<name>]` — cross-GDD scan for conflicting stats, values, and formulas
-- `/gamedev:security-audit [full | network | save | input | quick]` — save-tampering, cheat, network, and input-validation audit
+- `gamedev:design-review [path-to-doc]` — review one design doc for completeness, consistency, and implementability
+- `gamedev:code-review [path]` — architectural and quality review: standards, patterns, SOLID, testability, performance
+- `gamedev:balance-check [system | data-file]` — find outliers, broken progressions, degenerate strategies, economy imbalances
+- `gamedev:content-audit [system | --summary]` — compare GDD-specified content counts against what's implemented
+- `gamedev:scope-check [feature | sprint-N]` — detect scope creep against the original plan; quantify bloat, recommend cuts
+- `gamedev:perf-profile [system | full]` — structured profiling: bottlenecks, budget comparisons, prioritized recommendations
+- `gamedev:tech-debt [scan|add|prioritize|report]` — track and prioritize technical debt in a debt register
+- `gamedev:gate-check [target-phase]` — phase-gate readiness verdict (PASS/CONCERNS/FAIL) with specific blockers
+- `gamedev:consistency-check [full | entity:<name> | item:<name>]` — cross-GDD scan for conflicting stats, values, and formulas
+- `gamedev:security-audit [full | network | save | input | quick]` — save-tampering, cheat, network, and input-validation audit
 
 **QA & Testing**
-- `/gamedev:qa-plan [milestone | feature | story]` — QA test plan: classify stories by test type, define required coverage
-- `/gamedev:smoke-check [milestone | quick]` — critical-path smoke gate before QA hand-off; PASS/FAIL report
-- `/gamedev:soak-test [duration] [focus]` — protocol for extended play sessions: slow leaks, fatigue effects, edge cases
-- `/gamedev:regression-suite [update | audit | report]` — map tests to GDD critical paths, catch fixed bugs lacking regression tests
-- `/gamedev:test-setup [force]` — scaffold the engine-specific test framework and CI pipeline (run once)
-- `/gamedev:test-helpers [system | all | scaffold]` — generate engine-specific assertion, factory, and mock helpers
-- `/gamedev:test-evidence-review [story | milestone | system]` — quality review of tests and manual evidence; verdict per story
-- `/gamedev:test-flakiness [ci-log | scan | registry]` — detect non-deterministic tests, recommend quarantine or fix
-- `/gamedev:skill-test static|spec|category|audit [skill]` — validate the plugin's own skills, structurally and behaviorally
-- `/gamedev:skill-improve [skill-name]` — improve a skill via a test-fix-retest loop
+- `gamedev:qa-plan [milestone | feature | story]` — QA test plan: classify stories by test type, define required coverage
+- `gamedev:smoke-check [milestone | quick]` — critical-path smoke gate before QA hand-off; PASS/FAIL report
+- `gamedev:soak-test [duration] [focus]` — protocol for extended play sessions: slow leaks, fatigue effects, edge cases
+- `gamedev:regression-suite [update | audit | report]` — map tests to GDD critical paths, catch fixed bugs lacking regression tests
+- `gamedev:test-setup [force]` — scaffold the engine-specific test framework and CI pipeline (run once)
+- `gamedev:test-helpers [system | all | scaffold]` — generate engine-specific assertion, factory, and mock helpers
+- `gamedev:test-evidence-review [story | milestone | system]` — quality review of tests and manual evidence; verdict per story
+- `gamedev:test-flakiness [ci-log | scan | registry]` — detect non-deterministic tests, recommend quarantine or fix
+- `gamedev:skill-test static|spec|category|audit [skill]` — validate the plugin's own skills, structurally and behaviorally
+- `gamedev:skill-improve [skill-name]` — improve a skill via a test-fix-retest loop
 
 **Production**
-- `/gamedev:bug-report [description] | analyze <path> | verify <id> | close <id>` — structured bug reports as Backlog tasks with repro steps
-- `/gamedev:reverse-document <type> <path>` — generate missing design or architecture docs from existing code
-- `/gamedev:playtest-report [new | analyze <path>]` — standardized playtest feedback collection and analysis
+- `gamedev:bug-report [description] | analyze <path> | verify <id> | close <id>` — structured bug reports as Backlog tasks with repro steps
+- `gamedev:reverse-document <type> <path>` — generate missing design or architecture docs from existing code
+- `gamedev:playtest-report [new | analyze <path>]` — standardized playtest feedback collection and analysis
 
 **Release**
-- `/gamedev:release-checklist [platform]` — pre-release validation: build verification, certification, store metadata
-- `/gamedev:launch-checklist [date | dry-run]` — launch readiness across every department, with go/no-go sign-offs
-- `/gamedev:changelog [version | sprint]` — internal and player-facing changelogs from commits and sprint data
-- `/gamedev:patch-notes [version] [--style brief|detailed|full]` — player-facing patch notes, translated from developer language
-- `/gamedev:hotfix [bug-id]` — emergency fix workflow with a full audit trail, bypassing the normal sprint process
+- `gamedev:release-checklist [platform]` — pre-release validation: build verification, certification, store metadata
+- `gamedev:launch-checklist [date | dry-run]` — launch readiness across every department, with go/no-go sign-offs
+- `gamedev:changelog [version | sprint]` — internal and player-facing changelogs from commits and sprint data
+- `gamedev:patch-notes [version] [--style brief|detailed|full]` — player-facing patch notes, translated from developer language
+- `gamedev:hotfix [bug-id]` — emergency fix workflow with a full audit trail, bypassing the normal sprint process
 
 **Creative & Content**
-- `/gamedev:prototype [concept] [--path html|engine|paper] [--spike]` — throwaway concept prototype with a PROCEED/PIVOT/KILL verdict
-- `/gamedev:vertical-slice` — production-quality end-to-end build gating the Pre-Production → Production transition
-- `/gamedev:localize [scan|extract|validate|status|brief|…]` — full localization pipeline, from string scan to RTL checks
+- `gamedev:prototype [concept] [--path html|engine|paper] [--spike]` — throwaway concept prototype with a PROCEED/PIVOT/KILL verdict
+- `gamedev:vertical-slice` — production-quality end-to-end build gating the Pre-Production → Production transition
+- `gamedev:localize [scan|extract|validate|status|brief|…]` — full localization pipeline, from string scan to RTL checks
 
 **Change Management (OpenSpec)**
-- `/gamedev:openspec-propose` — propose a change with design, specs, and tasks generated in one step
-- `/gamedev:openspec-explore` — thinking-partner mode for exploring ideas before or during a change
-- `/gamedev:openspec-apply-change` — implement tasks from an OpenSpec change
-- `/gamedev:openspec-sync-specs` — fold a change's delta specs into the main specs without archiving
-- `/gamedev:openspec-archive-change` — archive a completed change
+- `gamedev:openspec-propose` — propose a change with design, specs, and tasks generated in one step
+- `gamedev:openspec-explore` — thinking-partner mode for exploring ideas before or during a change
+- `gamedev:openspec-apply-change` — implement tasks from an OpenSpec change
+- `gamedev:openspec-sync-specs` — fold a change's delta specs into the main specs without archiving
+- `gamedev:openspec-archive-change` — archive a completed change
 
 **Team Orchestration** (each coordinates multiple agents on a single feature)
-- `/gamedev:team-combat [feature]` — combat feature end-to-end: design, implementation, VFX, audio, QA
-- `/gamedev:team-narrative [content]` — cohesive story content, world lore, and narrative-driven level design
-- `/gamedev:team-ui [feature]` — full UX pipeline: spec, visual design, implementation, review, polish
-- `/gamedev:team-release [version]` — execute a release from candidate to deployment
-- `/gamedev:team-polish [feature or area]` — optimize, polish, and harden a feature to release quality
-- `/gamedev:team-audio [feature or area]` — audio pipeline from direction through implementation
-- `/gamedev:team-level [level or area]` — complete area/level creation: layout, narrative, art, systems, QA
-- `/gamedev:team-live-ops [season or event]` — plan a season, event, or live content update
-- `/gamedev:team-qa [milestone | feature]` — full QA cycle: test plan, test cases, smoke gate, sign-off report
+- `gamedev:team-combat [feature]` — combat feature end-to-end: design, implementation, VFX, audio, QA
+- `gamedev:team-narrative [content]` — cohesive story content, world lore, and narrative-driven level design
+- `gamedev:team-ui [feature]` — full UX pipeline: spec, visual design, implementation, review, polish
+- `gamedev:team-release [version]` — execute a release from candidate to deployment
+- `gamedev:team-polish [feature or area]` — optimize, polish, and harden a feature to release quality
+- `gamedev:team-audio [feature or area]` — audio pipeline from direction through implementation
+- `gamedev:team-level [level or area]` — complete area/level creation: layout, narrative, art, systems, QA
+- `gamedev:team-live-ops [season or event]` — plan a season, event, or live content update
+- `gamedev:team-qa [milestone | feature]` — full QA cycle: test plan, test cases, smoke gate, sign-off report
 
 ## Getting Started
 
-> **Adoption model changed.** This project is a **Claude Code and Codex plugin** named
-> `gamedev`, not a fork-me template. You install it into your own game project;
-> you no longer clone this repo as your game. Existing forks keep working as a
-> frozen snapshot, but new adoption uses the plugin flow below.
+Install `gamedev`, then use it in a separate repository for your game. An empty
+game directory is fine. You need Git, Python 3, Bash (Git Bash on Windows), and
+either supported assistant with plugin support. See [setup requirements](docs/setup-requirements.md)
+for optional tools.
 
-### Claude Code prerequisites
+### Install in Claude Code
 
-For Codex, follow [Codex setup](docs/codex.md).
+Inside Claude Code:
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with plugin support
-  (verified on **v2.1.226**; any recent 2.1.x should work)
-- [Git](https://git-scm.com/)
-- Python 3 (for scaffolding) and Bash (Git Bash on Windows)
-- **Recommended**: [jq](https://jqlang.github.io/jq/) for Claude hook validation
+```text
+/plugin marketplace add kessriga/game-studio
+/plugin install gamedev@game-studio
+```
 
-All hooks fail gracefully if optional tools are missing — nothing breaks, you just lose validation.
+Open a new Claude Code session in your game repository and run `/gamedev:start`.
+See the [Claude Code guide](docs/claude-code.md) for configuration and updates.
 
-### Setup
+### Install in Codex
 
-1. **Add this repo as a plugin marketplace and install the plugin** (from inside Claude Code):
-   ```
-   /plugin marketplace add kessriga/game-studio
-   /plugin install gamedev@game-studio
-   ```
+From this checkout, in a terminal:
 
-2. **Open your game project** (a fresh, empty directory is fine) and start Claude Code:
-   ```bash
-   cd my-game
-   claude
-   ```
+```sh
+codex plugin marketplace add ./
+codex plugin add gamedev@game-studio
+```
 
-3. **Run `/gamedev:start`** — on a fresh project it scaffolds the project-side
-   structure (`AGENTS.md`, Claude import files, `.claude/rules/`, `technical-preferences.md`, the
-   `production/`/`design/`/`docs/` tree, and your engine's reference), then asks
-   where you are (no idea, vague concept, clear design, existing work) and guides
-   you to the right workflow. Nothing existing is overwritten.
+Open a new Codex session in your game repository and run `$gamedev:start`.
+See the [Codex guide](docs/codex.md) for remote installation once this release
+reaches main, and for runtime differences.
 
-   Once scaffolded, jump to any skill directly:
-   - `/gamedev:brainstorm` — explore game ideas from scratch
-   - `/gamedev:setup-engine godot 4.6` — configure your engine if you already know
-   - `/gamedev:project-stage-detect` — analyze an existing project
-   - `/gamedev:status` — quick production-stage + Epic > Feature > Task check
+### Start building your game
+
+The start skill adds shared `AGENTS.md` instructions, host compatibility files,
+project rules, engine settings, and the `production/`, `design/`, and `docs/`
+directories. It preserves existing files, asks where you are in development,
+and guides you to the right workflow.
+
+Once scaffolded, choose any skill directly:
+
+- `gamedev:brainstorm` — explore game ideas from scratch
+- `gamedev:setup-engine godot 4.6` — configure your engine if you already know
+- `gamedev:project-stage-detect` — analyze an existing project
+- `gamedev:status` — check the production stage and active work
 
 ## Project Structure
 
 **The plugin** (this repo — installed, not cloned into your game):
 
 ```
-.codex-plugin/plugin.json           # Codex manifest
+.codex-plugin/plugin.json            # Codex manifest
 .agents/plugins/marketplace.json     # Codex repository marketplace
 .claude-plugin/
-  plugin.json                       # Plugin manifest (name: gamedev)
-  marketplace.json                  # This repo is its own marketplace (source: ./)
-skills/                             # 72 skills — invoked as /gamedev:<name>
-agents/                             # 53 subagents — addressed as gamedev:<name>
+  plugin.json                       # Claude Code manifest (name: gamedev)
+  marketplace.json                  # Claude Code marketplace (source: ./)
+skills/                             # 72 shared skill workflows
+agents/                             # 53 specialist role definitions
 hooks/                              # claude-hooks.json + 11 Claude hook scripts (run from ${CLAUDE_PLUGIN_ROOT})
 bin/
-  gamedev-stage                     # Stage + Epic>Feature>Task detection (on the Bash PATH)
-  gamedev-is-project                # Is this a gamedev project? Every hook bails when it is not
-docs/                               # Framework docs + 41 document templates (skills read via ../../docs)
-templates/                          # Project scaffold sources copied out by /gamedev:start
+  gamedev-stage                     # Stage + Epic>Feature>Task detection
+  gamedev-is-project                # Is this a gamedev project? Project-touching hooks bail when it is not
+docs/                               # Framework docs + 39 document templates (skills read via ../../docs)
+templates/                          # Project scaffold sources copied out by gamedev:start
 .claude/                            # Dev-only, not shipped: settings.json, validate-skill-change, opsx/
 ```
 
-**Your project** (scaffolded into your repo by `/gamedev:start`):
+**Your project** (scaffolded into your repo by `gamedev:start`):
 
 ```
 AGENTS.md                           # Shared project guidance and sources of truth
 CLAUDE.md                           # Imports AGENTS.md for Claude Code
 .claude/
-  rules/                            # 11 path-scoped coding standards (plugins can't ship rules)
+  rules/                            # 11 shared rule files; each declares the paths it covers
   docs/technical-preferences.md     # Your engine, naming, budgets (project-owned)
 src/                                # Game source code
 assets/                             # Art, audio, VFX, shaders, data files
@@ -363,15 +369,16 @@ production/                         # Milestones, releases, QA evidence, session
 prototypes/                         # Throwaway prototypes (isolated from src/)
 ```
 
-> **No status line.** A plugin cannot ship a main-session status line, so the
-> production stage + breadcrumb is delivered by the SessionStart hook and on demand
-> via `/gamedev:status` instead. Your personal status line is left untouched.
+Use `gamedev:status` to see the production stage and active work in either host.
+Claude Code also shows this information through its session-start hook.
 
 ## How It Works
 
 ### Agent Coordination
 
-Agents follow a structured delegation model:
+Follow these rules whether specialists run as subagents or as sequential role
+passes. The [host guide](docs/host-runtime.md) explains how to delegate and how
+to report when independent review is unavailable.
 
 1. **Vertical delegation** — directors delegate to leads, leads delegate to specialists
 2. **Horizontal consultation** — same-tier agents can consult each other but can't make binding cross-domain decisions
@@ -379,21 +386,27 @@ Agents follow a structured delegation model:
 4. **Change propagation** — cross-department changes are coordinated by `producer`
 5. **Domain boundaries** — agents don't modify files outside their domain without explicit delegation
 
-### Collaborative, Not Autonomous
+### Collaboration
 
-This is **not** an auto-pilot system. Every agent follows a strict collaboration protocol:
+You own the creative decisions and scope. Authoring workflows follow this protocol:
 
 1. **Ask** — agents ask questions before proposing solutions
 2. **Present options** — agents show 2-4 options with pros/cons
 3. **You decide** — the user always makes the call
 4. **Draft** — agents show work before finalizing
-5. **Approve** — nothing gets written without your sign-off
+5. **Approve** — drafts are written once you approve them
 
-You stay in control. The agents provide structure and expertise, not autonomy.
+A request to implement a concrete change authorizes that work. The assistant
+asks when a creative decision or a change in scope still needs your input.
 
-### Automated Safety
+### Validation and Session Support
 
-**Hooks** run automatically on every session:
+In both hosts, run the game's format, lint, build, and test checks before
+declaring work complete. Validate changed assets and keep a session handoff
+when work will continue later. Codex follows these steps explicitly.
+
+**Claude Code hooks** add automatic checks and session support. The first eleven
+below ship with the plugin; the last is contributor tooling in this repository.
 
 | Hook | Trigger | What It Does |
 |------|---------|--------------|
@@ -401,22 +414,26 @@ You stay in control. The agents provide structure and expertise, not autonomy.
 | `validate-push.sh` | PreToolUse (Bash) | Warns on pushes to protected branches — exits early if the command is not `git push` |
 | `validate-assets.sh` | PostToolUse (Write/Edit) | Validates naming conventions and JSON structure — exits early if the file is not in `assets/` |
 | `session-start.sh` | Session open | Shows current branch and recent commits for orientation |
-| `detect-gaps.sh` | Session open | Detects fresh projects (suggests `/gamedev:start`) and missing design docs when code or prototypes exist |
+| `detect-gaps.sh` | Session open | Detects fresh projects (suggests `gamedev:start`) and missing design docs when code or prototypes exist |
 | `pre-compact.sh` | Before compaction | Preserves session progress notes |
-| `post-compact.sh` | After compaction | Reminds Claude to restore session state from `active.md` |
+| `post-compact.sh` | After compaction | Reminds the assistant to restore session state from `active.md` |
 | `notify.sh` | Notification event | Shows Windows toast notification via PowerShell |
 | `session-stop.sh` | Session close | Archives `active.md` to session log and records git activity |
 | `log-agent.sh` | Agent spawned | Audit trail start — logs subagent invocation |
 | `log-agent-stop.sh` | Agent stops | Audit trail stop — completes subagent record |
-| `validate-skill-change.sh` | PostToolUse (Write/Edit) | Advises running `/gamedev:skill-test` after any `skills/` change |
+| `validate-skill-change.sh` | PostToolUse (Write/Edit) | Advises running `gamedev:skill-test` after any `skills/` change |
 
 > **Note**: `validate-commit.sh`, `validate-assets.sh`, and `validate-skill-change.sh` fire on every Bash/Write tool call and exit immediately (exit 0) when the command or file path is not relevant. This is normal hook behavior — not a performance concern.
 
-**Permission rules** in `settings.json` auto-allow safe operations (git status, test runs) and block dangerous ones (force push, `rm -rf`, reading `.env` files).
+Permissions come from your host and project configuration. The repository's
+development settings are not installed into your game.
 
 ### Path-Scoped Rules
 
-Coding standards are automatically enforced based on file location:
+Coding standards apply according to file location. Claude Code loads matching
+rule files automatically; Codex reads them as directed by the project's
+`AGENTS.md`. These instructions guide the assistant; the game's checks verify
+the resulting code.
 
 | Path | Enforces |
 |------|----------|
@@ -444,19 +461,21 @@ This framework is grounded in professional game development practices:
 
 ## Customization
 
-The plugin is a starting point, not a locked framework. Everything you scaffold is yours to customize:
+The project files you scaffold are yours to customize:
 
-- **Add/remove agents** — delete agent files you don't need, add new ones for your domains
-- **Edit agent prompts** — tune agent behavior, add project-specific knowledge
-- **Modify skills** — adjust workflows to match your team's process
+- **Set project guidance** — edit `AGENTS.md` with project-specific knowledge and role boundaries
 - **Add rules** — create new path-scoped rules for your project's directory structure
-- **Tune hooks** — adjust validation strictness, add new checks
+- **Tune validation** — configure your game's checks and any hooks your host supports
 - **Pick your engine** — use the Godot, Unity, Unreal, or Bevy agent set (or none)
-- **Set review intensity** — `full` (all director gates), `lean` (phase gates only), or `solo` (none). Set during `/gamedev:start` or edit `production/review-mode.txt`. Override per-run with `--review solo` on any skill.
+- **Set review intensity** — `full` (all director gates), `lean` (phase gates only), or `solo` (none). Set during `gamedev:start` or edit `production/review-mode.txt`. Override per-run with `--review solo` on any skill.
 
 ---
 
-*Built for Claude Code. Maintained and extended — contributions welcome.*
+To change the bundled skills, roles, or hooks, work in a plugin checkout and
+follow [CONTRIBUTING.md](CONTRIBUTING.md). Installed plugin caches may be
+replaced by updates.
+
+*Built for game developers using Claude Code or Codex. Contributions welcome.*
 
 ## License
 

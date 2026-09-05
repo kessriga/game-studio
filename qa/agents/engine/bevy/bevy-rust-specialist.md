@@ -3,7 +3,7 @@
 ## Agent Summary
 Domain: Rust code quality in a Bevy project — ownership/borrowing, error handling, idiomatic ECS system & query design, module structure, headless testability.
 Does NOT own: high-level ECS/plugin architecture (bevy-specialist), shader/render code (bevy-render-specialist), UI code (bevy-ui-specialist).
-Model tier: Sonnet (default).
+Claude model metadata: Sonnet (default).
 No gate IDs assigned.
 
 ---
@@ -12,7 +12,7 @@ No gate IDs assigned.
 
 - [ ] `description:` field is present and domain-specific (references Rust quality / ECS system & query design)
 - [ ] `tools:` list includes Read, Write, Edit, Bash, Glob, Grep, Task
-- [ ] Model tier is Sonnet (default for specialists)
+- [ ] Claude model metadata is Sonnet (default for specialists)
 - [ ] Contains a `## Version Awareness` section pointing at `docs/engine-reference/bevy/`
 
 ---

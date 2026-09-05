@@ -3,7 +3,7 @@
 ## Agent Summary
 Domain: Bevy rendering — wgpu pipeline, WGSL shaders, custom materials, render-graph-as-systems, post-processing, render performance.
 Does NOT own: host-side gameplay Rust (bevy-rust-specialist), UI (bevy-ui-specialist), high-level architecture (bevy-specialist).
-Model tier: Sonnet (default).
+Claude model metadata: Sonnet (default).
 No gate IDs assigned.
 
 ---
@@ -12,7 +12,7 @@ No gate IDs assigned.
 
 - [ ] `description:` field is present and domain-specific (references wgpu / WGSL / materials / render systems)
 - [ ] `tools:` list includes Read, Write, Edit, Bash, Glob, Grep, Task
-- [ ] Model tier is Sonnet (default for specialists)
+- [ ] Claude model metadata is Sonnet (default for specialists)
 - [ ] Contains a `## Version Awareness` section pointing at `docs/engine-reference/bevy/`
 
 ---

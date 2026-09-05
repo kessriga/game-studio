@@ -124,7 +124,7 @@ For phase gates, record in `docs/architecture/architecture.md` or
 
 ## Tier 1 — Creative Director Gates
 
-Agent: `creative-director` | Model tier: Fable | Domain: Vision, pillars, player experience
+Agent: `creative-director` | Domain: Vision, pillars, player experience
 
 ---
 
@@ -266,7 +266,7 @@ any session that produces player feedback
 
 ## Tier 1 — Technical Director Gates
 
-Agent: `technical-director` | Model tier: Fable | Domain: Architecture, engine risk, performance
+Agent: `technical-director` | Domain: Architecture, engine risk, performance
 
 ---
 
@@ -412,7 +412,7 @@ or before finalizing any engine-specific implementation approach
 
 ## Tier 1 — Producer Gates
 
-Agent: `producer` | Model tier: Opus 4.8 | Domain: Scope, timeline, dependencies, production risk
+Agent: `producer` | Domain: Scope, timeline, dependencies, production risk
 
 ---
 
@@ -514,7 +514,7 @@ is invoked
 
 ## Tier 1 — Art Director Gates
 
-Agent: `art-director` | Model tier: Opus 4.8 | Domain: Visual identity, art bible, visual production readiness
+Agent: `art-director` | Domain: Visual identity, art bible, visual production readiness
 
 ---
 
@@ -595,7 +595,7 @@ Agent: `art-director` | Model tier: Opus 4.8 | Domain: Visual identity, art bibl
 ## Tier 2 — Lead Gates
 
 These gates are invoked by orchestration skills and senior skills when a domain
-specialist's feasibility sign-off is needed. Tier 2 leads use Opus 4.8.
+specialist's feasibility sign-off is needed.
 
 ---
 

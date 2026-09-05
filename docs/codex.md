@@ -1,4 +1,4 @@
-# Use gamedev in Codex
+# Use Game Studio in Codex
 
 Install the same repository as a Codex plugin. It provides 72 skills and 53
 specialist role guides. Python 3 and Bash are required for scaffolding and stage
@@ -35,17 +35,18 @@ codex plugin add gamedev@game-studio
 
 ## Use the workflows
 
-| Claude command in shared docs | Codex skill mention |
+| Shared skill name | Codex skill mention |
 |-------------------------------|--------------------|
-| `/gamedev:start` | `$gamedev:start` |
-| `/gamedev:help` | `$gamedev:help` |
-| `/gamedev:status` | `$gamedev:status` |
-| `/gamedev:brainstorm cozy farming` | `$gamedev:brainstorm cozy farming` |
-| `/gamedev:dev-story TASK-12` | `$gamedev:dev-story TASK-12` |
+| `gamedev:start` | `$gamedev:start` |
+| `gamedev:help` | `$gamedev:help` |
+| `gamedev:status` | `$gamedev:status` |
+| `gamedev:brainstorm cozy farming` | `$gamedev:brainstorm cozy farming` |
+| `gamedev:dev-story TASK-12` | `$gamedev:dev-story TASK-12` |
 
 Every skill loads [the host guide](host-runtime.md). It explains tool mappings,
 argument parsing, model choice, delegation, and checks. The shared workflow
-catalog uses Claude command notation; choose the matching Codex skill.
+catalog uses skill names; choose the matching Codex skill. Existing
+`/gamedev:<skill>` references in workflows mean the same skill in your host.
 
 Root and nested `AGENTS.md` files carry project instructions. Each `CLAUDE.md`
 imports its sibling guide. Codex reads the shared files directly. Engine settings

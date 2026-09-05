@@ -12,7 +12,7 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 
 ## Phase 1: Read Standards
 
-Read the art bible or asset standards from the relevant design docs and the CLAUDE.md naming conventions.
+Read the art bible or asset standards from the relevant design docs and the AGENTS.md naming conventions.
 
 ---
 
@@ -92,6 +92,6 @@ This skill is read-only — it produces a report but does not write files.
 
 ## Phase 5: Next Steps
 
-- Fix naming violations using the patterns defined in CLAUDE.md.
+- Fix naming violations using the patterns defined in AGENTS.md.
 - Delete confirmed orphaned assets after manual review.
 - Run `/gamedev:content-audit` to cross-check asset counts against GDD-specified requirements.

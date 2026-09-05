@@ -11,7 +11,7 @@ not supported.
 
 Use GitHub's private vulnerability reporting instead:
 
-**[Report a vulnerability →](https://github.com/Donchitos/Claude-Code-Game-Studios/security/advisories/new)**
+**[Report a vulnerability →](https://github.com/kessriga/game-studio/security/advisories/new)**
 
 Include as much detail as possible:
 - Description of the vulnerability and what it affects
@@ -26,15 +26,16 @@ Include as much detail as possible:
 
 ## What Is In Scope
 
-CCGS is a **local development tool** — it installs shell hooks and coordinates
-AI agents that run directly on your machine. Security issues are primarily about
+Game Studio is a **local development tool**. Its skills and scripts can act on
+project files and run local commands through your coding assistant. Claude Code
+installations also load the plugin's shell hooks. Security issues are primarily about
 contributed code that executes in users' environments without their awareness.
 
 ### High Severity
-- Hooks (`.claude/hooks/*.sh`) that execute malicious or undisclosed shell
+- Hooks (`hooks/*.sh`) that execute malicious or undisclosed shell
   commands on user machines
 - Skills or agents that exfiltrate environment variables, API keys, or secrets
-- Prompt injection via skill or agent definitions that causes Claude to bypass
+- Prompt injection via skill or agent definitions that causes the assistant to bypass
   safety measures or take unauthorized destructive actions
 - Contributions that silently alter behavior in ways users cannot audit
 
@@ -46,9 +47,8 @@ contributed code that executes in users' environments without their awareness.
   approval step
 
 ### Out of Scope
-- The behavior of Claude or the Claude Code CLI itself
-  (report to [Anthropic](https://www.anthropic.com/security))
-- Bugs in the user's Claude Code installation or editor extension
+- The behavior of the underlying model, coding assistant, or its editor extension
+  (report those issues to the provider of the affected host)
 - Theoretical vulnerabilities with no realistic attack path
 - Issues requiring physical access to the user's machine
 
