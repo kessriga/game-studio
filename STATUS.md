@@ -14,7 +14,7 @@
 - Claude's 11 hooks remain explicitly registered. Codex uses the host guide's
   explicit validation and handoff steps; no Codex hooks are registered.
 
-## Verified locally on 2026-09-05
+## Verified on 2026-09-05
 
 - `just gate`: 112 existing shell assertions and 13 Python test methods passed,
   including all engine choices, reruns, legacy guides, path conflicts, symlinks,
@@ -27,13 +27,14 @@
   its expected advisory that plugin-root CLAUDE.md is contributor context and
   does not supply instructions to installed game projects.
 
+- Hosted CI passed on Linux, macOS, and Windows at `0e3a708`: see the
+  [successful run](https://github.com/kessriga/game-studio/actions/runs/33963760315).
+  The Windows checks use explicit UTF-8 and the absolute Git Bash executable
+  found on PATH, avoiding Windows native process search selecting WSL Bash.
+  Encoding lint now runs explicitly to prevent locale-dependent text reads.
+
 ## Limits of verification
 
-- The first hosted run passed on Linux and macOS. Windows exposed implicit
-  text decoding and Windows launching WSL Bash instead of Git Bash in the new
-  tests. The repair uses UTF-8, launches the absolute Bash executable found on
-  PATH, passes a slash-separated script path, and enables encoding lint.
-  Hosted validation of the repair is pending.
 - Conversational execution of all 72 skills, live subagent orchestration, and
   engine builds have not been exercised end to end. Role prompts and explicit
   checks do not imply automatic hook parity with Claude Code.

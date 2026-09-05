@@ -21,14 +21,16 @@ both plugin manifests validated. A comparison against the starting commit
 confirmed all 11 Claude hook definitions are unchanged, and all 53 roles plus
 67 otherwise unchanged skills retain their metadata and workflow text. The five
 substantive skill changes are start, setup-engine, status, help, and changelog.
-No existing tests were weakened. Hosted CI, installation into the user's global
-configuration, and full conversational/engine runs remain outside the observed
-validation. Main was refreshed before finalizing and had no newer commits.
+No existing tests were weakened. At the initial local handoff, hosted CI had
+not run; the result below supersedes that limit. Installation into the user's
+global configuration and full conversational/engine runs remain unverified. Main was refreshed before finalizing and had no newer commits.
 
 ## PR #17 CI repair
 
-- [ ] Fix Windows text decoding and Bash invocation, keep existing assertions, run the full local gate, and verify hosted CI before marking the PR green.
+- [x] Fix Windows text decoding and Bash invocation, keep existing assertions, run the full local gate, and verify hosted CI before marking the PR green.
 
 Windows CI uses cp1252 for implicit Python text reads; repository files and Codex JSON use UTF-8. Pass explicit encodings and a slash-separated path to Git Bash. Add encoding lint to prevent recurrence. Linux and macOS already passed the first hosted run.
 
 The remaining Windows failure was native process search selecting WSL Bash despite PATH lookup finding Git Bash. The test now launches the resolved absolute executable. Encoding lint requires Ruff preview mode; the gate runs that rule explicitly alongside the normal lint selection.
+
+PR #17 is open. Hosted CI run 33963760315 passed on Linux, macOS, and Windows at 0e3a708. The full local gate and native Codex reader also pass. No merge or source-branch deletion was requested or performed.
