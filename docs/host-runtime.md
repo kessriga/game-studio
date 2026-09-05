@@ -82,7 +82,8 @@ editing, read applicable `.claude/rules/*.md` files and their `paths` patterns;
 Codex does not automatically apply Claude rule files.
 
 For stage reporting, run `bash "<resolved-plugin-root>/bin/gamedev-stage"` in the
-game repository. No injected context or plugin-specific environment is needed.
+game repository. Use forward slashes in paths passed to Bash on Windows.
+No injected context or plugin-specific environment is needed.
 Before committing or pushing, run the game's documented format, lint, build,
 and test checks, review its design requirements, and validate changed assets.
 The Claude hook scripts may skip unsupported input; do not treat running them

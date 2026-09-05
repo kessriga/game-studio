@@ -2,7 +2,8 @@
 
 Install the same repository as a Codex plugin. It provides 72 skills and 53
 specialist role guides. Python 3 and Bash are required for scaffolding and stage
-reporting; Git Bash supplies Bash on Windows.
+reporting; Git Bash supplies Bash on Windows. Use forward slashes in paths
+passed to Bash, including absolute paths such as `C:/projects/my-game`.
 
 ## Install from a checkout
 

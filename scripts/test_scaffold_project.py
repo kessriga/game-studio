@@ -29,12 +29,16 @@ class ScaffoldTests(unittest.TestCase):
                 self.assertFalse(preserved)
                 for directory in ("", "src", "design", "docs"):
                     base = project / directory
-                    self.assertEqual((base / "CLAUDE.md").read_text(), "@AGENTS.md\n")
-                    self.assertGreater(len((base / "AGENTS.md").read_text()), 100)
+                    self.assertEqual(
+                        (base / "CLAUDE.md").read_text(encoding="utf-8"), "@AGENTS.md\n"
+                    )
+                    self.assertGreater(
+                        len((base / "AGENTS.md").read_text(encoding="utf-8")), 100
+                    )
                 references = project / "docs/engine-reference"
                 actual = {path.name for path in references.iterdir() if path.is_dir()}
                 self.assertEqual(actual, set() if engine == "undecided" else {engine})
-                guide = (project / "AGENTS.md").read_text()
+                guide = (project / "AGENTS.md").read_text(encoding="utf-8")
                 if engine == "undecided":
                     self.assertIn("No engine selected yet", guide)
                     self.assertNotIn("godot/VERSION.md", guide)
@@ -60,23 +64,30 @@ class ScaffoldTests(unittest.TestCase):
     def test_old_project_marker_does_not_prevent_adding_guidance(self):
         preferences = self.project / ".claude/docs/technical-preferences.md"
         preferences.parent.mkdir(parents=True)
-        preferences.write_text("Existing engine settings")
-        (self.project / "CLAUDE.md").write_text("Existing Claude guide")
+        preferences.write_text("Existing engine settings", encoding="utf-8")
+        (self.project / "CLAUDE.md").write_text(
+            "Existing Claude guide", encoding="utf-8"
+        )
         created, preserved = scaffold_project.scaffold(self.project, "unity")
         self.assertIn("AGENTS.md", created)
         self.assertIn("CLAUDE.md", preserved)
-        self.assertEqual(preferences.read_text(), "Existing engine settings")
         self.assertEqual(
-            (self.project / "CLAUDE.md").read_text(), "Existing Claude guide"
+            preferences.read_text(encoding="utf-8"), "Existing engine settings"
+        )
+        self.assertEqual(
+            (self.project / "CLAUDE.md").read_text(encoding="utf-8"),
+            "Existing Claude guide",
         )
 
     def test_existing_backlog_guide_is_preserved(self):
         self.project.mkdir()
         guide = self.project / "AGENTS.md"
-        guide.write_text("Existing Backlog instructions")
+        guide.write_text("Existing Backlog instructions", encoding="utf-8")
         _, preserved = scaffold_project.scaffold(self.project, "undecided")
         self.assertIn("AGENTS.md", preserved)
-        self.assertEqual(guide.read_text(), "Existing Backlog instructions")
+        self.assertEqual(
+            guide.read_text(encoding="utf-8"), "Existing Backlog instructions"
+        )
 
     def test_invalid_engine_creates_nothing(self):
         with self.assertRaises(ValueError):
@@ -85,7 +96,7 @@ class ScaffoldTests(unittest.TestCase):
 
     def test_conflicting_directory_fails_before_any_copy(self):
         self.project.mkdir()
-        (self.project / "src").write_text("User file")
+        (self.project / "src").write_text("User file", encoding="utf-8")
         with self.assertRaises(ValueError):
             scaffold_project.scaffold(self.project, "godot")
         self.assertEqual(list(self.project.iterdir()), [self.project / "src"])
@@ -115,6 +126,7 @@ class ScaffoldTests(unittest.TestCase):
             cwd=self.temp.name,
             capture_output=True,
             text=True,
+            encoding="utf-8",
             check=True,
         )
         self.assertIn("preserved 0", result.stdout)
@@ -125,13 +137,15 @@ class ScaffoldTests(unittest.TestCase):
             if key != "CLAUDE_PROJECT_DIR"
         }
         result = subprocess.run(
-            ["bash", str(stage)],
+            ["bash", stage.as_posix()],
             cwd=self.project,
             env=env,
             capture_output=True,
             text=True,
-            check=True,
+            encoding="utf-8",
+            check=False,
         )
+        self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout, "Concept\n")
 
     def test_relocated_plugin_resolves_its_own_templates(self):
@@ -145,9 +159,13 @@ class ScaffoldTests(unittest.TestCase):
             cwd=self.temp.name,
             capture_output=True,
             text=True,
+            encoding="utf-8",
             check=True,
         )
-        self.assertIn("unreal/VERSION.md", (self.project / "AGENTS.md").read_text())
+        self.assertIn(
+            "unreal/VERSION.md",
+            (self.project / "AGENTS.md").read_text(encoding="utf-8"),
+        )
         self.assertTrue(
             (self.project / "docs/engine-reference/unreal/VERSION.md").is_file()
         )

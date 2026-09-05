@@ -29,8 +29,10 @@
 
 ## Limits of verification
 
-- Hosted CI has not run for this change. The workflow defines Linux, macOS, and
-  Windows checks; only local macOS results are recorded above.
+- The first hosted run passed on Linux and macOS. Windows exposed implicit
+  text decoding and a Bash path issue in the new tests. The repair sets UTF-8
+  explicitly, passes a slash-separated Bash path, and adds encoding lint.
+  Hosted validation of the repair is pending.
 - Conversational execution of all 72 skills, live subagent orchestration, and
   engine builds have not been exercised end to end. Role prompts and explicit
   checks do not imply automatic hook parity with Claude Code.

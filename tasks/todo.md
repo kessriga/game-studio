@@ -24,3 +24,9 @@ substantive skill changes are start, setup-engine, status, help, and changelog.
 No existing tests were weakened. Hosted CI, installation into the user's global
 configuration, and full conversational/engine runs remain outside the observed
 validation. Main was refreshed before finalizing and had no newer commits.
+
+## PR #17 CI repair
+
+- [ ] Fix Windows text decoding and Bash invocation, keep existing assertions, run the full local gate, and verify hosted CI before marking the PR green.
+
+Windows CI uses cp1252 for implicit Python text reads; repository files and Codex JSON use UTF-8. Pass explicit encodings and a slash-separated path to Git Bash. Add encoding lint to prevent recurrence. Linux and macOS already passed the first hosted run.

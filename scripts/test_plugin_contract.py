@@ -12,10 +12,18 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class PluginContractTests(unittest.TestCase):
     def test_manifests_and_marketplaces_agree(self):
-        claude = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())
-        codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text())
-        marketplace = json.loads((ROOT / ".claude-plugin/marketplace.json").read_text())
-        catalog = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text())
+        claude = json.loads(
+            (ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8")
+        )
+        codex = json.loads(
+            (ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8")
+        )
+        marketplace = json.loads(
+            (ROOT / ".claude-plugin/marketplace.json").read_text(encoding="utf-8")
+        )
+        catalog = json.loads(
+            (ROOT / ".agents/plugins/marketplace.json").read_text(encoding="utf-8")
+        )
         entry = catalog["plugins"][0]
         self.assertEqual(claude["name"], codex["name"])
         self.assertEqual(entry["name"], codex["name"])
@@ -32,7 +40,7 @@ class PluginContractTests(unittest.TestCase):
         for pattern in ("skills/*/SKILL.md", "agents/*.md"):
             for path in sorted(ROOT.glob(pattern)):
                 with self.subTest(path=path.relative_to(ROOT)):
-                    front, body = path.read_text().split("---", 2)[1:]
+                    front, body = path.read_text(encoding="utf-8").split("---", 2)[1:]
                     metadata = yaml.safe_load(front)
                     expected = (
                         path.parent.name if path.name == "SKILL.md" else path.stem
@@ -49,11 +57,17 @@ class PluginContractTests(unittest.TestCase):
                     self.assertNotIn("context", metadata)
 
     def test_claude_hooks_are_explicit_and_codex_does_not_discover_them(self):
-        claude = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())
-        codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text())
+        claude = json.loads(
+            (ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8")
+        )
+        codex = json.loads(
+            (ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8")
+        )
         self.assertNotIn("hooks", codex)
         self.assertFalse((ROOT / "hooks/hooks.json").exists())
-        hooks = json.loads((ROOT / claude["hooks"]).read_text())["hooks"]
+        hooks = json.loads((ROOT / claude["hooks"]).read_text(encoding="utf-8"))[
+            "hooks"
+        ]
         self.assertEqual(
             set(hooks),
             {
@@ -87,7 +101,7 @@ class PluginContractTests(unittest.TestCase):
         paths.extend((ROOT / "templates").rglob("CLAUDE.md"))
         for path in paths:
             with self.subTest(path=path.relative_to(ROOT)):
-                self.assertEqual(path.read_text(), "@AGENTS.md\n")
+                self.assertEqual(path.read_text(encoding="utf-8"), "@AGENTS.md\n")
                 self.assertTrue(path.with_name("AGENTS.md").is_file())
 
 
