@@ -136,8 +136,10 @@ class ScaffoldTests(unittest.TestCase):
             for key, value in os.environ.items()
             if key != "CLAUDE_PROJECT_DIR"
         }
+        bash_path = shutil.which("bash")
+        self.assertIsNotNone(bash_path, "Bash is required for stage reporting")
         result = subprocess.run(
-            ["bash", "-x", stage.as_posix()],
+            [bash_path, stage.as_posix()],
             cwd=self.project,
             env=env,
             capture_output=True,
@@ -148,7 +150,7 @@ class ScaffoldTests(unittest.TestCase):
         self.assertEqual(
             result.returncode,
             0,
-            f"Bash: {shutil.which('bash')}\nstdout: {result.stdout}\nstderr: {result.stderr}",
+            f"Bash: {bash_path}\nstdout: {result.stdout}\nstderr: {result.stderr}",
         )
         self.assertEqual(result.stdout, "Concept\n")
 

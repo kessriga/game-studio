@@ -41,7 +41,8 @@ test:
 # Validate manifests, workflows, shell syntax, and maintained Python tools.
 lint:
     {{python}} scripts/check-namespacing.py
-    {{python}} -m ruff check --extend-select PLW1514 {{maintained_python}}
+    {{python}} -m ruff check {{maintained_python}}
+    {{python}} -m ruff check --preview --select PLW1514 {{maintained_python}}
     bash -c 'for script in bin/* hooks/*.sh scripts/*.sh scripts/test/*.sh; do bash -n "$script" || exit; done'
 
 # Check formatting without rewriting existing files.

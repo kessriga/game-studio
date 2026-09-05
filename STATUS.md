@@ -30,8 +30,9 @@
 ## Limits of verification
 
 - The first hosted run passed on Linux and macOS. Windows exposed implicit
-  text decoding and a Bash path issue in the new tests. The repair sets UTF-8
-  explicitly, passes a slash-separated Bash path, and adds encoding lint.
+  text decoding and Windows launching WSL Bash instead of Git Bash in the new
+  tests. The repair uses UTF-8, launches the absolute Bash executable found on
+  PATH, passes a slash-separated script path, and enables encoding lint.
   Hosted validation of the repair is pending.
 - Conversational execution of all 72 skills, live subagent orchestration, and
   engine builds have not been exercised end to end. Role prompts and explicit

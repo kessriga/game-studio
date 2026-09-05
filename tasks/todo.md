@@ -30,3 +30,5 @@ validation. Main was refreshed before finalizing and had no newer commits.
 - [ ] Fix Windows text decoding and Bash invocation, keep existing assertions, run the full local gate, and verify hosted CI before marking the PR green.
 
 Windows CI uses cp1252 for implicit Python text reads; repository files and Codex JSON use UTF-8. Pass explicit encodings and a slash-separated path to Git Bash. Add encoding lint to prevent recurrence. Linux and macOS already passed the first hosted run.
+
+The remaining Windows failure was native process search selecting WSL Bash despite PATH lookup finding Git Bash. The test now launches the resolved absolute executable. Encoding lint requires Ruff preview mode; the gate runs that rule explicitly alongside the normal lint selection.
