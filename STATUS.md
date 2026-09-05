@@ -34,8 +34,9 @@
   skills. New local documentation links resolve, and the 125 skill/role
   frontmatter blocks are unchanged by the documentation cleanup.
 
-- Hosted CI passed on Linux, macOS, and Windows at `0e3a708`: see the
-  [successful run](https://github.com/kessriga/game-studio/actions/runs/33963760315).
+- Hosted CI passed on Linux, macOS, and Windows after the documentation audit
+  at `3e2487c`: see the
+  [successful run](https://github.com/kessriga/game-studio/actions/runs/33966091128).
   The Windows checks use explicit UTF-8 and the absolute Git Bash executable
   found on PATH, avoiding Windows native process search selecting WSL Bash.
   Encoding lint now runs explicitly to prevent locale-dependent text reads.

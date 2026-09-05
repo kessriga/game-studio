@@ -62,9 +62,10 @@ to model assignments.
 
 | Frontmatter value | Workload | Skills |
 |-------------------|----------|--------|
-| `haiku` | Status, formatting, and focused checks | `/gamedev:help`, `/gamedev:story-readiness`, `/gamedev:scope-check`, `/gamedev:project-stage-detect`, `/gamedev:changelog`, `/gamedev:patch-notes`, `/gamedev:status` |
+| `haiku` | Status, formatting, and focused checks | `/gamedev:help`, `/gamedev:scope-check`, `/gamedev:project-stage-detect`, `/gamedev:changelog`, `/gamedev:patch-notes`, `/gamedev:status` |
 | `opus` | Cross-document synthesis and phase verdicts | `/gamedev:review-all-gdds`, `/gamedev:architecture-review`, `/gamedev:gate-check` |
-| `sonnet` | Other workflows | All remaining skills |
+| Unset | OpenSpec workflows | The five `openspec-*` skills leave model selection to the host |
+| `sonnet` | Other workflows | The remaining 58 skills, including `/gamedev:story-readiness` |
 
 When adding a skill, choose a model according to the workload above. Keep
 tool permissions separate: a model alias does not make a workflow read-only.

@@ -41,7 +41,7 @@ INTENT: the plugin supports Claude Code and Codex, but its public name and share
 
 - [x] Present Game Studio consistently in the README, contribution guide, and plugin descriptions, with installation and invocation for both hosts.
 - [x] Make shared skill, role, setup, context, and QA guidance host-neutral; isolate actual Claude configuration and preserve compatible file paths and metadata.
-- [ ] Review the complete audit, run the local gate and native discovery checks, and update PR #17 with the changes and hosted CI results.
+- [x] Review the complete audit, run the local gate and native discovery checks, and update PR #17 with the changes and hosted CI results.
 
 Baseline: `just gate` passed before these edits. Audit runtime and current reference docs; keep historical task records intact. Verify wording and references directly without adding tests that only mirror prose. Existing contract and hook checks must keep passing.
 
@@ -55,4 +55,8 @@ not an assumed runtime. No executable tests were removed or weakened.
 
 Verification remains limited to document review, metadata discovery, and the
 repository gate; conversational runs and engine builds remain unverified.
-Hosted CI for this documentation update will be checked after pushing.
+Hosted CI run 33966091128 passed on Linux, macOS, and Windows at 3e2487c.
+The final metadata audit also corrected the inherited model table: story-readiness
+declares sonnet, and the five OpenSpec skills leave the model unset. PR #17
+contains the final change description and validation evidence. Scratch logs,
+the validation environment, and generated local caches are removed at handoff.
