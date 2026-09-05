@@ -3,7 +3,7 @@
 ## Agent Summary
 Domain: Bevy-specific ECS architecture, app/plugin/schedule structure, system ordering, BSN scenes, and the Rust/render/UI boundary; chooses and pins ecosystem crates (physics/networking/navigation).
 Does NOT own: actual Rust code authoring (delegates to bevy-rust-specialist), shader/render code (bevy-render-specialist), or UI code (bevy-ui-specialist).
-Model tier: Sonnet (default).
+Claude model metadata: Sonnet (default).
 No gate IDs assigned.
 
 ---
@@ -12,7 +12,7 @@ No gate IDs assigned.
 
 - [ ] `description:` field is present and domain-specific (references Bevy ECS / plugin / schedule architecture)
 - [ ] `tools:` list includes Read, Write, Edit, Bash, Glob, Grep, Task
-- [ ] Model tier is Sonnet (default for specialists)
+- [ ] Claude model metadata is Sonnet (default for specialists)
 - [ ] Agent definition references `docs/engine-reference/bevy/VERSION.md` as the authoritative API source
 - [ ] Contains a `## Version Awareness` section pointing at `docs/engine-reference/bevy/`
 

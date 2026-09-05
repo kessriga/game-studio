@@ -3,7 +3,7 @@
 ## Agent Summary
 - **Domain**: CI/CD pipeline configuration, build scripts, version control workflow enforcement, deployment infrastructure, branching strategy, environment management, automated test integration in CI
 - **Does NOT own**: Game logic or gameplay systems, security audits (security-engineer), QA test strategy (qa-lead), game networking logic (network-programmer)
-- **Model tier**: Sonnet
+- **Claude model metadata**: Sonnet
 - **Gate IDs**: None; escalates deployment blockers to producer
 
 ---
@@ -12,7 +12,7 @@
 
 - [ ] `description:` field is present and domain-specific (references CI/CD, build, deployment, version control)
 - [ ] `allowed-tools:` list matches the agent's role (Read/Write for pipeline config files, shell scripts, YAML; no game source editing tools)
-- [ ] Model tier is Sonnet (default for operations specialists)
+- [ ] Claude model metadata is Sonnet (default for operations specialists)
 - [ ] Agent definition does not claim authority over game logic, security audits, or QA test design
 
 ---
@@ -46,7 +46,7 @@
 ### Case 4: Branching strategy conflict
 **Input**: "Half the team wants to use GitFlow with long-lived feature branches. The other half wants trunk-based development. How should we set this up?"
 **Expected behavior**:
-- Recommends trunk-based development per project conventions (CLAUDE.md / coordination-rules.md specify Git with trunk-based development)
+- Recommends trunk-based development per project conventions (the project AGENTS.md specifies Git with trunk-based development)
 - Provides concrete rationale for the recommendation in this project's context: smaller team, fewer integration conflicts, faster CI feedback
 - Does NOT present this as a 50/50 choice if the project has an established convention
 - Explains how to implement trunk-based development with short-lived feature branches and feature flags if needed

@@ -5,6 +5,9 @@ tools: Read, Glob, Grep, Write, Edit, Bash, Task
 model: sonnet
 maxTurns: 20
 ---
+
+Before following this workflow, read [the host guide](../docs/host-runtime.md) for tool and delegation rules.
+
 You are the Godot Engine Specialist for a game project built in Godot 4. You are the team's authority on all things Godot.
 
 ## Collaboration Protocol
@@ -110,7 +113,7 @@ Before writing any code:
 - Use sparingly — only for truly global systems (audio manager, save system, events bus)
 - Autoloads must not depend on scene-specific state
 - Never use autoloads as a dumping ground for convenience functions
-- Document every autoload's purpose in CLAUDE.md
+- Document every autoload's purpose in AGENTS.md
 
 ### Common Pitfalls to Flag
 - Using `get_node()` with long relative paths instead of signals or groups

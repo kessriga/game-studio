@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Bash
 model: haiku
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Scope Check
 
 This skill is read-only — it reports findings but writes no files.

@@ -3,7 +3,7 @@
 ## Agent Summary
 **Domain owned:** Visual identity, art bible authorship and enforcement, asset quality standards, UI/UX visual design, visual phase gate, concept art evaluation.
 **Does NOT own:** UX interaction flows and information architecture (ux-designer's domain), audio direction (audio-director), code implementation.
-**Model tier:** Opus 4.8 (department lead — despite the "director" title, only the top-2 authorities creative/technical-director are on Fable; all other leads including art-director are on Opus 4.8).
+**Claude model metadata:** Opus 4.8 (department lead — despite the "director" title, only the top-2 authorities creative/technical-director are on Fable; all other leads including art-director are on Opus 4.8).
 **Gate IDs handled:** AD-CONCEPT-VISUAL, AD-ART-BIBLE, AD-PHASE-GATE.
 
 ---
@@ -14,7 +14,7 @@ Verified by reading the agent's `agents/art-director.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references visual identity, art bible, asset standards — not generic)
 - [ ] `allowed-tools:` list is read-focused; image review capability if supported; no Bash unless asset pipeline checks are justified
-- [ ] Model tier is `claude-opus-4-8` per coordination-rules.md (department lead → Opus 4.8, not a top-2 director)
+- [ ] Claude model metadata is `claude-opus-4-8` per docs/claude-code.md (department lead → Opus 4.8, not a top-2 director)
 - [ ] Agent definition does not claim authority over UX interaction flows or audio direction
 
 ---

@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Task, AskUserQuestion, TodoWrite
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 When this skill is invoked:
 
 ## 1. Parse Arguments & Validate
@@ -742,7 +744,7 @@ Present a completion summary:
 > - Provisional assumptions: [list any assumptions about undesigned dependencies]
 > - Cross-system conflicts found: [list or "none"]
 
-> **To validate this GDD, open a fresh Claude Code session and run:**
+> **To validate this GDD, open a fresh session and run:**
 > `/gamedev:design-review design/gdd/[system-name].md`
 >
 > **Never run `/gamedev:design-review` in the same session as `/gamedev:design-system`.** The reviewing
@@ -863,7 +865,7 @@ shows context at or above 70%. If so, append this notice to the response:
 
 > **Context is approaching the limit (≥70%).** Your progress is saved — all approved
 > sections are written to `design/gdd/[system-name].md`. When you're ready to continue,
-> open a fresh Claude Code session and run `/gamedev:design-system [system-name]` — it will
+> open a fresh session and run `/gamedev:design-system [system-name]` — it will
 > detect which sections are complete and resume from the next one.
 
 ---

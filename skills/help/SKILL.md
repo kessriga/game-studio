@@ -4,10 +4,10 @@ description: "Analyzes what is done and the users query and offers advice on wha
 argument-hint: "[optional: what you just finished, e.g. 'finished design-review' or 'stuck on ADRs']"
 user-invocable: true
 allowed-tools: Read, Glob, Grep
-context: |
-  !echo "=== Live Project State ===" && echo "Stage: $(cat production/stage.txt 2>/dev/null | tr -d '[:space:]' || echo 'not set')" && echo "Review mode: $(cat production/review-mode.txt 2>/dev/null | tr -d '[:space:]' || echo 'solo (default)')" && echo "Session state: $(head -5 production/session-state/active.md 2>/dev/null || echo 'none')" && echo "(work items live on the Backlog board)"
 model: haiku
 ---
+
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
 # Studio Help — What Do I Do Next?
 
@@ -42,8 +42,8 @@ Collect these for the output in Step 7 — show them as a footer block:
 
 ```
 ### Also installed (not in workflow)
-- `/skill-name` — [description from SKILL.md frontmatter]
-- `/skill-name` — [description]
+- `gamedev:<skill-name>` — [description from SKILL.md frontmatter]
+- `gamedev:<skill-name>` — [description]
 ```
 
 Only show this block if at least one uncataloged skill exists. Limit to the 10
@@ -110,9 +110,11 @@ If the step has no `artifact` field:
 ### Special case: production phase — read the Backlog board
 
 When the current phase is `production`, the Backlog board is the authoritative
-work-item state (this skill is haiku/read-only, so it cannot call the Backlog
-MCP directly — advise the user to consult their board, or describe what to look
-for):
+work-item state. Use available, permitted Backlog read tools to inspect it.
+If those tools are unavailable, say that the board was not checked and ask the
+user for its current state. Session notes can show recent focus, but cannot
+confirm current board status. Keep this skill read-only; model names do not
+determine tool permissions. Interpret the board as follows:
 
 - Tasks with status `In Progress` → "currently active"
 - Tasks with status `To Do` (no `blocked` label) → "next up"

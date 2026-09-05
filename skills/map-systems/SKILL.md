@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, TodoWrite, Task
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 When this skill is invoked:
 
 ## Parse Arguments
@@ -351,7 +353,7 @@ This skill follows the collaborative design principle at every phase:
 If context reaches or exceeds 70% at any point, append this notice:
 
 > **Context is approaching the limit (≥70%).** The systems index is saved to
-> `design/gdd/systems-index.md`. Open a fresh Claude Code session to continue
+> `design/gdd/systems-index.md`. Open a fresh session to continue
 > designing individual GDDs — run `/gamedev:map-systems next` to pick up where you left off.
 
 ---

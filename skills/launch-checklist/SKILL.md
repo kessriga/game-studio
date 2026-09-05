@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 > **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/gamedev:launch-checklist`. Do not auto-invoke based on context matching.
 
 ## Phase 1: Parse Arguments
@@ -17,7 +19,7 @@ Read the argument for the launch date or `dry-run` mode. Dry-run mode generates 
 
 ## Phase 2: Gather Project Context
 
-- Read `CLAUDE.md` for tech stack, target platforms, and team structure
+- Read `AGENTS.md` for tech stack, target platforms, and team structure
 - Read the latest milestone in `production/milestones/`
 - Read any existing release checklist in `production/releases/`
 - Read the content calendar in `design/live-ops/content-calendar.md` if it exists

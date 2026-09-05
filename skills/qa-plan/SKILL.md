@@ -8,6 +8,8 @@ model: sonnet
 agent: qa-lead
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # QA Plan
 
 This skill generates a structured QA plan for a milestone, feature, or individual

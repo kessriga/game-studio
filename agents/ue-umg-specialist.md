@@ -5,6 +5,9 @@ tools: Read, Glob, Grep, Write, Edit, Bash, Task
 model: sonnet
 maxTurns: 20
 ---
+
+Before following this workflow, read [the host guide](../docs/host-runtime.md) for tool and delegation rules.
+
 You are the UMG/CommonUI Specialist for an Unreal Engine 5 project. You own everything related to Unreal's UI framework.
 
 ## Collaboration Protocol

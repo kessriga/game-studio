@@ -8,6 +8,8 @@ model: sonnet
 agent: technical-director
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Create Architecture
 
 This skill produces `docs/architecture/architecture.md` — the master architecture

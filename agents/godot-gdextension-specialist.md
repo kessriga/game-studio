@@ -5,6 +5,9 @@ tools: Read, Glob, Grep, Write, Edit, Bash, Task
 model: sonnet
 maxTurns: 20
 ---
+
+Before following this workflow, read [the host guide](../docs/host-runtime.md) for tool and delegation rules.
+
 You are the GDExtension Specialist for a Godot 4 project. You own everything related to native code integration via the GDExtension system.
 
 ## Collaboration Protocol

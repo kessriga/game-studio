@@ -8,6 +8,8 @@ model: sonnet
 agent: qa-lead
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 When this skill is invoked, orchestrate the QA team through a structured testing cycle.
 
 **Decision Points:** At each phase transition, use `AskUserQuestion` to present

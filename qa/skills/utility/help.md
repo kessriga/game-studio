@@ -3,10 +3,10 @@
 ## Skill Summary
 
 `/gamedev:help` analyzes what has been done and what comes next in the project workflow.
-It runs on the Haiku model (read-only, formatting task) and reads `production/stage.txt`
-and recent session state to produce a concise situational guidance summary. Because it
-is Haiku/read-only it cannot call the Backlog tools, so it reports the current focus from
-the session-state STATUS block rather than enumerating board work items. The skill
+It reads `production/stage.txt` and recent session state to produce a concise
+situational guidance summary. In Production, it reads the Backlog board through
+available, permitted tools. If the board cannot be read, it reports that limit
+and uses session notes only as evidence of recent focus, not current task status. The skill
 optionally accepts a context query (e.g., `/gamedev:help testing`) to surface relevant skills for
 a specific topic.
 
@@ -47,7 +47,9 @@ None. `/gamedev:help` is a read-only navigation skill. No director gates apply.
 
 **Expected behavior:**
 1. Skill reads stage.txt and session-state active.md
-2. Skill reads the current focus (epic/feature/task) from the session-state STATUS block
+2. Skill reads board status through available, permitted Backlog tools; when
+   unavailable, it labels the session-state focus as recent context and reports
+   that current board status is unknown
 3. Skill outputs: current stage, current focus, and 3 suggested next skills
    (e.g., `/gamedev:dev-story`, `/gamedev:story-done`, `/gamedev:story-readiness`)
 4. Suggestions are ranked by relevance to current project state
@@ -55,7 +57,7 @@ None. `/gamedev:help` is a read-only navigation skill. No director gates apply.
 
 **Assertions:**
 - [ ] Current stage is shown (Production)
-- [ ] Current focus from session state is mentioned (help is read-only and cannot enumerate board work items)
+- [ ] Board status is backed by tool results, or explicitly unverified when tools are unavailable
 - [ ] Exactly 2-3 next-skill suggestions are given (not a list of all skills)
 - [ ] Suggestions are appropriate for Production stage
 - [ ] Verdict is HELP COMPLETE

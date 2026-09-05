@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion, mcp__backlog__task_creat
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Bug Report
 
 Bugs are tracked as **Backlog tasks** with the `bug` label — the board is the bug

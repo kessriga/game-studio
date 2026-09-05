@@ -3,7 +3,7 @@
 ## Agent Summary
 Domain: bevy_ui — Node/flexbox layout, widgets (bevy_ui_widgets / bevy_feathers), Parley text & typography, text input (EditableText), input focus, accessibility (AccessKit).
 Does NOT own: host-side gameplay Rust (bevy-rust-specialist), shader/material work (bevy-render-specialist), high-level architecture (bevy-specialist).
-Model tier: Sonnet (default).
+Claude model metadata: Sonnet (default).
 No gate IDs assigned.
 
 ---
@@ -12,7 +12,7 @@ No gate IDs assigned.
 
 - [ ] `description:` field is present and domain-specific (references bevy_ui / layout / text / widgets)
 - [ ] `tools:` list includes Read, Write, Edit, Bash, Glob, Grep, Task
-- [ ] Model tier is Sonnet (default for specialists)
+- [ ] Claude model metadata is Sonnet (default for specialists)
 - [ ] Contains a `## Version Awareness` section pointing at `docs/engine-reference/bevy/`
 
 ---

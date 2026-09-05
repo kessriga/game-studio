@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Skill Test
 
 Validates `skills/*/SKILL.md` files for structural compliance and
@@ -152,6 +154,9 @@ If either is missing:
 ### Step 2 — Read Both Files
 
 Read the skill file and test spec file completely.
+Read `qa/AGENTS.md` for host-specific checks. Interpret tool names through the
+host guide. Claude frontmatter assertions inspect metadata; they do not prove
+that a particular model ran or that Codex used Claude's tool configuration.
 
 ### Step 3 — Evaluate Assertions
 
@@ -163,7 +168,7 @@ For each **Test Case** in the spec:
 
 For each assertion, evaluate whether the skill's written instructions, if
 followed correctly given the fixture state, would satisfy it. This is a
-Claude-evaluated reasoning check, not code execution.
+review of the written instructions, not an executed workflow or code test.
 
 Mark each assertion:
 - **PASS** — skill instructions clearly satisfy this assertion

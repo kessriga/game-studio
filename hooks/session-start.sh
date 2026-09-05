@@ -14,7 +14,7 @@ cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || true
 # as hook output. Missing predicate means "do nothing", quietly.
 "${CLAUDE_PLUGIN_ROOT}/bin/gamedev-is-project" 2> /dev/null || exit 0
 
-echo "=== Claude Code Game Studios — Session Context ==="
+echo "=== Game Studio — Session Context ==="
 
 # Production stage + breadcrumb (from the plugin's bin/gamedev-stage).
 # ${CLAUDE_PLUGIN_ROOT} is set for plugin hooks; fall back to PATH for dev use.

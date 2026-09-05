@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Edit, AskUserQuestion, Task, mcp__
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Story Done
 
 This skill closes the loop between design and implementation. Run it at the end

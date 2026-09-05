@@ -8,6 +8,8 @@ model: sonnet
 agent: lead-programmer
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Create Stories
 
 A story is a single implementable behaviour — small enough to complete in one

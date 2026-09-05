@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Bash, Write, AskUserQuestion, mcp__backlog__tas
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Smoke Check
 
 This skill is the gate between "implementation done" and "ready for QA

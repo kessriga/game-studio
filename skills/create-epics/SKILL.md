@@ -8,6 +8,8 @@ model: sonnet
 agent: technical-director
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Create Epics
 
 An epic is a named, bounded body of work that maps to one architectural module.

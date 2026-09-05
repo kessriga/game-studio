@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Task, AskUserQuestion
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 When this skill is invoked:
 
 ## 0. Parse Arguments — Detect Retrofit Mode
@@ -446,7 +448,7 @@ If there are no remaining priority ADRs and no undesigned GDD systems, offer onl
 
 **Always include this fixed notice in the closing output (do NOT omit it):**
 
-> To validate ADR coverage against your GDDs, open a **fresh Claude Code session**
+> To validate ADR coverage against your GDDs, open a **fresh session**
 > and run `/gamedev:architecture-review`.
 >
 > **Never run `/gamedev:architecture-review` in the same session as `/gamedev:architecture-decision`.**

@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Task, AskUserQuestion
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Phase 1: Parse Arguments
 
 Resolve the review mode (once, store for all gate spawns this run):

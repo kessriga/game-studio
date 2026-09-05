@@ -9,6 +9,8 @@ agent: prototyper
 isolation: worktree
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Purpose
 
 This is the **concept prototype** — a fast, throwaway build that answers one question:
@@ -94,7 +96,7 @@ Read `design/gdd/game-concept.md` if it exists. Extract:
 - Core fantasy (what the player is supposed to feel)
 - Core loop (the moment-to-moment action being tested)
 
-Read `CLAUDE.md` and `.claude/docs/technical-preferences.md` for the engine and
+Read `AGENTS.md` and `.claude/docs/technical-preferences.md` for the engine and
 language in use.
 
 ---

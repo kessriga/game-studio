@@ -8,6 +8,8 @@ model: sonnet
 # Read-only diagnostic skill — no specialist agent delegation needed
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Reverse Documentation
 
 This skill analyzes existing implementation (code, prototypes, systems) and generates

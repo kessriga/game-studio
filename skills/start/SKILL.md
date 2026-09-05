@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, Bash, AskUserQuestion
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Guided Onboarding
 
 This skill is the entry point for new users. It does NOT assume you have a game idea, an engine preference, or any prior experience. When the `gamedev` plugin is freshly installed into an empty project, it first **scaffolds** the project-side files a plugin cannot ship (Phase 0), then asks where the user is and routes them to the right workflow.
@@ -15,37 +17,44 @@ Files it may write: the project scaffold (Phase 0), `production/stage.txt` (Phas
 
 ---
 
-## Phase 0: Scaffold the Project (first run only)
+## Phase 0: Add Missing Project Files
 
-A Claude Code plugin cannot ship the project `CLAUDE.md`, the `.claude/rules/`, `.claude/docs/technical-preferences.md`, or the `production/`–`design/`–`docs/` tree — those must be created **into the user's repository**. This phase does that, once.
+A plugin cannot install project instructions or settings into a game repository
+by itself. Run this phase in the user's game repository, never the plugin checkout.
 
-**Detect first.** If `.claude/docs/technical-preferences.md` already exists in the project, it is already scaffolded — say nothing about scaffolding and go straight to Phase 1.
+1. Resolve `../../templates/` and `../../scripts/scaffold-project.py` relative to
+   this skill. Check for missing template files even if
+   `.claude/docs/technical-preferences.md` already exists. Older projects can
+   have that marker while lacking a useful `AGENTS.md` or nested guides.
+2. If any scaffold files are missing, explain the file groups to be added and
+   obtain consent unless the user's request already authorizes scaffolding.
+   Preserve existing files. If they decline, continue with the available files.
+3. Use the engine already configured in technical-preferences when present.
+   Otherwise ask which engine: Godot, Unity, Unreal, Bevy, or decide later.
+4. Run the following with the resolved absolute script path and game directory:
 
-**If not scaffolded:**
+   ```sh
+   python3 "<plugin-root>/scripts/scaffold-project.py" "<game-repository>" --engine godot
+   ```
 
-1. **Locate the scaffold sources.** They ship in the plugin at `templates/`, which is two directories up from this `SKILL.md` (`../../templates/`). Resolve that to an absolute path — call it `$TPL` below.
-2. **Ask consent** with `AskUserQuestion`:
-   - **Prompt**: "This looks like a fresh project. I can scaffold the game-studio structure here — project `CLAUDE.md`, `.claude/rules/`, `technical-preferences.md`, and the `production/`/`design/`/`docs/` directories. Nothing existing is overwritten. Proceed?"
-   - **Options**: `Yes, scaffold it` / `No, skip scaffolding`
-   - If they decline, note that some skills expect these files and continue to Phase 1.
-3. **Ask which engine** with `AskUserQuestion` (so only the relevant engine reference is copied):
-   - **Prompt**: "Which engine will this project use? (You can change this later with `/gamedev:setup-engine`.)"
-   - **Options**: `Godot` / `Unity` / `Unreal` / `Bevy` — plus let them pick "Decide later" via the free-text option, in which case skip the engine-reference copy.
-4. **Copy, never overwriting** (`cp` with `-n`). Create parent directories as needed. Run these from the project root:
-   - Project config & rules:
-     - `cp -n "$TPL/CLAUDE.md" ./CLAUDE.md` and `cp -n "$TPL/AGENTS.md" ./AGENTS.md` (the AGENTS.md mirror is read by non-Claude harnesses)
-     - `mkdir -p .claude/docs && cp -Rn "$TPL/.claude/rules" ./.claude/ && cp -n "$TPL/.claude/docs/technical-preferences.md" ./.claude/docs/`
-     - Optional local-config guides: `cp -n "$TPL/.claude/docs/CLAUDE-local-template.md" "$TPL/.claude/docs/settings-local-template.md" ./.claude/docs/`
-   - Directory tree & seeds (design registry, architecture registry):
-     - `cp -Rn "$TPL/design" "$TPL/production" "$TPL/src" ./`
-     - `mkdir -p docs && cp -Rn "$TPL/docs/architecture" "$TPL/docs/registry" ./docs/`
-   - Engine reference (chosen engine only), e.g. for Godot:
-     - `mkdir -p docs/engine-reference && cp -Rn "$TPL/docs/engine-reference/godot" ./docs/engine-reference/`
-     - If the user chose a different engine, copy that engine's directory instead; if "Decide later", skip this step and tell them `/gamedev:setup-engine` will add it.
-5. **Fix the engine import.** The scaffolded `CLAUDE.md` imports `@docs/engine-reference/godot/VERSION.md`. If the chosen engine is not Godot, update that line to the chosen engine's `VERSION.md`; if "Decide later", leave it and note `/gamedev:setup-engine` will set it.
-6. **Report** concisely what was created vs. what already existed (from `cp -n` — files that already exist are left untouched). Do not dump every path; summarize by group ("project CLAUDE.md, 11 rules, technical-preferences, production/design/docs tree, Godot engine reference").
-
-Then continue to Phase 1. Do not re-ask consent on later runs — the detect step guards it.
+   Choose `godot`, `unity`, `unreal`, `bevy`, or `undecided`. The script copies
+   only the selected engine reference and adds missing files without overwriting.
+   It includes root and nested `AGENTS.md` files and Claude import files,
+   shared `.claude/rules/` and settings, and the production/design/docs tree.
+   Python 3 is required. If unavailable, name the missing prerequisite and do
+   not claim scaffolding succeeded.
+5. Read the resulting project guides. New root `CLAUDE.md` imports `AGENTS.md`.
+   If an existing Claude guide contains project settings, propose merging those
+   into `AGENTS.md` and replacing the Claude guide with the import; show the
+   concrete changes and preserve unrelated guidance. If `AGENTS.md` contains
+   only Backlog instructions, merge the game guidance without losing that block.
+   Do not rewrite existing guides merely because the script preserved them.
+6. Confirm the new shared guide points to the selected engine's `VERSION.md`.
+   For existing guides, propose a correction if needed; for `undecided`, leave
+   the explicit no-engine note. Never leave an import to an uncopied Godot file.
+7. Report created and preserved file counts, plus any guide migration that still
+   needs a user decision. Then continue to Phase 1. On subsequent runs, add only
+   missing files and ask only about unresolved decisions.
 
 ---
 
@@ -67,9 +76,10 @@ Store these findings internally to validate the user's self-assessment and tailo
 
 ## Phase 2: Ask Where the User Is
 
-This is the first thing the user sees. Use `AskUserQuestion` with these exact options so the user can click rather than type:
+After any scaffold questions, use the host's user-input tool with these options
+so the user can choose a starting path:
 
-- **Prompt**: "Welcome to Claude Code Game Studios! Before I suggest anything, I'd like to understand where you're starting from. Where are you at with your game idea right now?"
+- **Prompt**: "Welcome to Game Studio! Before I suggest anything, I'd like to understand where you're starting from. Where are you at with your game idea right now?"
 - **Options**:
   - `A) No idea yet` — I don't have a game concept at all. I want to explore and figure out what to make.
   - `B) Vague idea` — I have a rough theme, feeling, or genre in mind (e.g., "something with space" or "a cozy farming game") but nothing concrete.
@@ -213,7 +223,7 @@ Stage mapping:
 
 Do this silently — no "May I write?" needed for this single-line file.
 
-Say: "I've set `production/stage.txt` to `[stage]` — this anchors your status line and stage detection."
+Say: "I've set `production/stage.txt` to `[stage]` — this records the stage for status reporting."
 
 ---
 

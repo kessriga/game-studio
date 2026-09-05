@@ -8,6 +8,8 @@ model: sonnet
 agent: producer
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 When this skill is invoked:
 
 Parse the argument:

@@ -8,6 +8,8 @@ allowed-tools: Read, Glob, Grep, Bash
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 ## Phase 1: Determine Scope
 
 Read the argument:
@@ -19,7 +21,7 @@ Read the argument:
 
 ## Phase 2: Load Performance Budgets
 
-Check for existing performance targets in design docs or CLAUDE.md:
+Check for existing performance targets in design docs or AGENTS.md:
 
 - Target FPS (e.g., 60fps = 16.67ms frame budget)
 - Memory budget (total and per-system)

@@ -3,7 +3,7 @@
 ## Agent Summary
 **Domain owned:** Story architecture, character design direction, world-building oversight, ND-CONSISTENCY gate, dialogue quality review.
 **Does NOT own:** Visual art style (art-director), technical systems or code (lead-programmer), production scheduling (producer), game mechanics rules (game-designer).
-**Model tier:** Opus 4.8 (department lead).
+**Claude model metadata:** Opus 4.8 (department lead).
 **Gate IDs handled:** ND-CONSISTENCY.
 
 ---
@@ -14,7 +14,7 @@ Verified by reading the agent's `agents/narrative-director.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references story, character, world-building, consistency — not generic)
 - [ ] `allowed-tools:` list is read-focused; includes Read for lore documents, GDDs, and narrative docs; no Bash unless justified
-- [ ] Model tier is `claude-opus-4-8` per coordination-rules.md (department lead → Opus 4.8)
+- [ ] Claude model metadata is `claude-opus-4-8` per docs/claude-code.md (department lead → Opus 4.8)
 - [ ] Agent definition does not claim authority over visual style, technical systems, or production scheduling
 
 ---

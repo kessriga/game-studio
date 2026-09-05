@@ -8,6 +8,8 @@ model: sonnet
 agent: technical-director
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 # Create Control Manifest
 
 The Control Manifest is a flat, actionable rules sheet for programmers. It

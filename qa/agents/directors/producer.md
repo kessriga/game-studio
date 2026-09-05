@@ -3,7 +3,7 @@
 ## Agent Summary
 **Domain owned:** Scope management, Backlog prioritisation validation, milestone tracking, epic prioritization, production phase gate.
 **Does NOT own:** Game design decisions (creative-director / game-designer), technical architecture (technical-director), creative direction.
-**Model tier:** Opus 4.8 (department lead — multi-document synthesis, high-stakes phase gate verdicts).
+**Claude model metadata:** Opus 4.8 (department lead — multi-document synthesis, high-stakes phase gate verdicts).
 **Gate IDs handled:** PR-SCOPE, PR-MILESTONE, PR-EPIC, PR-PHASE-GATE.
 
 ---
@@ -14,7 +14,7 @@ Verified by reading the agent's `agents/producer.md` frontmatter:
 
 - [ ] `description:` field is present and domain-specific (references scope, prioritisation, milestone, production — not generic)
 - [ ] `allowed-tools:` list is primarily read-focused; Bash only if milestone files require parsing
-- [ ] Model tier is `claude-opus-4-8` per coordination-rules.md (department lead → Opus 4.8)
+- [ ] Claude model metadata is `claude-opus-4-8` per docs/claude-code.md (department lead → Opus 4.8)
 - [ ] Agent definition does not claim authority over design decisions or technical architecture
 
 ---
@@ -49,12 +49,12 @@ Verified by reading the agent's `agents/producer.md` frontmatter:
 
 ### Case 4: Conflict escalation — correct parent
 **Scenario:** game-designer wants to add a late-breaking mechanic (dynamic weather affecting all gameplay systems) that technical-director warns will require 3 additional sprints. game-designer and technical-director are in disagreement about whether to proceed.
-**Expected:** Producer does not take a side on whether the mechanic is worth adding (design decision) or feasible (technical decision). Producer quantifies the production impact (3 sprints of delay, milestone slip risk), presents the trade-off to the user, and follows coordination-rules.md conflict resolution: escalate to the shared parent (in this case, surface the conflict for user decision since creative-director and technical-director are both top-tier).
+**Expected:** Producer does not take a side on whether the mechanic is worth adding (design decision) or feasible (technical decision). Producer quantifies the production impact (3 sprints of delay, milestone slip risk), presents the trade-off to the user, and follows docs/coordination-rules.md conflict resolution: escalate to the shared parent (in this case, surface the conflict for user decision since creative-director and technical-director are both top-tier).
 **Assertions:**
 - [ ] Quantifies the production impact in concrete terms (sprint count, milestone date slip)
 - [ ] Does not make a binding design or technical decision
 - [ ] Surfaces the conflict to the user with the scope implications clearly stated
-- [ ] References coordination-rules.md conflict resolution protocol (escalate to shared parent or user)
+- [ ] References docs/coordination-rules.md conflict resolution protocol (escalate to shared parent or user)
 
 ### Case 5: Context pass — uses provided context
 **Scenario:** Agent receives a gate context block that includes the current milestone deadline (8 weeks away) and velocity data from the last 4 sprints (8, 10, 9, 11 points). A sprint plan is submitted with 14 story points.

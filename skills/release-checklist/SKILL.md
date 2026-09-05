@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 > **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/gamedev:release-checklist`. Do not auto-invoke based on context matching.
 
 ## Phase 1: Parse Arguments
@@ -17,7 +19,7 @@ Read the argument for the target platform (`pc`, `console`, `mobile`, or `all`).
 
 ## Phase 2: Load Project Context
 
-- Read `CLAUDE.md` for project context, version information, and platform targets.
+- Read `AGENTS.md` for project context, version information, and platform targets.
 - Read the current milestone from `production/milestones/` to understand what features and content should be included in this release.
 
 ---

@@ -1,80 +1,60 @@
 # Setup Requirements
 
-This template requires a few tools to be installed for full functionality.
-All hooks fail gracefully if tools are missing — nothing will break, but
-you'll lose validation features.
+Game Studio needs a coding assistant with plugin support and the local tools
+below. Choose the [Claude Code setup](claude-code.md) or [Codex setup](codex.md).
+Keep your game in its own repository.
 
 ## Required
 
-| Tool | Purpose | Install |
-| ---- | ---- | ---- |
-| **Git** | Version control, branch management | [git-scm.com](https://git-scm.com/) |
-| **Claude Code** | AI agent CLI | `npm install -g @anthropic-ai/claude-code` |
+| Tool | Purpose | Setup |
+|------|---------|-------|
+| Claude Code or Codex | Runs the skills and specialist workflows | Follow the host guide linked above |
+| Git | Version control and worktrees | [git-scm.com](https://git-scm.com/) |
+| Python 3 | Adds missing project scaffold files | [python.org](https://www.python.org/) |
+| Bash | Stage reporting and shell helpers | Git Bash on Windows; system Bash on macOS and Linux |
 
-## Recommended
+Backlog.md, OpenSpec, and engine tools are separate integrations. Only the
+workflows that use them require them. Discover the tools available in the
+current session before attempting tracker updates or engine validation.
 
-| Tool | Used By | Purpose | Install |
-| ---- | ---- | ---- | ---- |
-| **jq** | Hooks (7 of 12) | JSON parsing in commit/push/asset/agent hooks | See below |
-| **Python 3** | Hooks (2 of 12) | JSON validation for data files | [python.org](https://www.python.org/) |
-| **Bash** | All hooks | Shell script execution | Included with Git for Windows |
+## Optional Claude hook tools
 
-### Installing jq
+The Claude hooks use `jq` for JSON event input and Python for data validation.
+Missing optional tools can make individual checks skip validation; a successful
+hook exit alone does not establish that the game passed its checks. Codex does
+not register these hooks and follows the explicit checks in
+[the host guide](host-runtime.md#explicit-checks).
 
-**Windows** (any of these):
-```
-winget install jqlang.jq
-choco install jq
-scoop install jq
-```
+Install `jq` with your package manager if you use the Claude hooks:
 
-**macOS**:
-```
-brew install jq
-```
+| Platform | Example |
+|----------|---------|
+| Windows | `winget install jqlang.jq` |
+| macOS | `brew install jq` |
+| Debian or Ubuntu | `sudo apt install jq` |
+| Fedora | `sudo dnf install jq` |
+| Arch | `sudo pacman -S jq` |
 
-**Linux**:
-```
-sudo apt install jq     # Debian/Ubuntu
-sudo dnf install jq     # Fedora
-sudo pacman -S jq       # Arch
-```
+Python remains required for scaffolding, regardless of hook use.
 
-## Platform Notes
+## Platform notes
 
-### Windows
-- Git for Windows includes **Git Bash**, which provides the `bash` command
-  used by all hooks in `settings.json`
-- Ensure Git Bash is on your PATH (default if installed via the Git installer)
-- Hooks use `bash hooks/[name].sh` — this works on Windows because
-  Claude Code invokes commands through a shell that can find `bash.exe`
+On Windows, make Git Bash available on PATH. Use forward slashes in paths passed
+to Bash, such as `C:/projects/my-game`. When invoking Bash from a program, resolve
+its full executable path: Windows may otherwise select the WSL launcher even
+when a PATH lookup finds Git Bash.
 
-### macOS / Linux
-- Bash is available natively
-- Install `jq` via your package manager for full hook support
+On macOS and Linux, use the system Bash. See [the hook reference](hooks-reference.md)
+for platform limits of individual Claude hooks.
 
-## Verifying Your Setup
+## Verify the local tools
 
-Run these commands to check prerequisites:
-
-```bash
-git --version          # Should show git version
-bash --version         # Should show bash version
-jq --version           # Should show jq version (optional)
-python3 --version      # Should show python version (optional)
+```sh
+git --version
+bash --version
+python3 --version
+jq --version           # Optional; used by Claude hooks
 ```
 
-## What Happens Without Optional Tools
-
-| Missing Tool | Effect |
-| ---- | ---- |
-| **jq** | Commit validation, push protection, asset validation, and agent audit hooks silently skip their checks. Commits and pushes still work. |
-| **Python 3** | JSON data file validation in commit and asset hooks is skipped. Invalid JSON can be committed without warning. |
-| **Both** | All hooks still execute without error (exit 0) but provide no validation. You're flying without safety nets. |
-
-## Recommended IDE
-
-Claude Code works with any editor, but the template is optimized for:
-- **VS Code** with the Claude Code extension
-- **Cursor** (Claude Code compatible)
-- Terminal-based Claude Code CLI
+Use any editor you prefer. The plugin's shared workflows do not depend on a
+particular editor extension.

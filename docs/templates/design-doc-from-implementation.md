@@ -184,7 +184,7 @@
 
 | Date | Author | Changes |
 |------|--------|---------|
-| [Date] | Claude (reverse-doc) | Initial reverse-documentation from `[source path]` |
+| [Date] | [Author] (reverse-documentation) | Initial reverse-documentation from `[source path]` |
 | [Date] | [User] | Clarified design intent, corrected [X] |
 
 ---

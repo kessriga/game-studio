@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Write, WebSearch, Task, AskUserQuestion
 model: sonnet
 ---
 
+Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
 When this skill is invoked:
 
 1. **Parse the argument** for an optional genre/theme hint (e.g., `roguelike`,
@@ -344,7 +346,7 @@ This is a multi-phase skill. If context reaches or exceeds 70% during any phase,
 append this notice to the current response before continuing:
 
 > **Context is approaching the limit (≥70%).** The game concept document is saved
-> to `design/gdd/game-concept.md`. Open a fresh Claude Code session to continue
+> to `design/gdd/game-concept.md`. Open a fresh session to continue
 > if needed — progress is not lost.
 
 ---
