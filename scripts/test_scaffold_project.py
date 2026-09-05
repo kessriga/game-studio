@@ -137,7 +137,7 @@ class ScaffoldTests(unittest.TestCase):
             if key != "CLAUDE_PROJECT_DIR"
         }
         result = subprocess.run(
-            ["bash", stage.as_posix()],
+            ["bash", "-x", stage.as_posix()],
             cwd=self.project,
             env=env,
             capture_output=True,
@@ -145,7 +145,11 @@ class ScaffoldTests(unittest.TestCase):
             encoding="utf-8",
             check=False,
         )
-        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(
+            result.returncode,
+            0,
+            f"Bash: {shutil.which('bash')}\nstdout: {result.stdout}\nstderr: {result.stderr}",
+        )
         self.assertEqual(result.stdout, "Concept\n")
 
     def test_relocated_plugin_resolves_its_own_templates(self):
