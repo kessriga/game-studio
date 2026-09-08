@@ -7,7 +7,64 @@ import {
   visibleWidth,
 } from "@earendil-works/pi-tui";
 import type { Component, Terminal, TUI } from "@earendil-works/pi-tui";
-import { boundedLines, createPanel, plain } from "./panel.ts";
+import {
+  boundedLines,
+  compactLines,
+  createPanel,
+  panelLines,
+  plain,
+} from "./panel.ts";
+import { phases } from "./workflow.ts";
+import type { Snapshot } from "./workflow.ts";
+
+function pendingPhase(phase: string): Snapshot {
+  return {
+    phase,
+    label: phases[phase].label,
+    nextPhase: phases[phase].next_phase,
+    state: { version: 1, revision: 0, runs: [], scopes: [], history: [] },
+    rows: phases[phase].steps.map((step) => ({
+      step,
+      status: "pending",
+      runs: [],
+      artifacts: [],
+      runsApproved: false,
+      complete: false,
+    })),
+  };
+}
+
+test("current and next steps show runnable Pi commands from the catalog", () => {
+  const view = pendingPhase("concept");
+  const lines = compactLines(view);
+  assert.equal(lines[1], "Current: /skill:gamedev-setup-engine · Engine Setup");
+  assert.equal(
+    lines[2],
+    "Next required: /skill:gamedev-brainstorm · Game Concept Document",
+  );
+  assert.ok(
+    boundedLines(lines, 60)[2].includes("/skill:gamedev-brainstorm"),
+    "Keep the runnable command ahead of the title when space is limited",
+  );
+  assert.ok(panelLines(view).includes("  /skill:gamedev-brainstorm"));
+  assert.doesNotMatch(lines.join("\n"), /\/gamedev:|undefined/);
+});
+
+test("commandless steps and phase destinations keep their labels", () => {
+  const view = pendingPhase("technical-setup");
+  view.rows = view.rows.filter((row) => row.step.id === "accessibility-doc");
+  const lines = compactLines(view);
+  assert.equal(lines[1], `Current: ${view.rows[0].step.name}`);
+  assert.equal(lines[2], "Next required: Pre-Production");
+  assert.doesNotMatch(
+    [...lines, ...panelLines(view)].join("\n"),
+    /\/skill:|undefined/,
+  );
+  view.rows[0].complete = true;
+  assert.equal(compactLines(view)[1], "Current: Ready for phase review");
+  view.nextPhase = null;
+  assert.equal(compactLines(view)[2], "Next required: Release sign-off");
+});
 
 function terminal() {
   let receive = (_data: string) => {};

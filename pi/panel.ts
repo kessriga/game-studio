@@ -8,7 +8,7 @@ import {
 } from "@earendil-works/pi-tui";
 import type { OverlayHandle, TUI } from "@earendil-works/pi-tui";
 import { blockers, phases } from "./workflow.ts";
-import type { Snapshot } from "./workflow.ts";
+import type { Snapshot, Step } from "./workflow.ts";
 
 export function plain(text: string): string {
   return stripTerminalSequences(text).replace(
@@ -21,6 +21,12 @@ export function boundedLines(lines: string[], width: number): string[] {
   return lines.map((line) =>
     stripTerminalSequences(truncateToWidth(plain(line), Math.max(0, width))),
   );
+}
+
+function stepLabel(step: Step): string {
+  return step.command
+    ? `${step.command.replace(/^\/gamedev:/, "/skill:gamedev-")} · ${step.name}`
+    : step.name;
 }
 
 export function compactLines(view: Snapshot): string[] {
@@ -37,10 +43,17 @@ export function compactLines(view: Snapshot): string[] {
       : current?.status;
   const focus = current
     ? `${current.id} ${current.step}${current.subject ? ` · ${current.subject}` : ""} (${status})`
-    : (focused?.step.name ?? "Ready for phase review");
-  const next =
-    remaining.find((row) => row.step.id !== focused?.step.id)?.step.name ??
-    (view.nextPhase ? phases[view.nextPhase].label : "Release sign-off");
+    : focused
+      ? stepLabel(focused.step)
+      : "Ready for phase review";
+  const nextStep = remaining.find(
+    (row) => row.step.id !== focused?.step.id,
+  )?.step;
+  const next = nextStep
+    ? stepLabel(nextStep)
+    : view.nextPhase
+      ? phases[view.nextPhase].label
+      : "Release sign-off";
   const previous =
     view.rows.filter((row) => row.complete).at(-1)?.step.name ??
     "none approved";
@@ -65,6 +78,10 @@ export function panelLines(view: Snapshot): string[] {
       `${marker} ${row.step.name}${row.step.required ? "" : " (optional)"}`,
     );
     lines.push(`  ${row.status}`);
+    if (row.step.command)
+      lines.push(
+        `  ${row.step.command.replace(/^\/gamedev:/, "/skill:gamedev-")}`,
+      );
   }
   lines.push(
     "",
