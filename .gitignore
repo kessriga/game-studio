@@ -17,7 +17,9 @@ production/session-logs/
 
 # === Local Tooling State (per-machine, never commit) ===
 .memdb/
+.memtrace/
 .serena/
+.worktrees/
 
 # === Internal Planning (not for public) ===
 
@@ -112,6 +114,7 @@ node_modules/
 # === Archives ===
 *.zip
 *.tar.gz
+*.tgz
 *.rar
 *.7z
 

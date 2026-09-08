@@ -1,14 +1,15 @@
 # Available Skills
 
-The 72 skills below share the same workflows in Claude Code and Codex. Names
-such as `gamedev:start` identify a skill; invoke it as `/gamedev:start` in
-Claude Code or `$gamedev:start` in Codex. You can also use your host's skill
-picker. See [the host guide](host-runtime.md) for tool and delegation mappings.
+The 72 skills below share the same workflows in Pi, Claude Code, and Codex. Names such as `gamedev:start` identify a
+skill. Invoke it as `/skill:gamedev-start` in Pi, `/gamedev:start` in Claude Code, or `$gamedev:start` in Codex. Pi
+loads namespaced entry points that link to these shared workflows. See [the host guide](host-runtime.md) for tools,
+subagents, and integration requirements. `gamedev:skill-test` and `gamedev:skill-improve` require a contributor
+checkout.
 
 ## Onboarding & Navigation
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:start` | First-time onboarding — asks where you are, then guides you to the right workflow |
 | `gamedev:status` | Show the current production stage and active work |
 | `gamedev:help` | Context-aware "what do I do next?" — reads current stage and surfaces the required next step |
@@ -21,7 +22,7 @@ picker. See [the host guide](host-runtime.md) for tool and delegation mappings.
 These skills require the separate OpenSpec integration.
 
 | Skill | Purpose |
-|-------|---------|
+| ------- | --------- |
 | `gamedev:openspec-propose` | Propose a change with design, specs, and tasks |
 | `gamedev:openspec-explore` | Explore questions and options before or during a change |
 | `gamedev:openspec-apply-change` | Implement the tasks in an OpenSpec change |
@@ -31,7 +32,7 @@ These skills require the separate OpenSpec integration.
 ## Game Design
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:brainstorm` | Guided ideation using professional studio methods (MDA, SDT, Bartle, verb-first) |
 | `gamedev:map-systems` | Decompose game concept into systems, map dependencies, prioritize design order |
 | `gamedev:design-system` | Guided, section-by-section GDD authoring for a single game system |
@@ -42,7 +43,7 @@ These skills require the separate OpenSpec integration.
 ## Art & Assets
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:art-bible` | Guided, section-by-section Art Bible authoring — creates visual identity spec before asset production begins |
 | `gamedev:asset-spec` | Generate per-asset visual specifications and AI generation prompts from GDDs, level docs, or character profiles |
 | `gamedev:asset-audit` | Audit assets for naming conventions, file size budgets, and pipeline compliance |
@@ -50,14 +51,14 @@ These skills require the separate OpenSpec integration.
 ## UX & Interface Design
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:ux-design` | Guided section-by-section UX spec authoring (screen/flow, HUD, or pattern library) |
 | `gamedev:ux-review` | Validate UX specs for GDD alignment, accessibility, and pattern compliance |
 
 ## Architecture
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:create-architecture` | Guided authoring of the master architecture document |
 | `gamedev:architecture-decision` | Create an Architecture Decision Record (ADR) |
 | `gamedev:architecture-review` | Validate all ADRs for completeness, dependency ordering, and GDD coverage |
@@ -66,7 +67,7 @@ These skills require the separate OpenSpec integration.
 ## Stories & Sprints
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:create-epics` | Translate GDDs + ADRs into epics — one per architectural module |
 | `gamedev:create-stories` | Break a single epic into implementable story files |
 | `gamedev:dev-story` | Read a story and implement it — routes to the correct programmer agent |
@@ -77,7 +78,7 @@ These skills require the separate OpenSpec integration.
 ## Reviews & Analysis
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:design-review` | Review a game design document for completeness and consistency |
 | `gamedev:code-review` | Architectural code review for a file or changeset |
 | `gamedev:balance-check` | Analyze game balance data, formulas, and config — flag outliers |
@@ -92,7 +93,7 @@ These skills require the separate OpenSpec integration.
 ## QA & Testing
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:qa-plan` | Generate a QA test plan for a sprint or feature |
 | `gamedev:smoke-check` | Run critical path smoke test gate before QA hand-off |
 | `gamedev:soak-test` | Generate a soak test protocol for extended play sessions |
@@ -107,19 +108,19 @@ These skills require the separate OpenSpec integration.
 ## Production
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:bug-report` | File a bug as a Backlog task (bug label); verify/close drive its status |
 | `gamedev:reverse-document` | Generate design or architecture docs from existing implementation |
 | `gamedev:playtest-report` | Generate a structured playtest report or analyze existing playtest notes |
 
-> Work items (stories, bugs, epics→milestones) live on the **Backlog board**, not
-> in sprint files. There are no sprint-plan/sprint-status/retrospective/milestone-review
-> skills — track and prioritise work directly on the board (continuous flow).
+> Work items (stories, bugs, epics→milestones) live on the **Backlog board**, not in sprint files. There are no
+> sprint-plan/sprint-status/retrospective/milestone-review skills — track and prioritise work directly on the board
+> (continuous flow).
 
 ## Release
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:release-checklist` | Generate and validate a pre-release checklist for the current build |
 | `gamedev:launch-checklist` | Complete launch readiness validation across all departments |
 | `gamedev:changelog` | Auto-generate changelog from git commits and Backlog data |
@@ -129,7 +130,7 @@ These skills require the separate OpenSpec integration.
 ## Creative & Content
 
 | Skill | Purpose |
-|---------|---------|
+| --------- | --------- |
 | `gamedev:prototype` | Concept prototype — throwaway build right after brainstorm to validate core idea (Phase 1) |
 | `gamedev:vertical-slice` | Pre-Production validation — production-quality end-to-end build before committing to Production (Phase 4) |
 | `gamedev:localize` | Localization workflow: string extraction, validation, translation readiness |
@@ -139,7 +140,7 @@ These skills require the separate OpenSpec integration.
 Coordinate multiple agents on a single feature area:
 
 | Skill | Coordinates |
-|---------|-------------|
+| --------- | ------------- |
 | `gamedev:team-combat` | game-designer + gameplay-programmer + ai-programmer + technical-artist + sound-designer + qa-tester |
 | `gamedev:team-narrative` | narrative-director + writer + world-builder + level-designer |
 | `gamedev:team-ui` | ux-designer + ui-programmer + art-director + accessibility-specialist |

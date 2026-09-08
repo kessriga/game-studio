@@ -1,7 +1,7 @@
 # The repo's command surface: every repeated command line, defined once.
 #
 # This repo is mostly markdown (skills, agents, docs, backlog, OpenSpec changes) driven by Claude
-# Code and Codex. There is no compiled build; CI runs the gate below. The .claude/hooks
+# Code, Codex, and Pi. There is no compiled build; CI runs the gate below. The .claude/hooks
 # scripts are invoked by Claude Code itself, never by hand. Skill/agent quality checks are
 # model-driven (/skill-test and the skill/agent testing framework in qa/), so no recipe can wrap them.
 # Add a recipe when a command line starts being repeated, not before.
@@ -13,7 +13,7 @@
 
 # List the available recipes.
 python := "python3"
-maintained_python := "scripts/scaffold-project.py scripts/check-codex.py scripts/test_scaffold_project.py scripts/test_plugin_contract.py"
+maintained_python := "scripts/scaffold-project.py scripts/check-codex.py scripts/generate-pi-skills.py scripts/test_scaffold_project.py scripts/test_plugin_contract.py scripts/test_pi_package.py"
 
 default:
     @just --list --unsorted
