@@ -96,7 +96,8 @@ npm ci
 npm run check
 ```
 
-On Windows, run the recipes in Git Bash and activate `.venv/Scripts/activate`. The gate checks shell syntax, workflow
+On Windows, run the recipes in Git Bash and activate `.venv/Scripts/activate`. Git uses `.gitattributes` to keep text
+files LF-terminated on every platform; CRLF checkouts fail the Prettier gate. The gate checks shell syntax, workflow
 namespacing, package/plugin manifests, shared instruction links, Python lint and formatting, scaffolding, and the
 existing hook and Git-helper tests. There is no compiled application to build. Ruff covers the new Python scaffold,
 native reader check, and contract tests; the older namespacing script remains checked through its own output.

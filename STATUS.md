@@ -43,9 +43,11 @@ or installed into user settings.
 - Static review covered all 125 shared skill/role files. Every file retains its host-guide bridge and unchanged
   frontmatter. Generated entry points are current; stale sidebar and terminal-context-meter claims were corrected.
 
-The changed CI workflow is configured for Linux, macOS, and Windows but has not run on hosted CI. Claude and Codex
-native validators could not be rerun because neither CLI is on PATH in this environment. Earlier evidence is retained
-below.
+The first [hosted run](https://github.com/kessriga/game-studio/actions/runs/34269331021) passed on Linux and macOS.
+Windows failed because Git converted the formatter's inputs to CRLF. A fresh checkout with `.gitattributes` reproduced
+and fixed all 11 formatting failures locally. [PR #18](https://github.com/kessriga/game-studio/pull/18) carries the
+current hosted results. Claude and Codex native validators could not be rerun because neither CLI is on PATH in this
+environment. Earlier evidence is retained below.
 
 ## Earlier verification: 2026-09-05
 
