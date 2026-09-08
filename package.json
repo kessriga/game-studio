@@ -1,0 +1,70 @@
+{
+  "name": "@kessriga/gamedev",
+  "version": "0.3.0",
+  "type": "module",
+  "description": "Game Studio: guided game development with 72 skills and 53 specialist role guides.",
+  "license": "MIT",
+  "author": "Kessriga Jeükal",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kessriga/game-studio.git"
+  },
+  "keywords": [
+    "pi-package",
+    "game-development",
+    "godot",
+    "unity",
+    "unreal",
+    "bevy"
+  ],
+  "files": [
+    "pi/",
+    "!pi/**/*.test.ts",
+    "skills/",
+    "agents/",
+    "docs/",
+    "templates/",
+    "bin/",
+    "scripts/scaffold-project.py",
+    "qa/",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "STATUS.md"
+  ],
+  "engines": {
+    "node": ">=22.17.0"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test pi/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "format:check": "prettier --check \"pi/*.ts\" \"scripts/check-pi*.mjs\" package.json tsconfig.json",
+    "check:pack": "node scripts/check-pi-pack.mjs",
+    "check": "npm run format:check && npm run typecheck && npm test && node scripts/check-pi.mjs && npm run check:pack"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
+    "typebox": "*"
+  },
+  "pi": {
+    "skills": [
+      "./pi/skills"
+    ],
+    "extensions": [
+      "./pi/extension.ts"
+    ],
+    "prompts": [],
+    "themes": []
+  },
+  "devDependencies": {
+    "@earendil-works/pi-ai": "0.85.1",
+    "@earendil-works/pi-coding-agent": "0.85.1",
+    "@earendil-works/pi-tui": "0.85.1",
+    "@types/node": "22.20.1",
+    "prettier": "3.9.6",
+    "typescript": "5.9.3"
+  }
+}

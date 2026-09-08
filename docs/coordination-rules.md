@@ -1,51 +1,45 @@
 # Agent Coordination Rules
 
-Read [the host guide](host-runtime.md) before delegating. These rules describe
-role responsibilities in either supported host. Host configuration determines
-which models and delegation tools are available.
+Read [the host guide](host-runtime.md) before delegating. These rules describe role responsibilities in all supported
+hosts. Host configuration determines which models and delegation tools are available.
 
-1. **Vertical Delegation**: Leadership agents delegate to department leads, who
-   delegate to specialists. Never skip a tier for complex decisions.
-2. **Horizontal Consultation**: Agents at the same tier may consult each other
-   but must not make binding decisions outside their domain.
-3. **Conflict Resolution**: When two agents disagree, escalate to the shared
-   parent. If no shared parent, escalate to `creative-director` for design
-   conflicts or `technical-director` for technical conflicts.
-4. **Change Propagation**: When a design change affects multiple domains, the
-   `producer` agent coordinates the propagation.
-5. **No Unilateral Cross-Domain Changes**: An agent must never modify files
-   outside its designated directories without explicit delegation.
+1. **Vertical Delegation**: Leadership agents delegate to department leads, who delegate to specialists. Never skip a
+   tier for complex decisions.
+2. **Horizontal Consultation**: Agents at the same tier may consult each other but must not make binding decisions
+   outside their domain.
+3. **Conflict Resolution**: When two agents disagree, escalate to the shared parent. If no shared parent, escalate to
+   `creative-director` for design conflicts or `technical-director` for technical conflicts.
+4. **Change Propagation**: When a design change affects multiple domains, the `producer` agent coordinates the
+   propagation.
+5. **No Unilateral Cross-Domain Changes**: An agent must never modify files outside its designated directories without
+   explicit delegation.
 
 ## Model selection
 
-Choose models through the host's supported configuration. Shared workflows
-require the same evidence and respect the same domain boundaries regardless
-of model. Claude's checked-in model fields are documented in
-[the Claude Code guide](claude-code.md#model-configuration); Codex uses its
-configured model and treats agent definitions as role instructions.
+Choose models through the host's supported configuration. Shared workflows require the same evidence and respect the
+same domain boundaries regardless of model. Claude's checked-in model fields are documented in
+[the Claude Code guide](claude-code.md#model-configuration). Pi and Codex use configured models and treat agent
+definitions as role instructions. In Pi, prefer the installed subagent extension and pass role bodies as described in
+[Pi delegation](pi.md#subagents).
 
 ## Delegation
 
-Use subagents when the host provides them and the user's authorization permits
-it. Pass the relevant role definition, task, inputs, permitted edit scope, and
-expected evidence to each subagent. Follow the host guide's tool mapping;
-`Task` in an existing workflow means delegation, not tracker task creation.
+Use subagents when the host provides them and the user's authorization permits it. Pass the relevant role definition,
+task, inputs, permitted edit scope, and expected evidence to each subagent. Follow the host guide's tool mapping; `Task`
+in an existing workflow means delegation, not tracker task creation.
 
-When delegation is unavailable, follow role instructions sequentially and
-identify the result as a role pass. If a workflow requires independent review,
-report that requirement as unmet. Self-review cannot satisfy it.
+When delegation is unavailable, follow role instructions sequentially and identify the result as a role pass. If a
+workflow requires independent review, report that requirement as unmet. Self-review cannot satisfy it.
 
 ## Parallel Task Protocol
 
-When an orchestration skill requests independent subagents and the host permits
-parallel work:
+When an orchestration skill requests independent subagents and the host permits parallel work:
 
 1. Start independent calls before waiting for their results.
 2. Collect results before proceeding to dependent phases.
 3. Surface blocked work immediately; do not silently skip it.
 4. Report completed checks separately from checks that could not run.
 
-For example, consistency and design-theory reviews can run together when each
-has all required inputs. A feasibility review that needs the revised design
-must wait for that revision. Do not let parallel agents edit overlapping files
+For example, consistency and design-theory reviews can run together when each has all required inputs. A feasibility
+review that needs the revised design must wait for that revision. Do not let parallel agents edit overlapping files
 without an explicit coordination plan.

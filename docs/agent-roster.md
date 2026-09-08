@@ -1,25 +1,26 @@
 # Agent Roster
 
-The 53 role definitions in `agents/` cover the domains below. Choose the role
-best suited to the work; a domain lead or producer coordinates work spanning
-several domains. These tiers describe responsibility, not model choice.
+The 53 role definitions in `agents/` cover the domains below. Choose the role best suited to the work; a domain lead or
+producer coordinates work spanning several domains. These tiers describe responsibility, not model choice.
 
-Read [coordination rules](coordination-rules.md) for delegation boundaries and
-[the host guide](host-runtime.md) for how to run roles in your assistant.
-Claude Code registers these files as subagents; Codex uses their instructions
-with available subagents or clearly identified sequential role passes.
+Read [coordination rules](coordination-rules.md) for delegation boundaries and [the host guide](host-runtime.md) for how
+to run roles in your assistant. Claude Code registers these files as subagents. Pi passes their instructions to an
+installed subagent extension; Codex uses its available delegation tools. Neither host automatically registers this
+folder as custom agents. Without a runner, use clearly labeled sequential role passes, not claims of independent review.
 Host-specific model metadata is listed in [the Claude Code guide](claude-code.md#model-configuration).
 
 ## Tier 1 -- Leadership Agents
+
 | Agent | Domain | When to Use |
-|-------|--------|-------------|
+| ------- | -------- | ------------- |
 | `creative-director` | High-level vision | Major creative decisions, pillar conflicts, tone/direction |
 | `technical-director` | Technical vision | Architecture decisions, tech stack choices, performance strategy |
 | `producer` | Production management | Sprint planning, milestone tracking, risk management, coordination |
 
 ## Tier 2 -- Department Lead Agents
+
 | Agent | Domain | When to Use |
-|-------|--------|-------------|
+| ------- | -------- | ------------- |
 | `game-designer` | Game design | Mechanics, systems, progression, economy, balancing |
 | `lead-programmer` | Code architecture | System design, code review, API design, refactoring |
 | `art-director` | Visual direction | Style guides, art bible, asset standards, UI/UX direction |
@@ -30,8 +31,9 @@ Host-specific model metadata is listed in [the Claude Code guide](claude-code.md
 | `localization-lead` | Internationalization | String externalization, translation pipeline, locale testing |
 
 ## Tier 3 -- Specialist Agents
+
 | Agent | Domain | When to Use |
-|-------|--------|-------------|
+| ------- | -------- | ------------- |
 | `systems-designer` | Systems design | Specific mechanic implementation, formula design, loops |
 | `level-designer` | Level design | Level layouts, pacing, encounter design, flow |
 | `economy-designer` | Economy/balance | Resource economies, loot tables, progression curves |
