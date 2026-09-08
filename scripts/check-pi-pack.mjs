@@ -49,12 +49,7 @@ try {
     );
     assert.doesNotMatch(path, /\.test\.ts$/);
   }
-  await execute("tar", [
-    "-xzf",
-    join(temporary, packed.filename),
-    "-C",
-    temporary,
-  ]);
+  await execute("tar", ["-xzf", packed.filename], { cwd: temporary });
   const check = join(dirname(fileURLToPath(import.meta.url)), "check-pi.mjs");
   const result = await execute(process.execPath, [
     check,
