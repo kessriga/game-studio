@@ -60,7 +60,12 @@ export type Update =
   | { action: "block"; run: string; note: string }
   | { action: "submit"; run: string; note: string; evidence: string[] }
   | { action: "approve"; run: string; note: string }
-  | { action: "finish"; step: string; note: string };
+  | {
+      action: "finish";
+      step: string;
+      note: string;
+      reviewedEvidence?: Evidence[];
+    };
 
 export async function currentPhase(root: string): Promise<string | undefined> {
   const saved = (await readOptional(root, "production/stage.txt"))?.trim();
@@ -161,6 +166,7 @@ async function rowFor(
   if (approved && step.repeatable && !scopeCurrent)
     status = `${runs.length} approved; scope open`;
   if (complete) status = "approved";
+  if (runs.some((run) => run.status === "submitted")) status = "submitted";
   if (
     stale ||
     (approved &&
@@ -317,10 +323,9 @@ async function finishScope(
   root: string,
   state: ProgressState,
   phase: string,
-  stepId: string,
-  note: string,
+  update: Extract<Update, { action: "finish" }>,
 ): Promise<void> {
-  const step = getStep(phase, stepId);
+  const step = getStep(phase, update.step);
   if (!step.repeatable)
     throw new Error("Only repeatable steps need scope confirmation.");
   const row = await rowFor(root, state, phase, step);
@@ -333,21 +338,26 @@ async function finishScope(
       "Approve all current runs with unchanged evidence before confirming their scope is complete.",
     );
   }
+  const reviewedEvidence = update.reviewedEvidence ?? [];
+  if (
+    step.artifact?.aggregate &&
+    (JSON.stringify(row.artifacts) !==
+      JSON.stringify(reviewedEvidence.map((item) => item.path).sort()) ||
+      !(await evidenceCurrent(root, reviewedEvidence)))
+  ) {
+    throw new Error(
+      "Scope evidence changed. Review the current artifacts and confirm again.",
+    );
+  }
   state.scopes = state.scopes.filter(
-    (scope) => scope.phase !== phase || scope.step !== stepId,
+    (scope) => scope.phase !== phase || scope.step !== step.id,
   );
   state.scopes.push({
     phase,
-    step: stepId,
+    step: step.id,
     runs: row.runs.map((run) => run.id),
-    note,
-    ...(step.artifact?.aggregate
-      ? {
-          evidence: await Promise.all(
-            row.artifacts.map((path) => fingerprint(root, path)),
-          ),
-        }
-      : {}),
+    note: update.note,
+    ...(step.artifact?.aggregate ? { evidence: reviewedEvidence } : {}),
   });
 }
 
@@ -376,7 +386,7 @@ export async function recordUpdate(
       throw new Error("Phase changed. Read status before retrying.");
     if (update.action === "start") startRun(state, phase, update);
     else if (update.action === "finish")
-      await finishScope(root, state, phase, update.step, update.note);
+      await finishScope(root, state, phase, update);
     else {
       const run = requireRun(state, phase, update.run);
       if (update.action === "submit") await submitRun(root, run, update);

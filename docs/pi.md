@@ -90,9 +90,12 @@ reported test results and required independent reviews. A subagent saying “don
 marks a run approved.
 
 For repeatable steps, submit the files for that subject rather than every file in the phase. Whole-step minimum counts
-and artifact coverage are checked when confirming scope. Catalog entries marked `aggregate`, such as the asset manifest,
-are fingerprinted at scope closure. Submit individual asset specs for individual runs; changing the shared index reopens
-scope review without invalidating an unchanged asset spec.
+and artifact coverage are checked when confirming scope. Create Stories checks `production/epics/*/story-*.md`, not epic
+specifications or the shared epic index.
+
+Catalog entries marked `aggregate`, such as the asset manifest, are fingerprinted before the scope confirmation prompts.
+Changes during confirmation or the verification-note prompt require a fresh review. Submit individual asset specs for
+individual runs; changing the shared index reopens scope review without invalidating an unchanged asset spec.
 
 Each run accepts at most 50 files, each no larger than 2 MiB; use a concise evidence report for large logs, binaries, or
 external reviews. Steps without a catalog file check can use a manual verification note. Any file explicitly cited by

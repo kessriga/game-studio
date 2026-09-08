@@ -240,7 +240,7 @@
           "required": true,
           "repeatable": true,
           "artifact": {
-            "glob": "production/epics/**/*.md",
+            "glob": "production/epics/*/story-*.md",
             "min_count": 2
           },
           "description": "Break each epic into implementable story files. Run per epic: /gamedev:create-stories [epic-slug]"

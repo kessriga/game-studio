@@ -29,9 +29,11 @@ or installed into user settings.
 
 - `just --set python .venv/bin/python gate`: 112 shell assertions and 16 Python tests passed, including scaffolding,
   manifests, generated resources, and shared instruction links. Ruff lint/format, shell syntax, and namespacing passed.
-- `npm run check`: formatting, TypeScript checks, and 28 workflow/extension tests passed. Tests cover stale evidence,
+- `npm run check`: formatting, TypeScript checks, and 32 workflow/extension tests passed. Tests cover stale evidence,
   subject isolation, shared manifests, gate confirmation races, concurrent updates, malformed/oversized state, path
   safety, persistence, both renderers, focus, dismissal, and owned-handle teardown.
+- PR #18 regression checks reject manifest changes during either scope approval prompt, exclude epic metadata from story
+  scope, and keep steps with submitted subjects from displaying as approved.
 - Pi's native resource loader found all 72 namespaced skills, 53 role guides, and one progress extension, without
   collisions with an unrelated code-review skill. Discovery passed in the checkout and a relocated 498-file npm tarball.
 - Isolated offline tmux smoke checks passed in regular and fullscreen Pi: widget and panel display, continued typing,

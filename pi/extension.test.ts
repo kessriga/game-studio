@@ -150,6 +150,72 @@ test("actual extension routes tracking, requires user approval, and restores sav
   assert.match(JSON.stringify(context), /installed subagent tool/);
 });
 
+for (const prompt of ["confirm", "input"] as const) {
+  test(`scope approval rejects manifest changes during ${prompt}`, async (t) => {
+    const root = await mkdtemp(join(tmpdir(), "gamedev scope approval "));
+    t.after(() => rm(root, { recursive: true, force: true }));
+    await mkdir(join(root, "production"));
+    await writeFile(join(root, "production/stage.txt"), "Pre-Production");
+    await mkdir(join(root, "design/assets"), { recursive: true });
+    const manifest = join(root, "design/assets/asset-manifest.md");
+    await writeFile(manifest, "Player asset");
+    await writeFile(
+      join(root, "design/assets/player.md"),
+      "Player specification",
+    );
+    const app = harness(root);
+    t.after(() => app.event("session_shutdown"));
+    await app.event("session_start");
+    await app.call({
+      action: "start",
+      revision: 0,
+      step: "asset-spec",
+      subject: "player",
+      note: "Specify the player asset.",
+    });
+    await app.call({
+      action: "submit",
+      revision: 1,
+      run: "r1",
+      note: "Player specification ready for review.",
+      evidence: ["design/assets/player.md"],
+    });
+    app.consent(true);
+    await app.command("approve r1");
+    const before = await readState(root);
+    const notices: string[] = [];
+    app.ctx.ui.notify = (message) => {
+      notices.push(message);
+    };
+    const confirm = app.ctx.ui.confirm;
+    const input = app.ctx.ui.input;
+    if (prompt === "confirm") {
+      app.ctx.ui.confirm = async () => {
+        await writeFile(manifest, "Player and unreviewed enemy assets");
+        return true;
+      };
+    } else {
+      app.ctx.ui.input = async () => {
+        await writeFile(manifest, "Player and unreviewed enemy assets");
+        return "Reviewed the original player-only scope.";
+      };
+    }
+    await app.command("finish asset-spec");
+    assert.deepEqual(await readState(root), before);
+    assert.match(notices.join("\n"), /Scope evidence changed/);
+    app.ctx.ui.confirm = confirm;
+    app.ctx.ui.input = input;
+    await app.command("finish asset-spec");
+    const after = await readState(root);
+    assert.equal(after.revision, before.revision + 1);
+    assert.equal(
+      after.scopes.length,
+      1,
+      "A fresh review can approve the new manifest",
+    );
+  });
+}
+
 test("unrelated sessions get neither progress files nor injected game instructions", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "unrelated extension "));
   t.after(() => rm(root, { recursive: true, force: true }));

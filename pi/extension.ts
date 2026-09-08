@@ -19,6 +19,7 @@ import {
   snapshot,
 } from "./workflow.ts";
 import type { Snapshot, Update } from "./workflow.ts";
+import { fingerprint } from "./progress-store.ts";
 
 function summary(view: Snapshot | undefined): string {
   if (!view)
@@ -275,6 +276,12 @@ async function approveFromUser(
     throw new Error("Run not found in this phase.");
   if (action === "finish" && !step?.step.repeatable)
     throw new Error("Choose a repeatable step in this phase.");
+  const reviewedEvidence =
+    action === "finish" && step?.step.artifact?.aggregate
+      ? await Promise.all(
+          step.artifacts.map((path) => fingerprint(ctx.cwd, path)),
+        )
+      : [];
   const evidence =
     run?.evidence.map((item) => item.path).join(", ") ||
     "No file evidence; manual verification required.";
@@ -288,7 +295,7 @@ async function approveFromUser(
   const update: Update =
     action === "approve"
       ? { action, run: id, note }
-      : { action, step: id, note };
+      : { action, step: id, note, reviewedEvidence };
   await recordUpdate(
     ctx.cwd,
     view.state.revision,

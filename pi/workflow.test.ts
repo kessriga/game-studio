@@ -10,7 +10,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test, type TestContext } from "node:test";
-import { readState, STATE_FILE } from "./progress-store.ts";
+import { fingerprint, readState, STATE_FILE } from "./progress-store.ts";
 import { compactLines } from "./panel.ts";
 import {
   blockers,
@@ -246,6 +246,60 @@ test("repeatable work needs separate subjects and an explicit whole-scope decisi
   );
 });
 
+test("submitted subjects keep a step pending even when another subject is approved", async (t) => {
+  const root = await game(t, "Production");
+  await update(root, {
+    action: "start",
+    step: "implement",
+    subject: "task-1",
+    note: "Implement the first story.",
+  });
+  await update(root, {
+    action: "submit",
+    run: "r1",
+    evidence: [],
+    note: "Ready for user review.",
+  });
+  await approveStory(root, "task-2");
+  let row = (await snapshot(root))!.rows.find(
+    (item) => item.step.id === "implement",
+  )!;
+  assert.equal(row.status, "submitted");
+  assert.equal(row.complete, false);
+  await update(
+    root,
+    { action: "approve", run: "r1", note: "First story verified." },
+    "user:test",
+  );
+  await update(
+    root,
+    { action: "finish", step: "implement", note: "Both stories verified." },
+    "user:test",
+  );
+  row = (await snapshot(root))!.rows.find(
+    (item) => item.step.id === "implement",
+  )!;
+  assert.equal(row.status, "approved");
+  assert.equal(row.complete, true);
+  const reopened = await update(root, {
+    action: "start",
+    step: "implement",
+    subject: "task-1",
+    note: "Reopen the earlier subject.",
+  });
+  await update(root, {
+    action: "submit",
+    run: reopened.runs.at(-1)!.id,
+    evidence: [],
+    note: "Revised story ready for review.",
+  });
+  row = (await snapshot(root))!.rows.find(
+    (item) => item.step.id === "implement",
+  )!;
+  assert.equal(row.status, "submitted");
+  assert.equal(row.complete, false);
+});
+
 test("duplicate active work is rejected and reopening preserves prior history", async (t) => {
   const root = await game(t, "Production");
   await approveStory(root, "task-1");
@@ -435,6 +489,45 @@ test("large story collections remain readable and repeatable evidence stays scop
   assert.equal((await readState(root)).runs[0].evidence.length, 30);
 });
 
+test("story scope covers story files without attaching shared epic metadata", async (t) => {
+  const root = await game(t, "Pre-Production");
+  await mkdir(join(root, "production/epics/combat"), { recursive: true });
+  const index = join(root, "production/epics/index.md");
+  const epic = join(root, "production/epics/combat/EPIC.md");
+  await writeFile(index, "Epic navigation");
+  await writeFile(epic, "Combat epic specification");
+  const files = [
+    "production/epics/combat/story-001-hit.md",
+    "production/epics/combat/story-002-dodge.md",
+  ];
+  for (const file of files)
+    await writeFile(join(root, file), "Story specification");
+  await approveStory(root, "combat", "create-stories", files);
+  await update(
+    root,
+    {
+      action: "finish",
+      step: "create-stories",
+      note: "All combat stories reviewed.",
+    },
+    "user:test",
+  );
+  await writeFile(index, "Updated epic navigation");
+  await writeFile(epic, "Updated epic metadata");
+  const row = (await snapshot(root))!.rows.find(
+    (item) => item.step.id === "create-stories",
+  )!;
+  assert.deepEqual(row.artifacts, files);
+  assert.equal(row.complete, true);
+  await writeFile(join(root, files[0]), "Changed story requirements");
+  assert.equal(
+    (await snapshot(root))!.rows.find(
+      (item) => item.step.id === "create-stories",
+    )!.complete,
+    false,
+  );
+});
+
 test("one repeatable screen can be approved before the phase-wide minimum exists", async (t) => {
   const root = await game(t, "Pre-Production");
   await mkdir(join(root, "design/ux"), { recursive: true });
@@ -617,6 +710,9 @@ test("shared asset indexes are reviewed at scope closure, not on unrelated subje
       action: "finish",
       step: "asset-spec",
       note: "Player is the complete current asset scope.",
+      reviewedEvidence: [
+        await fingerprint(root, "design/assets/asset-manifest.md"),
+      ],
     },
     "user:test",
   );
@@ -638,6 +734,9 @@ test("shared asset indexes are reviewed at scope closure, not on unrelated subje
       action: "finish",
       step: "asset-spec",
       note: "Both intended assets and the shared index are reviewed.",
+      reviewedEvidence: [
+        await fingerprint(root, "design/assets/asset-manifest.md"),
+      ],
     },
     "user:test",
   );
