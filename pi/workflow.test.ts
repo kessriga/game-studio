@@ -678,7 +678,10 @@ test("current and next are distinct, with submitted work waiting for user approv
   const root = await game(t);
   const view = (await snapshot(root))!;
   let lines = compactLines(view);
-  assert.match(lines[1], /Current: Engine Setup/);
+  assert.match(
+    lines[1],
+    /Current: \/skill:gamedev-setup-engine · Engine Setup/,
+  );
   assert.doesNotMatch(lines[2], /Engine Setup/);
   view.state.runs.push({
     id: "r1",

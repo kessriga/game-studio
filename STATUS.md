@@ -4,7 +4,7 @@
 
 - Game Studio supports Pi, Claude Code, and Codex through shared workflows and AGENTS.md guidance. Host-specific setup
   and metadata rules live in their host guides.
-- The unreleased 0.3.0 manifests agree across Pi, Claude Code, and Codex. Pi exposes 72 namespaced entry points linked
+- The unreleased 0.3.1 manifests agree across Pi, Claude Code, and Codex. Pi exposes 72 namespaced entry points linked
   to the shared skills and includes 53 role guides. Claude/Codex frontmatter remains unchanged.
 - Root and nested game-project instructions use AGENTS.md, with CLAUDE.md imports. The contributor and QA guides use the
   same arrangement.
@@ -17,12 +17,22 @@
 - Pi records named workflow runs, evidence fingerprints, user approvals, scope confirmations, and advisory gate
   decisions in `production/workflow-state.json`. Repeatable work is scoped by subject. Shared aggregate indexes are
   reviewed at scope closure rather than attached to every subject's approval.
-- Pi's compact widget and optional noncapturing side overlay use the shared workflow catalog. They leave the editor and
+- Pi's compact widget and optional noncapturing side overlay use the shared workflow catalog. Pending current and next
+  steps show Pi skill commands; the overlay lists each available command beneath its step. They leave the editor and
   footer alone. The overlay can cover transcript text; it is not a reserved sidebar column.
 - Delegation uses the installed subagent runner with shared role instructions. No second runner or extension-specific
   agent configurations are installed.
 
-## Verified on 2026-09-08
+## Command display fix verified on 2026-09-08
+
+- `just --set python .venv/bin/python gate` passed, including 112 shell assertions and 16 Python tests.
+- `npm run check` passed: formatting, types, 34 tests, native Pi discovery, and relocated package discovery. The new
+  regression failed before the fix and passed afterwards. Tests cover the concept-to-brainstorm mapping, narrow display
+  width, commandless steps, and unchanged phase fallback and approval labels.
+- TypeScript language-server checks were clean for all three changed source/test files. Claude and Codex native
+  validators were unavailable on PATH. No installed package or user settings were changed.
+
+## Pi package verified on 2026-09-08
 
 These are local macOS checks against the unreleased worktree, using Node 22.23.2 and Pi 0.85.1. No package was published
 or installed into user settings.
@@ -85,6 +95,7 @@ environment. Earlier evidence is retained below.
 
 ## Recent changes
 
+- 0.3.1 (unreleased): show catalog commands in Pi's current/next-step labels and side overlay, using Pi skill syntax.
 - 0.3.0 (unreleased): Pi packaging, namespaced skill entry points, installed-runner delegation guidance, persistent
   workflow progress, compact widget and side overlay, native/packed checks, and shared documentation updates.
 - 0.2.0: added Codex discovery, shared project guidance, portable scaffolding, host-aware workflows, explicit stage

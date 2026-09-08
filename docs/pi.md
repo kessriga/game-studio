@@ -110,9 +110,12 @@ or protection against arbitrary shell edits.
 
 ## Progress display
 
-A compact widget shows the saved phase, previous approved step, current work, and next required step. It refreshes on
-session start, agent turns, relevant tool results, and `/gamedev-workflow`. It does not continuously watch external file
-edits. Saved runs resume across sessions without inventing completion from files.
+A compact widget shows the saved phase, previous approved step, current work, and next required step. Pending current
+and next steps show their Pi skill command before the title, so the command stays visible when space is limited. For
+example, Game Concept Document shows `/skill:gamedev-brainstorm`. Steps without a catalog command keep their title.
+
+The widget refreshes on session start, agent turns, relevant tool results, and `/gamedev-workflow`. It does not
+continuously watch external file edits. Saved runs resume across sessions without inventing completion from files.
 
 ```text
 /gamedev-workflow panel
@@ -120,10 +123,10 @@ edits. Saved runs resume across sessions without inventing completion from files
 /gamedev-workflow show
 ```
 
-`panel` toggles a right-side view of the current phase's steps and their status. It does not take keyboard focus. It
-waits while another overlay is present and hides below 110 columns or 22 rows. Long lists are shortened; the status
-command shows all current-phase steps, and `history` shows the last 20 decisions. `hide` and `show` control the compact
-widget. Display preferences are session-local.
+`panel` toggles a right-side view of the current phase's steps, status, and available Pi skill commands. It does not
+take keyboard focus. It waits while another overlay is present and hides below 110 columns or 22 rows. Long lists are
+shortened; the status command shows all current-phase steps, and `history` shows the last 20 decisions. `hide` and
+`show` control the compact widget. Display preferences are session-local.
 
 The panel is an overlay, **not a reserved sidebar column**: it can cover transcript text. It owns only its own handle
 and removes it on session teardown or reload. It does not replace the editor or footer. It requires Pi's TUI and safe
