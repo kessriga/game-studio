@@ -13,13 +13,24 @@ import {
 } from "./panel.ts";
 import {
   blockers,
+  checkHandoff,
+  checkRunApproval,
+  scopeEvidence,
   phases,
   recordGateDecision,
   recordUpdate,
   snapshot,
 } from "./workflow.ts";
 import type { Snapshot, Update } from "./workflow.ts";
-import { fingerprint } from "./progress-store.ts";
+import type { Run } from "./progress-store.ts";
+
+function sourceLabel(run: Run): string {
+  if (run.handoff)
+    return `coordinator ${run.handoff.coordinator.root} (handed off from ${run.source!.checkout.root})`;
+  return run.source
+    ? `worktree ${run.source.checkout.root}`
+    : "coordinator checkout";
+}
 
 function summary(view: Snapshot | undefined): string {
   if (!view)
@@ -33,10 +44,15 @@ function summary(view: Snapshot | undefined): string {
     ),
   ];
   const active = view.state.runs
-    .filter((run) => run.phase === view.phase && run.status !== "approved")
+    .filter(
+      (run) =>
+        run.phase === view.phase && (run.status !== "approved" || run.source),
+    )
     .slice(-8);
   for (const run of active)
-    lines.push(`${run.id}: ${run.step} ${run.subject} — ${run.note}`);
+    lines.push(
+      `${run.id}: ${run.step} ${run.subject} — ${run.note} [source: ${sourceLabel(run)}]`,
+    );
   lines.push(
     "Artifact presence is not approval. Repeatable steps need scope confirmation. Backlog remains the story authority.",
   );
@@ -153,6 +169,13 @@ export default function gameStudio(pi: ExtensionAPI): void {
       run: Type.Optional(Type.String()),
       note: Type.Optional(Type.String({ maxLength: 2000 })),
       evidence: Type.Optional(Type.Array(Type.String(), { maxItems: 50 })),
+      worktree: Type.Optional(
+        Type.String({
+          maxLength: 4000,
+          description:
+            "Submit source: registered same-repository worktree root, relative to and inside coordinator cwd. Evidence paths are relative to this checkout. Omit to retain the run source.",
+        }),
+      ),
     }),
     async execute(_id, args, _signal, _onUpdate, ctx) {
       if (args.action !== "status") {
@@ -178,6 +201,7 @@ export default function gameStudio(pi: ExtensionAPI): void {
             run: args.run ?? "",
             note: args.note ?? "",
             evidence: args.evidence ?? [],
+            worktree: args.worktree,
           };
         await recordUpdate(
           ctx.cwd,
@@ -196,7 +220,7 @@ export default function gameStudio(pi: ExtensionAPI): void {
 
   pi.registerCommand("gamedev-workflow", {
     description:
-      "Workflow status, panel, history, approve <run>, finish <step>, gate, hide, or show",
+      "Workflow status, panel, history, approve <run>, finish <step>, handoff <run>, gate, hide, or show",
     handler: async (args, ctx) => {
       try {
         const [action, id] = args.trim().split(/\s+/);
@@ -220,7 +244,11 @@ export default function gameStudio(pi: ExtensionAPI): void {
           ctx.ui.notify(summary(view), "info");
           return;
         }
-        if (action === "approve" || action === "finish") {
+        if (
+          action === "approve" ||
+          action === "finish" ||
+          action === "handoff"
+        ) {
           await approveFromUser(action, id, view, ctx);
           await refresh(ctx);
           return;
@@ -257,7 +285,7 @@ export default function gameStudio(pi: ExtensionAPI): void {
 }
 
 async function approveFromUser(
-  action: "approve" | "finish",
+  action: "approve" | "finish" | "handoff",
   id: string | undefined,
   view: Snapshot,
   ctx: ExtensionContext,
@@ -266,36 +294,65 @@ async function approveFromUser(
     throw new Error("Approval requires an interactive user decision.");
   if (!id)
     throw new Error(
-      `Usage: /gamedev-workflow ${action} <${action === "approve" ? "run ID" : "step ID"}>`,
+      `Usage: /gamedev-workflow ${action} <${action === "finish" ? "step ID" : "run ID"}>`,
     );
   const run = view.state.runs.find(
     (item) => item.id === id && item.phase === view.phase,
   );
   const step = view.rows.find((row) => row.step.id === id);
-  if (action === "approve" && !run)
+  if (action !== "finish" && !run)
     throw new Error("Run not found in this phase.");
   if (action === "finish" && !step?.step.repeatable)
     throw new Error("Choose a repeatable step in this phase.");
   const reviewedEvidence =
     action === "finish" && step?.step.artifact?.aggregate
-      ? await Promise.all(
-          step.artifacts.map((path) => fingerprint(ctx.cwd, path)),
-        )
+      ? await scopeEvidence(ctx.cwd, step)
       : [];
   const evidence =
     run?.evidence.map((item) => item.path).join(", ") ||
     "No file evidence; manual verification required.";
+  const recheck = async () => {
+    const current = await snapshot(ctx.cwd);
+    if (
+      !current ||
+      current.phase !== view.phase ||
+      current.state.revision !== view.state.revision
+    )
+      throw new Error(
+        "Workflow state changed. Read status again before retrying.",
+      );
+    if (action === "approve") await checkRunApproval(ctx.cwd, run!);
+    if (action === "handoff") await checkHandoff(ctx.cwd, run!);
+    if (
+      action === "finish" &&
+      step?.step.artifact?.aggregate &&
+      JSON.stringify(
+        await scopeEvidence(
+          ctx.cwd,
+          current.rows.find((row) => row.step.id === id)!,
+        ),
+      ) !== JSON.stringify(reviewedEvidence)
+    )
+      throw new Error(
+        "Scope evidence changed. Review the current artifacts and confirm again.",
+      );
+  };
+  await recheck();
   const prompt =
-    action === "approve"
-      ? `Approve ${id}? ${run?.note}\nEvidence: ${evidence}\nConfirm you checked the result and any required independent review.`
-      : `Confirm ALL intended subjects for ${id} are complete, not just the recorded runs. Check the systems list or Backlog board first.`;
+    action === "handoff"
+      ? `Hand off ${id} from ${sourceLabel(run!)} to coordinator ${ctx.cwd}?\nEvidence: ${evidence}\nAll reviewed hashes must match. No files are copied and the stage stays unchanged. Repeatable scope reopens, including aggregate review.`
+      : action === "approve"
+        ? `Approve ${id}? ${run?.note}\nSource: ${sourceLabel(run!)}\nEvidence: ${evidence}\nConfirm you checked the result and any required independent review.`
+        : `Confirm ALL intended subjects for ${id} are complete, not just the recorded runs. Check the systems list or Backlog board first.\nSources: ${[...new Set(step!.runs.map(sourceLabel))].join(", ")}`;
   if (!(await ctx.ui.confirm("Game Studio approval", plain(prompt)))) return;
+  await recheck();
   const note = await ctx.ui.input("Record what you verified (required)");
   if (!note?.trim()) return;
+  await recheck();
   const update: Update =
-    action === "approve"
-      ? { action, run: id, note }
-      : { action, step: id, note, reviewedEvidence };
+    action === "finish"
+      ? { action, step: id, note, reviewedEvidence }
+      : { action, run: id, note };
   await recordUpdate(
     ctx.cwd,
     view.state.revision,
@@ -303,7 +360,9 @@ async function approveFromUser(
     `user:${ctx.sessionManager.getSessionId()}`,
   );
   ctx.ui.notify(
-    "Approval recorded. Changed evidence will require a new review.",
+    action === "handoff"
+      ? "Handoff recorded; scope reopened and stage unchanged."
+      : "Approval recorded. Changed evidence will require a new review.",
     "info",
   );
 }

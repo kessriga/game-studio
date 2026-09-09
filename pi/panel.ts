@@ -40,7 +40,7 @@ export function compactLines(view: Snapshot): string[] {
       ? "awaiting user approval"
       : current?.status;
   const focus = current
-    ? `${current.id} ${current.step}${current.subject ? ` · ${current.subject}` : ""} (${status})`
+    ? `${current.id} ${current.step}${current.subject ? ` · ${current.subject}` : ""} (${status}${current.source && !current.handoff ? "; worktree evidence" : ""})`
     : focused
       ? stepLabel(focused.step)
       : "Ready for phase review";
@@ -52,9 +52,10 @@ export function compactLines(view: Snapshot): string[] {
     : view.nextPhase
       ? phases[view.nextPhase].label
       : "Release sign-off";
-  const previous =
-    view.rows.filter((row) => row.complete).at(-1)?.step.name ??
-    "none approved";
+  const previousRow = view.rows.filter((row) => row.complete).at(-1);
+  const previous = previousRow
+    ? `${previousRow.step.name}${previousRow.runs.some((run) => run.source && !run.handoff) ? " [worktree evidence]" : ""}`
+    : "none approved";
   return [
     `Game Studio · ${view.label} · ${Object.keys(phases).indexOf(view.phase) + 1}/${Object.keys(phases).length} | Previous: ${previous}`,
     `Current: ${focus}`,

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import {
   mkdtemp,
   mkdir,
@@ -8,7 +9,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { test, type TestContext } from "node:test";
 import { fingerprint, readState, STATE_FILE } from "./progress-store.ts";
 import { compactLines } from "./panel.ts";
@@ -18,6 +19,7 @@ import {
   recordGateDecision,
   recordUpdate,
   snapshot,
+  scopeEvidence,
 } from "./workflow.ts";
 import type { Update } from "./workflow.ts";
 
@@ -38,6 +40,7 @@ async function approveStory(
   subject: string,
   step = "implement",
   evidence: string[] = [],
+  worktree?: string,
 ): Promise<string> {
   const state = await update(root, {
     action: "start",
@@ -51,6 +54,7 @@ async function approveStory(
     run,
     evidence,
     note: "Manual review needed: verify the board and test results.",
+    worktree,
   });
   await update(
     root,
@@ -771,3 +775,720 @@ test("shared asset indexes are reviewed at scope closure, not on unrelated subje
     /Approve all/,
   );
 });
+
+async function worktreeGame(t: TestContext, phase = "Concept") {
+  const root = await game(t, phase);
+  const git = (...args: string[]) =>
+    execFileSync(
+      "git",
+      [
+        "-c",
+        `core.hooksPath=${join(root, ".no-hooks")}`,
+        "-c",
+        "commit.gpgSign=false",
+        "-c",
+        "core.autocrlf=false",
+        ...args,
+      ],
+      {
+        cwd: root,
+        encoding: "utf8",
+        env: Object.fromEntries(
+          Object.entries(process.env).filter(
+            ([key]) => !key.toUpperCase().startsWith("GIT_"),
+          ),
+        ),
+      },
+    );
+  git("init");
+  git("config", "user.name", "Workflow test");
+  git("config", "user.email", "workflow@example.invalid");
+  git("add", "production/stage.txt");
+  git("commit", "-m", "Fixture");
+  const worktree = ".worktrees/source checkout";
+  git("worktree", "add", "--detach", worktree);
+  return { root, worktree, source: join(root, worktree), git };
+}
+
+const conceptFile = "design/gdd/game-concept.md";
+test("worktree submit resolves catalog and evidence only in the registered source", async (t) => {
+  const { root, worktree, source } = await worktreeGame(t);
+  await mkdir(join(source, "design/gdd"), { recursive: true });
+  await writeFile(join(source, conceptFile), "Reviewed source concept");
+  await update(root, {
+    action: "start",
+    step: "game-concept",
+    subject: "",
+    note: "Work",
+  });
+  await update(root, {
+    action: "block",
+    run: "r1",
+    note: "Awaiting source evidence",
+  });
+  await update(root, {
+    action: "submit",
+    run: "r1",
+    worktree,
+    evidence: [],
+    note: "Review source",
+  } as Update);
+  assert.deepEqual(
+    (await readState(root)).runs[0].evidence.map((item) => item.path),
+    [conceptFile],
+  );
+  await update(
+    root,
+    { action: "approve", run: "r1", note: "Reviewed source" },
+    "user:test",
+  );
+  assert.equal(
+    (await snapshot(root))!.rows.find((row) => row.step.id === "game-concept")!
+      .complete,
+    true,
+  );
+  await mkdir(join(root, "design/gdd"), { recursive: true });
+  await writeFile(
+    join(root, "design/gdd/game-concept.md"),
+    "Stale coordinator",
+  );
+  assert.equal(
+    (await snapshot(root))!.rows.find((row) => row.step.id === "game-concept")!
+      .complete,
+    true,
+  );
+  assert.equal(
+    await readFile(join(root, "production/stage.txt"), "utf8"),
+    "Concept",
+  );
+  assert.equal((await readState(source)).revision, 0);
+  assert.match(
+    compactLines((await snapshot(root))!)[0],
+    /Previous: Game Concept Document \[worktree evidence\]/,
+  );
+});
+
+async function put(root: string, path: string, text = "Reviewed evidence") {
+  await mkdir(dirname(join(root, path)), { recursive: true });
+  await writeFile(join(root, path), text);
+}
+const row = async (root: string, step: string) =>
+  (await snapshot(root))!.rows.find((item) => item.step.id === step)!;
+
+test("stale coordinator cannot satisfy a missing worktree artifact or contaminate resubmission", async (t) => {
+  const { root, worktree, source } = await worktreeGame(t);
+  await put(root, conceptFile, "Stale coordinator");
+  await update(root, {
+    action: "start",
+    step: "game-concept",
+    subject: "",
+    note: "Work",
+  });
+  const before = await readState(root);
+  await assert.rejects(
+    update(root, {
+      action: "submit",
+      run: "r1",
+      worktree,
+      evidence: [],
+      note: "Review",
+    }),
+    /missing required artifacts/,
+  );
+  assert.deepEqual(await readState(root), before);
+  await put(source, conceptFile, "Worktree concept");
+  await update(root, {
+    action: "submit",
+    run: "r1",
+    worktree,
+    evidence: [],
+    note: "Review",
+  });
+  await put(source, conceptFile, "Changed worktree concept");
+  assert.match((await row(root, "game-concept")).status, /stale evidence/);
+  await assert.rejects(
+    update(root, { action: "approve", run: "r1", note: "Review" }, "user:test"),
+    /Evidence changed/,
+  );
+  await update(root, {
+    action: "submit",
+    run: "r1",
+    evidence: [],
+    note: "Retain source without worktree argument",
+  });
+  const saved = (await readState(root)).runs[0];
+  assert.equal(saved.source!.worktree, worktree);
+  assert.deepEqual(saved.evidence, [await fingerprint(source, conceptFile)]);
+});
+
+test("removed or recreated unrelated source never falls back to identical coordinator files", async (t) => {
+  const { root, worktree, source, git } = await worktreeGame(t);
+  await put(source, conceptFile);
+  await put(root, conceptFile);
+  await approveStory(root, "", "game-concept", [], worktree);
+  const before = await readState(root);
+  git("worktree", "remove", "--force", worktree);
+  assert.equal((await row(root, "game-concept")).complete, false);
+  assert.match(
+    (await row(root, "game-concept")).status,
+    /stale evidence.*worktree/,
+  );
+  await put(source, conceptFile);
+  git("-C", source, "init");
+  assert.equal((await row(root, "game-concept")).complete, false);
+  assert.deepEqual(await readState(root), before);
+});
+
+test("recreating even a registered same-repository checkout requires fresh review", async (t) => {
+  const { root, worktree, source, git } = await worktreeGame(t);
+  await put(source, conceptFile);
+  await approveStory(root, "", "game-concept", [], worktree);
+  git("worktree", "remove", "--force", worktree);
+  git("worktree", "add", "--detach", worktree);
+  await put(source, conceptFile);
+  assert.equal((await row(root, "game-concept")).complete, false);
+});
+
+test("worktree validation rejects unrelated repositories, subfolders and unsafe paths despite inherited Git overrides", async (t) => {
+  const { root, worktree, source, git } = await worktreeGame(t, "Production");
+  const unrelated = ".worktrees/unrelated";
+  await mkdir(join(root, unrelated));
+  git("-C", join(root, unrelated), "init");
+  git("remote", "add", "origin", "https://example.invalid/same-remote.git");
+  git(
+    "-C",
+    join(root, unrelated),
+    "remote",
+    "add",
+    "origin",
+    "https://example.invalid/same-remote.git",
+  );
+  await put(source, "report.md");
+  await update(root, {
+    action: "start",
+    step: "implement",
+    subject: "story",
+    note: "Work",
+  });
+  const before = await readState(root);
+  for (const invalid of [
+    unrelated,
+    worktree + "/production",
+    "../outside",
+    source,
+    ".",
+    "",
+  ]) {
+    await assert.rejects(
+      update(root, {
+        action: "submit",
+        run: "r1",
+        worktree: invalid,
+        evidence: [],
+        note: "Review",
+      }),
+    );
+    assert.deepEqual(await readState(root), before);
+  }
+  const previous = {
+    GIT_DIR: process.env.GIT_DIR,
+    GIT_WORK_TREE: process.env.GIT_WORK_TREE,
+    GIT_COMMON_DIR: process.env.GIT_COMMON_DIR,
+  };
+  Object.assign(process.env, {
+    GIT_DIR: join(root, ".git"),
+    GIT_WORK_TREE: source,
+    GIT_COMMON_DIR: join(root, ".git"),
+  });
+  try {
+    await assert.rejects(
+      update(root, {
+        action: "submit",
+        run: "r1",
+        worktree: unrelated,
+        evidence: [],
+        note: "Review",
+      }),
+      /same Git repository/,
+    );
+    await update(root, {
+      action: "submit",
+      run: "r1",
+      worktree,
+      evidence: ["report.md"],
+      note: "Review",
+    });
+  } finally {
+    for (const [key, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+});
+
+test("worktree evidence retains traversal, regular-file, size and symlink protections", async (t) => {
+  const { root, worktree, source } = await worktreeGame(t, "Production");
+  await put(source, "report.md");
+  await put(source, "large.md", "x".repeat(2 * 1024 * 1024 + 1));
+  await update(root, {
+    action: "start",
+    step: "implement",
+    subject: "story",
+    note: "Work",
+  });
+  for (const evidence of [
+    ["../../production/stage.txt"],
+    [join(source, "report.md")],
+    ["production"],
+    ["large.md"],
+    Array.from({ length: 51 }, (_, i) => `file-${i}.md`),
+  ]) {
+    await assert.rejects(
+      update(root, {
+        action: "submit",
+        run: "r1",
+        worktree,
+        evidence,
+        note: "Review",
+      }),
+    );
+  }
+  try {
+    await symlink(source, join(root, ".worktrees/linked source"), "junction");
+    await symlink(join(source, "report.md"), join(source, "linked.md"));
+    await symlink(
+      join(source, "production"),
+      join(source, "linked-dir"),
+      "junction",
+    );
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "EPERM") {
+      t.skip("Symlink privileges unavailable");
+      return;
+    }
+    throw error;
+  }
+  await assert.rejects(
+    update(root, {
+      action: "submit",
+      run: "r1",
+      worktree: ".worktrees/linked source",
+      evidence: ["report.md"],
+      note: "Review",
+    }),
+    /symlink/,
+  );
+  for (const evidence of [["linked.md"], ["linked-dir/stage.txt"]])
+    await assert.rejects(
+      update(root, {
+        action: "submit",
+        run: "r1",
+        worktree,
+        evidence,
+        note: "Review",
+      }),
+      /symlink/,
+    );
+  await update(root, {
+    action: "submit",
+    run: "r1",
+    worktree,
+    evidence: ["report.md"],
+    note: "Review",
+  });
+  await rm(source, { recursive: true });
+  await symlink(root, source, "junction");
+  assert.equal((await row(root, "implement")).complete, false);
+  await assert.rejects(
+    update(root, { action: "approve", run: "r1", note: "Review" }, "user:test"),
+    /symlink/,
+  );
+});
+
+test("handoff after source removal requires identical canonical content and preserves provenance", async (t) => {
+  const { root, worktree, source, git } = await worktreeGame(t);
+  await put(source, conceptFile);
+  await approveStory(root, "", "game-concept", [], worktree);
+  const before = await readState(root);
+  git("worktree", "remove", "--force", worktree);
+  const handoff: Update = {
+    action: "handoff",
+    run: "r1",
+    note: "Merged reviewed content",
+  };
+  await assert.rejects(update(root, handoff), /user/);
+  await assert.rejects(
+    update(root, handoff, "user:test"),
+    /Canonical evidence differs/,
+  );
+  await put(root, conceptFile, "Different merged content");
+  await assert.rejects(
+    update(root, handoff, "user:test"),
+    /Canonical evidence differs/,
+  );
+  assert.deepEqual(await readState(root), before);
+  await put(root, conceptFile);
+  await update(root, handoff, "user:test");
+  const after = await readState(root);
+  assert.deepEqual(after.runs[0].source, before.runs[0].source);
+  assert.deepEqual(after.runs[0].evidence, before.runs[0].evidence);
+  assert.equal(after.runs[0].handoff!.actor, "user:test");
+  assert.equal(after.history.at(-1)!.action, "handoff");
+  assert.equal((await row(root, "game-concept")).complete, true);
+  assert.equal(
+    await readFile(join(root, "production/stage.txt"), "utf8"),
+    "Concept",
+  );
+  await assert.rejects(update(root, handoff, "user:test"), /prior handoff/);
+  await put(root, conceptFile, "Edited after handoff");
+  assert.equal((await row(root, "game-concept")).complete, false);
+});
+
+test("mixed-source repeatable scope uses qualified coverage and does not approve differing copies", async (t) => {
+  const { root, worktree, source, git } = await worktreeGame(
+    t,
+    "Technical Setup",
+  );
+  const second = ".worktrees/second checkout";
+  git("worktree", "add", "--detach", second);
+  const path = "docs/architecture/adr-input.md";
+  await put(source, path, "Source decision");
+  await put(join(root, second), path, "Different decision");
+  const other = [
+    "docs/architecture/adr-saves.md",
+    "docs/architecture/adr-assets.md",
+  ];
+  for (const file of other) await put(source, file);
+  await approveStory(
+    root,
+    "first",
+    "architecture-decision",
+    [path, ...other],
+    worktree,
+  );
+  await approveStory(root, "second", "architecture-decision", [path], second);
+  await assert.rejects(
+    update(
+      root,
+      { action: "finish", step: "architecture-decision", note: "All subjects" },
+      "user:test",
+    ),
+    /Approve all/,
+  );
+  await put(join(root, second), path, "Source decision");
+  await approveStory(root, "second", "architecture-decision", [path], second);
+  await update(
+    root,
+    {
+      action: "finish",
+      step: "architecture-decision",
+      note: "Both copies reviewed",
+    },
+    "user:test",
+  );
+  assert.equal((await row(root, "architecture-decision")).complete, true);
+  await put(join(root, second), "docs/architecture/adr-new.md");
+  assert.equal((await row(root, "architecture-decision")).complete, false);
+});
+
+test("copies of one screen across worktrees cannot satisfy the three-screen minimum", async (t) => {
+  const { root, worktree, source, git } = await worktreeGame(
+    t,
+    "Pre-Production",
+  );
+  const path = "design/ux/menu.md";
+  for (let i = 0; i < 3; i++) {
+    const tree = i === 0 ? worktree : `.worktrees/screen ${i}`;
+    if (i) git("worktree", "add", "--detach", tree);
+    await put(i === 0 ? source : join(root, tree), path);
+    await approveStory(root, `screen-${i}`, "ux-design", [path], tree);
+  }
+  await assert.rejects(
+    update(
+      root,
+      {
+        action: "finish",
+        step: "ux-design",
+        note: "Three runs are not three artifacts",
+      },
+      "user:test",
+    ),
+    /missing required artifacts \(1\/3\)/,
+  );
+});
+
+test("aggregate scope fingerprints every source, rejects differing manifests and reopens on handoff", async (t) => {
+  const { root, worktree, source, git } = await worktreeGame(
+    t,
+    "Pre-Production",
+  );
+  const second = ".worktrees/second checkout";
+  git("worktree", "add", "--detach", second);
+  const manifest = "design/assets/asset-manifest.md";
+  const player = "design/assets/player.md";
+  const enemy = "design/assets/enemy.md";
+  await put(source, player);
+  await put(source, manifest, "Player and enemy");
+  await put(join(root, second), enemy);
+  await put(join(root, second), manifest, "Only enemy");
+  await approveStory(root, "player", "asset-spec", [player], worktree);
+  await approveStory(root, "enemy", "asset-spec", [enemy], second);
+  const finish = async () =>
+    update(
+      root,
+      {
+        action: "finish",
+        step: "asset-spec",
+        note: "All assets",
+        reviewedEvidence: await scopeEvidence(
+          root,
+          await row(root, "asset-spec"),
+        ),
+      },
+      "user:test",
+    );
+  await assert.rejects(finish(), /Scope evidence changed/);
+  await put(join(root, second), manifest, "Player and enemy");
+  await finish();
+  const scope = (await readState(root)).scopes[0];
+  assert.equal(scope.evidence!.length, 2);
+  assert.notDeepEqual(scope.evidence![0].source, scope.evidence![1].source);
+  assert.equal((await row(root, "asset-spec")).complete, true);
+  await put(root, player);
+  await put(root, manifest, "Player and enemy");
+  git("worktree", "remove", "--force", worktree);
+  await update(
+    root,
+    { action: "handoff", run: "r1", note: "Merged player" },
+    "user:test",
+  );
+  assert.equal((await readState(root)).scopes.length, 0);
+  assert.equal((await row(root, "asset-spec")).complete, false);
+  await finish();
+  assert.equal((await row(root, "asset-spec")).complete, true);
+  await put(join(root, second), manifest, "Unreviewed change");
+  assert.equal((await row(root, "asset-spec")).complete, false);
+});
+
+test("legacy source-less records still read coordinator evidence in Git and non-Git games", async (t) => {
+  const { root, source } = await worktreeGame(t);
+  await put(root, conceptFile, "Canonical legacy concept");
+  await put(source, conceptFile, "Different worktree concept");
+  await approveStory(root, "", "game-concept");
+  const saved = await readState(root);
+  assert.equal(saved.runs[0].source, undefined);
+  assert.equal(saved.runs[0].handoff, undefined);
+  assert.equal((await row(root, "game-concept")).complete, true);
+  await assert.rejects(
+    update(
+      root,
+      { action: "handoff", run: "r1", note: "Not a source run" },
+      "user:test",
+    ),
+    /approved worktree run/,
+  );
+  const nonGit = await game(t);
+  await put(nonGit, conceptFile, "Canonical legacy concept");
+  await writeFile(join(nonGit, STATE_FILE), JSON.stringify(saved));
+  assert.equal((await row(nonGit, "game-concept")).complete, true);
+  await put(nonGit, conceptFile, "Changed canonical concept");
+  assert.equal((await row(nonGit, "game-concept")).complete, false);
+});
+
+test("an unregistered checkout cannot borrow a registered worktree's Git directory", async (t) => {
+  const { root, source, git } = await worktreeGame(t, "Production");
+  const fake = ".worktrees/unregistered";
+  await mkdir(join(root, fake));
+  await writeFile(
+    join(root, fake, ".git"),
+    `gitdir: ${git("-C", source, "rev-parse", "--absolute-git-dir").trim()}\n`,
+  );
+  await update(root, {
+    action: "start",
+    step: "implement",
+    subject: "story",
+    note: "Work",
+  });
+  await assert.rejects(
+    update(root, {
+      action: "submit",
+      run: "r1",
+      worktree: fake,
+      evidence: [],
+      note: "Review",
+    }),
+    /registered Git worktree/,
+  );
+});
+
+test("handoff cannot transfer approval to a replacement repository at the same coordinator path", async (t) => {
+  const { root, source, worktree, git } = await worktreeGame(t);
+  await put(source, conceptFile);
+  await put(root, conceptFile);
+  await approveStory(root, "", "game-concept", [], worktree);
+  const before = await readState(root);
+  git("worktree", "remove", "--force", worktree);
+  await rm(join(root, ".git"), { recursive: true });
+  git("init");
+  await assert.rejects(
+    update(
+      root,
+      {
+        action: "handoff",
+        run: "r1",
+        note: "Same path is not same repository",
+      },
+      "user:test",
+    ),
+    /original Git repository/,
+  );
+  assert.deepEqual(await readState(root), before);
+});
+
+test("aggregate scope rejects conflicting subject copies despite identical manifests", async (t) => {
+  const { root, source, worktree, git } = await worktreeGame(
+    t,
+    "Pre-Production",
+  );
+  const second = ".worktrees/conflicting assets";
+  git("worktree", "add", "--detach", second);
+  const manifest = "design/assets/asset-manifest.md";
+  const subject = "design/assets/shared.md";
+  await put(source, manifest, "Shared asset");
+  await put(join(root, second), manifest, "Shared asset");
+  await put(source, subject, "First reviewed spec");
+  await put(join(root, second), subject, "Different reviewed spec");
+  await approveStory(root, "first", "asset-spec", [subject], worktree);
+  await approveStory(root, "second", "asset-spec", [subject], second);
+  const before = await readState(root);
+  const reviewedEvidence = await scopeEvidence(
+    root,
+    await row(root, "asset-spec"),
+  );
+  await assert.rejects(
+    update(
+      root,
+      {
+        action: "finish",
+        step: "asset-spec",
+        note: "Both copies",
+        reviewedEvidence,
+      },
+      "user:test",
+    ),
+    /Scope evidence changed/,
+  );
+  assert.deepEqual(await readState(root), before);
+
+  // Older versions could persist this false-positive scope with unchanged files.
+  const previousApproval = structuredClone(before);
+  previousApproval.scopes.push({
+    phase: "pre-production",
+    step: "asset-spec",
+    runs: before.runs.map((run) => run.id),
+    note: "Previous scope decision",
+    evidence: reviewedEvidence,
+  });
+  await writeFile(join(root, STATE_FILE), JSON.stringify(previousApproval));
+  const invalid = await row(root, "asset-spec");
+  assert.equal(invalid.complete, false);
+  assert.match(invalid.status, /^stale evidence/);
+
+  await put(join(root, second), subject, "First reviewed spec");
+  await approveStory(root, "second", "asset-spec", [subject], second);
+  await update(
+    root,
+    {
+      action: "finish",
+      step: "asset-spec",
+      note: "Matching reviewed copies",
+      reviewedEvidence: await scopeEvidence(
+        root,
+        await row(root, "asset-spec"),
+      ),
+    },
+    "user:test",
+  );
+  assert.equal((await row(root, "asset-spec")).complete, true);
+});
+
+for (const coordinator of [false, true]) {
+  for (const missingFirst of [false, true]) {
+    test(`aggregate scope requires each source manifest (${coordinator ? "coordinator/worktree" : "worktree/worktree"}, ${missingFirst ? "first" : "second"} missing)`, async (t) => {
+      const { root, source, worktree, git } = await worktreeGame(
+        t,
+        "Pre-Production",
+      );
+      const second = ".worktrees/other assets";
+      git("worktree", "add", "--detach", second);
+      const firstRoot = coordinator ? root : source;
+      const secondRoot = join(root, second);
+      const manifest = "design/assets/asset-manifest.md";
+      const firstSubject = "design/assets/player.md";
+      const secondSubject = "design/assets/enemy.md";
+      await put(firstRoot, firstSubject);
+      await put(secondRoot, secondSubject);
+      await put(
+        missingFirst ? secondRoot : firstRoot,
+        manifest,
+        "Player and enemy",
+      );
+      await approveStory(
+        root,
+        "player",
+        "asset-spec",
+        [firstSubject],
+        coordinator ? undefined : worktree,
+      );
+      await approveStory(root, "enemy", "asset-spec", [secondSubject], second);
+      const before = await readState(root);
+      const reviewedEvidence = await scopeEvidence(
+        root,
+        await row(root, "asset-spec"),
+      );
+      const finish = async () =>
+        update(
+          root,
+          {
+            action: "finish",
+            step: "asset-spec",
+            note: "All assets",
+            reviewedEvidence: await scopeEvidence(
+              root,
+              await row(root, "asset-spec"),
+            ),
+          },
+          "user:test",
+        );
+      await assert.rejects(finish(), /missing required aggregate artifacts/);
+      assert.deepEqual(await readState(root), before);
+      assert.equal(
+        (await row(root, "asset-spec")).runsApproved,
+        true,
+        "Missing manifests reopen scope, not individual subject approvals",
+      );
+
+      // Reload an approval written by the older union-only scope check.
+      const previousApproval = structuredClone(before);
+      previousApproval.scopes.push({
+        phase: "pre-production",
+        step: "asset-spec",
+        runs: before.runs.map((run) => run.id),
+        note: "Previous scope decision",
+        evidence: reviewedEvidence,
+      });
+      await writeFile(join(root, STATE_FILE), JSON.stringify(previousApproval));
+      assert.equal((await row(root, "asset-spec")).complete, false);
+      assert.match((await row(root, "asset-spec")).status, /^stale evidence/);
+      const missingRoot = missingFirst ? firstRoot : secondRoot;
+      await put(missingRoot, manifest, "Player and enemy");
+      await finish();
+      assert.equal((await row(root, "asset-spec")).complete, true);
+      await rm(join(missingRoot, manifest));
+      const removed = await row(root, "asset-spec");
+      assert.equal(removed.complete, false);
+      assert.match(removed.status, /^stale evidence/);
+      await assert.rejects(finish(), /missing required aggregate artifacts/);
+    });
+  }
+}

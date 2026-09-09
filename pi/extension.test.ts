@@ -1,8 +1,9 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { test } from "node:test";
+import { test, type TestContext } from "node:test";
 import type {
   ExtensionAPI,
   ExtensionCommandContext,
@@ -12,6 +13,7 @@ import type {
 import { TuiMainScreen, type Terminal, type TUI } from "@earendil-works/pi-tui";
 import gameStudio from "./extension.ts";
 import { readState } from "./progress-store.ts";
+import { snapshot } from "./workflow.ts";
 
 type Handler = (
   event: unknown,
@@ -266,3 +268,279 @@ test("users can dismiss owned UI even when progress state is corrupt", async (t)
   await app.event("agent_settled");
   assert.equal(app.widgets.get("gamedev:progress"), undefined);
 });
+
+async function sourceApp(t: TestContext) {
+  const root = await mkdtemp(join(tmpdir(), "gamedev worktree extension "));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  await mkdir(join(root, "production"));
+  await writeFile(join(root, "production/stage.txt"), "Concept");
+  const git = (...args: string[]) =>
+    execFileSync(
+      "git",
+      [
+        "-c",
+        `core.hooksPath=${join(root, ".no-hooks")}`,
+        "-c",
+        "commit.gpgSign=false",
+        "-c",
+        "core.autocrlf=false",
+        ...args,
+      ],
+      {
+        cwd: root,
+        encoding: "utf8",
+        env: Object.fromEntries(
+          Object.entries(process.env).filter(
+            ([key]) => !key.toUpperCase().startsWith("GIT_"),
+          ),
+        ),
+      },
+    );
+  git("init");
+  git("config", "user.name", "Workflow test");
+  git("config", "user.email", "workflow@example.invalid");
+  git("add", "production/stage.txt");
+  git("commit", "-m", "Fixture");
+  const worktree = ".worktrees/source checkout";
+  git("worktree", "add", "--detach", worktree);
+  const source = join(root, worktree);
+  await mkdir(join(source, "design/gdd"), { recursive: true });
+  const file = "design/gdd/game-concept.md";
+  await writeFile(join(source, file), "Reviewed concept");
+  const app = harness(root);
+  t.after(() => app.event("session_shutdown"));
+  await app.event("session_start");
+  await app.call({
+    action: "start",
+    revision: 0,
+    step: "game-concept",
+    subject: "",
+    note: "Work",
+  });
+  await app.call({
+    action: "submit",
+    revision: 1,
+    run: "r1",
+    worktree,
+    evidence: [],
+    note: "Review source",
+  });
+  app.consent(true);
+  const notices: string[] = [];
+  app.ctx.ui.notify = (message) => {
+    notices.push(message);
+  };
+  return { root, worktree, source, file, app, git, notices };
+}
+
+test("worktree command approval displays the checkout and survives a fresh extension instance", async (t) => {
+  const { root, worktree, source, file, app } = await sourceApp(t);
+  assert.doesNotMatch(
+    JSON.stringify(app.tools.get("gamedev_workflow")!.parameters),
+    /"handoff"/,
+  );
+  let prompt = "";
+  app.ctx.ui.confirm = async (_title, message) => {
+    prompt = message;
+    return true;
+  };
+  await app.command("approve r1");
+  assert.match(prompt, /Source: worktree/);
+  assert.ok(prompt.includes(worktree));
+  assert.equal((await readState(root)).runs[0].status, "approved");
+  const restarted = harness(root);
+  t.after(() => restarted.event("session_shutdown"));
+  await restarted.event("session_start");
+  let context = JSON.stringify(await restarted.event("before_agent_start"));
+  assert.match(context, /approved \[worktree evidence\]/);
+  assert.match(context, /source: worktree/);
+  assert.equal((await readState(source)).revision, 0);
+  await writeFile(join(source, file), "Unreviewed replacement");
+  context = JSON.stringify(await restarted.event("before_agent_start"));
+  assert.match(context, /stale evidence/);
+  assert.equal(
+    (await snapshot(root))!.rows.find((row) => row.step.id === "game-concept")!
+      .complete,
+    false,
+  );
+});
+
+for (const prompt of ["confirm", "input"] as const) {
+  for (const mutation of ["file", "removed source", "source switch"] as const) {
+    test(`worktree approval rejects ${mutation} during ${prompt}`, async (t) => {
+      const { root, worktree, source, file, app, git, notices } =
+        await sourceApp(t);
+      const before = await readState(root);
+      let expected = before;
+      const change = async () => {
+        if (mutation === "file")
+          await writeFile(join(source, file), "Unreviewed change");
+        if (mutation === "removed source")
+          git("worktree", "remove", "--force", worktree);
+        if (mutation === "source switch") {
+          const second = ".worktrees/switched checkout";
+          git("worktree", "add", "--detach", second);
+          await mkdir(join(root, second, "design/gdd"), { recursive: true });
+          await writeFile(join(root, second, file), "Reviewed concept");
+          await app.call({
+            action: "submit",
+            revision: before.revision,
+            run: "r1",
+            worktree: second,
+            evidence: [],
+            note: "Different source",
+          });
+          expected = await readState(root);
+        }
+      };
+      const confirm = app.ctx.ui.confirm;
+      const input = app.ctx.ui.input;
+      if (prompt === "confirm")
+        app.ctx.ui.confirm = async () => {
+          await change();
+          return true;
+        };
+      else
+        app.ctx.ui.input = async () => {
+          await change();
+          return "Checked original source";
+        };
+      await app.command("approve r1");
+      assert.deepEqual(await readState(root), expected);
+      assert.equal(expected.runs[0].status, "submitted");
+      assert.ok(notices.length);
+      assert.doesNotMatch(notices.join("\n"), /Approval recorded/);
+      app.ctx.ui.confirm = confirm;
+      app.ctx.ui.input = input;
+      if (mutation !== "removed source") {
+        await app.call({
+          action: "submit",
+          revision: expected.revision,
+          run: "r1",
+          evidence: [],
+          note: "Fresh review",
+        });
+        await app.command("approve r1");
+        assert.equal((await readState(root)).runs[0].status, "approved");
+      }
+    });
+  }
+
+  test(`handoff rejects canonical changes during ${prompt} and succeeds after fresh confirmation`, async (t) => {
+    const { root, source, worktree, file, app, git, notices } =
+      await sourceApp(t);
+    await app.command("approve r1");
+    await mkdir(join(root, "design/gdd"), { recursive: true });
+    await writeFile(join(root, file), await readFile(join(source, file)));
+    git("worktree", "remove", "--force", worktree);
+    const before = await readState(root);
+    const confirm = app.ctx.ui.confirm;
+    const input = app.ctx.ui.input;
+    const change = () =>
+      writeFile(join(root, file), "Unreviewed canonical change");
+    if (prompt === "confirm")
+      app.ctx.ui.confirm = async () => {
+        await change();
+        return true;
+      };
+    else
+      app.ctx.ui.input = async () => {
+        await change();
+        return "Checked original canonical copy";
+      };
+    await app.command("handoff r1");
+    assert.deepEqual(await readState(root), before);
+    assert.match(notices.join("\n"), /Canonical evidence differs/);
+    app.ctx.ui.confirm = confirm;
+    app.ctx.ui.input = input;
+    await writeFile(join(root, file), "Reviewed concept");
+    app.consent(false);
+    await app.command("handoff r1");
+    assert.deepEqual(await readState(root), before);
+    app.consent(true);
+    await app.command("handoff r1");
+    const after = await readState(root);
+    assert.deepEqual(after.runs[0].evidence, before.runs[0].evidence);
+    assert.deepEqual(after.runs[0].source, before.runs[0].source);
+    assert.ok(after.runs[0].handoff);
+    const restarted = harness(root);
+    t.after(() => restarted.event("session_shutdown"));
+    const context = JSON.stringify(await restarted.event("before_agent_start"));
+    assert.match(context, /handed off from/);
+    assert.equal(
+      (await snapshot(root))!.rows.find(
+        (row) => row.step.id === "game-concept",
+      )!.complete,
+      true,
+    );
+    assert.equal(
+      await readFile(join(root, "production/stage.txt"), "utf8"),
+      "Concept",
+    );
+  });
+
+  test(`mixed-source aggregate approval rejects worktree manifest changes during ${prompt}`, async (t) => {
+    const { root, source, worktree, app, git, notices } = await sourceApp(t);
+    // Move the fixture to its asset phase; no workflow command changes the stage.
+    await writeFile(join(root, "production/stage.txt"), "Pre-Production");
+    const second = ".worktrees/second assets";
+    git("worktree", "add", "--detach", second);
+    const manifest = "design/assets/asset-manifest.md";
+    for (const [tree, subject] of [
+      [worktree, "player"],
+      [second, "enemy"],
+    ]) {
+      await mkdir(join(root, tree, "design/assets"), { recursive: true });
+      await writeFile(join(root, tree, manifest), "Player and enemy");
+      await writeFile(
+        join(root, tree, `design/assets/${subject}.md`),
+        `${subject} spec`,
+      );
+      await app.call({
+        action: "start",
+        revision: (await readState(root)).revision,
+        step: "asset-spec",
+        subject,
+        note: "Specify asset",
+      });
+      const run = (await readState(root)).runs.at(-1)!.id;
+      await app.call({
+        action: "submit",
+        revision: (await readState(root)).revision,
+        run,
+        worktree: tree,
+        evidence: [`design/assets/${subject}.md`],
+        note: "Review asset",
+      });
+      await app.command(`approve ${run}`);
+    }
+    const before = await readState(root);
+    const confirm = app.ctx.ui.confirm;
+    const input = app.ctx.ui.input;
+    const change = () =>
+      writeFile(join(source, manifest), "Unreviewed new asset");
+    if (prompt === "confirm")
+      app.ctx.ui.confirm = async () => {
+        await change();
+        return true;
+      };
+    else
+      app.ctx.ui.input = async () => {
+        await change();
+        return "Original scope";
+      };
+    await app.command("finish asset-spec");
+    assert.deepEqual(await readState(root), before);
+    assert.match(notices.join("\n"), /Scope evidence changed/);
+    app.ctx.ui.confirm = confirm;
+    app.ctx.ui.input = input;
+    await writeFile(join(source, manifest), "Player and enemy");
+    await app.command("finish asset-spec");
+    assert.equal((await readState(root)).scopes[0].evidence!.length, 2);
+    assert.equal(
+      (await snapshot(root))!.rows.find((row) => row.step.id === "asset-spec")!
+        .complete,
+      true,
+    );
+  });
+}

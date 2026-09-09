@@ -1,8 +1,30 @@
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { createHash, randomUUID } from "node:crypto";
-import { lstat, mkdir, open, readFile, rename, unlink } from "node:fs/promises";
+import {
+  lstat,
+  mkdir,
+  open,
+  readFile,
+  realpath,
+  rename,
+  unlink,
+} from "node:fs/promises";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 
-export type Evidence = { path: string; sha256: string };
+export type Checkout = {
+  root: string;
+  commonDir: string;
+  commonIdentity: string;
+  gitDir: string;
+  identity: string;
+};
+export type EvidenceSource = { worktree: string; checkout: Checkout };
+export type Evidence = {
+  path: string;
+  sha256: string;
+  source?: EvidenceSource;
+};
 export type Run = {
   id: string;
   phase: string;
@@ -11,6 +33,8 @@ export type Run = {
   status: "active" | "blocked" | "submitted" | "approved";
   note: string;
   evidence: Evidence[];
+  source?: EvidenceSource;
+  handoff?: { coordinator: Checkout; at: string; actor: string; note: string };
 };
 export type History = {
   at: string;
@@ -40,10 +64,22 @@ const isObject = (value: unknown): value is Record<string, unknown> =>
 const isText = (value: unknown): value is string =>
   typeof value === "string" && value.length <= 4000;
 const missing = (error: unknown) => isObject(error) && error.code === "ENOENT";
+const isCheckout = (value: unknown): value is Checkout =>
+  isObject(value) &&
+  [
+    value.root,
+    value.commonDir,
+    value.commonIdentity,
+    value.gitDir,
+    value.identity,
+  ].every(isText);
+const isSource = (value: unknown): value is EvidenceSource =>
+  isObject(value) && isText(value.worktree) && isCheckout(value.checkout);
 const isEvidence = (value: unknown): value is Evidence =>
   isObject(value) &&
   isText(value.path) &&
   isText(value.sha256) &&
+  (value.source === undefined || isSource(value.source)) &&
   /^[a-f0-9]{64}$/.test(value.sha256);
 
 export function parseState(text: string): ProgressState {
@@ -80,7 +116,14 @@ export function parseState(text: string): ProgressState {
         String(run.status),
       ) ||
       !Array.isArray(run.evidence) ||
-      run.evidence.length > 50
+      run.evidence.length > 50 ||
+      (run.source !== undefined && !isSource(run.source)) ||
+      (run.handoff !== undefined &&
+        (!run.source ||
+          run.status !== "approved" ||
+          !isObject(run.handoff) ||
+          !isCheckout(run.handoff.coordinator) ||
+          ![run.handoff.at, run.handoff.actor, run.handoff.note].every(isText)))
     ) {
       throw new Error("Invalid workflow run record.");
     }
@@ -138,6 +181,126 @@ export async function projectPath(root: string, name: string): Promise<string> {
   return path;
 }
 
+const execGit = promisify(execFile);
+async function git(root: string, args: string[]): Promise<string> {
+  const env = Object.fromEntries(
+    Object.entries(process.env).filter(
+      ([key]) => !key.toUpperCase().startsWith("GIT_"),
+    ),
+  );
+  const { stdout } = await execGit("git", args, {
+    cwd: root,
+    env,
+    timeout: 10000,
+    maxBuffer: 1024 * 1024,
+  });
+  return stdout;
+}
+
+/** Bind evidence to a registered checkout, not a remote URL or a directory name. */
+export async function checkoutIdentity(root: string): Promise<Checkout> {
+  if ((await lstat(root)).isSymbolicLink())
+    throw new Error("Refusing symlink source checkout.");
+  const canonical = await realpath(root);
+  const [top, common, directory] = (
+    await git(root, [
+      "rev-parse",
+      "--path-format=absolute",
+      "--show-toplevel",
+      "--git-common-dir",
+      "--absolute-git-dir",
+    ])
+  )
+    .trimEnd()
+    .split("\n");
+  if (!top || !common || !directory || (await realpath(top)) !== canonical)
+    throw new Error(
+      "Expected a registered Git worktree root, not a subdirectory.",
+    );
+  const registered = (
+    await git(root, ["worktree", "list", "--porcelain", "-z"])
+  )
+    .split("\0")
+    .filter((line) => line.startsWith("worktree "))
+    .map((line) => line.slice(9));
+  if (
+    !(
+      await Promise.all(
+        registered.map((path) => realpath(path).catch(() => "")),
+      )
+    ).includes(canonical)
+  )
+    throw new Error("Source is not a registered Git worktree.");
+  const commonDir = await realpath(common);
+  const gitDir = await realpath(directory);
+  const identities = await Promise.all(
+    [canonical, gitDir, commonDir].map(async (path) => {
+      const info = await lstat(path);
+      return `${info.dev}:${info.ino}:${info.birthtimeMs}`;
+    }),
+  );
+  return {
+    root: canonical,
+    commonDir,
+    commonIdentity: identities[2],
+    gitDir,
+    identity: identities.slice(0, 2).join("/"),
+  };
+}
+
+function sameCheckout(a: Checkout, b: Checkout): boolean {
+  return (
+    a.root === b.root &&
+    a.commonDir === b.commonDir &&
+    a.commonIdentity === b.commonIdentity &&
+    a.gitDir === b.gitDir &&
+    a.identity === b.identity
+  );
+}
+
+export async function captureSource(
+  root: string,
+  worktree: string,
+): Promise<EvidenceSource> {
+  const path = await projectPath(root, worktree);
+  const coordinator = await checkoutIdentity(root);
+  const checkout = await checkoutIdentity(path);
+  if (coordinator.commonDir !== checkout.commonDir)
+    throw new Error("Source worktree must belong to the same Git repository.");
+  return {
+    worktree: relative(resolve(root), path).split("\\").join("/"),
+    checkout,
+  };
+}
+
+export async function sourceRoot(
+  root: string,
+  source?: EvidenceSource,
+): Promise<string> {
+  if (!source) return root;
+  const current = await captureSource(root, source.worktree);
+  if (!sameCheckout(current.checkout, source.checkout))
+    throw new Error(
+      "Source checkout identity changed. Submit fresh evidence for review.",
+    );
+  return await projectPath(root, source.worktree);
+}
+
+export async function runRoot(root: string, run: Run): Promise<string> {
+  if (!run.handoff) return sourceRoot(root, run.source);
+  const current = await checkoutIdentity(root);
+  if (
+    !sameCheckout(current, run.handoff.coordinator) ||
+    current.commonDir !== run.source?.checkout.commonDir
+  )
+    throw new Error("Handoff coordinator identity changed.");
+  return root;
+}
+
+export function effectiveSource(run: Run): EvidenceSource | undefined {
+  return run.handoff ? undefined : run.source;
+}
+
 export async function readOptional(
   root: string,
   name: string,
@@ -182,7 +345,10 @@ export async function evidenceCurrent(
 ): Promise<boolean> {
   for (const item of evidence) {
     try {
-      if ((await fingerprint(root, item.path)).sha256 !== item.sha256)
+      if (
+        (await fingerprint(await sourceRoot(root, item.source), item.path))
+          .sha256 !== item.sha256
+      )
         return false;
     } catch {
       return false;

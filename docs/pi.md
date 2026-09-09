@@ -58,13 +58,15 @@ The coordinating agent uses `gamedev_workflow` to:
 2. `start` a catalog step before work. Repeatable steps also need a subject: use a system name, screen name, epic, or
    story ID.
 3. `block` the run when a requirement or integration is missing.
-4. `submit` the run with an evidence summary and project-relative file paths.
+4. `submit` the run with an evidence summary and checkout-relative file paths. For work in a registered worktree,
+   include `worktree` as described below. A blocked run can submit; no new run or resume command is needed.
 
 The agent cannot approve a run through this tool. Use the user command after checking the result:
 
 ```text
 /gamedev-workflow
 /gamedev-workflow approve r1
+/gamedev-workflow handoff r1
 /gamedev-workflow finish implement
 /gamedev-workflow gate
 /gamedev-workflow history
@@ -78,6 +80,64 @@ reopens that scope. Backlog remains the authority for story status; the progress
 and rejects requirements that change during confirmation. It does **not** change the stage. Use `gamedev:gate-check` for
 the full phase review and user-approved advancement. Gates remain advisory; no extension silently advances a phase or
 prevents an informed user override.
+
+### Evidence from a worktree
+
+The coordinator keeps `production/workflow-state.json` and reads its own `production/stage.txt`. Submission can name a
+separate source checkout without moving either file or changing the phase:
+
+```json
+{
+  "action": "submit",
+  "revision": 2,
+  "run": "r1",
+  "worktree": ".worktrees/concept review",
+  "evidence": ["design/gdd/game-concept.md"],
+  "note": "Concept ready for user review."
+}
+```
+
+`worktree` must name the root of a registered Git worktree in the **same common repository**. It must be relative to and
+inside the coordinator root. Absolute paths, sibling checkouts, arbitrary subfolders, unrelated clones, and symlinked
+source paths are refused. Use a nested worktree such as `.worktrees/concept review`; spaces are supported. This
+restriction keeps the existing project path protections. Git must be on PATH. Inherited `GIT_*` variables do not control
+validation.
+
+All evidence paths and catalog file patterns resolve in that source alone. Missing or stale coordinator files neither
+satisfy nor contaminate a worktree submission. Omitting `worktree` on a later submission retains the run's source.
+Before approval, an explicit new `worktree` can switch the source and capture new evidence. After approval, start a new
+run to revise the work. Source-less records keep their coordinator-relative behavior, including non-Git projects.
+
+Approval shows the source checkout. The extension checks its saved identity and submitted hashes before the dialog,
+after confirmation, after the verification note, and under the state lock. A progress update during either prompt
+requires a fresh decision. Status reloads use the same source; worktree approvals do not claim that coordinator files
+are approved. Removed, replaced, or symlinked sources become stale, even if the coordinator has identical files. There
+is no automatic fallback. Checkout identity is local: moving or recreating a checkout requires a fresh review, not an
+edit to saved fingerprints.
+
+### Handoff after merging
+
+After merging the reviewed files into the coordinator checkout, use:
+
+```text
+/gamedev-workflow handoff r1
+```
+
+This user-only action switches an approved worktree run's effective reads to the coordinator. It copies no files and
+changes no stage. The canonical files must match **every original reviewed hash** and the run's catalog requirements.
+The extension checks them before and after both prompts, then again under the state lock. Different content needs a new
+run and review; handoff never rewrites hashes to make a merge pass.
+
+Handoff can use persisted reviewed evidence after the source worktree has been removed. It still requires the original
+common Git repository. The original source identity and evidence remain in the run, alongside the handoff's coordinator
+identity, user, time, and note. History records the action. Later edits to canonical evidence make the run stale.
+
+Handoff reopens repeatable scope. It transfers only the run approval, **not an aggregate scope approval**. Use `finish`
+again to review the current shared manifests and all intended subjects. Mixed-source scope checks qualify evidence by
+checkout: each copy needs coverage, differing copies of the same path cannot close scope, and duplicate paths count only
+once toward catalog minimums. Aggregate confirmation fingerprints the manifests in every effective source. A coordinator
+manifest cannot stand in for an unreviewed worktree manifest. See the
+[source and handoff decision](decisions/worktree-evidence.md).
 
 ### Evidence and saved state
 
@@ -99,8 +159,8 @@ individual runs; changing the shared index reopens scope review without invalida
 
 Each run accepts at most 50 files, each no larger than 2 MiB; use a concise evidence report for large logs, binaries, or
 external reviews. Steps without a catalog file check can use a manual verification note. Any file explicitly cited by
-several runs remains shared evidence: changing it invalidates those runs. Changed or removed evidence requires a new
-review. Reopen approved work as a new run; prior history remains available.
+several runs in the same checkout remains shared evidence: changing it invalidates those runs. Changed or removed
+evidence requires a new review. Reopen approved work as a new run; prior history remains available.
 
 Writes use an exclusive lock, revision check, synced temporary file, and atomic replacement. A stale caller must reread
 status. Invalid JSON is preserved, not reset. Growth beyond 10 MiB is refused before replacing readable state. Agree an
