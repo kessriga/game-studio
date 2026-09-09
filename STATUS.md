@@ -47,8 +47,14 @@ Local macOS checks against the uncommitted 0.4.1 worktree:
 - `npm run check` passed after the review fixes: formatting, types, 63 tests, native discovery of 72 skills and 53 roles
   plus one extension, and relocated discovery from a 485-file package. Changed Markdown was formatted with
   `rumdl fmt --no-cache --enable MD013`; the diff was reviewed.
-- These local results do not include hosted CI, real interactive UI smoke, RPC client, conversational game workflow,
-  engine build, or package installation. No release was made.
+- Hosted [run 34394798811](https://github.com/kessriga/game-studio/actions/runs/34394798811) at `d416803` passed on
+  Linux and macOS. Windows passed the shell/Python gate but failed one of 63 TypeScript tests: the source-disclosure
+  assertion compared a slash-separated fixture path with the correctly displayed native Windows path. The corrected test
+  checks the full canonical directory and its rendered boundary, not just the basename. A deterministic Windows-style
+  probe through the actual text renderer and the focused local test pass. Production path/security checks are unchanged;
+  corrected hosted results must be checked at the exact [PR head](https://github.com/kessriga/game-studio/pull/21).
+- No real interactive UI smoke, RPC client, conversational game workflow, engine build, or package installation was run.
+  No release was made.
 - Checkout identity uses local paths and filesystem identity. Moving or recreating checkouts requires fresh review;
   sibling worktrees are not supported. Adversarial filesystem races and power-loss recovery remain unverified.
 

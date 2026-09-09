@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  mkdtemp,
+  mkdir,
+  readFile,
+  realpath,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test, type TestContext } from "node:test";
@@ -334,7 +341,7 @@ async function sourceApp(t: TestContext) {
 }
 
 test("worktree command approval displays the checkout and survives a fresh extension instance", async (t) => {
-  const { root, worktree, source, file, app } = await sourceApp(t);
+  const { root, source, file, app } = await sourceApp(t);
   assert.doesNotMatch(
     JSON.stringify(app.tools.get("gamedev_workflow")!.parameters),
     /"handoff"/,
@@ -346,7 +353,9 @@ test("worktree command approval displays the checkout and survives a fresh exten
   };
   await app.command("approve r1");
   assert.match(prompt, /Source: worktree/);
-  assert.ok(prompt.includes(worktree));
+  assert.ok(
+    prompt.includes(`Source: worktree ${await realpath(source)} Evidence:`),
+  );
   assert.equal((await readState(root)).runs[0].status, "approved");
   const restarted = harness(root);
   t.after(() => restarted.event("session_shutdown"));
