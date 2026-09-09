@@ -1,13 +1,23 @@
 import { readFileSync } from "node:fs";
 import { glob } from "node:fs/promises";
 import {
+  captureSource,
+  checkoutIdentity,
+  effectiveSource,
+  runRoot,
+  sourceRoot,
   evidenceCurrent,
   fingerprint,
   readOptional,
   readState,
   updateState,
 } from "./progress-store.ts";
-import type { Evidence, ProgressState, Run } from "./progress-store.ts";
+import type {
+  Evidence,
+  EvidenceSource,
+  ProgressState,
+  Run,
+} from "./progress-store.ts";
 
 export type Step = {
   id: string;
@@ -45,6 +55,7 @@ export type Row = {
   status: string;
   runs: Run[];
   artifacts: string[];
+  artifactRefs?: ArtifactRef[];
   runsApproved: boolean;
   complete: boolean;
 };
@@ -58,7 +69,14 @@ export type Snapshot = {
 export type Update =
   | { action: "start"; step: string; subject: string; note: string }
   | { action: "block"; run: string; note: string }
-  | { action: "submit"; run: string; note: string; evidence: string[] }
+  | {
+      action: "submit";
+      run: string;
+      note: string;
+      evidence: string[];
+      worktree?: string;
+    }
+  | { action: "handoff"; run: string; note: string }
   | { action: "approve"; run: string; note: string }
   | {
       action: "finish";
@@ -124,6 +142,54 @@ function requireArtifacts(step: Step, artifacts: string[]): void {
   }
 }
 
+type ArtifactRef = { path: string; source?: EvidenceSource };
+const evidenceKey = (item: ArtifactRef) =>
+  JSON.stringify([item.source?.checkout ?? null, item.path]);
+const runEvidence = (run: Run): Evidence[] =>
+  run.evidence.map((item) => ({
+    ...item,
+    ...(effectiveSource(run) ? { source: effectiveSource(run) } : {}),
+  }));
+function conflictingCopies(evidence: Evidence[]): boolean {
+  const hashes = new Map<string, string>();
+  for (const item of evidence) {
+    if (hashes.has(item.path) && hashes.get(item.path) !== item.sha256)
+      return true;
+    hashes.set(item.path, item.sha256);
+  }
+  return false;
+}
+
+function aggregateSourcesCovered(
+  step: Step,
+  runs: Run[],
+  artifacts: ArtifactRef[],
+): boolean {
+  if (!step.artifact?.aggregate || !step.artifact.glob) return true;
+  return runs.every((run) => {
+    const source = JSON.stringify(effectiveSource(run)?.checkout ?? null);
+    return (
+      artifacts.filter(
+        (item) => JSON.stringify(item.source?.checkout ?? null) === source,
+      ).length >= (step.artifact!.min_count ?? 1)
+    );
+  });
+}
+
+export async function scopeEvidence(
+  root: string,
+  row: Row,
+): Promise<Evidence[]> {
+  return Promise.all(
+    (
+      row.artifactRefs ?? row.artifacts.map((path): ArtifactRef => ({ path }))
+    ).map(async (item) => ({
+      ...(await fingerprint(await sourceRoot(root, item.source), item.path)),
+      ...(item.source ? { source: item.source } : {}),
+    })),
+  );
+}
+
 async function rowFor(
   root: string,
   state: ProgressState,
@@ -131,11 +197,34 @@ async function rowFor(
   step: Step,
 ): Promise<Row> {
   const runs = latestRuns(state, phase, step.id);
-  const artifacts = await artifactFiles(root, step);
+  const artifactRefs: ArtifactRef[] = [];
+  const sources = new Set<string>();
+  let stale = false;
+  for (const run of runs) {
+    try {
+      const directory = await runRoot(root, run);
+      if (!(await evidenceCurrent(directory, run.evidence))) stale = true;
+      const source = effectiveSource(run);
+      const key = JSON.stringify(source?.checkout ?? null);
+      if (!sources.has(key)) {
+        sources.add(key);
+        artifactRefs.push(
+          ...(await artifactFiles(directory, step)).map((path) => ({
+            path,
+            ...(source ? { source } : {}),
+          })),
+        );
+      }
+    } catch {
+      stale = true;
+    }
+  }
+  if (!runs.length)
+    artifactRefs.push(
+      ...(await artifactFiles(root, step)).map((path) => ({ path })),
+    );
+  const artifacts = [...new Set(artifactRefs.map((item) => item.path))].sort();
   const latest = runs.at(-1);
-  const stale = (
-    await Promise.all(runs.map((run) => evidenceCurrent(root, run.evidence)))
-  ).some((current) => !current);
   const approved =
     runs.length > 0 && runs.every((run) => run.status === "approved") && !stale;
   const scope = state.scopes.find(
@@ -147,14 +236,17 @@ async function rowFor(
     runs.every((run) => scope.runs.includes(run.id)) &&
     (await evidenceCurrent(root, scope.evidence ?? []));
   const hasArtifacts =
-    !step.artifact?.glob || artifacts.length >= (step.artifact.min_count ?? 1);
+    (!step.artifact?.glob ||
+      artifacts.length >= (step.artifact.min_count ?? 1)) &&
+    aggregateSourcesCovered(step, runs, artifactRefs);
+  const subjectEvidence = runs.flatMap(runEvidence);
   const evidence = step.artifact?.aggregate
     ? (scope?.evidence ?? [])
-    : runs.flatMap((run) => run.evidence);
-  const captured = new Set(evidence.map((item) => item.path));
-  const artifactSetCurrent = artifacts.every((path) =>
-    captured.has(path.replaceAll("\\", "/")),
-  );
+    : subjectEvidence;
+  const captured = new Set(evidence.map(evidenceKey));
+  const artifactSetCurrent =
+    artifactRefs.every((item) => captured.has(evidenceKey(item))) &&
+    !conflictingCopies([...subjectEvidence, ...evidence]);
   const complete =
     approved &&
     hasArtifacts &&
@@ -177,8 +269,19 @@ async function rowFor(
   const active = runs.find(
     (run) => run.status === "active" || run.status === "blocked",
   );
-  if (active) status = `${active.status}: ${active.subject || active.id}`;
-  return { step, status, runs, artifacts, runsApproved: approved, complete };
+  if (active && !(stale && runs.some((run) => run.source)))
+    status = `${active.status}: ${active.subject || active.id}`;
+  if (runs.some((run) => effectiveSource(run)))
+    status += " [worktree evidence]";
+  return {
+    step,
+    status,
+    runs,
+    artifacts,
+    artifactRefs,
+    runsApproved: approved,
+    complete,
+  };
 }
 
 export async function snapshot(root: string): Promise<Snapshot | undefined> {
@@ -264,8 +367,13 @@ async function submitRun(
 ): Promise<void> {
   if (run.status === "approved")
     throw new Error("Start a new run before revising approved work.");
+  const source =
+    update.worktree === undefined
+      ? run.source
+      : await captureSource(root, update.worktree);
+  const directory = await sourceRoot(root, source);
   const step = getStep(run.phase, run.step);
-  const artifacts = await artifactFiles(root, step);
+  const artifacts = await artifactFiles(directory, step);
   if (!step.repeatable) requireArtifacts(step, artifacts);
   const selected = step.repeatable
     ? update.evidence
@@ -288,20 +396,22 @@ async function submitRun(
   }
   if (paths.length > 50) throw new Error("Use at most 50 evidence files.");
   const evidence: Evidence[] = await Promise.all(
-    paths.map((path) => fingerprint(root, path)),
+    paths.map((path) => fingerprint(directory, path)),
   );
+  run.source = source;
   run.evidence = evidence;
   run.status = "submitted";
   run.note = update.note;
 }
 
-async function approveRun(root: string, run: Run, note: string): Promise<void> {
+export async function checkRunApproval(root: string, run: Run): Promise<void> {
   if (run.status !== "submitted")
     throw new Error("Submit evidence before requesting approval.");
-  if (!(await evidenceCurrent(root, run.evidence)))
+  const directory = await runRoot(root, run);
+  if (!(await evidenceCurrent(directory, run.evidence)))
     throw new Error("Evidence changed. Submit it again before approval.");
   const step = getStep(run.phase, run.step);
-  const artifacts = await artifactFiles(root, step);
+  const artifacts = await artifactFiles(directory, step);
   if (!step.repeatable) {
     requireArtifacts(step, artifacts);
     if (
@@ -315,8 +425,40 @@ async function approveRun(root: string, run: Run, note: string): Promise<void> {
       throw new Error("New artifacts appeared. Submit them before approval.");
     }
   }
-  run.status = "approved";
-  run.note = note;
+}
+
+/** Handoff verifies reviewed run files only; aggregate scope must be reviewed again. */
+export async function checkHandoff(root: string, run: Run): Promise<void> {
+  if (run.status !== "approved" || !run.source || run.handoff)
+    throw new Error(
+      "Handoff requires an approved worktree run without a prior handoff.",
+    );
+  const coordinator = await checkoutIdentity(root);
+  if (
+    coordinator.commonDir !== run.source.checkout.commonDir ||
+    coordinator.commonIdentity !== run.source.checkout.commonIdentity
+  )
+    throw new Error(
+      "Handoff coordinator must belong to the original Git repository.",
+    );
+  if (!(await evidenceCurrent(root, run.evidence)))
+    throw new Error(
+      "Canonical evidence differs from reviewed hashes. Merge identical content or start a new review.",
+    );
+  const step = getStep(run.phase, run.step);
+  const artifacts = await artifactFiles(root, step);
+  if (!step.repeatable || step.artifact?.aggregate)
+    requireArtifacts(step, artifacts);
+  if (
+    step.artifact?.glob &&
+    !step.artifact.aggregate &&
+    (step.repeatable
+      ? !run.evidence.some((item) => artifacts.includes(item.path))
+      : artifacts.some(
+          (path) => !run.evidence.some((item) => item.path === path),
+        ))
+  )
+    throw new Error("Canonical catalog artifacts differ. Start a new review.");
 }
 
 async function finishScope(
@@ -330,9 +472,13 @@ async function finishScope(
     throw new Error("Only repeatable steps need scope confirmation.");
   const row = await rowFor(root, state, phase, step);
   requireArtifacts(step, row.artifacts);
+  if (!aggregateSourcesCovered(step, row.runs, row.artifactRefs!))
+    throw new Error(
+      `${step.name}: missing required aggregate artifacts in a source checkout.`,
+    );
   if (
     !row.runsApproved ||
-    (!step.artifact?.aggregate && row.status === "stale evidence")
+    (!step.artifact?.aggregate && row.status.startsWith("stale evidence"))
   ) {
     throw new Error(
       "Approve all current runs with unchanged evidence before confirming their scope is complete.",
@@ -341,8 +487,12 @@ async function finishScope(
   const reviewedEvidence = update.reviewedEvidence ?? [];
   if (
     step.artifact?.aggregate &&
-    (JSON.stringify(row.artifacts) !==
-      JSON.stringify(reviewedEvidence.map((item) => item.path).sort()) ||
+    (JSON.stringify(row.artifactRefs!.map(evidenceKey).sort()) !==
+      JSON.stringify(reviewedEvidence.map(evidenceKey).sort()) ||
+      conflictingCopies([
+        ...row.runs.flatMap(runEvidence),
+        ...reviewedEvidence,
+      ]) ||
       !(await evidenceCurrent(root, reviewedEvidence)))
   ) {
     throw new Error(
@@ -374,7 +524,9 @@ export async function recordUpdate(
       "No saved game phase. Run gamedev:start before tracking work.",
     );
   if (
-    (update.action === "approve" || update.action === "finish") &&
+    (update.action === "approve" ||
+      update.action === "finish" ||
+      update.action === "handoff") &&
     !actor.startsWith("user:")
   ) {
     throw new Error(
@@ -390,7 +542,23 @@ export async function recordUpdate(
     else {
       const run = requireRun(state, phase, update.run);
       if (update.action === "submit") await submitRun(root, run, update);
-      if (update.action === "approve") await approveRun(root, run, update.note);
+      if (update.action === "approve") {
+        await checkRunApproval(root, run);
+        run.status = "approved";
+        run.note = update.note;
+      }
+      if (update.action === "handoff") {
+        await checkHandoff(root, run);
+        run.handoff = {
+          coordinator: await checkoutIdentity(root),
+          at: new Date().toISOString(),
+          actor,
+          note: update.note,
+        };
+        state.scopes = state.scopes.filter(
+          (scope) => scope.phase !== phase || scope.step !== run.step,
+        );
+      }
       if (update.action === "block") {
         if (run.status === "approved")
           throw new Error("Start a new run before reopening approved work.");

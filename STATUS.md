@@ -1,6 +1,6 @@
 # Implementation status
 
-## Current implementation: 0.4.0 (unreleased)
+## Current implementation: 0.4.1 (unreleased)
 
 - Shared Markdown workflows and roles are host-neutral; Pi is the only packaged integration.
 - All 72 skills and 53 roles retain identity metadata, host-guide links, domain responsibilities, arguments, routing,
@@ -11,7 +11,52 @@
   There is no normal-workflow fallback to legacy preferences.
 - Stage/project detection uses cwd only. Pi retains its generated entry points, progress state, evidence fingerprints,
   user approvals, scope confirmations, widget and noncapturing overlay.
+- Workflow submission can bind catalog checks and evidence to a registered nested worktree of the same repository. User
+  approval checks source identity and hashes through both prompts. Explicit post-merge handoff preserves reviewed
+  provenance, requires matching canonical hashes, and reopens repeatable scope without copying files or changing stage.
 - Safety checks and session handoffs are explicit; no validation, notification, or audit hooks ship.
+
+## Worktree evidence fix validation
+
+Local macOS checks against the uncommitted 0.4.1 worktree:
+
+- The focused real-Git regression failed before the fix: a source-only concept could not submit because the coordinator
+  had zero matching catalog artifacts. It passes after the fix. Initial missing dependencies and an incorrect fixture
+  step name were corrected before this red result; they are not bug evidence.
+- Focused workflow and extension checks pass: 55 tests. New cases use temporary Git repositories and worktrees with
+  spaces, local author configuration, and disabled fixture hooks/signing. They cover source-only and stale coordinator
+  files, blocked-run submission, both approval prompts, state/source switches, restart, removed and recreated sources,
+  unrelated and unregistered checkouts, inherited Git overrides, unsafe paths, symlinks, size limits, legacy records,
+  matching-only handoff after removal, and mixed-source repeatable and aggregate scope.
+- Same-session self-review checked source provenance, prompt-to-lock validation, catalog coverage, duplicate counts, and
+  UI source labels. This is not independent review. Named Fable skills and a dedicated LSP tool were unavailable; the
+  work used think/act/prove and an explicit self-judge pass. Automatic TypeScript diagnostics reported no errors.
+- Independent review caught two aggregate scope gaps despite the earlier passing gates: differing subject copies could
+  pass with identical manifests, and one source's manifest could satisfy another source's missing manifest. The fix
+  checks conflicts across run and aggregate evidence and requires aggregate artifacts in every effective source. Five
+  new regressions failed before the fix and pass afterwards, including coordinator/worktree combinations, previously
+  saved false-positive approvals, and manifest removal after approval. Both independent reproduction probes now reject
+  scope.
+- Targeted independent recheck found both aggregate fixes correct, with no remaining findings. The parent independently
+  reran both original probes (both reject), the full shell/Python gate (57 assertions and 17 tests), and the npm gate
+  (63 tests, native discovery, and 485-file relocated discovery). Primary LSP checks reported zero diagnostics in all
+  six changed TypeScript files. The lens diagnostics cache was unavailable; no broader scanner pass is claimed.
+- `just --set python .venv/bin/python gate` passed: 57 shell assertions and 17 Python tests, with namespacing, generated
+  drift, Ruff, shell syntax, and diff checks. The assumed main-checkout interpreter was absent; an approved
+  worktree-local virtual environment supplied the existing requirements. That setup failure was not a code regression.
+- `npm run check` passed after the review fixes: formatting, types, 63 tests, native discovery of 72 skills and 53 roles
+  plus one extension, and relocated discovery from a 485-file package. Changed Markdown was formatted with
+  `rumdl fmt --no-cache --enable MD013`; the diff was reviewed.
+- Hosted [run 34394798811](https://github.com/kessriga/game-studio/actions/runs/34394798811) at `d416803` passed on
+  Linux and macOS. Windows passed the shell/Python gate but failed one of 63 TypeScript tests: the source-disclosure
+  assertion compared a slash-separated fixture path with the correctly displayed native Windows path. The corrected test
+  checks the full canonical directory and its rendered boundary, not just the basename. A deterministic Windows-style
+  probe through the actual text renderer and the focused local test pass. Production path/security checks are unchanged;
+  corrected hosted results must be checked at the exact [PR head](https://github.com/kessriga/game-studio/pull/21).
+- No real interactive UI smoke, RPC client, conversational game workflow, engine build, or package installation was run.
+  No release was made.
+- Checkout identity uses local paths and filesystem identity. Moving or recreating checkouts requires fresh review;
+  sibling worktrees are not supported. Adversarial filesystem races and power-loss recovery remain unverified.
 
 ## Migration validation
 
@@ -116,6 +161,8 @@ environment. Earlier evidence is retained below.
   global settings were installed here.
 
 ## Release history
+
+- 0.4.1 (unreleased): source-bound worktree evidence and explicit verified post-merge handoff.
 
 - 0.4.0 (unreleased): host-neutral layout, explicit checks, reviewed migration, and removal of retired integrations.
 
