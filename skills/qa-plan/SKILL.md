@@ -1,26 +1,22 @@
 ---
 name: qa-plan
 description: "Generate a QA test plan for a milestone (epic) or feature. Reads GDDs and story files, classifies stories by test type (Logic/Integration/Visual/UI), and produces a structured test plan covering automated tests required, manual test cases, smoke test scope, and playtest sign-off requirements. Run before implementing an epic or when starting a major feature."
-argument-hint: "[milestone | feature: system-name | story: path]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, AskUserQuestion, mcp__backlog__task_list
-model: sonnet
-agent: qa-lead
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [milestone | feature: system-name | story: path]
+
+**Primary role:** Read `../../agents/qa-lead.md` before following this workflow.
+
 # QA Plan
 
-This skill generates a structured QA plan for a milestone, feature, or individual
-story. It reads all in-scope story files and their referenced GDDs, classifies
-each story by test type, and produces a plan that tells developers exactly what
-to automate, what to verify manually, what the smoke test scope is, and when
-to bring in a playtester.
+This skill generates a structured QA plan for a milestone, feature, or individual story. It reads all in-scope story
+files and their referenced GDDs, classifies each story by test type, and produces a plan that tells developers exactly
+what to automate, what to verify manually, what the smoke test scope is, and when to bring in a playtester.
 
-Run this before a milestone begins so the team knows upfront what testing work
-is required. A test plan written after implementation is a post-mortem, not a
-plan.
+Run this before a milestone begins so the team knows upfront what testing work is required. A test plan written after
+implementation is a post-mortem, not a plan.
 
 **Output:** `production/qa/qa-plan-[milestone-slug]-[date].md`
 
@@ -28,26 +24,23 @@ plan.
 
 ## Phase 1: Parse Scope
 
-**Argument:** `$ARGUMENTS` (blank = ask user via AskUserQuestion)
+**Argument:** the invocation arguments (blank = ask user via a user-input tool or chat)
 
 Determine scope from the argument:
 
-- **`milestone [name]`** — `task_list` that Backlog milestone; follow each task's
-  `Spec:` reference to its story `.md` to build the story list.
-- **`feature: [system-name]`** — glob `production/epics/*/story-*.md`, filter
-  to stories whose file path or title contains the system name. Also check the
-  epic index file (`EPIC.md`) in that system's directory.
+- **`milestone [name]`** — `task_list` that Backlog milestone; follow each task's `Spec:` reference to its story `.md`
+  to build the story list.
+- **`feature: [system-name]`** — glob `production/epics/*/story-*.md`, filter to stories whose file path or title
+  contains the system name. Also check the epic index file (`EPIC.md`) in that system's directory.
 - **`story: [path]`** — validate that the path exists and load that single file.
-- **No argument** — use `AskUserQuestion`:
+- **No argument** — use a user-input tool or chat:
   - "What is the scope for this QA plan?"
-  - Options: "A milestone (epic)", "Specific feature (enter system name)",
-    "Specific story (enter path)", "Full epic"
+  - Options: "A milestone (epic)", "Specific feature (enter system name)", "Specific story (enter path)", "Full epic"
 
 After resolving scope, report: "Building QA plan for [N] stories in [scope]."
 
-If a story file path is referenced but the file does not exist, note it as
-MISSING and continue with the remaining stories. Do not fail the entire plan
-for one missing file.
+If a story file path is referenced but the file does not exist, note it as MISSING and continue with the remaining
+stories. Do not fail the entire plan for one missing file.
 
 ---
 
@@ -67,19 +60,16 @@ For each in-scope story file, read the full file and extract:
 
 After reading stories, load supporting context once (not per story):
 
-- `design/gdd/systems-index.md` — to understand system priorities and which
-  GDDs are approved
-- For each unique GDD referenced across all stories: read the
-  **Acceptance Criteria**, **Formulas**, and **Edge Cases** sections. Do not load
-  the full GDD text. These three sections contain the testable requirements, the math
-  to verify, and the boundary conditions that tests must cover. If an Edge Cases
-  section is absent from the GDD, note it per GDD: "No Edge Cases section found — edge
-  case coverage will be inferred from acceptance criteria only."
-- `docs/architecture/control-manifest.md` — scan for forbidden patterns that
-  automated tests should guard against (if the file exists)
+- `design/gdd/systems-index.md` — to understand system priorities and which GDDs are approved
+- For each unique GDD referenced across all stories: read the **Acceptance Criteria**, **Formulas**, and **Edge Cases**
+  sections. Do not load the full GDD text. These three sections contain the testable requirements, the math to verify,
+  and the boundary conditions that tests must cover. If an Edge Cases section is absent from the GDD, note it per GDD:
+  "No Edge Cases section found — edge case coverage will be inferred from acceptance criteria only."
+- `docs/architecture/control-manifest.md` — scan for forbidden patterns that automated tests should guard against (if
+  the file exists)
 
-If no GDD is referenced in a story, note it as a gap but do not block the plan.
-The story will be classified using acceptance criteria alone.
+If no GDD is referenced in a story, note it as a gap but do not block the plan. The story will be classified using
+acceptance criteria alone.
 
 ---
 
@@ -87,25 +77,26 @@ The story will be classified using acceptance criteria alone.
 
 For each story, assign a Story Type:
 
-- **If the story already has a `Type:` field in its header**: accept it as-is. Do NOT re-classify or validate against the criteria below — the Type was set by lead-programmer at story creation and is authoritative. Record it as-is.
-- **If the `Type:` field is missing**: infer the type from the acceptance criteria using the table below, and note in the report that the type was inferred (not declared). Flag this as a gap — the story should have its Type declared explicitly before implementation begins.
+- **If the story already has a `Type:` field in its header**: accept it as-is. Do NOT re-classify or validate against
+  the criteria below — the Type was set by lead-programmer at story creation and is authoritative. Record it as-is.
+- **If the `Type:` field is missing**: infer the type from the acceptance criteria using the table below, and note in
+  the report that the type was inferred (not declared). Flag this as a gap — the story should have its Type declared
+  explicitly before implementation begins.
 
 | Story Type | Classification Indicators |
-|---|---|
+| --- | --- |
 | **Logic** | Acceptance criteria reference calculations, formulas, numerical thresholds, state transitions, AI decisions, data validation, buff/debuff stacking, economy transactions, or any testable computation |
 | **Integration** | Criteria involve two or more systems interacting, signals or events propagating across system boundaries, save/load round-trips, network sync, or persistence |
 | **Visual/Feel** | Criteria reference animation behaviour, VFX, shader output, "feels responsive", perceived timing, screen shake, particle effects, audio sync, or visual feedback quality |
 | **UI** | Criteria reference menus, HUD elements, buttons, screens, dialogue boxes, inventory panels, tooltips, or any player-facing interface element |
 | **Config/Data** | Changes are limited to balance tuning values, data files, or configuration — no new code logic is involved |
 
-**Mixed stories** (e.g., a story that adds both a formula and a UI display):
-assign the primary type based on which acceptance criteria carry the highest
-implementation risk, and note the secondary type. Mixed Logic+Integration or
+**Mixed stories** (e.g., a story that adds both a formula and a UI display): assign the primary type based on which
+acceptance criteria carry the highest implementation risk, and note the secondary type. Mixed Logic+Integration or
 Visual+UI combinations are the most common.
 
-After classifying all stories, produce a classification summary table in
-conversation before proceeding to Phase 4. This gives the user visibility into
-how tests will be allocated.
+After classifying all stories, produce a classification summary table in conversation before proceeding to Phase 4. This
+gives the user visibility into how tests will be allocated.
 
 ---
 
@@ -116,9 +107,9 @@ Assemble the full QA plan document. Use this structure:
 ````markdown
 # QA Plan: [Milestone/Feature Name]
 **Date**: [date]
-**Generated by**: /gamedev:qa-plan
+**Generated by**: /skill:gamedev-qa-plan
 **Scope**: [N stories across [N systems]]
-**Engine**: [engine name from .claude/docs/technical-preferences.md, or "Not configured"]
+**Engine**: [engine name from docs/technical-preferences.md, or "Not configured"]
 **Milestone**: [Backlog milestone name if applicable]
 
 ---
@@ -188,7 +179,7 @@ Critical paths to verify before any QA hand-off for this milestone:
 5. Save / load cycle completes without data loss (if save system exists)
 6. Performance is within budget on target hardware (no new frame spikes)
 
-*Smoke tests are verified by the developer via `/gamedev:smoke-check`. Reference this
+*Smoke tests are verified by the developer via `/skill:gamedev-smoke-check`. Reference this
 list when running that skill.*
 
 ---
@@ -216,44 +207,48 @@ A story is DONE when ALL of the following are true:
       manual evidence (screenshot, video, or playtest notes with sign-off)
 - [ ] Test file exists at the specified path for all Logic and Integration stories
 - [ ] Manual evidence document exists for all Visual/Feel and UI stories
-- [ ] Smoke check passes (run `/gamedev:smoke-check` before QA hand-off)
+- [ ] Smoke check passes (run `/skill:gamedev-smoke-check` before QA hand-off)
 - [ ] No regressions introduced
-- [ ] Code reviewed (via `/gamedev:code-review` or documented peer review)
-- [ ] Story file updated to `Status: Complete` (via `/gamedev:story-done`)
+- [ ] Code reviewed (via `/skill:gamedev-code-review` or documented peer review)
+- [ ] Story file updated to `Status: Complete` (via `/skill:gamedev-story-done`)
 ````
 
-When generating content, use the actual story titles, GDD formula text, and
-acceptance criteria extracted in Phase 2. Do not use placeholder text — every
-test entry should reflect the real requirements of these specific stories.
+When generating content, use the actual story titles, GDD formula text, and acceptance criteria extracted in Phase 2. Do
+not use placeholder text — every test entry should reflect the real requirements of these specific stories.
 
 ---
 
 ## Phase 5: Write Output
 
-Show the complete plan in conversation (or a summary if the plan is very long),
-then ask two questions together using `AskUserQuestion`:
+Show the complete plan in conversation (or a summary if the plan is very long), then ask two questions together using a
+user-input tool or chat:
 
 ```
 question: "Ready to write the QA plan. Choose output options:"
 multiSelect: true
 options:
   - "Write QA plan to production/qa/qa-plan-[milestone-slug]-[date].md"
-  - "Also back-fill test case specs into each story file's ## QA Test Cases section (Recommended — enables /gamedev:dev-story and /gamedev:code-review traceability)"
+  - "Also back-fill test case specs into each story file's ## QA Test Cases section (Recommended — enables /skill:gamedev-dev-story and /skill:gamedev-code-review traceability)"
 ```
 
 If "Write QA plan" is selected: write the plan file exactly as generated — do not truncate.
 
-If "Also back-fill story files" is selected: for each Logic and Integration story in scope, edit the story file at its path. Find the `## QA Test Cases` section and replace its content with the test case specs generated in Phase 4 for that story. If a story has no `## QA Test Cases` section, append it before `## Test Evidence`. For Visual/Feel and UI stories, write the manual verification steps instead of test specs.
+If "Also back-fill story files" is selected: for each Logic and Integration story in scope, edit the story file at its
+path. Find the `## QA Test Cases` section and replace its content with the test case specs generated in Phase 4 for that
+story. If a story has no `## QA Test Cases` section, append it before `## Test Evidence`. For Visual/Feel and UI
+stories, write the manual verification steps instead of test specs.
 
 After writing:
 
 "QA plan written to `production/qa/qa-plan-[milestone-slug]-[date].md`.
 
 Next steps:
+
 - Share this plan with the team before milestone implementation begins
-- Once all milestone stories are implemented, run `/gamedev:smoke-check` to gate QA hand-off — not yet, only after implementation is complete
-- For Logic/Integration stories, create the test files at the listed paths
-  before marking stories done — `/gamedev:story-done` checks for them"
+- Once all milestone stories are implemented, run `/skill:gamedev-smoke-check` to gate QA hand-off — not yet, only after
+  implementation is complete
+- For Logic/Integration stories, create the test files at the listed paths before marking stories done —
+  `/skill:gamedev-story-done` checks for them"
 
 Silently append to `production/session-state/active.md` (create the file if it does not exist):
 
@@ -266,13 +261,11 @@ Silently append to `production/session-state/active.md` (create the file if it d
 ## Collaborative Protocol
 
 - **Never write the plan without asking** — Phase 5 requires explicit approval.
-- **Classify conservatively**: when a story is ambiguous between Logic and
-  Integration, classify it as Integration — it requires both unit and
-  integration tests.
-- **Do not invent test cases** beyond what acceptance criteria and GDD formulas
-  support. If a formula is absent from the GDD, flag it rather than guessing.
-- **Playtest requirements are advisory**: the user decides whether a playtest
-  is warranted for borderline Visual/Feel stories. Flag the case; do not mandate.
-- Use `AskUserQuestion` for scope selection when no argument is provided.
-  Keep all other phases non-interactive — present findings, then ask once to
-  approve the write.
+- **Classify conservatively**: when a story is ambiguous between Logic and Integration, classify it as Integration — it
+  requires both unit and integration tests.
+- **Do not invent test cases** beyond what acceptance criteria and GDD formulas support. If a formula is absent from the
+  GDD, flag it rather than guessing.
+- **Playtest requirements are advisory**: the user decides whether a playtest is warranted for borderline Visual/Feel
+  stories. Flag the case; do not mandate.
+- Use a user-input tool or chat for scope selection when no argument is provided. Keep all other phases non-interactive
+  — present findings, then ask once to approve the write.

@@ -5,32 +5,49 @@ by its bare name in invocation position instead of the gamedev: namespace.
 Roster is derived from the filesystem (skills/<name>/, agents/<name>.md), so it
 stays correct as skills/agents are added or removed. Run from the repo root.
 Exit 0 = clean, exit 1 = bare references found (printed with location)."""
-import os, re, sys
+
+import os
+import re
+import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def roster(kind):
     base = os.path.join(ROOT, kind)
     if kind == "skills":
-        return sorted(d for d in os.listdir(base)
-                      if os.path.isdir(os.path.join(base, d)))
+        return sorted(
+            d for d in os.listdir(base) if os.path.isdir(os.path.join(base, d))
+        )
     return sorted(f[:-3] for f in os.listdir(base) if f.endswith(".md"))
+
 
 skills = roster("skills")
 agents = roster("agents")
 
 # bare /skill invocation (not a path, not already gamedev:)
-re_slash = re.compile(r'(?<![\w./:-])/(' + "|".join(map(re.escape, sorted(skills, key=len, reverse=True))) + r')(?![\w/-])')
-# bare subagent_type: agent
-re_sub = re.compile(r'subagent_type\s*[:=]\s*["\']?(' + "|".join(map(re.escape, sorted(set(skills) | set(agents), key=len, reverse=True))) + r')["\']?')
+re_slash = re.compile(
+    r"(?<![\w./:-])/("
+    + "|".join(map(re.escape, sorted(skills, key=len, reverse=True)))
+    + r")(?![\w/-])"
+)
+# Reject retired literal delegation APIs in current distribution (negative contract).
+re_sub = re.compile(
+    r'subagent_type\s*[:=]\s*["\']?('
+    + "|".join(map(re.escape, sorted(set(skills) | set(agents), key=len, reverse=True)))
+    + r')["\']?'
+)
 
-SCOPE = ["skills", "agents", "hooks", "docs", "templates", "qa"]
+SCOPE = ["skills", "agents", "docs", "templates", "qa"]
 FILES = ["README.md", "CONTRIBUTING.md"]
 EXTS = (".md", ".yaml", ".yml", ".txt", ".sh")
 
+
 def scan():
     for base in SCOPE:
-        for dp, _, fns in os.walk(os.path.join(ROOT, base)):
+        for dp, dirs, fns in os.walk(os.path.join(ROOT, base)):
+            if base == "docs":
+                dirs[:] = [name for name in dirs if name != "decisions"]
             for fn in fns:
                 if fn.endswith(EXTS):
                     yield os.path.join(dp, fn)
@@ -38,6 +55,7 @@ def scan():
         p = os.path.join(ROOT, fn)
         if os.path.exists(p):
             yield p
+
 
 hits = 0
 for path in scan():

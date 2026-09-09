@@ -1,30 +1,11 @@
 #!/usr/bin/env bash
-# gamedev-is-project — decide whether the current project is a gamedev project.
-#
-# Exit 0 when it is, 1 when it is not. Nothing is printed: the exit status IS
-# the answer, which keeps every caller a single `|| exit 0` line.
-#
-# Why this exists: Claude Code enables a plugin per scope, not per project, so
-# the hooks in hooks.json run in whatever repository the session was started in.
-# Ungated, they create production/session-logs/ in unrelated repos, print the
-# Game Studios banner over someone else's session context, and apply gamedev
-# commit and push conventions to code that has nothing to do with a game.
-# Installing the plugin is not consent to any of that.
-#
-# Consumed by bin/gamedev-stage and by the shipped hooks. If a project of yours
-# is not recognised, run /gamedev:adopt, or write its phase to
-# production/stage.txt by hand — that file is a marker as well as an override.
+# Detect a Game Studio project in the current working directory, without writes.
+# Exit 0 for project-owned markers, otherwise 1; print nothing.
+# Session logs and runtime state alone do not identify a game project.
+# Run /skill:gamedev-adopt for an existing game missing framework artifacts.
 
-# Resolve against the user's project when invoked from the plugin install.
-cd "${CLAUDE_PROJECT_DIR:-.}" 2> /dev/null || exit 1
-
-# A path qualifies as a marker only if a skill or the /gamedev:start scaffold
-# creates it. Nothing a *hook* writes may be listed here: the logging hooks
-# create production/session-logs/ themselves, so trusting that directory would
-# let the first session in any repository mint its own permission for the next
-# one. Listed in the order a project acquires them.
 for marker in \
-    ".claude/docs/technical-preferences.md" \
+    "docs/technical-preferences.md" \
     "design/registry/entities.yaml" \
     "production/stage.txt" \
     "design/gdd"; do

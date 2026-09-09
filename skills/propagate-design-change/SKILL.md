@@ -1,30 +1,27 @@
 ---
 name: propagate-design-change
 description: "When a GDD is revised, scans all ADRs and the traceability index to identify which architectural decisions are now potentially stale. Produces a change impact report and guides the user through resolution."
-argument-hint: "[path/to/changed-gdd.md]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Bash, Task
-model: sonnet
-agent: technical-director
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [path/to/changed-gdd.md]
+
+**Primary role:** Read `../../agents/technical-director.md` before following this workflow.
+
 # Propagate Design Change
 
-When a GDD changes, architectural decisions written against it may no longer be
-valid. This skill finds every affected ADR, compares what the ADR assumed against
-what the GDD now says, and guides the user through resolution.
+When a GDD changes, architectural decisions written against it may no longer be valid. This skill finds every affected
+ADR, compares what the ADR assumed against what the GDD now says, and guides the user through resolution.
 
-**Usage:** `/gamedev:propagate-design-change design/gdd/combat-system.md`
+**Usage:** `/skill:gamedev-propagate-design-change design/gdd/combat-system.md`
 
 ---
 
 ## 1. Validate Argument
 
 A GDD path argument is **required**. If missing, fail with:
-> "Usage: `/gamedev:propagate-design-change design/gdd/[system].md`
-> Provide the path to the GDD that was changed."
+> "Usage: `/skill:gamedev-propagate-design-change design/gdd/[system].md` Provide the path to the GDD that was changed."
 
 Verify the file exists. If not, fail with:
 > "[path] not found. Check the path and try again."
@@ -46,12 +43,12 @@ git show HEAD:design/gdd/[filename].md
 ```
 
 If the file has no git history (new file), report:
-> "No previous version in git — this appears to be a new GDD, not a revision.
-> Nothing to propagate."
+> "No previous version in git — this appears to be a new GDD, not a revision. Nothing to propagate."
 
 If git returns the previous version, do a conceptual diff:
-- Identify sections that changed (new rules, removed rules, modified formulas,
-  changed acceptance criteria, changed tuning knobs)
+
+- Identify sections that changed (new rules, removed rules, modified formulas, changed acceptance criteria, changed
+  tuning knobs)
 - Identify sections that are unchanged
 - Produce a change summary:
 
@@ -75,6 +72,7 @@ Key changes affecting architecture:
 ## 4. Load Architecture Inputs
 
 Read all ADRs in `docs/architecture/`:
+
 - For each ADR, read the full file
 - Extract the "GDD Requirements Addressed" table
 - Note which GDD documents and requirement IDs each ADR references
@@ -89,8 +87,8 @@ Report: "Loaded [N] ADRs. [M] reference [gdd filename]."
 
 For each ADR that references the changed GDD:
 
-Compare the ADR's "GDD Requirements Addressed" entries against the changed sections
-of the GDD. For each referenced requirement:
+Compare the ADR's "GDD Requirements Addressed" entries against the changed sections of the GDD. For each referenced
+requirement:
 
 1. **Locate the requirement** in the current GDD — does it still exist?
 2. **Compare**: What did the GDD say when the ADR was written vs. what it says now?
@@ -99,7 +97,7 @@ of the GDD. For each referenced requirement:
 Classify each affected ADR as one of:
 
 | Status | Meaning |
-|--------|---------|
+| -------- | --------- |
 | ✅ **Still Valid** | The GDD change doesn't affect what this ADR decided |
 | ⚠️ **Needs Review** | The GDD change may affect this ADR — human judgment needed |
 | 🔴 **Likely Superseded** | The GDD change directly contradicts what this ADR assumed |
@@ -151,22 +149,28 @@ ADRs referencing this GDD: [M]
 ## 6b. Director Gate — Technical Impact Review
 
 **Review mode check** — apply before spawning TD-CHANGE-IMPACT:
+
 - `solo` → skip. Note: "TD-CHANGE-IMPACT skipped — Solo mode." Proceed to Phase 7.
 - `lean` → skip. Note: "TD-CHANGE-IMPACT skipped — Lean mode." Proceed to Phase 7.
 - `full` → spawn as normal.
 
-Spawn `technical-director` via Task using gate **TD-CHANGE-IMPACT** (`../../docs/director-gates.md`).
+Spawn `gamedev:technical-director` through authorized delegation using gate **TD-CHANGE-IMPACT**
+(`../../docs/director-gates.md`).
 
-Pass: the full Design Change Impact Report from Phase 6 (change summary, all affected ADRs with their Still Valid / Needs Review / Likely Superseded classifications, and recommended actions).
+Pass: the full Design Change Impact Report from Phase 6 (change summary, all affected ADRs with their Still Valid /
+Needs Review / Likely Superseded classifications, and recommended actions).
 
 The technical-director reviews whether:
+
 - The impact classifications are correct (no ADRs under-classified)
 - The recommended actions are architecturally sound
 - Any cascading effects on other ADRs or systems were missed
 
 Apply the verdict:
+
 - **APPROVE** → proceed to Phase 7 resolution workflow
-- **CONCERNS** → surface the specific ADRs or recommendations flagged; use `AskUserQuestion` with options: `Revise the impact assessment` / `Accept with noted concerns` / `Discuss further`
+- **CONCERNS** → surface the specific ADRs or recommendations flagged; use a user-input tool or chat with options:
+  `Revise the impact assessment` / `Accept with noted concerns` / `Discuss further`
 - **REJECT** → do not proceed to resolution; re-analyze the impact before continuing
 
 ---
@@ -176,14 +180,15 @@ Apply the verdict:
 For each ADR marked "Needs Review" or "Likely Superseded", ask the user what to do:
 
 Ask for each ADR in turn:
-> "ADR-NNNN ([title]) — [status]. What would you like to do?"
-> Options:
+> "ADR-NNNN ([title]) — [status]. What would you like to do?" Options:
+>
 > - "Mark Superseded (I'll write a new ADR)" — updates ADR status line to `Superseded by: [pending]`
 > - "Update in place (minor revision)" — opens the ADR for editing; note what to revise
 > - "Keep as-is (the change doesn't actually affect this decision)"
 > - "Skip for now (revisit later)"
 
 For ADRs marked **Superseded**:
+
 - Update the ADR's Status field: `Superseded by ADR-[next number] (pending — see change-impact-[date]-[system].md)`
 - Ask: "May I update the status in [ADR filename]?"
 
@@ -192,6 +197,7 @@ For ADRs marked **Superseded**:
 ## 8. Update Traceability Index
 
 If `docs/architecture/architecture-traceability.md` exists:
+
 - Add the changed GDD requirements to the "Superseded Requirements" table:
 
 ```markdown
@@ -210,13 +216,14 @@ Ask: "May I update the traceability index?"
 Ask: "May I write the change impact report to `docs/architecture/change-impact-[date]-[system-slug].md`?"
 
 The document contains:
+
 - The change summary from step 3
 - The full impact analysis from step 5
 - Resolution decisions made in step 7
 - List of ADRs that need to be written or updated
 
-If user approved: Verdict: **COMPLETE** — change impact report saved.
-If user declined: Verdict: **BLOCKED** — user declined write.
+If user approved: Verdict: **COMPLETE** — change impact report saved. If user declined: Verdict: **BLOCKED** — user
+declined write.
 
 ---
 
@@ -224,11 +231,11 @@ If user declined: Verdict: **BLOCKED** — user declined write.
 
 Based on the resolution decisions, suggest:
 
-- **ADRs marked Superseded**: "Run `/gamedev:architecture-decision [title]` to write the
-  replacement ADR. Then re-run `/gamedev:propagate-design-change` to verify coverage."
+- **ADRs marked Superseded**: "Run `/skill:gamedev-architecture-decision [title]` to write the replacement ADR. Then
+  re-run `/skill:gamedev-propagate-design-change` to verify coverage."
 - **ADRs to update in place**: List the specific fields to update in each ADR
-- **If many ADRs affected**: "Run `/gamedev:architecture-review` after all ADRs are updated
-  to verify the full traceability matrix is still coherent."
+- **If many ADRs affected**: "Run `/skill:gamedev-architecture-review` after all ADRs are updated to verify the full
+  traceability matrix is still coherent."
 
 ---
 

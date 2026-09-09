@@ -14,10 +14,11 @@
 
 These should pass before any behavioral testing:
 
-- [ ] Frontmatter has all required fields (`name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`)
+- [ ] Frontmatter has all required fields (`name`, `description` only; arguments and role routing are documented in the
+      body)
 - [ ] 2+ phase headings found
 - [ ] At least one verdict keyword present (`PASS`, `FAIL`, `CONCERNS`, `APPROVED`, `BLOCKED`, `COMPLETE`, `READY`)
-- [ ] If `allowed-tools` includes Write/Edit: `"May I write"` language present
+- [ ] If the workflow authors files: `"May I write"` language present
 - [ ] Next-step handoff section present at end
 
 ---
@@ -38,15 +39,18 @@ These should pass before any behavioral testing:
 ### Case 1: Happy Path — [brief name]
 
 **Fixture** (assumed project state):
+
 - [file/condition 1]
 - [file/condition 2]
 
 **Expected behavior**:
+
 1. [Step 1]
 2. [Step 2]
 3. [Step 3]
 
 **Assertions**:
+
 - [ ] [Assertion 1]
 - [ ] [Assertion 2]
 - [ ] [Assertion 3]
@@ -58,14 +62,17 @@ These should pass before any behavioral testing:
 ### Case 2: Failure / Blocked — [brief name]
 
 **Fixture**:
+
 - [missing or invalid condition]
 
 **Expected behavior**:
+
 1. [Skill detects the problem]
 2. [Skill reports FAIL/BLOCKED]
 3. [Skill does NOT proceed]
 
 **Assertions**:
+
 - [ ] Skill stops early and does not produce output
 - [ ] Correct error/block message displayed
 - [ ] No files written without user approval
@@ -77,13 +84,16 @@ These should pass before any behavioral testing:
 ### Case 3: Mode Variant — [brief name]
 
 **Fixture**:
+
 - [standard project state]
 - [specific mode or flag set]
 
 **Expected behavior**:
+
 1. [Behavior differs from happy path because of mode]
 
 **Assertions**:
+
 - [ ] [Mode-specific assertion]
 - [ ] [Output differs correctly from Case 1]
 
@@ -94,12 +104,15 @@ These should pass before any behavioral testing:
 ### Case 4: Edge Case — [brief name]
 
 **Fixture**:
+
 - [unusual or boundary condition]
 
 **Expected behavior**:
+
 1. [Skill handles gracefully]
 
 **Assertions**:
+
 - [ ] [Edge case handled without crash or silent failure]
 - [ ] [Correct output or message]
 
@@ -110,14 +123,17 @@ These should pass before any behavioral testing:
 ### Case 5: Director Gate — [brief name]
 
 **Fixture**:
+
 - [project state that triggers a gate check]
 - Review mode: [full | lean | solo]
 
 **Expected behavior**:
+
 1. [Gate fires / does not fire based on mode]
 2. [Correct director agents spawned or skipped]
 
 **Assertions**:
+
 - [ ] In full mode: [specific gates spawn]
 - [ ] In lean mode: [phase gates only, or skip]
 - [ ] In solo mode: no director gates spawn
@@ -138,5 +154,4 @@ These should pass before any behavioral testing:
 
 ## Coverage Notes
 
-[Any gaps in coverage, known edge cases not tested, or conditions that would require
-a live skill run to verify.]
+[Any gaps in coverage, known edge cases not tested, or conditions that would require a live skill run to verify.]

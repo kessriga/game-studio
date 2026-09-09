@@ -1,22 +1,19 @@
 ---
 name: scope-check
 description: "Analyze a feature or sprint for scope creep by comparing current scope against the original plan. Flags additions, quantifies bloat, and recommends cuts. Use when user says 'any scope creep', 'scope review', 'are we staying in scope'."
-argument-hint: "[feature-name or sprint-N]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash
-model: haiku
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
+**Arguments:** [feature-name or sprint-N]
 
 # Scope Check
 
 This skill is read-only — it reports findings but writes no files.
 
-Compares original planned scope against current state to detect, quantify, and triage
-scope creep.
+Compares original planned scope against current state to detect, quantify, and triage scope creep.
 
-**Argument:** `$ARGUMENTS[0]` — feature name, sprint number, or milestone name.
+**Argument:** the first invocation argument — feature name, sprint number, or milestone name.
 
 ---
 
@@ -25,11 +22,11 @@ scope creep.
 Locate the baseline scope document for the given argument:
 
 - **Feature name** → read `design/gdd/[feature].md` or matching file in `design/`
-- **Backlog milestone/label** (e.g., `combat-mvp`) → read the milestone's tasks under `backlog/tasks/` and use their titles/ACs as the baseline
+- **Backlog milestone/label** (e.g., `combat-mvp`) → read the milestone's tasks under `backlog/tasks/` and use their
+  titles/ACs as the baseline
 - **Milestone doc** → read `production/milestones/[name].md`
 
-If the document is not found, report the missing file and stop. Do not proceed without
-a baseline to compare against.
+If the document is not found, report the missing file and stop. Do not proceed without a baseline to compare against.
 
 ---
 
@@ -94,7 +91,7 @@ Generated: [Date]
 Assign a canonical verdict based on net scope change:
 
 | Net Change | Verdict | Meaning |
-|-----------|---------|---------|
+| ----------- | --------- | --------- |
 | ≤10% | **PASS** | On Track — within acceptable variance |
 | 10–25% | **CONCERNS** | Minor Creep — manageable with targeted cuts |
 | 25–50% | **FAIL** | Significant Creep — must cut or formally extend timeline |
@@ -114,11 +111,13 @@ Net change: [+X%] — [On Track / Minor Creep / Significant Creep / Out of Contr
 After presenting the report, offer concrete follow-up:
 
 - **PASS** → no action required. Suggest re-running before next milestone.
-- **CONCERNS** → offer to identify the 2–3 additions with best cut ratio. Reprioritise the Backlog board to formally re-scope.
-- **FAIL** → recommend escalating to producer. Reprioritise the board (defer tasks to a later milestone) or run `/gamedev:estimate` to re-baseline timeline.
+- **CONCERNS** → offer to identify the 2–3 additions with best cut ratio. Reprioritise the Backlog board to formally
+  re-scope.
+- **FAIL** → recommend escalating to producer. Reprioritise the board (defer tasks to a later milestone) or run
+  `/skill:gamedev-estimate` to re-baseline timeline.
 
 Always end with:
-> "Run `/gamedev:scope-check [name]` again after cuts are made to verify the verdict improves."
+> "Run `/skill:gamedev-scope-check [name]` again after cuts are made to verify the verdict improves."
 
 ---
 

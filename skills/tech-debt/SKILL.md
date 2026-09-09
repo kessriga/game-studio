@@ -1,13 +1,11 @@
 ---
 name: tech-debt
 description: "Track, categorize, and prioritize technical debt across the codebase. Scans for debt indicators, maintains a debt register, and recommends repayment scheduling."
-argument-hint: "[scan|add|prioritize|report]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
+**Arguments:** [scan|add|prioritize|report]
 
 ## Phase 1: Parse Subcommand
 
@@ -47,7 +45,8 @@ Present the findings to the user.
 
 Ask: "May I write these findings to `docs/tech-debt-register.md`?"
 
-If yes, update the register (append new entries, do not overwrite existing ones). Verdict: **COMPLETE** — scan findings written to register.
+If yes, update the register (append new entries, do not overwrite existing ones). Verdict: **COMPLETE** — scan findings
+written to register.
 
 If no, stop here. Verdict: **BLOCKED** — user declined write.
 
@@ -57,7 +56,8 @@ If no, stop here. Verdict: **BLOCKED** — user declined write.
 
 Ask the user for the description, affected files, and impact if left unfixed (plain text prompts).
 
-Then use `AskUserQuestion` to collect the **category**:
+Then use a user-input tool or chat to collect the **category**:
+
 - Prompt: "What category does this tech debt belong to?"
 - Options:
   - `[A] Architecture Debt — wrong abstractions, missing patterns, coupling issues`
@@ -67,7 +67,8 @@ Then use `AskUserQuestion` to collect the **category**:
   - `[E] Dependency Debt — outdated packages, deprecated APIs, version conflicts`
   - `[F] Performance Debt — known slow paths, memory issues, unoptimized queries`
 
-Then use `AskUserQuestion` to collect the **estimated fix effort**:
+Then use a user-input tool or chat to collect the **estimated fix effort**:
+
 - Prompt: "What is the estimated effort to fix this item?"
 - Options:
   - `[A] S — Small (under 1 day)`
@@ -114,14 +115,15 @@ Read the debt register. Generate summary statistics:
 
 Flag any items that have been in the register for more than 3 sprints.
 
-Output the report to the user. This mode is read-only — no files are written. Verdict: **COMPLETE** — debt report generated.
+Output the report to the user. This mode is read-only — no files are written. Verdict: **COMPLETE** — debt report
+generated.
 
 ---
 
 ## Phase 3: Next Steps
 
 - Add high-priority debt items to the Backlog board as tasks (label them for tracking).
-- Run `/gamedev:tech-debt report` at the start of each sprint to track debt trends over time.
+- Run `/skill:gamedev-tech-debt report` at the start of each sprint to track debt trends over time.
 
 ### Debt Register Format
 
@@ -136,6 +138,7 @@ Total items: [N] | Estimated total effort: [T-shirt sizes summed]
 ```
 
 ### Rules
+
 - Tech debt is not inherently bad — it is a tool. The register tracks conscious decisions.
 - Every debt entry must explain WHY it was accepted (deadline, prototype, missing info)
 - "Scan" should run at least once per sprint to catch new debt

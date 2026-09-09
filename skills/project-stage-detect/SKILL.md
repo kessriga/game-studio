@@ -1,19 +1,17 @@
 ---
 name: project-stage-detect
 description: "Automatically analyze project state, detect stage, identify gaps, and recommend next steps based on existing artifacts. Use when user asks 'where are we in development', 'what stage are we in', 'full project audit'."
-argument-hint: "[optional: role filter like 'programmer' or 'designer']"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Write
-model: haiku
-# Read-only diagnostic skill — no specialist agent delegation needed
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [optional: role filter like 'programmer' or 'designer']
+
 # Project Stage Detection
 
-This skill scans your project to determine its current development stage, completeness
-of artifacts, and gaps that need attention. It's especially useful when:
+This skill scans your project to determine its current development stage, completeness of artifacts, and gaps that need
+attention. It's especially useful when:
+
 - Starting with an existing project
 - Onboarding to a codebase
 - Checking what's missing before a milestone
@@ -28,6 +26,7 @@ of artifacts, and gaps that need attention. It's especially useful when:
 Analyze project structure and content:
 
 **Design Documentation** (`design/`):
+
 - Count GDD files in `design/gdd/*.md`
 - Check for game-concept.md, game-pillars.md, systems-index.md
 - If systems-index.md exists, count total systems vs. designed systems
@@ -36,53 +35,60 @@ Analyze project structure and content:
 - Count level designs in `design/levels/`
 
 **Source Code** (`src/`):
+
 - Count source files (language-agnostic)
 - Identify major systems (directories with 5+ files)
 - Check for core/, gameplay/, ai/, networking/, ui/ directories
 - Estimate lines of code (rough scale)
 
 **Production Artifacts** (`production/`):
+
 - Check for active sprint plans
 - Look for milestone definitions
 - Find roadmap documents
 
 **Prototypes** (`prototypes/`):
+
 - Count prototype directories
 - Check for READMEs (documented vs undocumented)
 - Assess if prototypes are archived or active
 
 **Architecture Docs** (`docs/architecture/`):
+
 - Count ADRs (Architecture Decision Records)
 - Check for overview/index documents
 
 **Tests** (`tests/`):
+
 - Count test files
 - Estimate test coverage (rough heuristic)
 
 ### 2. Classify Project Stage
 
-Based on scanned artifacts, determine stage. Check `production/stage.txt` first —
-if it exists, use its value (explicit override from `/gamedev:gate-check`). Otherwise,
-auto-detect using these heuristics (check from most-advanced backward):
+Based on scanned artifacts, determine stage. Check `production/stage.txt` first — if it exists, use its value (explicit
+override from `/skill:gamedev-gate-check`). Otherwise, auto-detect using these heuristics (check from most-advanced
+backward):
 
 | Stage | Indicators |
-|-------|-----------|
+| ------- | ----------- |
 | **Concept** | No game concept doc, brainstorming phase |
 | **Systems Design** | Game concept exists, systems index missing or incomplete |
 | **Technical Setup** | Systems index exists, engine not configured |
 | **Pre-Production** | Engine configured, `src/` has <10 source files |
 | **Production** | `src/` has 10+ source files, active development |
-| **Polish** | Explicit only (set by `/gamedev:gate-check` Production → Polish gate) |
-| **Release** | Explicit only (set by `/gamedev:gate-check` Polish → Release gate) |
+| **Polish** | Explicit only (set by `/skill:gamedev-gate-check` Production → Polish gate) |
+| **Release** | Explicit only (set by `/skill:gamedev-gate-check` Polish → Release gate) |
 
 ### 3. Collaborative Gap Identification
 
 **DO NOT** just list missing files. Instead, **ask clarifying questions**:
 
-- "I see combat code (`src/gameplay/combat/`) but no `design/gdd/combat-system.md`. Was this prototyped first, or should we reverse-document?"
+- "I see combat code (`src/gameplay/combat/`) but no `design/gdd/combat-system.md`. Was this prototyped first, or should
+  we reverse-document?"
 - "You have 15 ADRs but no architecture overview. Should I create one to help new contributors?"
 - "No sprint plans in `production/`. Are you tracking work elsewhere (Jira, Trello, etc.)?"
-- "I found a game concept but no systems index. Have you decomposed the concept into individual systems yet, or should we run `/gamedev:map-systems`?"
+- "I found a game concept but no systems index. Have you decomposed the concept into individual systems yet, or should
+  we run `/skill:gamedev-map-systems`?"
 - "Prototypes directory has 3 projects with no READMEs. Were these experiments, or do they need documentation?"
 
 ### 4. Generate Stage Report
@@ -90,6 +96,7 @@ auto-detect using these heuristics (check from most-advanced backward):
 Use template: `../../docs/templates/project-stage-report.md`
 
 **Report structure**:
+
 ```markdown
 # Project Stage Analysis
 
@@ -114,27 +121,32 @@ Use template: `../../docs/templates/project-stage-report.md`
 
 ### 5. Role-Filtered Recommendations (Optional)
 
-If user provided a role argument (e.g., `/gamedev:project-stage-detect programmer`):
+If user provided a role argument (e.g., `/skill:gamedev-project-stage-detect programmer`):
 
 **Programmer**:
+
 - Focus on architecture docs, test coverage, missing ADRs
 - Code-to-docs gaps
 
 **Designer**:
+
 - Focus on GDD completeness, missing design sections
 - Prototype documentation
 
 **Producer**:
+
 - Focus on sprint plans, milestone tracking, roadmap
 - Cross-team coordination docs
 
 **General** (no role):
+
 - Holistic view of all gaps
 - Highest-priority items across domains
 
 ### 6. Request Approval Before Writing
 
 **Collaborative protocol**:
+
 ```
 I've analyzed your project. Here's what I found:
 
@@ -160,13 +172,13 @@ Wait for user approval before creating the file.
 
 ```bash
 # General project analysis
-/gamedev:project-stage-detect
+/skill:gamedev-project-stage-detect
 
 # Programmer-focused analysis
-/gamedev:project-stage-detect programmer
+/skill:gamedev-project-stage-detect programmer
 
 # Designer-focused analysis
-/gamedev:project-stage-detect designer
+/skill:gamedev-project-stage-detect designer
 ```
 
 ---
@@ -175,11 +187,12 @@ Wait for user approval before creating the file.
 
 After generating the report, suggest relevant next steps:
 
-- **Concept exists but no systems index?** → `/gamedev:map-systems` to decompose into systems
-- **Missing design docs?** → `/gamedev:reverse-document design src/[system]`
-- **Missing architecture docs?** → `/gamedev:architecture-decision` or `/gamedev:reverse-document architecture`
-- **Prototypes need documentation?** → `/gamedev:reverse-document concept prototypes/[name]`
-- **No epics/milestones yet?** → `/gamedev:create-epics` then `/gamedev:create-stories`
+- **Concept exists but no systems index?** → `/skill:gamedev-map-systems` to decompose into systems
+- **Missing design docs?** → `/skill:gamedev-reverse-document design src/[system]`
+- **Missing architecture docs?** → `/skill:gamedev-architecture-decision` or
+  `/skill:gamedev-reverse-document architecture`
+- **Prototypes need documentation?** → `/skill:gamedev-reverse-document concept prototypes/[name]`
+- **No epics/milestones yet?** → `/skill:gamedev-create-epics` then `/skill:gamedev-create-stories`
 - **Approaching a milestone?** → review milestone progress on the Backlog board
 
 ---

@@ -15,18 +15,26 @@
 #   - When a new GDD references an existing entry, append its path to
 #     referenced_by. Do not create a duplicate entry.
 #
-# WRITTEN BY: /gamedev:design-system (Phase 5 — after GDD sections are approved)
-#             /gamedev:consistency-check (when resolving conflicts)
-# READ BY:    /gamedev:design-system (Phase 2 — before authoring begins, and after
+# WRITTEN BY: /skill:gamedev-design-system (Phase 5 — after GDD sections
+#   are approved)
+#             /skill:gamedev-consistency-check (when resolving conflicts)
+# READ BY:    /skill:gamedev-design-system (Phase 2 — before authoring
+#   begins, and after
 #               Section C/D writes to conflict-check new entities/formulas)
-#             /gamedev:consistency-check (primary input — grep-first, GDD-second)
-#             /gamedev:review-all-gdds (Phase 1 — baseline for Phase 2 checks)
-#             /gamedev:architecture-review (data structure and interface validation)
+#             /skill:gamedev-consistency-check (primary input —
+#   grep-first, GDD-second)
+#             /skill:gamedev-review-all-gdds (Phase 1 — baseline for
+#   Phase 2 checks)
+#             /skill:gamedev-architecture-review (data structure and
+#   interface validation)
 #
 # SEARCH PATTERNS (for skills using Grep):
-#   All entity names:        Grep pattern="^  - name:" path="design/registry/entities.yaml"
-#   Specific entity:         Grep pattern="  - name: goblin" path="design/registry/entities.yaml"
-#   All items:               Grep pattern="^  - name:" path="design/registry/entities.yaml" (items section)
+#   All entity names:        Grep pattern="^  - name:"
+#   path="design/registry/entities.yaml"
+#   Specific entity:         Grep pattern="  - name: goblin"
+#   path="design/registry/entities.yaml"
+#   All items:               Grep pattern="^  - name:"
+#   path="design/registry/entities.yaml" (items section)
 #   What combat.md owns:     Grep pattern="source: design/gdd/combat.md"
 #   What inventory.md uses:  Grep pattern="referenced_by.*inventory"
 #   All gold values:          Grep pattern="value_gold:"
@@ -34,12 +42,14 @@
 #
 # FORMAT: YAML. Consistent indentation is critical for grep reliability.
 #   Sections: entities | items | formulas | constants
-#   Each entry: name, status, source, referenced_by[], attributes{}, added, revised
+#   Each entry: name, status, source, referenced_by[], attributes{},
+#   added, revised
 
 version: 1
 last_updated: ""
 
-# ─── ENTITIES ────────────────────────────────────────────────────────────────
+# ─── ENTITIES
+#   ────────────────────────────────────────────────────────────────
 # Named game-world objects: enemies, NPCs, characters, factions, bosses.
 # Register an entity here when it appears in more than one GDD — e.g., an
 # enemy defined in combat.md that also drops items listed in inventory.md.
@@ -69,7 +79,8 @@ entities: []
 #     revised: ""
 
 
-# ─── ITEMS ───────────────────────────────────────────────────────────────────
+# ─── ITEMS
+#   ───────────────────────────────────────────────────────────────────
 # Named collectables, equipment, consumables, crafting materials, currency.
 # Register an item when its name or value appears in more than one GDD.
 #
@@ -87,7 +98,8 @@ items: []
 #     source: design/gdd/combat.md   # drop defined in combat GDD
 #     referenced_by:
 #       - design/gdd/combat.md
-#       - design/gdd/inventory.md    # inventory GDD lists its weight/stack rules
+#       - design/gdd/inventory.md    # inventory GDD lists its
+#   weight/stack rules
 #       - design/gdd/economy.md      # economy GDD references its sell price
 #     value_gold: 5
 #     weight: 1
@@ -97,7 +109,8 @@ items: []
 #     revised: ""
 
 
-# ─── FORMULAS ────────────────────────────────────────────────────────────────
+# ─── FORMULAS
+#   ────────────────────────────────────────────────────────────────
 # Named calculations with defined variables and output ranges.
 # Register a formula when its output feeds into another system's input,
 # or when another GDD references it by name.
@@ -123,7 +136,8 @@ formulas: []
 #       - crit_chance
 #       - crit_multiplier
 #     output_range: [0, 999]
-#     expression: "max(0, attack - defense) * (1 + crit_chance * crit_multiplier)"
+#     expression: "max(0, attack - defense) * (1 + crit_chance *
+#   crit_multiplier)"
 #     notes: "Output feeds into health-system damage intake. Min is 0 (armour
 #       can absorb all damage). Max is uncapped in formula but tuning knob
 #       damage_cap in combat.md clamps at 999."
@@ -131,7 +145,8 @@ formulas: []
 #     revised: ""
 
 
-# ─── CONSTANTS ───────────────────────────────────────────────────────────────
+# ─── CONSTANTS
+#   ───────────────────────────────────────────────────────────────
 # Named numerical values referenced across multiple systems.
 # Register a constant when it is defined in one GDD but another GDD must
 # agree with it (e.g., gold carry limit defined in economy but checked in

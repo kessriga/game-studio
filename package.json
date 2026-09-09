@@ -1,6 +1,6 @@
 {
   "name": "@kessriga/gamedev",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "type": "module",
   "description": "Game Studio: guided game development with 72 skills and 53 specialist role guides.",
   "license": "MIT",
@@ -28,7 +28,6 @@
     "scripts/scaffold-project.py",
     "qa/",
     "AGENTS.md",
-    "CLAUDE.md",
     "CONTRIBUTING.md",
     "SECURITY.md",
     "STATUS.md"

@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">Game Studio</h1>
   <p align="center">
-    Guided game development in Pi, Claude Code, and Codex.
+    Host-neutral game workflows, with Pi integration.
     <br />
     53 specialist roles. 72 skills. One shared workflow.
   </p>
@@ -9,26 +9,18 @@
 
 ---
 
-## Choose your coding assistant
+## Shared workflows, Pi integration
 
-Game Studio ships as a **Pi package** and as the `gamedev` plugin for **Claude Code and Codex**. All three use the same
-skills, specialist roles, and project documents. See [Getting Started](#getting-started) for installation and
-[STATUS.md](STATUS.md) for verified capabilities.
+Game Studio ships 72 shared skills, 53 specialist role guides, and the Pi package `@kessriga/gamedev`. See
+[Getting Started](#getting-started), [verified capabilities](STATUS.md), and the [host guide](docs/host-runtime.md).
+Other runtimes may read the workflows but have no shipped integration.
 
-This guide identifies skills by name, such as `gamedev:brainstorm`. Add the prefix your assistant uses when invoking
-one:
+Logical identifiers such as `gamedev:brainstorm` name shared workflows. In Pi use `/skill:gamedev-start` or
+`/skill:gamedev-brainstorm cozy farming`. The [Pi guide](docs/pi.md) covers installation, available-runner delegation,
+progress tracking, and user approvals. The package supplies role instructions, not a subagent runner. Sequential role
+passes are not independent review.
 
-| Host | Start a project | Run a skill with arguments |
-| ------ | ----------------- | ---------------------------- |
-| Pi | `/skill:gamedev-start` | `/skill:gamedev-brainstorm cozy farming` |
-| Claude Code | `/gamedev:start` | `/gamedev:brainstorm cozy farming` |
-| Codex | `$gamedev:start` | `$gamedev:brainstorm cozy farming` |
-
-You can also select the skill from your assistant's skill picker. Host-specific setup and runtime behavior are
-documented in the [Pi guide](docs/pi.md), [Claude Code guide](docs/claude-code.md), and [Codex guide](docs/codex.md). Pi
-uses an installed subagent extension when available; this package supplies the role instructions, not another subagent
-runner. Its progress widget shows previous, current, and next steps; `/gamedev-workflow panel` toggles a side overlay.
-Saved evidence and user approvals remain separate. See [workflow tracking](docs/pi.md#workflow-tracking).
+Upgrading an existing project? Follow the [reviewed 0.4 migration](docs/migration-0.4.md) before scaffolding.
 
 ## Why This Exists
 
@@ -62,8 +54,7 @@ independent review from a role pass in the same session.
 | ---------- | ------- | ------------- |
 | **Specialist roles** | 53 | Design, programming, art, audio, narrative, QA, and production expertise; delegated or followed as role passes according to host capabilities |
 | **Skills** | 72 | Workflows for every phase (`gamedev:start`, `gamedev:design-system`, `gamedev:create-epics`, `gamedev:create-stories`, `gamedev:dev-story`, `gamedev:story-done`, etc.) |
-| **Hooks** | 11 | Claude Code automation for validation, session state, notifications, and audit logs; Pi and Codex follow explicit checks |
-| **Rules** | 11 | Coding standards for matching project paths; loaded automatically by Claude Code and read explicitly in Pi and Codex |
+| **Rules** | 11 | Coding standards for matching project paths; read explicitly using their path patterns |
 | **Templates** | 39 | Document templates for GDDs, UX specs, ADRs, HUD design, accessibility, and more |
 
 ## Studio Hierarchy
@@ -95,7 +86,7 @@ delegating work. Each host controls model selection; it does not change a role's
 
 ### Engine Specialists
 
-The plugin includes agent sets for four engines. Use the set that matches your project:
+The package includes agent sets for four engines. Use the set that matches your project:
 
 | Engine | Lead Agent | Sub-Specialists |
 | -------- | ----------- | ----------------- |
@@ -271,7 +262,7 @@ optional, `<angle brackets>` required. Most authoring, team, and gate skills als
 - `gamedev:test-evidence-review [story | milestone | system]` — quality review of tests and manual evidence; verdict per
   story
 - `gamedev:test-flakiness [ci-log | scan | registry]` — detect non-deterministic tests, recommend quarantine or fix
-- `gamedev:skill-test static|spec|category|audit [skill]` — validate the plugin's own skills, structurally and
+- `gamedev:skill-test static|spec|category|audit [skill]` — validate the framework's own skills, structurally and
   behaviorally
 - `gamedev:skill-improve [skill-name]` — improve a skill via a test-fix-retest loop
 
@@ -321,8 +312,7 @@ optional, `<angle brackets>` required. Most authoring, team, and gate skills als
 ## Getting Started
 
 Install `gamedev`, then use it in a separate repository for your game. An empty game directory is fine. You need Git,
-Python 3, Bash (Git Bash on Windows), and one of the supported assistants. See
-[setup requirements](docs/setup-requirements.md) for optional tools.
+Python 3, Bash (Git Bash on Windows), and Pi. See [setup requirements](docs/setup-requirements.md) for optional tools.
 
 ### Install in Pi
 
@@ -336,35 +326,11 @@ Before release, use `pi install /absolute/path/to/game-studio` with a contributo
 repository and run `/skill:gamedev-start`. See [Pi setup](docs/pi.md) for local testing, subagent integration, and
 progress tracking.
 
-### Install in Claude Code
-
-Inside Claude Code:
-
-```text
-/plugin marketplace add kessriga/game-studio
-/plugin install gamedev@game-studio
-```
-
-Open a new Claude Code session in your game repository and run `/gamedev:start`. See the
-[Claude Code guide](docs/claude-code.md) for configuration and updates.
-
-### Install in Codex
-
-From this checkout, in a terminal:
-
-```sh
-codex plugin marketplace add ./
-codex plugin add gamedev@game-studio
-```
-
-Open a new Codex session in your game repository and run `$gamedev:start`. See the [Codex guide](docs/codex.md) for
-remote installation once this release reaches main, and for runtime differences.
-
 ### Start building your game
 
-The start skill adds shared `AGENTS.md` instructions, host compatibility files, project rules, engine settings, and the
-`production/`, `design/`, and `docs/` directories. It preserves existing files, asks where you are in development, and
-guides you to the right workflow.
+The start skill adds shared `AGENTS.md` instructions, project rules, engine settings, and the `production/`, `design/`,
+and `docs/` directories. It preserves existing files, asks where you are in development, and guides you to the right
+workflow.
 
 Once scaffolded, choose any skill directly:
 
@@ -375,45 +341,33 @@ Once scaffolded, choose any skill directly:
 
 ## Project Structure
 
-**The plugin** (this repo — installed, not cloned into your game):
+**The package** (installed separately from your game):
 
-```
-package.json                        # Pi package manifest
-pi/                                 # Pi integration and generated namespaced skill entry points
-.codex-plugin/plugin.json            # Codex manifest
-.agents/plugins/marketplace.json     # Codex repository marketplace
-.claude-plugin/
-  plugin.json                       # Claude Code manifest (name: gamedev)
-  marketplace.json                  # Claude Code marketplace (source: ./)
-skills/                             # 72 shared skill workflows
-agents/                             # 53 specialist role definitions
-hooks/                              # claude-hooks.json + 11 Claude hook scripts (run from ${CLAUDE_PLUGIN_ROOT})
-bin/
-  gamedev-stage                     # Stage + Epic>Feature>Task detection
-  gamedev-is-project                # Is this a gamedev project? Project-touching hooks bail when it is not
-docs/                               # Framework docs + 39 document templates (skills read via ../../docs)
-templates/                          # Project scaffold sources copied out by gamedev:start
-.claude/                            # Dev-only, not shipped: settings.json, validate-skill-change, opsx/
+```text
+package.json   # Pi package manifest
+pi/            # Pi extension and generated namespaced entry points
+skills/        # Shared workflows
+agents/        # Specialist role guides
+docs/          # Framework guides and document templates
+templates/     # Game-owned scaffold sources
+bin/           # Current-directory project and stage helpers
 ```
 
-**Your project** (scaffolded into your repo by `gamedev:start`):
+**Your game** (scaffolded without host-specific files):
 
-```
-AGENTS.md                           # Shared project guidance and sources of truth
-CLAUDE.md                           # Imports AGENTS.md for Claude Code
-.claude/
-  rules/                            # 11 shared rule files; each declares the paths it covers
-  docs/technical-preferences.md     # Your engine, naming, budgets (project-owned)
-src/                                # Game source code
-assets/                             # Art, audio, VFX, shaders, data files
-design/                             # GDDs, narrative docs, level designs
-docs/                               # ADRs, registries, your engine's reference snapshot
-production/                         # Milestones, releases, QA evidence, session state
-prototypes/                         # Throwaway prototypes (isolated from src/)
+```text
+AGENTS.md                        # Canonical project guidance
+src/                             # Source and nested AGENTS.md
+assets/                          # Art, audio, VFX, shaders, data
+design/                          # GDDs, narrative, registries and nested AGENTS.md
+docs/technical-preferences.md     # Your engine, version, naming and budgets
+docs/rules/                      # Eleven explicitly loaded path-scoped rules
+docs/                            # Architecture, engine references and nested AGENTS.md
+production/                      # Stage, QA evidence, workflow progress, handoff
+prototypes/                      # Throwaway prototypes
 ```
 
-Use `gamedev:status` to see the production stage and active work in any host. Claude Code also shows this information
-through its session-start hook.
+See [directory structure](docs/directory-structure.md). Use `/skill:gamedev-status` for a snapshot.
 
 ## How It Works
 
@@ -444,39 +398,15 @@ in scope still needs your input.
 
 ### Validation and Session Support
 
-In every host, run the game's format, lint, build, and test checks before declaring work complete. Validate changed
-assets and keep a session handoff when work will continue later. Pi and Codex follow these steps explicitly.
-
-**Claude Code hooks** add automatic checks and session support. The first eleven below ship with the plugin; the last is
-contributor tooling in this repository.
-
-| Hook | Trigger | What It Does |
-| ------ | --------- | -------------- |
-| `validate-commit.sh` | PreToolUse (Bash) | Checks for hardcoded values, TODO format, JSON validity, design doc sections — exits early if the command is not `git commit` |
-| `validate-push.sh` | PreToolUse (Bash) | Warns on pushes to protected branches — exits early if the command is not `git push` |
-| `validate-assets.sh` | PostToolUse (Write/Edit) | Validates naming conventions and JSON structure — exits early if the file is not in `assets/` |
-| `session-start.sh` | Session open | Shows current branch and recent commits for orientation |
-| `detect-gaps.sh` | Session open | Detects fresh projects (suggests `gamedev:start`) and missing design docs when code or prototypes exist |
-| `pre-compact.sh` | Before compaction | Preserves session progress notes |
-| `post-compact.sh` | After compaction | Reminds the assistant to restore session state from `active.md` |
-| `notify.sh` | Notification event | Shows Windows toast notification via PowerShell |
-| `session-stop.sh` | Session close | Archives `active.md` to session log and records git activity |
-| `log-agent.sh` | Agent spawned | Audit trail start — logs subagent invocation |
-| `log-agent-stop.sh` | Agent stops | Audit trail stop — completes subagent record |
-| `validate-skill-change.sh` | PostToolUse (Write/Edit) | Advises running `gamedev:skill-test` after any `skills/` change |
-
-> **Note**: `validate-commit.sh`, `validate-assets.sh`, and `validate-skill-change.sh` fire on every Bash/Write tool
-> call and exit immediately (exit 0) when the command or file path is not relevant. This is normal hook behavior — not a
-> performance concern.
-
-Permissions come from your host and project configuration. The repository's development settings are not installed into
-your game.
+Run the game's format, lint, build, and test checks before declaring work complete. Validate changed assets, check
+branch policy before authorized commits or pushes, and save session handoffs explicitly. See
+[explicit checks](docs/host-runtime.md#explicit-checks). No automatic validation hooks or audit logs are bundled.
+Permissions come from the runtime and project configuration, not role prose.
 
 ### Path-Scoped Rules
 
-Coding standards apply according to file location. Claude Code loads matching rule files automatically; Pi and Codex
-read them as directed by the project's `AGENTS.md`. These instructions guide the assistant; the game's checks verify the
-resulting code.
+Coding standards apply according to file location. Read matching `docs/rules/` files explicitly as directed by the
+project's `AGENTS.md`. These instructions guide the assistant; the game's checks verify the resulting code.
 
 | Path | Enforces |
 | ------ | ---------- |
@@ -508,17 +438,17 @@ The project files you scaffold are yours to customize:
 
 - **Set project guidance** — edit `AGENTS.md` with project-specific knowledge and role boundaries
 - **Add rules** — create new path-scoped rules for your project's directory structure
-- **Tune validation** — configure your game's checks and any hooks your host supports
+- **Tune validation** — configure your game's checks
 - **Pick your engine** — use the Godot, Unity, Unreal, or Bevy agent set (or none)
 - **Set review intensity** — `full` (all director gates), `lean` (phase gates only), or `solo` (none). Set during
   `gamedev:start` or edit `production/review-mode.txt`. Override per-run with `--review solo` on any skill.
 
 ---
 
-To change the bundled skills, roles, or hooks, work in a plugin checkout and follow [CONTRIBUTING.md](CONTRIBUTING.md).
-Installed plugin caches may be replaced by updates.
+To change the bundled skills or roles, work in a contributor checkout and follow [CONTRIBUTING.md](CONTRIBUTING.md).
+Installed package caches may be replaced by updates.
 
-*Built for game developers using Pi, Claude Code, or Codex.*
+*Built for game developers using shared workflows and Pi.*
 
 ## License
 

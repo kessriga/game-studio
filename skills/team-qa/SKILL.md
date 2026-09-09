@@ -1,21 +1,19 @@
 ---
 name: team-qa
 description: "Orchestrate the QA team through a full testing cycle. Coordinates qa-lead (strategy + test plan) and qa-tester (test case writing + bug reporting) to produce a complete QA package for a milestone or feature. Covers: test plan generation, test case writing, smoke check gate, manual QA execution, and sign-off report."
-argument-hint: "[milestone | feature: system-name] [--review full|lean|solo]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Task, AskUserQuestion, mcp__backlog__task_list, mcp__backlog__task_view
-model: sonnet
-agent: qa-lead
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [milestone | feature: system-name] [--review full|lean|solo]
+
+**Primary role:** Read `../../agents/qa-lead.md` before following this workflow.
+
 When this skill is invoked, orchestrate the QA team through a structured testing cycle.
 
-**Decision Points:** At each phase transition, use `AskUserQuestion` to present
-the user with the subagent's proposals as selectable options. Write the agent's
-full analysis in conversation, then capture the decision with concise labels.
-The user must approve before moving to the next phase.
+**Decision Points:** At each phase transition, use a user-input tool or chat to present the user with the subagent's
+proposals as selectable options. Write the agent's full analysis in conversation, then capture the decision with concise
+labels. The user must approve before moving to the next phase.
 
 ## Phase 0: Resolve Review Mode
 
@@ -24,8 +22,10 @@ The user must approve before moving to the next phase.
 3. Else default to `solo`.
 
 Modes:
+
 - `full` — spawn all director and lead gates as described
-- `lean` — skip director gates unless they are PHASE-GATE type (CD-PHASE-GATE, TD-PHASE-GATE, PR-PHASE-GATE, AD-PHASE-GATE)
+- `lean` — skip director gates unless they are PHASE-GATE type (CD-PHASE-GATE, TD-PHASE-GATE, PR-PHASE-GATE,
+  AD-PHASE-GATE)
 - `solo` — skip all director gate spawning entirely; run the skill without any agent gates
 
 Store the resolved mode for use in all subsequent phases.
@@ -37,11 +37,14 @@ Store the resolved mode for use in all subsequent phases.
 
 ## How to Delegate
 
-Use the Task tool to spawn each team member as a subagent:
-- `subagent_type: gamedev:qa-lead` — Strategy, planning, classification, sign-off
-- `subagent_type: gamedev:qa-tester` — Test case writing and bug report writing
+Follow the host guide to delegate to these roles; use the installed runner only when available and authorized:
 
-Always provide full context in each agent's prompt (story file paths, QA plan path, scope constraints). Launch independent qa-tester tasks in parallel where possible (e.g., multiple stories in Phase 5 can be scaffolded simultaneously).
+- `gamedev:qa-lead` — Strategy, planning, classification, sign-off
+- `gamedev:qa-tester` — Test case writing and bug report writing
+
+Always provide full context in each agent's prompt (story file paths, QA plan path, scope constraints). Launch
+independent qa-tester tasks in parallel where possible (e.g., multiple stories in Phase 5 can be scaffolded
+simultaneously).
 
 ## Pipeline
 
@@ -50,9 +53,11 @@ Always provide full context in each agent's prompt (story file paths, QA plan pa
 Before doing anything else, gather the full scope:
 
 1. Detect the current milestone or feature scope from the argument:
-   - If argument is a milestone name (e.g., `Combat System`): `task_list` that milestone to gather its story tasks; follow each task's `Spec:` reference to the story `.md`.
+   - If argument is a milestone name (e.g., `Combat System`): `task_list` that milestone to gather its story tasks;
+     follow each task's `Spec:` reference to the story `.md`.
    - If argument is `feature: [system-name]`: glob story files tagged for that system
-   - If no argument: read `production/session-state/active.md`, then `task_list` the Backlog board (status `In Progress`/`Done`) to infer the active milestone
+   - If no argument: read `production/session-state/active.md`, then `task_list` the Backlog board (status
+     `In Progress`/`Done`) to infer the active milestone
 
 2. Read `production/stage.txt` to confirm the current project phase.
 
@@ -61,25 +66,33 @@ Before doing anything else, gather the full scope:
 
 ### Phase 2: QA Strategy (qa-lead)
 
-Spawn `qa-lead` via Task to review all in-scope stories and produce a QA strategy.
+Spawn `gamedev:qa-lead` through authorized delegation to review all in-scope stories and produce a QA strategy.
 
 Prompt the qa-lead to:
+
 - Read each story file
 - Classify each story by type: **Logic** / **Integration** / **Visual/Feel** / **UI** / **Config/Data**
 - Identify which stories require automated test evidence vs. manual QA
 - Flag any stories with missing acceptance criteria or missing test evidence that would block QA
 - Estimate manual QA effort (number of test sessions needed)
-- **Before assessing smoke status, check for an existing smoke check report**: Glob `production/qa/smoke-*.md` and read the most recently modified file (if found). If a report exists, use its verdict and findings directly — do not re-interview the user. If no report exists, note: "No prior smoke check report found — run `/gamedev:smoke-check` before proceeding." and set smoke check status to UNKNOWN (treat as PASS WITH WARNINGS for the purpose of continuing). Produce a smoke check verdict: **PASS** / **PASS WITH WARNINGS [list]** / **FAIL [list of failures]** / **UNKNOWN (no report found)**
+- **Before assessing smoke status, check for an existing smoke check report**: Glob `production/qa/smoke-*.md` and read
+  the most recently modified file (if found). If a report exists, use its verdict and findings directly — do not
+  re-interview the user. If no report exists, note: "No prior smoke check report found — run
+  `/skill:gamedev-smoke-check` before proceeding." and set smoke check status to UNKNOWN (treat as PASS WITH WARNINGS
+  for the purpose of continuing). Produce a smoke check verdict: **PASS** / **PASS WITH WARNINGS [list]** /
+  **FAIL [list of failures]** / **UNKNOWN (no report found)**
 - Produce a strategy summary table and smoke check result:
 
   | Story | Type | Automated Required | Manual Required | Blocker? |
   |-------|------|--------------------|-----------------|----------|
 
-  **Smoke Check**: [PASS / PASS WITH WARNINGS / FAIL / UNKNOWN] — [source: `production/qa/smoke-[date].md` or "no report found"] — [details if not PASS]
+  **Smoke Check**: [PASS / PASS WITH WARNINGS / FAIL / UNKNOWN] — [source: `production/qa/smoke-[date].md` or "no report
+  found"] — [details if not PASS]
 
-If the smoke check result is **FAIL**, the qa-lead must list the failures prominently. QA cannot proceed past the strategy phase with a failed smoke check.
+If the smoke check result is **FAIL**, the qa-lead must list the failures prominently. QA cannot proceed past the
+strategy phase with a failed smoke check.
 
-Present the qa-lead's full strategy to the user, then use `AskUserQuestion`:
+Present the qa-lead's full strategy to the user, then use a user-input tool or chat:
 
 ```
 question: "QA Strategy Review"
@@ -87,13 +100,14 @@ options:
   - "Looks good — proceed to test plan"
   - "Adjust story types before proceeding"
   - "Skip blocked stories and proceed with the rest"
-  - "Smoke check failed — fix issues and re-run /gamedev:team-qa"
+  - "Smoke check failed — fix issues and re-run /skill:gamedev-team-qa"
   - "Cancel — resolve blockers first"
 ```
 
-If smoke check **FAIL**: do not proceed to Phase 3. Surface the failures from the smoke check report and stop. The user must fix them, re-run `/gamedev:smoke-check`, and then re-run `/gamedev:team-qa`.
-If smoke check **UNKNOWN**: surface a warning — "No smoke check report found. Recommend running `/gamedev:smoke-check` before QA. Proceeding with caution."
-If smoke check **PASS WITH WARNINGS**: note the warnings for the sign-off report and continue.
+If smoke check **FAIL**: do not proceed to Phase 3. Surface the failures from the smoke check report and stop. The user
+must fix them, re-run `/skill:gamedev-smoke-check`, and then re-run `/skill:gamedev-team-qa`. If smoke check
+**UNKNOWN**: surface a warning — "No smoke check report found. Recommend running `/skill:gamedev-smoke-check` before QA.
+Proceeding with caution." If smoke check **PASS WITH WARNINGS**: note the warnings for the sign-off report and continue.
 If blockers are present: list them explicitly. The user may choose to skip blocked stories or cancel the cycle.
 
 ### Phase 3: Test Plan Generation
@@ -101,12 +115,16 @@ If blockers are present: list them explicitly. The user may choose to skip block
 Using the strategy from Phase 2, produce a structured test plan document.
 
 The test plan should cover:
+
 - **Scope**: milestone/feature name, story count, dates
 - **Story Classification Table**: from Phase 2 strategy
 - **Automated Test Requirements**: which stories need test files, expected paths in `tests/`
 - **Manual QA Scope**: which stories need manual walkthrough and what to validate
 - **Out of Scope**: what is explicitly not being tested this cycle and why
-- **Entry Criteria**: what must be true before QA can begin. Always include: (1) Smoke check PASS or PASS WITH WARNINGS report exists at `production/qa/smoke-*.md`, (2) build is stable (no crashes on launch), (3) all high-priority story tasks in the milestone are `In Progress` or `Done` on the Backlog board. Add any milestone-specific criteria beyond these.
+- **Entry Criteria**: what must be true before QA can begin. Always include: (1) Smoke check PASS or PASS WITH WARNINGS
+  report exists at `production/qa/smoke-*.md`, (2) build is stable (no crashes on launch), (3) all high-priority story
+  tasks in the milestone are `In Progress` or `Done` on the Backlog board. Add any milestone-specific criteria beyond
+  these.
 - **Exit Criteria**: what constitutes a completed QA cycle (all stories PASS or FAIL with bugs filed)
 
 Ask: "May I write the QA plan to `production/qa/qa-plan-[milestone]-[date].md`?"
@@ -115,17 +133,20 @@ Write only after receiving approval.
 
 ### Phase 4: Test Case Writing (qa-tester)
 
-> **Smoke check** is performed as part of Phase 2 (QA Strategy). If the smoke check returned FAIL in Phase 2, the cycle was stopped there. This phase only runs when the Phase 2 smoke check was PASS, PASS WITH WARNINGS, or UNKNOWN.
+> **Smoke check** is performed as part of Phase 2 (QA Strategy). If the smoke check returned FAIL in Phase 2, the cycle
+> was stopped there. This phase only runs when the Phase 2 smoke check was PASS, PASS WITH WARNINGS, or UNKNOWN.
 
 For each story requiring manual QA (Visual/Feel, UI, Integration without automated tests):
 
-Spawn `qa-tester` via Task for each story (run in parallel where possible), providing:
+Spawn `gamedev:qa-tester` through authorized delegation for each story (run in parallel where possible), providing:
+
 - The story file path
 - The relevant section of the QA plan for that story
 - The GDD acceptance criteria for the system being tested (if available)
 - Instructions to write detailed test cases covering all acceptance criteria
 
 Each test case set should include:
+
 - **Preconditions**: game state required before testing begins
 - **Steps**: numbered, unambiguous actions
 - **Expected Result**: what should happen
@@ -134,7 +155,7 @@ Each test case set should include:
 
 Present the test cases to the user for review before execution. Group by story.
 
-Use `AskUserQuestion` per story group (batched 3-4 at a time):
+Use a user-input tool or chat per story group (batched 3-4 at a time):
 
 ```
 question: "Test cases ready for [Story Group]. Review before manual QA begins?"
@@ -148,7 +169,7 @@ options:
 
 Walk through each story in the approved manual QA list.
 
-Batch stories into groups of 3-4 and use `AskUserQuestion` for each:
+Batch stories into groups of 3-4 and use a user-input tool or chat for each:
 
 ```
 question: "Manual QA — [Story Title]\n[brief description of what to test]"
@@ -159,9 +180,12 @@ options:
   - "BLOCKED — cannot test yet (reason)"
 ```
 
-After each FAIL result: use `AskUserQuestion` to collect the failure description, then file a bug via `/gamedev:bug-report` — a Backlog task with the `bug` label (repro/severity/context in the task description). The board is the bug list; there is no `production/qa/bugs/` markdown store.
+After each FAIL result: use a user-input tool or chat to collect the failure description, then file a bug via
+`/skill:gamedev-bug-report` — a Backlog task with the `bug` label (repro/severity/context in the task description). The
+board is the bug list; there is no `production/qa/bugs/` markdown store.
 
 After collecting all results, summarize:
+
 - Stories PASS: [count]
 - Stories PASS WITH NOTES: [count]
 - Stories FAIL: [count] — bugs filed: [IDs]
@@ -169,7 +193,7 @@ After collecting all results, summarize:
 
 ### Phase 6: QA Sign-Off Report
 
-Spawn `qa-lead` via Task to produce the sign-off report using all results from Phases 4–6.
+Spawn `gamedev:qa-lead` through authorized delegation to produce the sign-off report using all results from Phases 4–6.
 
 The sign-off report format:
 
@@ -197,14 +221,16 @@ The sign-off report format:
 ```
 
 Verdict rules:
+
 - **APPROVED**: All stories PASS or PASS WITH NOTES; no S1/S2 bugs open
 - **APPROVED WITH CONDITIONS**: S3/S4 bugs open, or PASS WITH NOTES issues documented; no S1/S2 bugs
 - **NOT APPROVED**: Any S1/S2 bugs open; or stories FAIL without documented workaround
 
 Next step guidance by verdict:
-- APPROVED: "Build is ready for the next phase. Run `/gamedev:gate-check` to validate advancement."
+
+- APPROVED: "Build is ready for the next phase. Run `/skill:gamedev-gate-check` to validate advancement."
 - APPROVED WITH CONDITIONS: "Resolve conditions before advancing. S3/S4 bugs may be deferred to polish."
-- NOT APPROVED: "Resolve S1/S2 bugs and re-run `/gamedev:team-qa` or targeted manual QA before advancing."
+- NOT APPROVED: "Resolve S1/S2 bugs and re-run `/skill:gamedev-team-qa` or targeted manual QA before advancing."
 
 Ask: "May I write this QA sign-off report to `production/qa/qa-signoff-[milestone]-[date].md`?"
 
@@ -212,32 +238,36 @@ Write only after receiving approval.
 
 ## Error Recovery Protocol
 
-If any spawned agent (via Task) returns BLOCKED, errors, or cannot complete:
+If any spawned agent (through authorized delegation) returns BLOCKED, errors, or cannot complete:
 
 1. **Surface immediately**: Report "[AgentName]: BLOCKED — [reason]" to the user before continuing to dependent phases
-2. **Assess dependencies**: Check whether the blocked agent's output is required by subsequent phases. If yes, do not proceed past that dependency point without user input.
-3. **Offer options** via AskUserQuestion with choices:
+2. **Assess dependencies**: Check whether the blocked agent's output is required by subsequent phases. If yes, do not
+   proceed past that dependency point without user input.
+3. **Offer options** via a user-input tool or chat with choices:
    - Skip this agent and note the gap in the final report
    - Retry with narrower scope
    - Stop here and resolve the blocker first
 4. **Always produce a partial report** — output whatever was completed. Never discard work because one agent blocked.
 
 Common blockers:
+
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/gamedev:architecture-decision` first
-- Scope too large → split into two stories via `/gamedev:create-stories`
+- ADR status is Proposed → do not implement; run `/skill:gamedev-architecture-decision` first
+- Scope too large → split into two stories via `/skill:gamedev-create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## Output
 
-A summary covering: stories in scope, smoke check result, manual QA results, bugs filed (with IDs and severities), and the final APPROVED / APPROVED WITH CONDITIONS / NOT APPROVED verdict.
+A summary covering: stories in scope, smoke check result, manual QA results, bugs filed (with IDs and severities), and
+the final APPROVED / APPROVED WITH CONDITIONS / NOT APPROVED verdict.
 
-Verdict: **COMPLETE** — QA cycle finished.
-Verdict: **BLOCKED** — smoke check failed or critical blocker prevented cycle completion; partial report produced.
+Verdict: **COMPLETE** — QA cycle finished. Verdict: **BLOCKED** — smoke check failed or critical blocker prevented cycle
+completion; partial report produced.
 
 ## Session State Update
 
-After the final phase completes (sign-off report written or BLOCKED verdict reached), silently append to `production/session-state/active.md`:
+After the final phase completes (sign-off report written or BLOCKED verdict reached), silently append to
+`production/session-state/active.md`:
 
 ```
 <!-- QA RUN: [date] | Milestone: [milestone name or "ad-hoc"] | Verdict: [PASS/FAIL/CONCERNS] | Report: production/qa/qa-[date].md -->

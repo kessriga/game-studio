@@ -1,18 +1,18 @@
 # Technical Preferences
 
-<!-- Populated by /gamedev:setup-engine. Updated as the user makes decisions throughout development. -->
+<!-- Populated by /skill:gamedev-setup-engine. Updated as the user makes decisions throughout development. -->
 <!-- All agents reference this file for project-specific standards and conventions. -->
 
 ## Engine & Language
 
-- **Engine**: [TO BE CONFIGURED — run /gamedev:setup-engine]
+- **Engine**: [TO BE CONFIGURED — run /skill:gamedev-setup-engine]
 - **Language**: [TO BE CONFIGURED]
 - **Rendering**: [TO BE CONFIGURED]
 - **Physics**: [TO BE CONFIGURED]
 
 ## Input & Platform
 
-<!-- Written by /gamedev:setup-engine. Read by /gamedev:ux-design, /gamedev:ux-review, /gamedev:test-setup, /gamedev:team-ui, and /gamedev:dev-story -->
+<!-- Written by /skill:gamedev-setup-engine. Read by /skill:gamedev-ux-design, /skill:gamedev-ux-review, /skill:gamedev-test-setup, /skill:gamedev-team-ui, and /skill:gamedev-dev-story -->
 <!-- to scope interaction specs, test helpers, and implementation to the correct input methods. -->
 
 - **Target Platforms**: [TO BE CONFIGURED — e.g., PC, Console, Mobile, Web]
@@ -57,15 +57,15 @@
 ## Architecture Decisions Log
 
 <!-- Quick reference linking to full ADRs in docs/architecture/ -->
-- [No ADRs yet — use /gamedev:architecture-decision to create one]
+- [No ADRs yet — use /skill:gamedev-architecture-decision to create one]
 
 ## Engine Specialists
 
-<!-- Written by /gamedev:setup-engine when engine is configured. -->
-<!-- Read by /gamedev:code-review, /gamedev:architecture-decision, /gamedev:architecture-review, and team skills -->
+<!-- Written by /skill:gamedev-setup-engine when engine is configured. -->
+<!-- Read by /skill:gamedev-code-review, /skill:gamedev-architecture-decision, /skill:gamedev-architecture-review, and team skills -->
 <!-- to know which specialist to spawn for engine-specific validation. -->
 
-- **Primary**: [TO BE CONFIGURED — run /gamedev:setup-engine]
+- **Primary**: [TO BE CONFIGURED — run /skill:gamedev-setup-engine]
 - **Language/Code Specialist**: [TO BE CONFIGURED]
 - **Shader Specialist**: [TO BE CONFIGURED]
 - **UI Specialist**: [TO BE CONFIGURED]
@@ -78,7 +78,7 @@
 <!-- If a row says [TO BE CONFIGURED], fall back to Primary for that file type. -->
 
 | File Extension / Type | Specialist to Spawn |
-|-----------------------|---------------------|
+| ----------------------- | --------------------- |
 | Game code (primary language) | [TO BE CONFIGURED] |
 | Shader / material files | [TO BE CONFIGURED] |
 | UI / screen files | [TO BE CONFIGURED] |

@@ -1,14 +1,14 @@
 # Contributing to Game Studio
 
-Game Studio is a coordination framework for indie game development using Pi, Claude Code, or Codex. Contributions are
-welcome — bug fixes, new skills that fill a real gap, agent improvements, and hook fixes. PRs that don't fit the
+Game Studio is a coordination framework for indie game development with shared workflows and Pi. Contributions are
+welcome — bug fixes, new skills that fill a real gap, role improvements, and integration fixes. PRs that don't fit the
 framework's direction will be closed without lengthy explanation.
 
 ## What Makes a Good PR
 
 - **Bug fixes** — something is broken, here's the fix
 - **New skills** that address a workflow gap not already covered
-- **Improvements** to existing agents, skills, or hooks
+- **Improvements** to existing roles or skills
 - **Documentation corrections** — wrong info, broken references, outdated steps
 
 Feature requests submitted as PRs will be closed. Open an issue instead.
@@ -25,17 +25,10 @@ These are the things that will get your PR rejected if you miss them.
 
 - Skills live in `skills/<name>/SKILL.md`; the subdirectory format is required for shared workflow discovery. Pi loads
   generated entry points in `pi/skills/`.
-- SKILL.md must include YAML frontmatter: `name` and `description`. Keep the Claude-specific fields used by existing
-  workflows. Pi and Codex ignore their configuration semantics; the host guide explains how to run the workflow.
-- Write shared instructions for all hosts. Use `AGENTS.md` for project guidance, describe the required work and
-  evidence, and map tool calls through the host guide. Keep model choices in host configuration; see
-  [Claude model metadata](docs/claude-code.md#model-configuration).
-
-**Hooks**
-
-- Use `grep -E` — never `grep -P` (Perl regex breaks on Windows Git Bash)
-- Include fallbacks for systems without `jq` or `python` installed
-- Claude hooks run on their configured events; exit quickly and gracefully (`exit 0`) when not applicable
+- SKILL.md frontmatter contains only `name` and `description`. Put argument guidance and role routing in the body.
+- Write host-neutral workflow instructions. Use AGENTS.md for project guidance and explain required work and evidence.
+  Map capabilities through the host guide; do not invent tool schemas, permissions, or model configuration.
+- Portable shell helpers use `grep -E`, not `grep -P`; quote paths and test from external directories with spaces.
 
 **Agents**
 
@@ -45,8 +38,8 @@ These are the things that will get your PR rejected if you miss them.
 
 **Reference docs**
 
-- If your PR adds or changes a skill, agent, or hook, update the matching reference doc (agent-roster, skills-reference,
-  hooks-reference, or rules-reference). PRs that add things without updating the index will be sent back.
+- If your PR adds or changes a skill or role, update the matching reference doc (agent-roster, skills-reference, or
+  rules-reference). PRs that add things without updating the index will be sent back.
 
 ## The Collaborative Principle
 
@@ -57,31 +50,29 @@ Skills and agents present creative choices to the user. A request to implement a
 ask when a needed decision or scope change is still unresolved. Do not invent creative decisions or exceed the scope the
 user authorized.
 
-## Developing the plugin (dogfooding)
+## Developing the package
 
-This repo **is** the `gamedev` plugin. Skills live in `skills/`, agents in `agents/`, hooks in `hooks/`, framework docs
-in `docs/`, and project scaffold sources in `templates/`. Repository instructions guide contributors; installing the
-plugin makes its skills available to game projects. Use the local install steps in the [Pi guide](docs/pi.md),
-[Claude Code guide](docs/claude-code.md#installation), or [Codex guide](docs/codex.md#install-from-a-checkout), then
-open a new session in a separate game repository.
+Shared workflows live in `skills/`, role guides in `agents/`, framework docs in `docs/`, and game scaffold sources in
+`templates/`. Use [Pi local installation](docs/pi.md), then open a new session in a separate game repository. Never edit
+installed package files to configure a game.
 
 Two conventions the gate checks:
 
-- **Namespacing.** Identify skills and roles as `gamedev:<name>`; frontmatter `name:` fields stay bare. Existing
-  `/gamedev:<skill>` references in workflows are translated for the current host. Run
-  `python3 scripts/check-namespacing.py` before committing — it fails on any bare framework reference.
+- **Namespacing.** Identify skills and roles as `gamedev:<name>`; frontmatter `name:` fields stay bare. Pi examples use
+  `/skill:gamedev-<skill>`. Run `python3 scripts/check-namespacing.py` before committing — it fails on any bare
+  framework reference.
 - **Paths.** Skills reference framework docs relative to their own `SKILL.md` (`../../docs/<file>.md`); project-side
-  files (`.claude/rules/`, `.claude/docs/technical-preferences.md`) keep their project paths.
+  files (`docs/rules/`, `docs/technical-preferences.md`) keep their project paths.
 
 Every skill and role links to [the host guide](docs/host-runtime.md). Shared project instructions belong in AGENTS.md;
-CLAUDE.md imports that file.
+Read applicable nested guides and path-scoped rules explicitly.
 
 After changing skill names, descriptions, or `docs/workflow-catalog.yaml`, run `python3 scripts/generate-pi-skills.py`.
 Pi entry points and its catalog JSON are generated resources. Do not edit them by hand.
 
-The start skill scaffolds project-owned rules and settings. Use `gamedev:status` for stage reporting in any host. Claude
-also provides a session-start hook; Pi and Codex follow the explicit checks in the host guide. Keep host-specific APIs,
-model tables, and installation commands in their respective host docs.
+The start skill preserves existing files and blocks legacy preferences/rules before writing defaults. Follow
+[the migration guide](docs/migration-0.4.md). Use `gamedev:status` for current-directory stage reporting and the host
+guide's explicit validation and handoff checks.
 
 ## Testing Your Changes
 
@@ -98,9 +89,9 @@ npm run check
 
 On Windows, run the recipes in Git Bash and activate `.venv/Scripts/activate`. Git uses `.gitattributes` to keep text
 files LF-terminated on every platform; CRLF checkouts fail the Prettier gate. The gate checks shell syntax, workflow
-namespacing, package/plugin manifests, shared instruction links, Python lint and formatting, scaffolding, and the
-existing hook and Git-helper tests. There is no compiled application to build. Ruff covers the new Python scaffold,
-native reader check, and contract tests; the older namespacing script remains checked through its own output.
+namespacing, package metadata, shared instruction links, Python lint and formatting, scaffolding, and the Git-helper
+tests. There is no compiled application to build. Ruff covers the new Python scaffold, generated resource and contract
+tests; the older namespacing script remains checked through its own output.
 
 The npm gate requires Node 22.17 or newer and `tar` on PATH. It checks TypeScript formatting and types, workflow
 behavior, both Pi renderers, native skill/extension discovery, and the relocated packed distribution. It uses Pi 0.85.1
@@ -108,10 +99,8 @@ without a model or user settings changes. TypeScript is loaded directly by Pi; t
 artifact. Run `npx prettier --write "pi/*.ts" "scripts/check-pi*.mjs" package.json tsconfig.json` to format maintained
 JavaScript and TypeScript; format changed Markdown with the project's Markdown formatter.
 
-For host-specific verification, run `python3 scripts/check-codex.py` and
-`claude plugin validate .claude-plugin/plugin.json`. The Codex check uses the installed CLI's native plugin reader and
-does not install anything. Also exercise changed workflows in the relevant host when available. Record what actually
-ran; metadata discovery is distinct from a full conversational or engine test.
+Also exercise changed workflows conversationally in Pi when available. Record what actually ran; native resource
+discovery does not prove model execution, independent review, or an engine build.
 
 GitHub Actions is configured to run `just gate` and `npm run check` on Linux, macOS, and Windows. Include actual local
 and hosted results separately in the PR description. Local success is not evidence that the changed CI workflow passed.
@@ -120,24 +109,19 @@ and hosted results separately in the PR description. Local success is not eviden
 
 Every user-visible release needs a version bump in the same PR as its changes:
 
-1. Bump `version` in `package.json`, `.codex-plugin/plugin.json`, `.claude-plugin/plugin.json`, and the `plugins[0]`
-   entry of `.claude-plugin/marketplace.json`. The gate verifies that they agree. `metadata.version` in
-   `marketplace.json` is the *marketplace's* version; this repo has kept it in lockstep since it ships exactly one
-   plugin.
-2. Patch for a fix, minor for new skills/agents or changed behaviour.
-3. Run the full gate and each available host's native validation. Record what was verified in STATUS.md and the PR.
-4. After merging, follow the relevant host's release and update procedure: [Pi](docs/pi.md),
-   [Claude Code](docs/claude-code.md#updates-and-release-tags), and [Codex](docs/codex.md). Publish only with maintainer
-   authorization.
+1. Bump `version` in `package.json` and both root package entries in `package-lock.json` together.
+2. Patch for a fix, minor for new workflows or changed behavior.
+3. Run both full gates and record exact results in STATUS.md and the PR, separating local and hosted evidence.
+4. After merging, follow [Pi updates](docs/pi.md). Publish only with maintainer authorization.
 
 ## Commit Format
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-feat: add /gamedev:playtest-report skill for structured playtest capture
-fix: correct grep -P usage in session-start hook
-docs: update skills-reference with new /gamedev:qa-plan entry
+feat: add /skill:gamedev-playtest-report skill for structured playtest capture
+fix: preserve custom preferences during scaffolding
+docs: update skills-reference with new /skill:gamedev-qa-plan entry
 ```
 
 Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`
@@ -151,5 +135,5 @@ Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`
 
 ## Platform Compatibility
 
-Game Studio must work on Windows (Git Bash), macOS, and Linux. If your hook or script uses anything platform-specific,
-it will be rejected. When in doubt, test on Windows.
+Game Studio must work on Windows (Git Bash), macOS, and Linux. If your script uses anything platform-specific, it will
+be rejected. When in doubt, test on Windows.

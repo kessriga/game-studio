@@ -1,14 +1,11 @@
 ---
 name: asset-audit
 description: "Audits game assets for compliance with naming conventions, file size budgets, format standards, and pipeline requirements. Identifies orphaned assets, missing references, and standard violations."
-argument-hint: "[category|all]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep
-model: sonnet
-# Read-only diagnostic skill — no specialist agent delegation needed
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
+**Arguments:** [category|all]
 
 ## Phase 1: Read Standards
 
@@ -31,11 +28,13 @@ Scan the target asset directory using Glob:
 ## Phase 3: Run Compliance Checks
 
 **Naming conventions:**
+
 - Art: `[category]_[name]_[variant]_[size].[ext]`
 - Audio: `[category]_[context]_[name]_[variant].[ext]`
 - All files must be lowercase with underscores
 
 **File standards:**
+
 - Textures: Power-of-two dimensions, correct format (PNG for UI, compressed for 3D), within size budget
 - Audio: Correct sample rate, format (OGG for SFX, OGG/MP3 for music), within duration limits
 - Data: Valid JSON/YAML, schema-compliant
@@ -94,4 +93,4 @@ This skill is read-only — it produces a report but does not write files.
 
 - Fix naming violations using the patterns defined in AGENTS.md.
 - Delete confirmed orphaned assets after manual review.
-- Run `/gamedev:content-audit` to cross-check asset counts against GDD-specified requirements.
+- Run `/skill:gamedev-content-audit` to cross-check asset counts against GDD-specified requirements.

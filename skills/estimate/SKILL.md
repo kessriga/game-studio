@@ -1,17 +1,16 @@
 ---
 name: estimate
 description: "Estimates task effort by analyzing complexity, dependencies, historical velocity, and risk factors. Produces a structured estimate with confidence levels."
-argument-hint: "[task-description]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [task-description]
+
 ## Phase 1: Understand the Task
 
-Read the task description from the argument. If the description is too vague to estimate meaningfully, ask for clarification before proceeding.
+Read the task description from the argument. If the description is too vague to estimate meaningfully, ask for
+clarification before proceeding.
 
 Read AGENTS.md for project context: tech stack, coding standards, architectural patterns, and any estimation guidelines.
 
@@ -33,18 +32,21 @@ Identify files and modules that would need to change:
 ## Phase 3: Analyze Complexity Factors
 
 **Code Complexity:**
+
 - Lines of code in affected files
 - Number of dependencies and coupling level
 - Whether this touches core/engine code vs leaf/feature code
 - Whether existing patterns can be followed or new patterns are needed
 
 **Scope:**
+
 - Number of systems touched
 - New code vs modification of existing code
 - Amount of new test coverage required
 - Data migration or configuration changes needed
 
 **Risk:**
+
 - New technology or unfamiliar libraries
 - Unclear or ambiguous requirements
 - Dependencies on unfinished work
@@ -122,8 +124,8 @@ This skill is read-only — no files are written. Verdict: **COMPLETE** — esti
 
 ## Phase 5: Next Steps
 
-- If confidence is Low: recommend a time-boxed spike (`/gamedev:prototype`) before committing.
-- If the task is > 10 days: recommend breaking it into smaller stories via `/gamedev:create-stories`.
+- If confidence is Low: recommend a time-boxed spike (`/skill:gamedev-prototype`) before committing.
+- If the task is > 10 days: recommend breaking it into smaller stories via `/skill:gamedev-create-stories`.
 - To schedule the task: file it on the Backlog board and prioritise it.
 
 ### Guidelines

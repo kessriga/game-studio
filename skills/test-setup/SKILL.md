@@ -1,24 +1,20 @@
 ---
 name: test-setup
 description: "Scaffold the test framework and CI/CD pipeline for the project's engine. Creates the tests/ directory structure, engine-specific test runner configuration, and GitHub Actions workflow. Run once during Technical Setup phase before the first sprint begins."
-argument-hint: "[force]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Write
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [force]
+
 # Test Setup
 
-This skill scaffolds the automated testing infrastructure for the project.
-It detects the configured engine, generates the appropriate test runner
-configuration, creates the standard directory layout, and wires up CI/CD
-so tests run on every push.
+This skill scaffolds the automated testing infrastructure for the project. It detects the configured engine, generates
+the appropriate test runner configuration, creates the standard directory layout, and wires up CI/CD so tests run on
+every push.
 
-Run this once during the Technical Setup phase, before any implementation
-begins. A test framework installed at sprint start costs 30 minutes.
-A test framework installed at sprint four costs 3 sprints.
+Run this once during the Technical Setup phase, before any implementation begins. A test framework installed at sprint
+start costs 30 minutes. A test framework installed at sprint four costs 3 sprints.
 
 **Output:** `tests/` directory structure + `.github/workflows/tests.yml`
 
@@ -27,26 +23,24 @@ A test framework installed at sprint four costs 3 sprints.
 ## Phase 1: Detect Engine and Existing State
 
 1. **Read engine config**:
-   - Read `.claude/docs/technical-preferences.md` and extract the `Engine:` value.
-   - If engine is not configured (`[TO BE CONFIGURED]`), stop:
-     "Engine not configured. Run `/gamedev:setup-engine` first, then re-run `/gamedev:test-setup`."
+   - Read `docs/technical-preferences.md` and extract the `Engine:` value.
+   - If engine is not configured (`[TO BE CONFIGURED]`), stop: "Engine not configured. Run `/skill:gamedev-setup-engine`
+     first, then re-run `/skill:gamedev-test-setup`."
 
 2. **Check for existing test infrastructure**:
    - Glob `tests/` — does the directory exist?
    - Glob `tests/unit/` and `tests/integration/` — do subdirectories exist?
    - Glob `.github/workflows/` — does a CI workflow file exist?
-   - Glob `tests/gdunit4_runner.gd` (Godot) or `tests/EditMode/` (Unity) or
-     `Source/Tests/` (Unreal) for engine-specific artifacts.
+   - Glob `tests/gdunit4_runner.gd` (Godot) or `tests/EditMode/` (Unity) or `Source/Tests/` (Unreal) for engine-specific
+     artifacts.
 
 3. **Report findings**:
    - "Engine: [engine]. Test directory: [found / not found]. CI workflow: [found / not found]."
-   - If everything already exists AND `force` argument was not passed:
-     "Test infrastructure appears to be in place. Re-run with `/gamedev:test-setup force`
-     to regenerate. Proceeding will not overwrite existing test files."
+   - If everything already exists AND `force` argument was not passed: "Test infrastructure appears to be in place.
+     Re-run with `/skill:gamedev-test-setup force` to regenerate. Proceeding will not overwrite existing test files."
 
-If the `force` argument is passed, skip the "already exists" early-exit and
-proceed — but still do not overwrite files that already exist at a given path.
-Only create files that are missing.
+If the `force` argument is passed, skip the "already exists" early-exit and proceed — but still do not overwrite files
+that already exist at a given path. Only create files that are missing.
 
 ---
 
@@ -73,8 +67,7 @@ tests/
 Estimated time: ~5 minutes to create all files.
 ```
 
-Ask: "May I create these files? I will not overwrite any test files that
-already exist at these paths."
+Ask: "May I create these files? I will not overwrite any test files that already exist at these paths."
 
 Do not proceed without approval.
 
@@ -97,11 +90,11 @@ After approval, create the following files:
 ## Directory Layout
 
 ```
-tests/
-  unit/           # Isolated unit tests (formulas, state machines, logic)
-  integration/    # Cross-system and save/load tests
-  smoke/          # Critical path test list for /gamedev:smoke-check gate
-  evidence/       # Screenshot logs and manual test sign-off records
+
+tests/ unit/ # Isolated unit tests (formulas, state machines, logic) integration/ # Cross-system and save/load tests
+smoke/ # Critical path test list for /skill:gamedev-smoke-check gate evidence/ # Screenshot logs and manual test
+sign-off records
+
 ```
 
 ## Running Tests
@@ -129,6 +122,7 @@ tests/
 Tests run automatically on every push to `main` and on every pull request.
 A failed test suite blocks merging.
 ```
+
 ```
 
 ### Engine-specific files
@@ -138,7 +132,7 @@ A failed test suite blocks merging.
 Create `tests/gdunit4_runner.gd`:
 
 ```gdscript
-# GdUnit4 test runner — invoked by CI and /gamedev:smoke-check
+# GdUnit4 test runner — invoked by CI and /skill:gamedev-smoke-check
 # Usage: godot --headless --script tests/gdunit4_runner.gd
 extends SceneTree
 
@@ -160,6 +154,7 @@ Create `tests/integration/.gdignore_placeholder` with content:
 `# Integration tests go here — one subdirectory per system`
 
 Note in the README: **Installing GdUnit4**
+
 ```
 1. Open Godot → AssetLib → search "GdUnit4" → Download & Install
 2. Enable the plugin: Project → Project Settings → Plugins → GdUnit4 ✓
@@ -170,6 +165,7 @@ Note in the README: **Installing GdUnit4**
 #### Unity (`Engine: Unity`)
 
 Create `tests/EditMode/` placeholder file `tests/EditMode/README.md`:
+
 ```markdown
 # Edit Mode Tests
 Unit tests that run without entering Play Mode.
@@ -178,6 +174,7 @@ Assembly definition required: `tests/EditMode/EditModeTests.asmdef`
 ```
 
 Create `tests/PlayMode/README.md`:
+
 ```markdown
 # Play Mode Tests
 Integration tests that run in a real game scene.
@@ -186,6 +183,7 @@ Assembly definition required: `tests/PlayMode/PlayModeTests.asmdef`
 ```
 
 Note in the README: **Enabling Unity Test Framework**
+
 ```
 Window → General → Test Runner
 (Unity Test Framework is included by default in Unity 2019+)
@@ -194,6 +192,7 @@ Window → General → Test Runner
 #### Unreal Engine (`Engine: Unreal` or `Engine: UE5`)
 
 Create `Source/Tests/README.md`:
+
 ```markdown
 # Unreal Automation Tests
 Tests use the UE Automation Testing Framework.
@@ -206,13 +205,13 @@ Test category naming: "MyGame.[System].[Feature]"
 
 #### Bevy (`Engine: Bevy`)
 
-Bevy uses Rust's built-in test harness (`cargo test`) — no separate runner file.
-Logic/ECS tests build a headless `App` with `MinimalPlugins` (no window, no GPU)
-so they run in CI without a display. Colocate unit tests with the code under test
-(`#[cfg(test)] mod tests`) per Rust convention; put multi-system integration tests
-in the crate's `tests/` directory.
+Bevy uses Rust's built-in test harness (`cargo test`) — no separate runner file. Logic/ECS tests build a headless `App`
+with `MinimalPlugins` (no window, no GPU) so they run in CI without a display. Colocate unit tests with the code under
+test (`#[cfg(test)] mod tests`) per Rust convention; put multi-system integration tests in the crate's `tests/`
+directory.
 
 Note in the README: **Running Bevy tests**
+
 ```
 cargo test                 # all unit + integration tests, headless
 cargo test -p <crate>      # a single workspace crate
@@ -220,6 +219,7 @@ cargo test <name>          # tests matching a substring
 ```
 
 Headless ECS test pattern (no window/GPU required):
+
 ```rust
 #[cfg(test)]
 mod tests {
@@ -331,8 +331,7 @@ jobs:
           path: test-results/
 ```
 
-Note: Unity CI requires a `UNITY_LICENSE` secret. Add to GitHub repository
-secrets before the first CI run.
+Note: Unity CI requires a `UNITY_LICENSE` secret. Add to GitHub repository secrets before the first CI run.
 
 ### Unreal Engine
 
@@ -374,8 +373,8 @@ jobs:
           path: Saved/Logs/
 ```
 
-Note: UE CI requires a self-hosted runner with Unreal Editor installed.
-Set the `UE_EDITOR_PATH` environment variable on the runner.
+Note: UE CI requires a self-hosted runner with Unreal Editor installed. Set the `UE_EDITOR_PATH` environment variable on
+the runner.
 
 ### Bevy
 
@@ -425,12 +424,13 @@ jobs:
 ```
 
 Notes:
-- Logic/ECS tests run headlessly with `MinimalPlugins` — **no** window or GPU, so
-  a standard `ubuntu-latest` runner suffices (no self-hosted runner, no license).
-- The `libasound2-dev` / `libudev-dev` packages are Bevy's Linux build
-  dependencies; without them the crate fails to compile even for headless tests.
-- For faster/segmented runs, `cargo nextest run` is a drop-in alternative to
-  `cargo test`; keep `cargo test` as the baseline.
+
+- Logic/ECS tests run headlessly with `MinimalPlugins` — **no** window or GPU, so a standard `ubuntu-latest` runner
+  suffices (no self-hosted runner, no license).
+- The `libasound2-dev` / `libudev-dev` packages are Bevy's Linux build dependencies; without them the crate fails to
+  compile even for headless tests.
+- For faster/segmented runs, `cargo nextest run` is a drop-in alternative to `cargo test`; keep `cargo test` as the
+  baseline.
 
 ---
 
@@ -442,7 +442,7 @@ Create `tests/smoke/critical-paths.md`:
 # Smoke Test: Critical Paths
 
 **Purpose**: Run these 10-15 checks in under 15 minutes before any QA hand-off.
-**Run via**: `/gamedev:smoke-check` (which reads this file)
+**Run via**: `/skill:gamedev-smoke-check` (which reads this file)
 **Update**: Add new entries when new core systems are implemented.
 
 ## Core Stability (always run)
@@ -489,15 +489,15 @@ Files created:
 Next steps:
 1. [Engine-specific install step, e.g., "Install GdUnit4 via AssetLib"]
 2. Write your first test: create tests/unit/[first-system]/[system]_test.[ext]
-3. Run `/gamedev:qa-plan sprint` before your first sprint to classify stories and set
+3. Run `/skill:gamedev-qa-plan sprint` before your first sprint to classify stories and set
    test evidence requirements
-4. `/gamedev:smoke-check` before every QA hand-off
+4. `/skill:gamedev-smoke-check` before every QA hand-off
 
-Gate note: /gamedev:gate-check Technical Setup → Pre-Production now requires:
+Gate note: /skill:gamedev-gate-check Technical Setup → Pre-Production now requires:
 - tests/ directory with unit/ and integration/ subdirectories
 - .github/workflows/tests.yml
 - At least one example test file
-Run /gamedev:test-setup and write one example test before advancing.
+Run /skill:gamedev-test-setup and write one example test before advancing.
 
 Verdict: **COMPLETE** — test framework scaffolded and CI/CD wired up.
 ```
@@ -506,12 +506,12 @@ Verdict: **COMPLETE** — test framework scaffolded and CI/CD wired up.
 
 ## Collaborative Protocol
 
-- **Never overwrite existing test files** — only create files that are missing.
-  If a test runner file exists, leave it as-is.
+- **Never overwrite existing test files** — only create files that are missing. If a test runner file exists, leave it
+  as-is.
 - **Always ask before creating files** — Phase 2 requires explicit approval.
-- **Engine detection is non-negotiable** — if the engine is not configured,
-  stop and redirect to `/gamedev:setup-engine`. Do not guess.
-- **`force` flag skips the "already exists" early-exit but never overwrites.**
-  It means "create any missing files even if the directory already exists."
-- For Unity CI, note that the `UNITY_LICENSE` secret must be configured
-  manually. Do not attempt to automate license management.
+- **Engine detection is non-negotiable** — if the engine is not configured, stop and redirect to
+  `/skill:gamedev-setup-engine`. Do not guess.
+- **`force` flag skips the "already exists" early-exit but never overwrites.** It means "create any missing files even
+  if the directory already exists."
+- For Unity CI, note that the `UNITY_LICENSE` secret must be configured manually. Do not attempt to automate license
+  management.

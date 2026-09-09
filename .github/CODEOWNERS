@@ -6,12 +6,11 @@
 *                           @kessriga
 
 # Core configuration — owner review required
-CLAUDE.md                   @kessriga
-.claude/                    @kessriga
-settings.json               @kessriga
+AGENTS.md                   @kessriga
+pi/                    @kessriga
+package.json               @kessriga
 
 # Skills and agents — high-impact, review carefully
 skills/                     @kessriga
 agents/                     @kessriga
-hooks/                      @kessriga
 bin/                        @kessriga

@@ -8,25 +8,23 @@ hosts. Host configuration determines which models and delegation tools are avail
 2. **Horizontal Consultation**: Agents at the same tier may consult each other but must not make binding decisions
    outside their domain.
 3. **Conflict Resolution**: When two agents disagree, escalate to the shared parent. If no shared parent, escalate to
-   `creative-director` for design conflicts or `technical-director` for technical conflicts.
-4. **Change Propagation**: When a design change affects multiple domains, the `producer` agent coordinates the
+   `gamedev:creative-director` for design conflicts or `gamedev:technical-director` for technical conflicts.
+4. **Change Propagation**: When a design change affects multiple domains, the `gamedev:producer` agent coordinates the
    propagation.
 5. **No Unilateral Cross-Domain Changes**: An agent must never modify files outside its designated directories without
    explicit delegation.
 
 ## Model selection
 
-Choose models through the host's supported configuration. Shared workflows require the same evidence and respect the
-same domain boundaries regardless of model. Claude's checked-in model fields are documented in
-[the Claude Code guide](claude-code.md#model-configuration). Pi and Codex use configured models and treat agent
-definitions as role instructions. In Pi, prefer the installed subagent extension and pass role bodies as described in
-[Pi delegation](pi.md#subagents).
+Choose models through runtime configuration. Shared workflows require the same evidence and domain boundaries regardless
+of model. Use an available authorized runner and pass role bodies as described in [Pi delegation](pi.md#subagents); the
+package supplies no model or permission configuration.
 
 ## Delegation
 
 Use subagents when the host provides them and the user's authorization permits it. Pass the relevant role definition,
-task, inputs, permitted edit scope, and expected evidence to each subagent. Follow the host guide's tool mapping; `Task`
-in an existing workflow means delegation, not tracker task creation.
+task, inputs, permitted edit scope, and expected evidence to each subagent. Follow the host guide's capability mapping;
+delegation does not authorize tracker task creation.
 
 When delegation is unavailable, follow role instructions sequentially and identify the result as a role pass. If a
 workflow requires independent review, report that requirement as unmet. Self-review cannot satisfy it.

@@ -1,15 +1,14 @@
 # Concept Prototype Report: [Concept Name]
 
-> **Date**: [YYYY-MM-DD]
-> **Prototype Path**: [HTML / Engine / Paper]
-> **Concept File**: design/gdd/game-concept.md (if exists)
+> **Date**: [YYYY-MM-DD] **Prototype Path**: [HTML / Engine / Paper] **Concept File**: design/gdd/game-concept.md (if
+> exists)
 
 ---
 
 ## Hypothesis
 
-[The falsifiable hypothesis this prototype set out to test:
-"If the player [does X], they will feel [Y] — evidenced by [measurable signal Z]."]
+[The falsifiable hypothesis this prototype set out to test: "If the player [does X], they will feel [Y] — evidenced by
+[measurable signal Z]."]
 
 ---
 
@@ -23,25 +22,24 @@
 
 [What was built, how long it took, what shortcuts were taken deliberately.]
 
-**Path chosen:** [HTML / Engine / Paper]
-**Reason for path:** [Why this path was appropriate for this hypothesis]
+**Path chosen:** [HTML / Engine / Paper] **Reason for path:** [Why this path was appropriate for this hypothesis]
 
 **Shortcuts taken (intentional):**
+
 - [e.g., hardcoded values, placeholder art, no menus, etc.]
 
 ---
 
 ## Result
 
-[What actually happened — specific observations, not opinions. Quote playtesters
-directly where possible.]
+[What actually happened — specific observations, not opinions. Quote playtesters directly where possible.]
 
 ---
 
 ## Metrics
 
 | Metric | Value |
-|--------|-------|
+| -------- | ------- |
 | Path used | [HTML / Engine / Paper] |
 | Iterations to playable | [N — Engine path only; N/A otherwise] |
 | Prototype duration | [e.g., 4 hours] |
@@ -66,47 +64,44 @@ directly where possible.]
 - **Assumptions disproved:** [What the concept doc assumed that proved wrong]
 - **Emergent mechanics:** [Behaviors that appeared during testing worth formalizing]
 
-> Note: If HTML path was used and feel is uncertain, consider an engine prototype
-> targeting feel specifically before committing to GDDs.
+> Note: If HTML path was used and feel is uncertain, consider an engine prototype targeting feel specifically before
+> committing to GDDs.
 
 **Next steps:**
-1. `/gamedev:design-review design/gdd/game-concept.md`
-2. `/gamedev:gate-check`
-3. `/gamedev:map-systems`
-4. `/gamedev:design-system [mechanic]` (use learnings in Tuning Knobs and Formulas sections)
+
+1. `/skill:gamedev-design-review design/gdd/game-concept.md`
+2. `/skill:gamedev-gate-check`
+3. `/skill:gamedev-map-systems`
+4. `/skill:gamedev-design-system [mechanic]` (use learnings in Tuning Knobs and Formulas sections)
 
 ---
 
 ## If Pivoting
 
-[What alternative direction the results suggest — what felt almost right and what
-to adjust. Be specific about what to change, not just that something needs changing.]
+[What alternative direction the results suggest — what felt almost right and what to adjust. Be specific about what to
+change, not just that something needs changing.]
 
-**Pivot direction:** [What to try differently]
-**What to keep:** [What worked and should be preserved]
-**Next step:** `/gamedev:prototype [revised-concept]`
+**Pivot direction:** [What to try differently] **What to keep:** [What worked and should be preserved] **Next step:**
+`/skill:gamedev-prototype [revised-concept]`
 
 ---
 
 ## If Killing
 
-[Why this concept does not work — what specific signal led to this verdict.
-This report is the deliverable; no further action needed on this concept.]
+[Why this concept does not work — what specific signal led to this verdict. This report is the deliverable; no further
+action needed on this concept.]
 
-**Next step:** `/gamedev:brainstorm [new-direction]`
+**Next step:** `/skill:gamedev-brainstorm [new-direction]`
 
 ---
 
 ## Lessons Learned
 
-- **What assumptions were broken by actually building this?**
-  [...]
+- **What assumptions were broken by actually building this?** [...]
 
-- **What surprised us that didn't show up in the brainstorm?**
-  [...]
+- **What surprised us that didn't show up in the brainstorm?** [...]
 
-- **What would we test differently next time?**
-  [...]
+- **What would we test differently next time?** [...]
 
 ---
 

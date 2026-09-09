@@ -22,10 +22,9 @@ class PiPackageTests(unittest.TestCase):
 
     def test_pi_manifest_and_release_match(self):
         package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
-        claude = json.loads(
-            (ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8")
-        )
-        self.assertEqual(package["version"], claude["version"])
+        lock = json.loads((ROOT / "package-lock.json").read_text(encoding="utf-8"))
+        self.assertEqual(package["version"], lock["version"])
+        self.assertEqual(package["version"], lock["packages"][""]["version"])
         self.assertIn("pi-package", package["keywords"])
         self.assertEqual(
             package["pi"],

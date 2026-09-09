@@ -1,13 +1,8 @@
 #!/bin/sh
 # Tests for bin/gamedev-is-project and the stage contract that depends on it.
 #
-# The property that matters is the negative one. Claude Code enables a plugin per scope, so every
-# shipped hook runs in every repository the user opens; the predicate is the only thing standing
-# between that and gamedev writing production/session-logs/, printing its banner, and enforcing its
-# commit conventions inside unrelated projects. A false positive is therefore the expensive failure,
-# and the case that guards against the original bug is `session-logs is not a marker`: the logging
-# hooks create that directory themselves, so accepting it would let the first session in any
-# repository mint permission for every session after it.
+# Detection must depend only on the current game repository, never inherited host state.
+# Incidental session artifacts must not turn an unrelated repository into a game.
 #
 # Each case builds a throwaway directory containing exactly one candidate path, so a marker that
 # stops working cannot be masked by another one still passing.
@@ -23,10 +18,6 @@ STAGE="$TEST_DIR/../bin/gamedev-stage"
 
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT INT TERM
-
-# The predicate resolves its project against CLAUDE_PROJECT_DIR when set, so an inherited value
-# from the developer's own session would point every case at the wrong tree.
-unset CLAUDE_PROJECT_DIR
 
 # fixture <name> <path>... -- a fresh project directory holding only the given paths. A path
 # ending in / is created as a directory, anything else as an empty file.
@@ -51,10 +42,10 @@ status_in() {
     (cd "$_dir" && "$_cmd" > /dev/null 2>&1) && printf '0\n' || printf '%s\n' "$?"
 }
 
-# --- Markers a skill or the /gamedev:start scaffold creates -----------------------------------
+# --- Markers a skill or the /skill:gamedev-start scaffold creates -----------------------------------
 
 for marker in \
-    ".claude/docs/technical-preferences.md" \
+    "docs/technical-preferences.md" \
     "design/registry/entities.yaml" \
     "production/stage.txt" \
     "design/gdd/"; do
@@ -90,14 +81,22 @@ assert_file_empty "$(cd "$dir" && "$SUT" 2>&1)" "prints nothing when it accepts"
 dir=$(fixture "silence-no")
 assert_file_empty "$(cd "$dir" && "$SUT" 2>&1 || true)" "prints nothing when it rejects"
 
-# --- CLAUDE_PROJECT_DIR wins over the working directory ----------------------------------------
-
-# The hooks cd into the project before calling the predicate, but /gamedev:status and the plugin
-# PATH entry do not, so the variable has to be honoured from an unrelated cwd.
+# Retired host environment variables must never override the caller's cwd.
 dir=$(fixture "via-env" "production/stage.txt")
+printf 'Production\n' > "$dir/production/stage.txt"
 outside=$(fixture "outside")
-assert_status "honours CLAUDE_PROJECT_DIR from an unrelated cwd" 0 \
-    "$(cd "$outside" && CLAUDE_PROJECT_DIR="$dir" "$SUT" > /dev/null 2>&1 && printf '0\n' || printf '%s\n' "$?")"
+export CLAUDE_PROJECT_DIR="$dir"
+for helper in "$SUT" "$STAGE"; do
+    assert_status "exported host variable cannot redirect $helper" 1 "$(status_in "$outside" "$helper")"
+done
+local_game=$(fixture "local-game" "design/registry/entities.yaml")
+assert_status "local project wins over exported host variable" 0 "$(status_in "$local_game" "$SUT")"
+assert_file_empty "$(cd "$outside" && "$STAGE" 2>&1 || true)" "host variable cannot leak stage output"
+actual=$(cd "$local_game" && "$STAGE")
+if [ "$actual" = "Concept" ]; then pass "stage reads current directory"; else fail "stage leaked $actual"; fi
+unset CLAUDE_PROJECT_DIR
+legacy=$(fixture "legacy-only" ".claude/docs/technical-preferences.md")
+assert_status "legacy preferences are not a runtime fallback" 1 "$(status_in "$legacy" "$SUT")"
 
 # --- gamedev-stage inherits the verdict ---------------------------------------------------------
 

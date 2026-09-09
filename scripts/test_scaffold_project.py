@@ -4,12 +4,14 @@ import importlib.util
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 SCRIPT = Path(__file__).with_name("scaffold-project.py")
 SPEC = importlib.util.spec_from_file_location("scaffold_project", SCRIPT)
+assert SPEC is not None and SPEC.loader is not None
 scaffold_project = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(scaffold_project)
 
@@ -27,11 +29,18 @@ class ScaffoldTests(unittest.TestCase):
                 created, preserved = scaffold_project.scaffold(project, engine)
                 self.assertTrue(created)
                 self.assertFalse(preserved)
+                for retired in (
+                    ".claude",
+                    ".codex",
+                    ".claude-plugin",
+                    ".codex-plugin",
+                    ".agents",
+                ):
+                    self.assertFalse((project / retired).exists())
+                self.assertTrue((project / "docs/technical-preferences.md").is_file())
                 for directory in ("", "src", "design", "docs"):
                     base = project / directory
-                    self.assertEqual(
-                        (base / "CLAUDE.md").read_text(encoding="utf-8"), "@AGENTS.md\n"
-                    )
+                    self.assertFalse((base / "CLAUDE.md").exists())
                     self.assertGreater(
                         len((base / "AGENTS.md").read_text(encoding="utf-8")), 100
                     )
@@ -45,9 +54,7 @@ class ScaffoldTests(unittest.TestCase):
                 else:
                     self.assertIn(f"{engine}/VERSION.md", guide)
                     self.assertTrue((references / engine / "VERSION.md").is_file())
-                self.assertEqual(
-                    len(list((project / ".claude/rules").glob("*.md"))), 11
-                )
+                self.assertEqual(len(list((project / "docs/rules").glob("*.md"))), 11)
 
     def test_rerun_preserves_bytes_and_adds_missing_nested_guide(self):
         scaffold_project.scaffold(self.project, "bevy")
@@ -61,23 +68,89 @@ class ScaffoldTests(unittest.TestCase):
         self.assertEqual(guide.read_bytes(), b"User instructions\r\nDo not change.\r\n")
         self.assertTrue(nested.is_file())
 
-    def test_old_project_marker_does_not_prevent_adding_guidance(self):
-        preferences = self.project / ".claude/docs/technical-preferences.md"
-        preferences.parent.mkdir(parents=True)
-        preferences.write_text("Existing engine settings", encoding="utf-8")
-        (self.project / "CLAUDE.md").write_text(
-            "Existing Claude guide", encoding="utf-8"
-        )
-        created, preserved = scaffold_project.scaffold(self.project, "unity")
-        self.assertIn("AGENTS.md", created)
-        self.assertIn("CLAUDE.md", preserved)
+    def test_legacy_configuration_blocks_before_any_write(self):
+        for marker in (
+            ".claude/docs/technical-preferences.md",
+            ".claude/rules/custom.md",
+        ):
+            for neutral_exists in (False, True):
+                with self.subTest(marker=marker, neutral_exists=neutral_exists):
+                    project = self.project / str(neutral_exists) / marker.split("/")[1]
+                    legacy = project / marker
+                    legacy.parent.mkdir(parents=True)
+                    legacy.write_bytes(b"User settings\r\nEngine: custom\r\n")
+                    if neutral_exists:
+                        neutral = project / "docs/technical-preferences.md"
+                        neutral.parent.mkdir(parents=True)
+                        neutral.write_bytes(b"Conflicting neutral settings\n")
+                    before = {
+                        p.relative_to(project): p.read_bytes()
+                        for p in project.rglob("*")
+                        if p.is_file()
+                    }
+                    with self.assertRaisesRegex(ValueError, "reviewed migration"):
+                        scaffold_project.scaffold(project, "unity")
+                    after = {
+                        p.relative_to(project): p.read_bytes()
+                        for p in project.rglob("*")
+                        if p.is_file()
+                    }
+                    self.assertEqual(before, after)
+                    self.assertFalse((project / "AGENTS.md").exists())
+
+    def test_reviewed_migration_preserves_custom_settings_and_rules(self):
+        legacy = self.project / ".claude/docs/technical-preferences.md"
+        legacy.parent.mkdir(parents=True)
+        legacy.write_bytes(b"Custom engine version\r\n")
+        rules = self.project / ".claude/rules"
+        rules.mkdir()
+        (rules / "gameplay-code.md").write_bytes(b"Custom rules\r\n")
+        guide = self.project / "CLAUDE.md"
+        guide.write_bytes(b"User-owned legacy guide\r\n")
+        settings = self.project / ".claude/settings.local.json"
+        settings.write_bytes(b'{"custom": true}\n')
+        worktree_file = self.project / ".claude/worktrees/other-game/src/user.txt"
+        worktree_file.parent.mkdir(parents=True)
+        worktree_file.write_bytes(b"Do not touch this other worktree\r\n")
+        # Simulate the user-reviewed move documented in migration-0.4.md.
+        (self.project / "docs").mkdir()
+        legacy.rename(self.project / "docs/technical-preferences.md")
+        rules.rename(self.project / "docs/rules")
+        _, preserved = scaffold_project.scaffold(self.project, "godot")
+        self.assertIn("docs/technical-preferences.md", preserved)
+        self.assertIn("docs/rules/gameplay-code.md", preserved)
         self.assertEqual(
-            preferences.read_text(encoding="utf-8"), "Existing engine settings"
+            (self.project / "docs/technical-preferences.md").read_bytes(),
+            b"Custom engine version\r\n",
         )
         self.assertEqual(
-            (self.project / "CLAUDE.md").read_text(encoding="utf-8"),
-            "Existing Claude guide",
+            (self.project / "docs/rules/gameplay-code.md").read_bytes(),
+            b"Custom rules\r\n",
         )
+        self.assertEqual(guide.read_bytes(), b"User-owned legacy guide\r\n")
+
+        self.assertEqual(settings.read_bytes(), b'{"custom": true}\n')
+        self.assertEqual(
+            worktree_file.read_bytes(), b"Do not touch this other worktree\r\n"
+        )
+
+    def test_dangling_legacy_links_block_before_any_write(self):
+        for relative in (
+            ".claude",
+            ".claude/docs",
+            ".claude/rules",
+            ".claude/docs/technical-preferences.md",
+        ):
+            with self.subTest(relative=relative):
+                project = self.project / relative.replace("/", "-")
+                legacy = project / relative
+                legacy.parent.mkdir(parents=True)
+                legacy.symlink_to(project / "missing", target_is_directory=True)
+                with self.assertRaisesRegex(ValueError, "reviewed migration"):
+                    scaffold_project.scaffold(project, "godot")
+                self.assertTrue(legacy.is_symlink())
+                self.assertFalse((project / "AGENTS.md").exists())
+                self.assertFalse((project / "docs/technical-preferences.md").exists())
 
     def test_existing_backlog_guide_is_preserved(self):
         self.project.mkdir()
@@ -117,7 +190,7 @@ class ScaffoldTests(unittest.TestCase):
     def test_scaffold_and_stage_from_unrelated_working_directory(self):
         result = subprocess.run(
             [
-                os.sys.executable,
+                sys.executable,
                 str(SCRIPT.resolve()),
                 str(self.project),
                 "--engine",
@@ -131,13 +204,10 @@ class ScaffoldTests(unittest.TestCase):
         )
         self.assertIn("preserved 0", result.stdout)
         stage = SCRIPT.resolve().parents[1] / "bin/gamedev-stage"
-        env = {
-            key: value
-            for key, value in os.environ.items()
-            if key != "CLAUDE_PROJECT_DIR"
-        }
+        # Retired host variables must not redirect stage reporting.
+        env = dict(os.environ, CLAUDE_PROJECT_DIR=self.temp.name)
         bash_path = shutil.which("bash")
-        self.assertIsNotNone(bash_path, "Bash is required for stage reporting")
+        assert bash_path is not None, "Bash is required for stage reporting"
         result = subprocess.run(
             [bash_path, stage.as_posix()],
             cwd=self.project,
@@ -161,7 +231,7 @@ class ScaffoldTests(unittest.TestCase):
         shutil.copy2(SCRIPT, script)
         shutil.copytree(SCRIPT.resolve().parents[1] / "templates", plugin / "templates")
         subprocess.run(
-            [os.sys.executable, str(script), str(self.project), "--engine", "unreal"],
+            [sys.executable, str(script), str(self.project), "--engine", "unreal"],
             cwd=self.temp.name,
             capture_output=True,
             text=True,

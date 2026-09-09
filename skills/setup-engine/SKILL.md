@@ -1,13 +1,11 @@
 ---
 name: setup-engine
-description: "Configure the project's game engine and version. Pins the engine in the shared project guide, detects knowledge gaps, and populates engine reference docs via WebSearch when the version is beyond the LLM's training data."
-argument-hint: "[engine] | [engine version] | refresh | upgrade [old-version] [new-version] | no args for guided selection"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, WebSearch, WebFetch, Task, AskUserQuestion
-model: sonnet
+description: "Configure the project's game engine and version. Pins the engine in the shared project guide, detects knowledge gaps, and populates engine reference docs via available web search when the version is beyond the LLM's training data."
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
+**Arguments:** [engine] | [engine version] | refresh | upgrade [old-version] [new-version] | no args for guided selection
 
 When this skill is invoked:
 
@@ -15,11 +13,12 @@ When this skill is invoked:
 
 Four modes:
 
-- **Full spec**: `/gamedev:setup-engine godot 4.6` — engine and version provided
-- **Engine only**: `/gamedev:setup-engine unity` — engine provided, version will be looked up
-- **No args**: `/gamedev:setup-engine` — fully guided mode (engine recommendation + version)
-- **Refresh**: `/gamedev:setup-engine refresh` — update reference docs (see Section 10)
-- **Upgrade**: `/gamedev:setup-engine upgrade [old-version] [new-version]` — migrate to a new engine version (see Section 11)
+- **Full spec**: `/skill:gamedev-setup-engine godot 4.6` — engine and version provided
+- **Engine only**: `/skill:gamedev-setup-engine unity` — engine provided, version will be looked up
+- **No args**: `/skill:gamedev-setup-engine` — fully guided mode (engine recommendation + version)
+- **Refresh**: `/skill:gamedev-setup-engine refresh` — update reference docs (see Section 10)
+- **Upgrade**: `/skill:gamedev-setup-engine upgrade [old-version] [new-version]` — migrate to a new engine version (see
+  Section 11)
 
 ---
 
@@ -28,33 +27,40 @@ Four modes:
 If no engine is specified, run an interactive engine selection process:
 
 ### Check for existing game concept
-- Read `design/gdd/game-concept.md` if it exists — extract genre, scope, platform
-  targets, art style, team size, and any engine recommendation from `/gamedev:brainstorm`
+
+- Read `design/gdd/game-concept.md` if it exists — extract genre, scope, platform targets, art style, team size, and any
+  engine recommendation from `/skill:gamedev-brainstorm`
 - If no concept exists, inform the user:
-  > "No game concept found. Consider running `/gamedev:brainstorm` first to discover what
-  > you want to build — it will also recommend an engine. Or tell me about your
-  > game and I can help you pick."
+  > "No game concept found. Consider running `/skill:gamedev-brainstorm` first to discover what you want to build — it
+  > will also recommend an engine. Or tell me about your game and I can help you pick."
 
-### If the user wants to pick without a concept, ask in this order:
+### If the user wants to pick without a concept, ask in this order
 
-**Question 1 — Prior experience** (ask this first, always, via `AskUserQuestion`):
+**Question 1 — Prior experience** (ask this first, always, via a user-input tool or chat):
+
 - Prompt: "Have you worked in any of these engines before?"
 - Options: `Godot` / `Unity` / `Unreal Engine 5` / `Bevy` / `Multiple — I'll explain` / `None of them`
-- If they pick a specific engine → recommend that engine. Prior experience outweighs all other factors. Confirm with them and skip the matrix.
+- If they pick a specific engine → recommend that engine. Prior experience outweighs all other factors. Confirm with
+  them and skip the matrix.
 - If "None" or "Multiple" → continue to the questions below.
 
 **Questions 2-6 — Decision matrix inputs** (only if no prior engine experience):
 
-**Question 2 — Target platform** (ask this second, always, via `AskUserQuestion` — platform eliminates or heavily weights engines before any other factor):
+**Question 2 — Target platform** (ask this second, always, via a user-input tool or chat — platform eliminates or
+heavily weights engines before any other factor):
+
 - Prompt: "What platforms are you targeting for this game?"
 - Options: `PC (Steam / Epic)` / `Mobile (iOS / Android)` / `Console` / `Web / Browser` / `Multiple platforms`
 - Platform rules that feed directly into the recommendation:
   - Mobile → Unity strongly preferred; Unreal is a poor fit; Godot is viable for simple mobile
   - Console → Unity or Unreal; Godot console support requires third-party publishers or significant extra work
-  - Web → Godot exports cleanly to web; Bevy targets WebGPU/WASM (functional, evolving); Unity WebGL is functional; Unreal has poor web support
+  - Web → Godot exports cleanly to web; Bevy targets WebGPU/WASM (functional, evolving); Unity WebGL is functional;
+    Unreal has poor web support
   - PC only → all engines viable; other factors decide
-  - Multiple → Unity is the most portable across PC/mobile/console; Bevy covers PC + web well but console/mobile need extra work
-  - Bevy-specific: strongest on PC and web (WASM/WebGPU); console requires third-party/self-published effort (similar to Godot); mobile is possible but the least-trodden path
+  - Multiple → Unity is the most portable across PC/mobile/console; Bevy covers PC + web well but console/mobile need
+    extra work
+  - Bevy-specific: strongest on PC and web (WASM/WebGPU); console requires third-party/self-published effort (similar to
+    Godot); mobile is possible but the least-trodden path
 
 1. **What kind of game?** (2D, 3D, or both?)
 2. **Primary input method?** (keyboard/mouse, gamepad, touch, or mixed?)
@@ -64,35 +70,67 @@ If no engine is specified, run an interactive engine selection process:
 
 ### Produce a recommendation
 
-Do NOT use a simple scoring matrix that eliminates engines. Instead, reason through the user's profile against the honest tradeoffs below, then present 1-2 recommendations with full context. Always end with the user choosing — never force a verdict.
+Do NOT use a simple scoring matrix that eliminates engines. Instead, reason through the user's profile against the
+honest tradeoffs below, then present 1-2 recommendations with full context. Always end with the user choosing — never
+force a verdict.
 
 **Engine honest tradeoffs:**
 
 **Godot 4**
-- Genuine strengths: 2D (best in class), stylized/indie 3D, rapid iteration, free forever (MIT), open source, gentlest learning curve, best for solo devs who want full control
-- Real limitations: 3D ecosystem is thin compared to Unity/Unreal (fewer tutorials, assets, community answers for 3D-specific problems); large open-world 3D is very hard and largely untested in Godot; console export requires third-party publishers or significant extra work; smaller professional job market
+
+- Genuine strengths: 2D (best in class), stylized/indie 3D, rapid iteration, free forever (MIT), open source, gentlest
+  learning curve, best for solo devs who want full control
+- Real limitations: 3D ecosystem is thin compared to Unity/Unreal (fewer tutorials, assets, community answers for
+  3D-specific problems); large open-world 3D is very hard and largely untested in Godot; console export requires
+  third-party publishers or significant extra work; smaller professional job market
 - Licensing reality: Truly free with no revenue thresholds ever. MIT license means you own everything.
-- Best fit: 2D games of any scope; stylized/atmospheric 3D; contained 3D worlds (not open-world); first game projects where learning curve matters; projects where budget is a hard constraint at any scale
+- Best fit: 2D games of any scope; stylized/atmospheric 3D; contained 3D worlds (not open-world); first game projects
+  where learning curve matters; projects where budget is a hard constraint at any scale
 
 **Unity**
-- Genuine strengths: Industry standard for mid-scope 3D and mobile; massive asset store and tutorial ecosystem; C# is a professional language; best console certification support for indie; strong community for almost every genre
-- Real limitations: Licensing controversy in 2023 damaged trust (runtime fee was proposed then walked back — the risk of policy changes remains real); C# has a steeper initial curve than GDScript; heavier editor than Godot for simple projects
-- Licensing reality: Free under $200K revenue AND 200K installs (Unity Personal/Plus). Only becomes costly if the game is genuinely successful — most indie games never hit this threshold. The 2023 controversy is worth knowing about but the actual current terms are reasonable for most indie developers.
-- Best fit: Mobile games; mid-scope 3D; games targeting console; developers with C# background; projects needing large asset store; teams of 2-5
+
+- Genuine strengths: Industry standard for mid-scope 3D and mobile; massive asset store and tutorial ecosystem; C# is a
+  professional language; best console certification support for indie; strong community for almost every genre
+- Real limitations: Licensing controversy in 2023 damaged trust (runtime fee was proposed then walked back — the risk of
+  policy changes remains real); C# has a steeper initial curve than GDScript; heavier editor than Godot for simple
+  projects
+- Licensing reality: Free under $200K revenue AND 200K installs (Unity Personal/Plus). Only becomes costly if the game
+  is genuinely successful — most indie games never hit this threshold. The 2023 controversy is worth knowing about but
+  the actual current terms are reasonable for most indie developers.
+- Best fit: Mobile games; mid-scope 3D; games targeting console; developers with C# background; projects needing large
+  asset store; teams of 2-5
 
 **Unreal Engine 5**
-- Genuine strengths: Best-in-class 3D visuals (Lumen, Nanite, Chaos physics); industry standard for AAA and photorealistic 3D; large open-world support is mature and production-tested; Blueprint visual scripting lowers C++ barrier; strong for games targeting high-end PC or console
-- Real limitations: Steepest learning curve; heaviest editor (slow compile times, large project sizes); overkill for stylized/2D/small-scope games; C++ is genuinely hard; not suitable for mobile or web; 5% royalty past $1M gross revenue
-- Licensing reality: 5% royalty only applies AFTER $1M gross revenue per title. For a first game or any game that doesn't reach $1M, it costs nothing. This threshold is high enough that most indie developers will never pay it.
-- Best fit: AAA-quality 3D; large open-world games; photorealistic visuals; developers with C++ experience or willing to use Blueprint; games targeting high-end PC/console where visual fidelity is a core selling point
+
+- Genuine strengths: Best-in-class 3D visuals (Lumen, Nanite, Chaos physics); industry standard for AAA and
+  photorealistic 3D; large open-world support is mature and production-tested; Blueprint visual scripting lowers C++
+  barrier; strong for games targeting high-end PC or console
+- Real limitations: Steepest learning curve; heaviest editor (slow compile times, large project sizes); overkill for
+  stylized/2D/small-scope games; C++ is genuinely hard; not suitable for mobile or web; 5% royalty past $1M gross
+  revenue
+- Licensing reality: 5% royalty only applies AFTER
+  $1M gross revenue per title. For a first game or any game that doesn't reach $1M, it costs nothing. This threshold is
+  high enough that most indie developers will never pay it.
+- Best fit: AAA-quality 3D; large open-world games; photorealistic visuals; developers with C++ experience or willing to
+  use Blueprint; games targeting high-end PC/console where visual fidelity is a core selling point
 
 **Bevy**
-- Genuine strengths: Code-first Rust ECS — exceptional for systemic/simulation-heavy games, ECS-native architecture, no editor lock-in, free forever (MIT/Apache dual license), open source, fast and safe (Rust). Strong PC and web (WASM/WebGPU) story. Great when the team already knows Rust and wants full control in code.
-- Real limitations: **No editor** (scenes are authored in code via BSN, though an editor is in development); **breaking changes every ~3 months** (one minor per cycle) — you must budget for migrations; physics, networking, and pathfinding are third-party crates, not first-party; smaller ecosystem and job market than Unity/Unreal; requires learning Rust, which has a real learning curve; console/mobile are the least-trodden paths.
+
+- Genuine strengths: Code-first Rust ECS — exceptional for systemic/simulation-heavy games, ECS-native architecture, no
+  editor lock-in, free forever (MIT/Apache dual license), open source, fast and safe (Rust). Strong PC and web
+  (WASM/WebGPU) story. Great when the team already knows Rust and wants full control in code.
+- Real limitations: **No editor** (scenes are authored in code via BSN, though an editor is in development);
+  **breaking changes every ~3 months** (one minor per cycle) — you must budget for migrations; physics, networking, and
+  pathfinding are third-party crates, not first-party; smaller ecosystem and job market than Unity/Unreal; requires
+  learning Rust, which has a real learning curve; console/mobile are the least-trodden paths.
 - Licensing reality: Truly free with no revenue thresholds ever (MIT/Apache-2.0). You own everything.
-- Best fit: Systemic/simulation/roguelike/strategy games; developers who know or want to learn Rust; teams that prefer code-first workflows over editor-driven ones; PC and web targets; projects where a permissive license and full source control matter. Weakest fit: teams wanting a mature visual editor, artists-as-primary-authors workflows, or console-first launches on a tight timeline.
+- Best fit: Systemic/simulation/roguelike/strategy games; developers who know or want to learn Rust; teams that prefer
+  code-first workflows over editor-driven ones; PC and web targets; projects where a permissive license and full source
+  control matter. Weakest fit: teams wanting a mature visual editor, artists-as-primary-authors workflows, or
+  console-first launches on a tight timeline.
 
 **Genre-specific guidance** (factor this into the recommendation):
+
 - 2D any style → Godot strongly preferred
 - 3D stylized / atmospheric / contained world → Godot viable, Unity solid alternative
 - 3D open world (large, seamless) → Unity or Unreal; Godot is not production-proven for this
@@ -102,26 +140,34 @@ Do NOT use a simple scoring matrix that eliminates engines. Instead, reason thro
 - Horror / narrative / walking sim → any engine; match to art style and team experience
 - Action RPG / Soulslike → Unity or Unreal for 3D; community support and assets matter here
 - Platformer 2D → Godot
-- Strategy / top-down / RTS → Godot or Unity depending on 2D vs 3D; Bevy is a strong fit if the team knows Rust (ECS suits large entity counts and systemic simulation)
-- Systemic / simulation / roguelike (many entities, emergent rules) → Bevy is an excellent fit for Rust-comfortable teams; Godot/Unity otherwise
+- Strategy / top-down / RTS → Godot or Unity depending on 2D vs 3D; Bevy is a strong fit if the team knows Rust (ECS
+  suits large entity counts and systemic simulation)
+- Systemic / simulation / roguelike (many entities, emergent rules) → Bevy is an excellent fit for Rust-comfortable
+  teams; Godot/Unity otherwise
 - Rust-experienced team, code-first workflow, PC/web target → Bevy
 
 **Recommendation format:**
+
 1. Show a comparison table with the user's specific factors as rows
 2. Give a primary recommendation with honest reasoning
 3. Name the best alternative and when to choose it instead
-4. Explicitly state: "This is a starting point, not a verdict — you can always migrate engines, and many developers switch between projects."
-5. Use `AskUserQuestion` to confirm: "Does this recommendation feel right, or would you like to explore a different engine?"
-   - Options: `[Primary engine] (Recommended)` / `[Alternative engine]` / `[Third engine]` / `Explore further` / `Type something`
+4. Explicitly state: "This is a starting point, not a verdict — you can always migrate engines, and many developers
+   switch between projects."
+5. Use a user-input tool or chat to confirm: "Does this recommendation feel right, or would you like to explore a
+   different engine?"
+   - Options: `[Primary engine] (Recommended)` / `[Alternative engine]` / `[Third engine]` / `Explore further` /
+     `Type something`
 
-**If the user picks "Explore further":**
-Use `AskUserQuestion` with concept-specific deep-dive topics. Always generate these options from the user's actual concept — do not use generic options. Always include at minimum:
+**If the user picks "Explore further":** Use a user-input tool or chat with concept-specific deep-dive topics. Always
+generate these options from the user's actual concept — do not use generic options. Always include at minimum:
+
 - The primary engine's specific limitations for this concept (e.g., "How far can Godot 3D actually go for [genre]?")
 - The alternative engine's specific tradeoffs for this concept
 - Language choice impact on this concept's technical challenges
 - Any concept-specific technical concern (e.g., adaptive audio, open-world streaming, multiplayer netcode)
 
-The user can select multiple topics. Answer each selected topic in depth before returning to the engine confirmation question.
+The user can select multiple topics. Answer each selected topic in depth before returning to the engine confirmation
+question.
 
 ---
 
@@ -130,7 +176,7 @@ The user can select multiple topics. Answer each selected topic in depth before 
 Once the engine is chosen:
 
 - If version was provided, use it
-- If no version provided, use WebSearch to find the latest stable release:
+- If no version provided, use available web search to find the latest stable release:
   - Search: `"[engine] latest stable version [current year]"`
   - Confirm with the user: "The latest stable [engine] is [version]. Use this?"
 
@@ -144,27 +190,30 @@ If Godot was chosen, ask the user which language to use **before** showing the p
 
 > "Godot supports two primary languages:
 >
->   **A) GDScript** — Python-like, Godot-native, fastest iteration. Best for beginners, solo devs, and teams coming from Python or Lua.
->   **B) C#** — .NET 8+, familiar to Unity developers, stronger IDE tooling (Rider / Visual Studio), slight performance advantage on heavy logic.
->   **C) Both** — GDScript for gameplay/UI scripting, C# for performance-critical systems. Advanced setup — requires .NET SDK alongside Godot.
+> **A) GDScript** — Python-like, Godot-native, fastest iteration. Best for beginners, solo devs, and teams coming from
+> Python or Lua. **B) C#** — .NET 8+, familiar to Unity developers, stronger IDE tooling (Rider / Visual Studio), slight
+> performance advantage on heavy logic. **C) Both** — GDScript for gameplay/UI scripting, C# for performance-critical
+> systems. Advanced setup — requires .NET SDK alongside Godot.
 >
 > Which will this project primarily use?"
 
-Record the choice. It determines the shared project-guide template, naming conventions, specialist routing, and which agent is spawned for code files throughout the project.
+Record the choice. It determines the shared project-guide template, naming conventions, specialist routing, and which
+agent is spawned for code files throughout the project.
 
 ---
 
-Read `AGENTS.md` and show the proposed Technology Stack changes there. If the
-project still keeps its full guide only in `CLAUDE.md`, follow the migration
-instructions in the host guide before editing. Obtain approval for unresolved
-choices; an existing request to configure these settings already authorizes the
-edits. Keep the Claude import file pointing to the shared guide.
+Before configuring an older project, complete [the reviewed migration](../../docs/migration-0.4.md). Do not use defaults
+when neutral preferences are missing because the project has not migrated. Read `AGENTS.md` and show proposed Technology
+Stack changes. Obtain approval for unresolved choices; an existing request to configure these settings already
+authorizes the edits.
 
 Update the Technology Stack section, replacing the unconfigured placeholders with the actual values:
 
-**For Godot** — use the template matching the language chosen above. See **Appendix A** at the bottom of this skill for all three variants (GDScript, C#, Both).
+**For Godot** — use the template matching the language chosen above. See **Appendix A** at the bottom of this skill for
+all three variants (GDScript, C#, Both).
 
 **For Unity:**
+
 ```markdown
 - **Engine**: Unity [version]
 - **Language**: C#
@@ -173,6 +222,7 @@ Update the Technology Stack section, replacing the unconfigured placeholders wit
 ```
 
 **For Unreal:**
+
 ```markdown
 - **Engine**: Unreal Engine [version]
 - **Language**: C++ (primary), Blueprint (gameplay prototyping)
@@ -181,6 +231,7 @@ Update the Technology Stack section, replacing the unconfigured placeholders wit
 ```
 
 **For Bevy:**
+
 ```markdown
 - **Engine**: Bevy [version]
 - **Language**: Rust
@@ -188,18 +239,18 @@ Update the Technology Stack section, replacing the unconfigured placeholders wit
 - **Asset Pipeline**: Bevy Asset System (asset_server) + BSN scenes
 ```
 
-> **Note**: Bevy has a single language (Rust), so no language-selection step is
-> needed. Physics, networking, and pathfinding are third-party crates — do not
-> add them to Allowed Libraries until a system actively integrates one.
+> **Note**: Bevy has a single language (Rust), so no language-selection step is needed. Physics, networking, and
+> pathfinding are third-party crates — do not add them to Allowed Libraries until a system actively integrates one.
 
 ---
 
 ## 5. Populate Technical Preferences
 
-After updating the shared project guide, create or update `.claude/docs/technical-preferences.md` with
-engine-appropriate defaults. Read the existing template first, then fill in:
+After updating the shared project guide, create or update `docs/technical-preferences.md` with engine-appropriate
+defaults. Read the existing template first, then fill in:
 
 ### Engine & Language Section
+
 - Fill from the engine choice made in step 4
 
 ### Naming Conventions (engine defaults)
@@ -207,6 +258,7 @@ engine-appropriate defaults. Read the existing template first, then fill in:
 **For Godot** — see **Appendix A** for GDScript, C#, and Both variants.
 
 **For Unity (C#):**
+
 - Classes: PascalCase (e.g., `PlayerController`)
 - Public fields/properties: PascalCase (e.g., `MoveSpeed`)
 - Private fields: _camelCase (e.g., `_moveSpeed`)
@@ -215,6 +267,7 @@ engine-appropriate defaults. Read the existing template first, then fill in:
 - Constants: PascalCase or UPPER_SNAKE_CASE
 
 **For Unreal (C++):**
+
 - Classes: Prefixed PascalCase (`A` for Actor, `U` for UObject, `F` for struct)
 - Variables: PascalCase (e.g., `MoveSpeed`)
 - Functions: PascalCase (e.g., `TakeDamage()`)
@@ -222,6 +275,7 @@ engine-appropriate defaults. Read the existing template first, then fill in:
 - Files: Match class without prefix (e.g., `PlayerController.h`)
 
 **For Bevy (Rust) — follow standard Rust `rustfmt`/Clippy conventions:**
+
 - Types (structs/enums/components/resources/traits): PascalCase (e.g., `PlayerController`, `Health`)
 - Functions/systems/variables: snake_case (e.g., `apply_damage`, `move_speed`)
 - Modules/files: snake_case (e.g., `player_controller.rs`)
@@ -231,11 +285,11 @@ engine-appropriate defaults. Read the existing template first, then fill in:
 
 ### Input & Platform Section
 
-Populate `## Input & Platform` using the answers gathered in Section 2 (or extracted
-from the game concept). Derive the values using this mapping:
+Populate `## Input & Platform` using the answers gathered in Section 2 (or extracted from the game concept). Derive the
+values using this mapping:
 
 | Platform target | Gamepad Support | Touch Support |
-|-----------------|-----------------|---------------|
+| ----------------- | ----------------- | --------------- |
 | PC only | Partial (recommended) | None |
 | Console | Full | None |
 | Mobile | None | Full |
@@ -244,6 +298,7 @@ from the game concept). Derive the values using this mapping:
 | Web | Partial | Partial |
 
 For **Primary Input**, use the dominant input for the game genre:
+
 - Action/RPG/platformer targeting console → Gamepad
 - Strategy/point-and-click/RTS → Keyboard/Mouse
 - Mobile game → Touch
@@ -252,6 +307,7 @@ For **Primary Input**, use the dominant input for the game genre:
 Present the derived values and ask the user to confirm or adjust before writing.
 
 Example filled section:
+
 ```markdown
 ## Input & Platform
 - **Target Platforms**: PC, Console
@@ -263,23 +319,30 @@ Example filled section:
 ```
 
 ### Remaining Sections
-- **Performance Budgets**: Use `AskUserQuestion`:
+
+- **Performance Budgets**: Use a user-input tool or chat:
   - Prompt: "Should I set default performance budgets now, or leave them for later?"
-  - Options: `[A] Set defaults now (60fps, 16.6ms frame budget, engine-appropriate draw call limit)` / `[B] Leave as [TO BE CONFIGURED] — I'll set these when I know my target hardware`
+  - Options: `[A] Set defaults now (60fps, 16.6ms frame budget, engine-appropriate draw call limit)` /
+    `[B] Leave as [TO BE CONFIGURED] — I'll set these when I know my target hardware`
   - If [A]: populate with the suggested defaults. If [B]: leave as placeholder.
 - **Testing**: Suggest engine-appropriate framework (GUT for Godot, NUnit for Unity, etc.) — ask before adding.
 - **Forbidden Patterns**: Leave as placeholder — do NOT pre-populate.
-- **Allowed Libraries**: Leave as placeholder — do NOT pre-populate dependencies the project does not currently need. Only add a library here when it is actively being integrated, not speculatively.
+- **Allowed Libraries**: Leave as placeholder — do NOT pre-populate dependencies the project does not currently need.
+  Only add a library here when it is actively being integrated, not speculatively.
 
-> **Guardrail**: Never add speculative dependencies to Allowed Libraries. For example, do NOT add GodotSteam unless Steam integration is actively beginning in this session. Post-launch integrations should be added to Allowed Libraries when that work begins, not during engine setup.
+> **Guardrail**: Never add speculative dependencies to Allowed Libraries. For example, do NOT add GodotSteam unless
+> Steam integration is actively beginning in this session. Post-launch integrations should be added to Allowed Libraries
+> when that work begins, not during engine setup.
 
 ### Engine Specialists Routing
 
-Also populate the `## Engine Specialists` section in `technical-preferences.md` with the correct routing for the chosen engine:
+Also populate the `## Engine Specialists` section in `technical-preferences.md` with the correct routing for the chosen
+engine:
 
 **For Godot** — see **Appendix A** for the routing table matching the language chosen.
 
 **For Unity:**
+
 ```markdown
 ## Engine Specialists
 - **Primary**: unity-specialist
@@ -302,6 +365,7 @@ Also populate the `## Engine Specialists` section in `technical-preferences.md` 
 ```
 
 **For Unreal:**
+
 ```markdown
 ## Engine Specialists
 - **Primary**: unreal-specialist
@@ -325,6 +389,7 @@ Also populate the `## Engine Specialists` section in `technical-preferences.md` 
 ```
 
 **For Bevy:**
+
 ```markdown
 ## Engine Specialists
 - **Primary**: bevy-specialist
@@ -347,8 +412,12 @@ Also populate the `## Engine Specialists` section in `technical-preferences.md` 
 ```
 
 ### Collaborative Step
-Present the filled-in preferences to the user. For Godot, include the chosen language and note where the full naming conventions and routing tables live:
-> "Here are the default technical preferences for [engine] ([language if Godot]). The naming conventions and specialist routing are in Appendix A of this skill — I'll apply the [GDScript/C#/Both] variant. Want to customize any of these, or shall I save the defaults?"
+
+Present the filled-in preferences to the user. For Godot, include the chosen language and note where the full naming
+conventions and routing tables live:
+> "Here are the default technical preferences for [engine] ([language if Godot]). The naming conventions and specialist
+> routing are in Appendix A of this skill — I'll apply the [GDScript/C#/Both] variant. Want to customize any of these,
+> or shall I save the defaults?"
 
 For all other engines, present the defaults directly without referencing the appendix.
 
@@ -361,11 +430,15 @@ Wait for approval before writing the file.
 Check whether the engine version is likely beyond the LLM's training data.
 
 **Known approximate coverage** (update this as models change):
-- LLM knowledge cutoff: **May 2025**
+
+- LLM knowledge cutoff: use the current runtime's stated cutoff; if unavailable, record **unknown**. The version
+  estimates below are conservative reference baselines, not promises of model knowledge.
 - Godot: training data likely covers up to ~4.3
 - Unity: training data likely covers up to ~2023.x / early 6000.x
 - Unreal: training data likely covers up to ~5.3 / early 5.4
-- Bevy: training data likely covers up to ~0.16-0.17. **Treat every Bevy version as HIGH risk by default** — Bevy ships breaking changes every ~3 months, so even a "current" minor is likely past the cutoff and the reference docs are effectively required, not optional.
+- Bevy: training data likely covers up to ~0.16-0.17. **Treat every Bevy version as HIGH risk by default** — Bevy ships
+  breaking changes every ~3 months, so even a "current" minor is likely past the cutoff and the reference docs are
+  effectively required, not optional.
 
 Compare the user's chosen version against these baselines:
 
@@ -379,7 +452,7 @@ Inform the user which category they're in and why.
 
 ## 7. Populate Engine Reference Docs
 
-### If WITHIN training data (LOW RISK):
+### If WITHIN training data (LOW RISK)
 
 Create a minimal `docs/engine-reference/<engine>/VERSION.md`:
 
@@ -390,7 +463,7 @@ Create a minimal `docs/engine-reference/<engine>/VERSION.md`:
 |-------|-------|
 | **Engine Version** | [version] |
 | **Project Pinned** | [today's date] |
-| **LLM Knowledge Cutoff** | May 2025 |
+| **LLM Knowledge Cutoff** | [Runtime-provided cutoff, or unknown] |
 | **Risk Level** | LOW — version is within LLM training data |
 
 ## Note
@@ -398,13 +471,12 @@ Create a minimal `docs/engine-reference/<engine>/VERSION.md`:
 This engine version is within the LLM's training data. Engine reference
 docs are optional but can be added later if agents suggest incorrect APIs.
 
-Run `/gamedev:setup-engine refresh` to populate full reference docs at any time.
+Run `/skill:gamedev-setup-engine refresh` to populate full reference docs at any time.
 ```
 
-Do NOT create breaking-changes.md, deprecated-apis.md, etc. — they would
-add context cost with minimal value.
+Do NOT create breaking-changes.md, deprecated-apis.md, etc. — they would add context cost with minimal value.
 
-### If BEYOND training data (MEDIUM or HIGH RISK):
+### If BEYOND training data (MEDIUM or HIGH RISK)
 
 Create the full reference doc set by searching the web:
 
@@ -423,7 +495,8 @@ Ask: "May I create the engine reference docs under `docs/engine-reference/<engin
 
 Wait for confirmation before writing any files.
 
-3. **Create the full reference directory**:
+1. **Create the full reference directory**:
+
    ```
    docs/engine-reference/<engine>/
    ├── VERSION.md              # Version pin + knowledge gap analysis
@@ -433,19 +506,18 @@ Wait for confirmation before writing any files.
    └── modules/                # Per-subsystem references (create as needed)
    ```
 
-4. **Populate each file** using real data from the web searches, following
-   the format established in existing reference docs. Every file must have
-   a "Last verified: [date]" header.
+2. **Populate each file** using real data from the web searches, following the format established in existing reference
+   docs. Every file must have a "Last verified: [date]" header.
 
-5. **For module files**: Only create modules for subsystems where significant
-   changes occurred. Don't create empty or minimal module files.
+3. **For module files**: Only create modules for subsystems where significant changes occurred. Don't create empty or
+   minimal module files.
 
 ---
 
 ## 8. Update the Engine Reference
 
-In the shared `AGENTS.md`, point the Engine Version Reference section to the
-selected engine with an explicit reading instruction:
+In the shared `AGENTS.md`, point the Engine Version Reference section to the selected engine with an explicit reading
+instruction:
 
 ```markdown
 ## Engine Version Reference
@@ -453,31 +525,26 @@ selected engine with an explicit reading instruction:
 Read `docs/engine-reference/<engine>/VERSION.md` before using engine APIs.
 ```
 
-Replace any previous engine reference. Keep `CLAUDE.md` as `@AGENTS.md`; Codex
-does not expand Claude's file imports. For a legacy project that has not migrated,
-update the existing Claude import as well so the two hosts do not read different
-engine versions. Show the changes before asking about any unresolved choice.
+Replace any previous engine reference in `AGENTS.md` with this explicit reading instruction. Show the changes before
+asking about any unresolved choice. Preserve unrelated project guidance.
 
 ---
 
 ## 9. Verify Specialist Guidance
 
-Read the chosen engine's specialist role files from the installed plugin and
-check their Version Awareness guidance. Do not modify installed plugin files.
-Keep any missing project-specific guidance in the project's `AGENTS.md` or
-technical-preferences file. It should require reading the pinned engine version,
-checking deprecated APIs and breaking changes, and verifying uncertain APIs
-against official documentation. Follow the host guide when delegating these roles.
+Read the chosen engine's specialist role files from the installed plugin and check their Version Awareness guidance. Do
+not modify installed plugin files. Keep any missing project-specific guidance in the project's `AGENTS.md` or
+technical-preferences file. It should require reading the pinned engine version, checking deprecated APIs and breaking
+changes, and verifying uncertain APIs against official documentation. Follow the host guide when delegating these roles.
 
 ---
 
 ## 10. Refresh Subcommand
 
-If invoked as `/gamedev:setup-engine refresh`:
+If invoked as `/skill:gamedev-setup-engine refresh`:
 
-1. Read the existing `docs/engine-reference/<engine>/VERSION.md` to get
-   the current engine and version
-2. Use WebSearch to check for:
+1. Read the existing `docs/engine-reference/<engine>/VERSION.md` to get the current engine and version
+2. Use available web search to check for:
    - New engine releases since last verification
    - Updated migration guides
    - Newly deprecated APIs
@@ -489,35 +556,30 @@ If invoked as `/gamedev:setup-engine refresh`:
 
 ## 11. Upgrade Subcommand
 
-If invoked as `/gamedev:setup-engine upgrade [old-version] [new-version]`:
+If invoked as `/skill:gamedev-setup-engine upgrade [old-version] [new-version]`:
 
 ### Step 1 — Read Current Version State
 
-Read `docs/engine-reference/<engine>/VERSION.md` to confirm the current pinned
-version, risk level, and any migration note URLs already recorded. If
-`old-version` was not provided as an argument, use the pinned version from this
-file.
+Read `docs/engine-reference/<engine>/VERSION.md` to confirm the current pinned version, risk level, and any migration
+note URLs already recorded. If `old-version` was not provided as an argument, use the pinned version from this file.
 
 ### Step 2 — Fetch Migration Guide
 
-Use WebSearch and WebFetch to locate the official migration guide between
-`old-version` and `new-version`:
+Use available web search and page retrieval to locate the official migration guide between `old-version` and
+`new-version`:
 
 - Search: `"[engine] [old-version] to [new-version] migration guide"`
 - Search: `"[engine] [new-version] breaking changes changelog"`
-- Fetch the migration guide URL from VERSION.md if one is already recorded,
-  or use the URL found via search.
+- Fetch the migration guide URL from VERSION.md if one is already recorded, or use the URL found via search.
 
-Extract: renamed APIs, removed APIs, changed defaults, behavior changes, and
-any "must migrate" items.
+Extract: renamed APIs, removed APIs, changed defaults, behavior changes, and any "must migrate" items.
 
 ### Step 3 — Pre-Upgrade Audit
 
-Scan `src/` for code that uses APIs known to be deprecated or changed in the
-target version:
+Scan `src/` for code that uses APIs known to be deprecated or changed in the target version:
 
-- Use Grep to search for deprecated API names extracted from the migration
-  guide (e.g., old function names, removed node types, changed property names)
+- Use Grep to search for deprecated API names extracted from the migration guide (e.g., old function names, removed node
+  types, changed property names)
 - List each file that matches, with the specific API reference found
 
 Present the audit results as a table:
@@ -542,17 +604,15 @@ Recommended migration order (dependency-sorted):
   ...
 ```
 
-If no deprecated APIs are found in `src/`, report: "No deprecated API usage
-found in src/ — upgrade may be low-risk."
+If no deprecated APIs are found in `src/`, report: "No deprecated API usage found in src/ — upgrade may be low-risk."
 
 ### Step 4 — Confirm Before Updating
 
 Ask the user before making any changes:
 
-> "Pre-upgrade audit complete. Found [N] files using deprecated APIs.
-> Proceed with upgrading VERSION.md to [new-version]?
-> (This will update the pinned version and add migration notes — it does NOT
-> change any source files. Source migration is done manually or via stories.)"
+> "Pre-upgrade audit complete. Found [N] files using deprecated APIs. Proceed with upgrading VERSION.md to
+> [new-version]? (This will update the pinned version and add migration notes — it does NOT change any source files.
+> Source migration is done manually or via stories.)"
 
 Wait for explicit confirmation before continuing.
 
@@ -564,14 +624,13 @@ After confirmation:
    - `Engine Version` → `[new-version]`
    - `Project Pinned` → today's date
    - `Last Docs Verified` → today's date
-   - Re-evaluate and update the `Risk Level` and `Post-Cutoff Version Timeline`
-     table if the new version falls beyond the LLM knowledge cutoff
-   - Add a `## Migration Notes — [old-version] → [new-version]` section
-     containing: migration guide URL, key breaking changes, deprecated APIs
-     found in this project, and recommended migration order from the audit
+   - Re-evaluate and update the `Risk Level` and `Post-Cutoff Version Timeline` table if the new version falls beyond
+     the LLM knowledge cutoff
+   - Add a `## Migration Notes — [old-version] → [new-version]` section containing: migration guide URL, key breaking
+     changes, deprecated APIs found in this project, and recommended migration order from the audit
 
-2. If `breaking-changes.md` or `deprecated-apis.md` exist in the engine
-   reference directory, append the new version's changes to those files.
+2. If `breaking-changes.md` or `deprecated-apis.md` exist in the engine reference directory, append the new version's
+   changes to those files.
 
 ### Step 6 — Post-Upgrade Reminder
 
@@ -582,11 +641,11 @@ VERSION.md updated: [engine] [old-version] → [new-version]
 
 Next steps:
 1. Migrate deprecated API usages in the [N] files listed above
-2. Run /gamedev:setup-engine refresh after upgrading the actual engine binary to
+2. Run /skill:gamedev-setup-engine refresh after upgrading the actual engine binary to
    verify no new deprecations were missed
-3. Run /gamedev:architecture-review — the engine upgrade may invalidate ADRs that
+3. Run /skill:gamedev-architecture-review — the engine upgrade may invalidate ADRs that
    reference specific APIs or engine capabilities
-4. If any ADRs are invalidated, run /gamedev:propagate-design-change to update
+4. If any ADRs are invalidated, run /skill:gamedev-propagate-design-change to update
    downstream stories
 ```
 
@@ -609,11 +668,11 @@ Agent Config:    [verified]
 
 Next Steps:
 1. Review docs/engine-reference/<engine>/VERSION.md
-2. [If from /gamedev:brainstorm] Run /gamedev:map-systems to decompose your concept into individual systems
-3. [If from /gamedev:brainstorm] Run /gamedev:design-system to author per-system GDDs (guided, section-by-section)
-4. [If from /gamedev:brainstorm] Run /gamedev:prototype [core-mechanic] to validate the core idea before writing GDDs
-5. [If fresh start] Run /gamedev:brainstorm to discover your game concept
-6. Define your first epic (Backlog milestone): /gamedev:create-epics
+2. [If from /skill:gamedev-brainstorm] Run /skill:gamedev-map-systems to decompose your concept into individual systems
+3. [If from /skill:gamedev-brainstorm] Run /skill:gamedev-design-system to author per-system GDDs (guided, section-by-section)
+4. [If from /skill:gamedev-brainstorm] Run /skill:gamedev-prototype [core-mechanic] to validate the core idea before writing GDDs
+5. [If fresh start] Run /skill:gamedev-brainstorm to discover your game concept
+6. Define your first epic (Backlog milestone): /skill:gamedev-create-epics
 ```
 
 ---
@@ -622,24 +681,29 @@ Verdict: **COMPLETE** — engine configured and reference docs populated.
 
 ## Guardrails
 
-- NEVER guess an engine version — always verify via WebSearch or user confirmation
+- NEVER guess an engine version — always verify via available web search or user confirmation
 - NEVER overwrite existing reference docs without asking — append or update
 - If reference docs already exist for a different engine, ask before replacing
 - Always show the user what you're about to change before editing the shared project guide
-- If WebSearch returns ambiguous results, show the user and let them decide
-- When the user chose **GDScript**: copy the GDScript project-guide template from Appendix A1 exactly. NEVER add "C++ via GDExtension" to the Language field. GDScript projects may use GDExtension, but it is not a primary project language. The `godot-gdextension-specialist` in the routing table is available for when native extensions are needed — it does not make C++ a project language.
+- If available web search returns ambiguous results, show the user and let them decide
+- When the user chose **GDScript**: copy the GDScript project-guide template from Appendix A1 exactly. NEVER add "C++
+  via GDExtension" to the Language field. GDScript projects may use GDExtension, but it is not a primary project
+  language. The `gamedev:godot-gdextension-specialist` in the routing table is available for when native extensions are
+  needed — it does not make C++ a project language.
 
 ---
 
 ## Appendix A — Godot Language Configuration
 
-All Godot-specific variants for language-dependent configuration. Referenced from Sections 4 and 5 — only relevant when Godot is the chosen engine. Use the subsection matching the language chosen in Section 4.
+All Godot-specific variants for language-dependent configuration. Referenced from Sections 4 and 5 — only relevant when
+Godot is the chosen engine. Use the subsection matching the language chosen in Section 4.
 
 ---
 
 ### A1. Project Technology Stack Templates
 
 **GDScript:**
+
 ```markdown
 - **Engine**: Godot [version]
 - **Language**: GDScript
@@ -647,9 +711,12 @@ All Godot-specific variants for language-dependent configuration. Referenced fro
 - **Asset Pipeline**: Godot Import System + custom resource pipeline
 ```
 
-> **Guardrail**: When using this GDScript template, write the Language field as exactly "`GDScript`" — no additions. Do NOT append "C++ via GDExtension" or any other language. The C# template below includes GDExtension because C# projects commonly wrap native code; GDScript projects do not.
+> **Guardrail**: When using this GDScript template, write the Language field as exactly "`GDScript`" — no additions. Do
+> NOT append "C++ via GDExtension" or any other language. The C# template below includes GDExtension because C# projects
+> commonly wrap native code; GDScript projects do not.
 
 **C#:**
+
 ```markdown
 - **Engine**: Godot [version]
 - **Language**: C# (.NET 8+, primary), C++ via GDExtension (native plugins only)
@@ -658,6 +725,7 @@ All Godot-specific variants for language-dependent configuration. Referenced fro
 ```
 
 **Both — GDScript + C#:**
+
 ```markdown
 - **Engine**: Godot [version]
 - **Language**: GDScript (gameplay/UI scripting), C# (performance-critical systems), C++ via GDExtension (native only)
@@ -670,6 +738,7 @@ All Godot-specific variants for language-dependent configuration. Referenced fro
 ### A2. Naming Conventions
 
 **GDScript:**
+
 - Classes: PascalCase (e.g., `PlayerController`)
 - Variables/functions: snake_case (e.g., `move_speed`)
 - Signals: snake_case past tense (e.g., `health_changed`)
@@ -678,6 +747,7 @@ All Godot-specific variants for language-dependent configuration. Referenced fro
 - Constants: UPPER_SNAKE_CASE (e.g., `MAX_HEALTH`)
 
 **C#:**
+
 - Classes: PascalCase (`PlayerController`) — must also be `partial`
 - Public properties/fields: PascalCase (`MoveSpeed`, `JumpVelocity`)
 - Private fields: `_camelCase` (`_currentHealth`, `_isGrounded`)
@@ -687,14 +757,16 @@ All Godot-specific variants for language-dependent configuration. Referenced fro
 - Scenes: PascalCase matching root node (`PlayerController.tscn`)
 - Constants: PascalCase (`MaxHealth`, `DefaultMoveSpeed`)
 
-**Both — GDScript + C#:**
-Use GDScript conventions for `.gd` files and C# conventions for `.cs` files. Mixed-language files do not exist — the boundary is per-file. When in doubt about which language a new system should use, ask the user and record the decision in `technical-preferences.md`.
+**Both — GDScript + C#:** Use GDScript conventions for `.gd` files and C# conventions for `.cs` files. Mixed-language
+files do not exist — the boundary is per-file. When in doubt about which language a new system should use, ask the user
+and record the decision in `technical-preferences.md`.
 
 ---
 
 ### A3. Engine Specialists Routing
 
 **GDScript:**
+
 ```markdown
 ## Engine Specialists
 - **Primary**: godot-specialist
@@ -717,6 +789,7 @@ Use GDScript conventions for `.gd` files and C# conventions for `.cs` files. Mix
 ```
 
 **C#:**
+
 ```markdown
 ## Engine Specialists
 - **Primary**: godot-specialist
@@ -740,6 +813,7 @@ Use GDScript conventions for `.gd` files and C# conventions for `.cs` files. Mix
 ```
 
 **Both — GDScript + C#:**
+
 ```markdown
 ## Engine Specialists
 - **Primary**: godot-specialist

@@ -5,8 +5,8 @@ When writing or editing game code in this directory, follow these standards.
 ## Engine Version Warning
 
 The LLM's training data predates the pinned engine version.
-**Always check `docs/engine-reference/` before using any engine API.**
-Do not guess at post-cutoff API signatures — look them up first.
+**Always check `docs/engine-reference/` before using any engine API.** Do not guess at post-cutoff API signatures — look
+them up first.
 
 ## Coding Standards
 
@@ -18,19 +18,17 @@ Do not guess at post-cutoff API signatures — look them up first.
 
 ## File Routing
 
-Match the engine-specialist agent to the file type being written.
-See `AGENTS.md` → Technical Preferences → Engine Specialists → File Extension Routing.
+Match the engine-specialist agent to the file type being written. See `AGENTS.md` → Technical Preferences → Engine
+Specialists → File Extension Routing.
 
 When in doubt, use the primary engine specialist configured in `AGENTS.md`.
 
 ## Tests
 
-Tests live in `tests/` — not in `src/`.
-Run `/gamedev:test-setup` to scaffold the test framework if it doesn't exist yet.
-Every gameplay system should have unit tests covering its formulas and edge cases.
+Tests live in `tests/` — not in `src/`. Run `/skill:gamedev-test-setup` to scaffold the test framework if it doesn't
+exist yet. Every gameplay system should have unit tests covering its formulas and edge cases.
 
 ## Verification-Driven Development
 
-Write tests first when adding gameplay systems.
-For UI changes, verify with screenshots.
-Compare expected output to actual output before marking work complete.
+Write tests first when adding gameplay systems. For UI changes, verify with screenshots. Compare expected output to
+actual output before marking work complete.

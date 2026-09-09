@@ -42,9 +42,9 @@ other packages. Game Studio loads small entry points named `gamedev-<skill>` fro
 `skills/<skill>/SKILL.md`; there is only one workflow body to maintain. Do not add the shared `skills/` folder
 separately to Pi settings.
 
-Translate shared `gamedev:<skill>` and `/gamedev:<skill>` references to `/skill:gamedev-<skill>`. Arguments are user
-text, not shell variables. Read [the host guide](host-runtime.md) before following a workflow, and resolve its relative
-paths from the shared file, not the generated entry point.
+Translate shared `gamedev:<skill>` and `/skill:gamedev-<skill>` references to `/skill:gamedev-<skill>`. Arguments are
+user text, not shell variables. Read [the host guide](host-runtime.md) before following a workflow, and resolve its
+relative paths from the shared file, not the generated entry point.
 
 ## Workflow tracking
 
@@ -153,14 +153,15 @@ subagent({
 
 Supply the actual file text, not these placeholders. Omit `agent` unless the runner lists that exact registered name.
 Use `tasks` only for independent work when its schema supports the array, then collect every result before proceeding.
-Claude's model and permission metadata does not configure Pi. Do not install a runner or change global settings without
+Role guides do not configure models or permissions. Do not install a runner or change global settings without
 permission. Without a runner, label same-session role passes as self-review, not independent review.
 
 ## Project guidance and integrations
 
-`gamedev:start` adds `AGENTS.md` and preserves existing files. One-line CLAUDE.md imports keep the game usable in Claude
-Code. Engine preferences and path-scoped rules retain their `.claude/` paths; Pi reads applicable rules explicitly
-rather than interpreting Claude imports or running Claude hooks.
+`gamedev:start` adds canonical `AGENTS.md` guides and preserves existing files. Preferences live in
+`docs/technical-preferences.md`, rules in `docs/rules/`; read applicable rules explicitly. Fresh scaffolds contain no
+host-specific files. Before upgrading an older game, follow the [reviewed migration](migration-0.4.md), including stale
+catalog evidence and approvals.
 
 Git, Python 3, and Bash are needed for scaffolding and shared stage reporting. The extension requires Node 22.17 or
 newer. Backlog.md, OpenSpec, engines, web tools, and Model Context Protocol (MCP) support are separate integrations.

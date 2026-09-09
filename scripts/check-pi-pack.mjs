@@ -38,6 +38,18 @@ try {
     "pi/skills/gamedev-start.md",
     "skills/start/SKILL.md",
     "templates/AGENTS.md",
+    "templates/docs/technical-preferences.md",
+    "templates/docs/rules/ai-code.md",
+    "templates/docs/rules/data-files.md",
+    "templates/docs/rules/design-docs.md",
+    "templates/docs/rules/engine-code.md",
+    "templates/docs/rules/gameplay-code.md",
+    "templates/docs/rules/narrative.md",
+    "templates/docs/rules/network-code.md",
+    "templates/docs/rules/prototype-code.md",
+    "templates/docs/rules/shader-code.md",
+    "templates/docs/rules/test-standards.md",
+    "templates/docs/rules/ui-code.md",
     "scripts/scaffold-project.py",
   ]) {
     assert.ok(paths.has(required), `Missing packed resource: ${required}`);
@@ -48,6 +60,11 @@ try {
       /^(node_modules|\.venv|\.git|\.worktrees|backlog|openspec)\//,
     );
     assert.doesNotMatch(path, /\.test\.ts$/);
+    assert.doesNotMatch(
+      path,
+      /(^|\/)(\.claude(?:-plugin)?|\.codex(?:-plugin)?|\.agents|hooks)(\/|$)/,
+    );
+    assert.doesNotMatch(path, /(^|\/)CLAUDE\.md$/);
   }
   await execute("tar", ["-xzf", packed.filename], { cwd: temporary });
   const check = join(dirname(fileURLToPath(import.meta.url)), "check-pi.mjs");

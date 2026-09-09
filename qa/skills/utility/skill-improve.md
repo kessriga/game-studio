@@ -1,36 +1,34 @@
-# Skill Test Spec: /gamedev:skill-improve
+# Skill Test Spec: /skill:gamedev-skill-improve
 
 ## Skill Summary
 
-`/gamedev:skill-improve` runs an automated test-fix-retest improvement loop on a skill
-file. It invokes `/gamedev:skill-test static` (and optionally `/gamedev:skill-test category`) to
-establish a baseline score, diagnoses the failing checks, proposes targeted fixes
-to the SKILL.md file, asks "May I write the improvements to [skill path]?", applies
-the fixes, and re-runs the tests to confirm improvement.
+`/skill:gamedev-skill-improve` runs an automated test-fix-retest improvement loop on a skill file. It invokes
+`/skill:gamedev-skill-test static` (and optionally `/skill:gamedev-skill-test category`) to establish a baseline score,
+diagnoses the failing checks, proposes targeted fixes to the SKILL.md file, asks "May I write the improvements to [skill
+path]?", applies the fixes, and re-runs the tests to confirm improvement.
 
-If the proposed fix makes the skill worse (regression), the fix is reverted (with
-user confirmation) rather than applied. If the skill is already perfect (0 failures),
-the skill exits immediately without making changes. No director gates apply. Verdicts:
-IMPROVED (score went up), NO CHANGE (no improvements possible or user declined), or
-REVERTED (fix was applied but caused regression and was reverted).
+If the proposed fix makes the skill worse (regression), the fix is reverted (with user confirmation) rather than
+applied. If the skill is already perfect (0 failures), the skill exits immediately without making changes. No director
+gates apply. Verdicts: IMPROVED (score went up), NO CHANGE (no improvements possible or user declined), or REVERTED (fix
+was applied but caused regression and was reverted).
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/gamedev:skill-test static` — no fixture needed.
+Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
 
-- [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
+- [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: IMPROVED, NO CHANGE, REVERTED
 - [ ] Contains "May I write" collaborative protocol language before applying fixes
-- [ ] Has a next-step handoff (e.g., run `/gamedev:skill-test spec` to validate behavioral compliance)
+- [ ] Has a next-step handoff (e.g., run `/skill:gamedev-skill-test spec` to validate behavioral compliance)
 
 ---
 
 ## Director Gate Checks
 
-None. `/gamedev:skill-improve` is a meta-utility skill. No director gates apply.
+None. `/skill:gamedev-skill-improve` is a meta-utility skill. No director gates apply.
 
 ---
 
@@ -39,23 +37,26 @@ None. `/gamedev:skill-improve` is a meta-utility skill. No director gates apply.
 ### Case 1: Happy Path — Skill With 2 Static Failures, Both Fixed, IMPROVED
 
 **Fixture:**
+
 - `skills/some-skill/SKILL.md` has 2 static failures:
-  - Check 4: no "May I write" language despite having Write in allowed-tools
+  - Check 4: no "May I write" language despite documented file-writing steps
   - Check 5: no next-step handoff at the end
 
-**Input:** `/gamedev:skill-improve some-skill`
+**Input:** `/skill:gamedev-skill-improve some-skill`
 
 **Expected behavior:**
-1. Skill runs `/gamedev:skill-test static some-skill` — baseline: 5/7 checks pass
+
+1. Skill runs `/skill:gamedev-skill-test static some-skill` — baseline: 5/7 checks pass
 2. Skill diagnoses the 2 failing checks (4 and 5)
 3. Skill proposes fixes:
    - Add "May I write" language to the appropriate phase
    - Add a next-step handoff section at the end
 4. Skill asks "May I write improvements to `skills/some-skill/SKILL.md`?"
-5. Fixes applied; `/gamedev:skill-test static some-skill` re-run — now 7/7 checks pass
+5. Fixes applied; `/skill:gamedev-skill-test static some-skill` re-run — now 7/7 checks pass
 6. Verdict is IMPROVED (5→7)
 
 **Assertions:**
+
 - [ ] Baseline score is established before any changes (5/7)
 - [ ] Both failing checks are diagnosed and addressed in the proposed fix
 - [ ] "May I write" is asked before applying the fix
@@ -67,13 +68,14 @@ None. `/gamedev:skill-improve` is a meta-utility skill. No director gates apply.
 ### Case 2: Fix Causes Regression — Score Comparison Shows Regression, REVERTED
 
 **Fixture:**
-- `skills/some-skill/SKILL.md` has 1 static failure (missing handoff)
-- Proposed fix inadvertently removes the verdict keywords section
-  (introducing a new failure)
 
-**Input:** `/gamedev:skill-improve some-skill`
+- `skills/some-skill/SKILL.md` has 1 static failure (missing handoff)
+- Proposed fix inadvertently removes the verdict keywords section (introducing a new failure)
+
+**Input:** `/skill:gamedev-skill-improve some-skill`
 
 **Expected behavior:**
+
 1. Baseline: 6/7 checks pass (1 failure: missing handoff)
 2. Skill proposes fix and asks "May I write improvements?"
 3. Fix is applied; re-test runs
@@ -83,6 +85,7 @@ None. `/gamedev:skill-improve` is a meta-utility skill. No director gates apply.
 7. User confirms; changes are reverted; verdict is REVERTED
 
 **Assertions:**
+
 - [ ] Re-test score is compared to baseline before finalizing
 - [ ] Regression is detected when score decreases
 - [ ] User is asked to confirm revert (not automatic)
@@ -94,13 +97,14 @@ None. `/gamedev:skill-improve` is a meta-utility skill. No director gates apply.
 ### Case 3: Skill With Category Assignment — Baseline Captures Both Scores
 
 **Fixture:**
-- `skills/gate-check/SKILL.md` is a gate skill with 1 static failure
-  and 2 category (G-criteria) failures
+
+- `skills/gate-check/SKILL.md` is a gate skill with 1 static failure and 2 category (G-criteria) failures
 - `tests/skills/quality-rubric.md` has Gate Skills section
 
-**Input:** `/gamedev:skill-improve gate-check`
+**Input:** `/skill:gamedev-skill-improve gate-check`
 
 **Expected behavior:**
+
 1. Skill runs both static and category tests for the baseline:
    - Static: 6/7 checks pass
    - Category: 3/5 G-criteria pass
@@ -112,6 +116,7 @@ None. `/gamedev:skill-improve` is a meta-utility skill. No director gates apply.
 7. Verdict is IMPROVED (9→12)
 
 **Assertions:**
+
 - [ ] Both static and category scores are captured in the baseline
 - [ ] Combined score is used for comparison (not just one type)
 - [ ] All 3 failures are addressed in the proposed fix
@@ -123,13 +128,15 @@ None. `/gamedev:skill-improve` is a meta-utility skill. No director gates apply.
 ### Case 4: Skill Already Perfect — No Improvements Needed
 
 **Fixture:**
+
 - `skills/brainstorm/SKILL.md` has no static failures
 - Category score is also 5/5 (if applicable)
 
-**Input:** `/gamedev:skill-improve brainstorm`
+**Input:** `/skill:gamedev-skill-improve brainstorm`
 
 **Expected behavior:**
-1. Skill runs `/gamedev:skill-test static brainstorm` — 7/7 checks pass
+
+1. Skill runs `/skill:gamedev-skill-test static brainstorm` — 7/7 checks pass
 2. If category applies: 5/5 criteria pass
 3. Skill outputs: "No improvements needed — brainstorm is fully compliant"
 4. Skill exits without proposing any changes
@@ -137,6 +144,7 @@ None. `/gamedev:skill-improve` is a meta-utility skill. No director gates apply.
 6. Verdict is NO CHANGE
 
 **Assertions:**
+
 - [ ] Skill exits immediately after confirming 0 failures
 - [ ] "No improvements needed" message is shown
 - [ ] No changes are proposed
@@ -148,16 +156,19 @@ None. `/gamedev:skill-improve` is a meta-utility skill. No director gates apply.
 ### Case 5: Director Gate Check — No gate; skill-improve is a meta utility
 
 **Fixture:**
+
 - Skill with at least 1 static failure
 
-**Input:** `/gamedev:skill-improve some-skill`
+**Input:** `/skill:gamedev-skill-improve some-skill`
 
 **Expected behavior:**
+
 1. Skill runs the test-fix-retest loop
 2. No director agents are spawned
 3. No gate IDs appear in output
 
 **Assertions:**
+
 - [ ] No director gate is invoked
 - [ ] No gate skip messages appear
 - [ ] Verdict is IMPROVED, NO CHANGE, or REVERTED — no gate verdict
@@ -177,9 +188,9 @@ None. `/gamedev:skill-improve` is a meta-utility skill. No director gates apply.
 
 ## Coverage Notes
 
-- The improvement loop is designed to run only one fix-retest cycle per
-  invocation; running multiple iterations requires re-invoking `/gamedev:skill-improve`.
-- Behavioral compliance (spec-mode test results) is not included in the
-  improvement loop — only structural (static) and category scores are automated.
-- The case where the skill file cannot be read (permissions error or missing file)
-  is not tested; this would result in an error before the baseline is established.
+- The improvement loop is designed to run only one fix-retest cycle per invocation; running multiple iterations requires
+  re-invoking `/skill:gamedev-skill-improve`.
+- Behavioral compliance (spec-mode test results) is not included in the improvement loop — only structural (static) and
+  category scores are automated.
+- The case where the skill file cannot be read (permissions error or missing file) is not tested; this would result in
+  an error before the baseline is established.

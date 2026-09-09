@@ -1,26 +1,23 @@
 ---
 name: quick-design
 description: "Lightweight design spec for small changes — tuning adjustments, minor mechanics, balance tweaks. Skips full GDD authoring when a system GDD already exists or the change is too small to warrant one. Produces a Quick Design Spec that embeds directly into story files."
-argument-hint: "[brief description of the change]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [brief description of the change]
+
 # Quick Design
 
-This is the **lightweight design path** for changes that don't need a full GDD.
-Full GDD authoring via `/gamedev:design-system` is the heavyweight path. Use this skill
-for work under approximately 4 hours of implementation — tuning adjustments,
-minor behavioral tweaks, small additions to existing systems, or standalone
+This is the **lightweight design path** for changes that don't need a full GDD. Full GDD authoring via
+`/skill:gamedev-design-system` is the heavyweight path. Use this skill for work under approximately 4 hours of
+implementation — tuning adjustments, minor behavioral tweaks, small additions to existing systems, or standalone
 features too small to warrant a full document.
 
 **Output:** `design/quick-specs/[name]-[date].md`
 
-**When to run:** Anytime a change is too small for `/gamedev:design-system` but too
-meaningful to implement without a written rationale.
+**When to run:** Anytime a change is too small for `/skill:gamedev-design-system` but too meaningful to implement
+without a written rationale.
 
 ---
 
@@ -28,27 +25,24 @@ meaningful to implement without a written rationale.
 
 First, read the argument and determine which category this change falls into:
 
-- **Tuning** — changing numbers or balance values in an existing system with no
-  behavioral change (most minimal path). Example: "increase jump height from 5
-  to 6 units", "reduce enemy patrol speed by 10%".
-- **Tweak** — a small behavioral change to an existing system that introduces no
-  new states, branches, or systems. Example: "make dash invincible on frame 1",
-  "allow combo to cancel into roll".
-- **Addition** — adding a small mechanic to an existing system that may introduce
-  1-2 new states or interactions. Example: "add a parry window to the block
-  mechanic", "add a charge variant to the basic attack".
-- **New Small System** — a standalone feature small enough that it has no
-  existing GDD and is under approximately one week of implementation work.
-  Example: "achievement popup system", "simple day/night visual cycle".
+- **Tuning** — changing numbers or balance values in an existing system with no behavioral change (most minimal path).
+  Example: "increase jump height from 5 to 6 units", "reduce enemy patrol speed by 10%".
+- **Tweak** — a small behavioral change to an existing system that introduces no new states, branches, or systems.
+  Example: "make dash invincible on frame 1", "allow combo to cancel into roll".
+- **Addition** — adding a small mechanic to an existing system that may introduce 1-2 new states or interactions.
+  Example: "add a parry window to the block mechanic", "add a charge variant to the basic attack".
+- **New Small System** — a standalone feature small enough that it has no existing GDD and is under approximately one
+  week of implementation work. Example: "achievement popup system", "simple day/night visual cycle".
 
-If the change does NOT fit these categories — it introduces a new system with
-significant cross-system dependencies, requires more than one week of
-implementation, or fundamentally alters an existing system's core rules — stop
-and redirect to `/gamedev:design-system` instead.
+If the change does NOT fit these categories — it introduces a new system with significant cross-system dependencies,
+requires more than one week of implementation, or fundamentally alters an existing system's core rules — stop and
+redirect to `/skill:gamedev-design-system` instead.
 
-If there is no argument, ask the user to describe the change (plain text prompt), then classify it using the criteria above.
+If there is no argument, ask the user to describe the change (plain text prompt), then classify it using the criteria
+above.
 
-Present the inferred classification using `AskUserQuestion`:
+Present the inferred classification using a user-input tool or chat:
+
 - Prompt: "I've classified this as **[inferred type]** — [brief reason]. Is that correct?"
 - Options:
   - `[A] Yes — [inferred type] is correct`
@@ -56,10 +50,10 @@ Present the inferred classification using `AskUserQuestion`:
   - `[C] Tweak — small behavioral change to an existing system`
   - `[D] Addition — adding a small mechanic to an existing system`
   - `[E] New Small System — standalone feature, under one week of work`
-  - `[F] This is too large — redirect me to /gamedev:design-system`
+  - `[F] This is too large — redirect me to /skill:gamedev-design-system`
 
-If [F]: stop. Verdict: **REDIRECTED** — use `/gamedev:design-system` for this change.
-Otherwise: proceed with the selected type.
+If [F]: stop. Verdict: **REDIRECTED** — use `/skill:gamedev-design-system` for this change. Otherwise: proceed with the
+selected type.
 
 ---
 
@@ -67,19 +61,15 @@ Otherwise: proceed with the selected type.
 
 Before drafting anything, read the relevant context:
 
-- Search `design/gdd/` for the GDD most relevant to this change. Read the
-  sections that this change would affect.
-- Check whether `design/gdd/systems-index.md` exists. If it does, read it to
-  understand where this system sits in the dependency graph and what tier it
-  belongs to. If it does not exist, note "No systems index found — skipping
-  dependency tier check." and continue.
-- Check `design/quick-specs/` for any prior quick specs that touched this
-  system — avoid contradicting them.
-- If this is a Tuning change, also check `assets/data/` for the data file that
-  holds the relevant values.
+- Search `design/gdd/` for the GDD most relevant to this change. Read the sections that this change would affect.
+- Check whether `design/gdd/systems-index.md` exists. If it does, read it to understand where this system sits in the
+  dependency graph and what tier it belongs to. If it does not exist, note "No systems index found — skipping dependency
+  tier check." and continue.
+- Check `design/quick-specs/` for any prior quick specs that touched this system — avoid contradicting them.
+- If this is a Tuning change, also check `assets/data/` for the data file that holds the relevant values.
 
-Report what was found: "Found GDD at [path]. Relevant section: [section name].
-No conflicting quick specs found." (or note any conflicts found.)
+Report what was found: "Found GDD at [path]. Relevant section: [section name]. No conflicting quick specs found." (or
+note any conflicts found.)
 
 ---
 
@@ -89,7 +79,8 @@ Use the appropriate spec format for the change category.
 
 ### For Tuning changes
 
-When proposing new values, apply the tuning rule from the Decision Rules in `../../docs/game-design-lenses.md` — double or halve to find the feel, never nudge 10%, then bisect — and state that reasoning in the Rationale column.
+When proposing new values, apply the tuning rule from the Decision Rules in `../../docs/game-design-lenses.md` — double
+or halve to find the feel, never nudge 10%, then bisect — and state that reasoning in the Rationale column.
 
 Produce a single table:
 
@@ -176,9 +167,8 @@ new states, list them. If it introduces new parameters, define their ranges.]
 
 ### For New Small System changes
 
-Use a trimmed GDD structure. Include only the sections that are directly
-necessary — skip Player Fantasy, full Formulas, and Edge Cases unless the
-system specifically requires them.
+Use a trimmed GDD structure. Include only the sections that are directly necessary — skip Player Fantasy, full Formulas,
+and Edge Cases unless the system specifically requires them.
 
 ```markdown
 # Quick Design Spec: [Title]
@@ -226,34 +216,30 @@ tracking threshold — quick spec is sufficient."]
 
 ## 4. Approval and Filing
 
-Present the draft to the user in full. Then use `AskUserQuestion`:
+Present the draft to the user in full. Then use a user-input tool or chat:
+
 - Prompt: "Here's the Quick Design Spec draft. How do you want to proceed?"
 - Options:
   - `[A] Approve — write it as shown`
   - `[B] Revise — I'll describe what to change`
-  - `[C] This grew too large — redirect to /gamedev:design-system instead`
+  - `[C] This grew too large — redirect to /skill:gamedev-design-system instead`
 
-If [B]: collect the requested changes, revise the draft, and re-present this widget.
-If [C]: stop. Verdict: **REDIRECTED** — use `/gamedev:design-system` for this change.
+If [B]: collect the requested changes, revise the draft, and re-present this widget. If [C]: stop. Verdict:
+**REDIRECTED** — use `/skill:gamedev-design-system` for this change.
 
-If [A]: ask "May I write this Quick Design Spec to
-`design/quick-specs/[kebab-case-title]-[YYYY-MM-DD].md`?"
+If [A]: ask "May I write this Quick Design Spec to `design/quick-specs/[kebab-case-title]-[YYYY-MM-DD].md`?"
 
-Use today's date in the filename. The title should be a kebab-case description
-of the change (e.g., `jump-height-tuning-2026-03-10`,
-`parry-window-addition-2026-03-10`).
+Use today's date in the filename. The title should be a kebab-case description of the change (e.g.,
+`jump-height-tuning-2026-03-10`, `parry-window-addition-2026-03-10`).
 
-If yes, create the `design/quick-specs/` directory if it does not exist, then
-write the file.
+If yes, create the `design/quick-specs/` directory if it does not exist, then write the file.
 
-If a GDD update is required (flagged in the spec), ask separately after
-writing the quick spec:
+If a GDD update is required (flagged in the spec), ask separately after writing the quick spec:
 
-"This spec modifies rules in [System Name]. May I update
-`design/gdd/[filename].md` — specifically the [section name] section?"
+"This spec modifies rules in [System Name]. May I update `design/gdd/[filename].md` — specifically the [section name]
+section?"
 
-Show the exact text that would be changed (old vs. new) before asking. Do not
-make GDD edits without explicit approval.
+Show the exact text that would be changed (old vs. new) before asking. Do not make GDD edits without explicit approval.
 
 ---
 
@@ -267,7 +253,7 @@ Type: [Tuning / Tweak / Addition / New Small System]
 System: [system name]
 GDD update: [Required — pending approval / Applied / Not required]
 
-Next step: This spec is ready for `/gamedev:story-readiness` validation before
+Next step: This spec is ready for `/skill:gamedev-story-readiness` validation before
 implementation. Reference this spec in the story's GDD Reference field.
 ```
 
@@ -275,25 +261,25 @@ implementation. Reference this spec in the story's GDD Reference field.
 
 Verdict: **COMPLETE** — quick design spec written and ready for implementation.
 
-Quick Design Specs **bypass** `/gamedev:design-review` and `/gamedev:review-all-gdds` by
-design. They are for small, low-risk, well-scoped changes where the cost of
-the full review pipeline exceeds the risk of the change itself.
+Quick Design Specs **bypass** `/skill:gamedev-design-review` and `/skill:gamedev-review-all-gdds` by design. They are
+for small, low-risk, well-scoped changes where the cost of the full review pipeline exceeds the risk of the change
+itself.
 
 Redirect to the full pipeline if any of the following are true:
+
 - The change adds a new system that belongs in the systems index
-- The change significantly alters cross-system behavior or a system's
-  contracts with other systems
-- The change introduces new player-facing mechanics that affect the
-  game's MDA aesthetic balance
+- The change significantly alters cross-system behavior or a system's contracts with other systems
+- The change introduces new player-facing mechanics that affect the game's MDA aesthetic balance
 - Implementation is likely to exceed one week of work
 
-In those cases: "This change has grown beyond quick-spec scope. I recommend
-using `/gamedev:design-system` to author a full GDD for this."
+In those cases: "This change has grown beyond quick-spec scope. I recommend using `/skill:gamedev-design-system` to
+author a full GDD for this."
 
 ---
 
 ## Recommended Next Steps
 
-- Run `/gamedev:story-readiness [story-path]` to validate the story before implementation begins — reference this spec in the story's GDD Reference field
-- Run `/gamedev:dev-story [story-path]` to implement once the story passes readiness checks
-- If the change is larger than expected, run `/gamedev:design-system [system-name]` to author a full GDD instead
+- Run `/skill:gamedev-story-readiness [story-path]` to validate the story before implementation begins — reference this
+  spec in the story's GDD Reference field
+- Run `/skill:gamedev-dev-story [story-path]` to implement once the story passes readiness checks
+- If the change is larger than expected, run `/skill:gamedev-design-system [system-name]` to author a full GDD instead

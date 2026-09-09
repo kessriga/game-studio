@@ -75,7 +75,7 @@ test("catalog commands resolve to real shared workflows and phase links are vali
     );
     for (const step of phase.steps) {
       if (step.command) {
-        const name = step.command.replace("/gamedev:", "");
+        const name = step.command.replace("/skill:gamedev-", "");
         assert.ok(
           (
             await readFile(
@@ -658,8 +658,8 @@ test("state growth cannot commit an unreadable file", async (t) => {
 
 test("engine configuration patterns match the template, not its placeholder", async (t) => {
   const root = await game(t);
-  await mkdir(join(root, ".claude/docs"), { recursive: true });
-  const path = join(root, ".claude/docs/technical-preferences.md");
+  await mkdir(join(root, "docs"), { recursive: true });
+  const path = join(root, "docs/technical-preferences.md");
   await writeFile(path, "- **Engine**: [TO BE CONFIGURED]\n");
   assert.equal(
     (await snapshot(root))!.rows.find((row) => row.step.id === "engine-setup")!

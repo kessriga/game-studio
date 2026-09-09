@@ -1,5 +1,5 @@
 # Workflow Catalog
-# Used by /gamedev:help to determine where a user is and what comes next.
+# Used by /skill:gamedev-help to determine where a user is and what comes next.
 #
 # Artifact checks:
 #   glob: presence check — passes if ≥1 file matches (or min_count)
@@ -12,7 +12,8 @@
 # required: false → optional enhancement (shown as OPTIONAL)
 # repeatable: true → runs multiple times (one per system, story, etc.)
 #
-# Phase gates (/gamedev:gate-check): verdicts are ADVISORY — they guide the
+# Phase gates (/skill:gamedev-gate-check): verdicts are ADVISORY — they
+#   guide the
 # decision
 # but never hard-block advancement. The user always decides whether to proceed.
 
@@ -24,7 +25,7 @@ phases:
     steps:
       - id: brainstorm
         name: "Brainstorm"
-        command: /gamedev:brainstorm
+        command: /skill:gamedev-brainstorm
         required: false
         description: >-
           Explore the game concept using MDA, verb-first, and player psychology
@@ -32,10 +33,10 @@ phases:
 
       - id: engine-setup
         name: "Engine Setup"
-        command: /gamedev:setup-engine
+        command: /skill:gamedev-setup-engine
         required: true
         artifact:
-          glob: ".claude/docs/technical-preferences.md"
+          glob: "docs/technical-preferences.md"
           pattern: '\*\*Engine\*\*:[ \t]+[A-Za-z]'
         description: >-
           Configure engine, pin version, set naming conventions and performance
@@ -43,7 +44,7 @@ phases:
 
       - id: game-concept
         name: "Game Concept Document"
-        command: /gamedev:brainstorm
+        command: /skill:gamedev-brainstorm
         required: true
         artifact:
           glob: "design/gdd/game-concept.md"
@@ -52,24 +53,24 @@ phases:
 
       - id: design-review-concept
         name: "Concept Review"
-        command: /gamedev:design-review
+        command: /skill:gamedev-design-review
         required: false
         description: "Validate the game concept (recommended before proceeding)"
 
       - id: art-bible
         name: "Art Bible"
-        command: /gamedev:art-bible
+        command: /skill:gamedev-art-bible
         required: true
         artifact:
           glob: "design/art/art-bible.md"
         description: >-
           Author the visual identity specification (9 sections). Uses the Visual
-          Identity Anchor produced by /gamedev:brainstorm. Run after game
+          Identity Anchor produced by /skill:gamedev-brainstorm. Run after game
           concept is formed, before systems design.
 
       - id: map-systems
         name: "Systems Map"
-        command: /gamedev:map-systems
+        command: /skill:gamedev-map-systems
         required: true
         artifact:
           glob: "design/gdd/systems-index.md"
@@ -84,7 +85,7 @@ phases:
     steps:
       - id: design-system
         name: "System GDDs"
-        command: /gamedev:design-system
+        command: /skill:gamedev-design-system
         required: true
         repeatable: true
         artifact:
@@ -97,7 +98,7 @@ phases:
 
       - id: design-review
         name: "Per-System Design Review"
-        command: /gamedev:design-review
+        command: /skill:gamedev-design-review
         required: true
         repeatable: true
         description: >-
@@ -106,7 +107,7 @@ phases:
 
       - id: review-all-gdds
         name: "Cross-GDD Review"
-        command: /gamedev:review-all-gdds
+        command: /skill:gamedev-review-all-gdds
         required: true
         artifact:
           glob: "design/gdd/gdd-cross-review-*.md"
@@ -116,12 +117,13 @@ phases:
 
       - id: consistency-check
         name: "Consistency Check"
-        command: /gamedev:consistency-check
+        command: /skill:gamedev-consistency-check
         required: false
         repeatable: true
         description: >-
           Scan all GDDs for contradictions, undefined references, and mechanic
-          conflicts. Run after /gamedev:review-all-gdds, and again any time a
+          conflicts. Run after /skill:gamedev-review-all-gdds, and again
+          any time a
           GDD is added or revised mid-project.
 
   technical-setup:
@@ -133,7 +135,7 @@ phases:
     steps:
       - id: create-architecture
         name: "Architecture Document"
-        command: /gamedev:create-architecture
+        command: /skill:gamedev-create-architecture
         required: true
         artifact:
           glob: "docs/architecture/architecture.md"
@@ -142,7 +144,7 @@ phases:
 
       - id: architecture-decision
         name: "Architecture Decisions (ADRs)"
-        command: /gamedev:architecture-decision
+        command: /skill:gamedev-architecture-decision
         required: true
         repeatable: true
         artifact:
@@ -154,7 +156,7 @@ phases:
 
       - id: architecture-review
         name: "Architecture Review"
-        command: /gamedev:architecture-review
+        command: /skill:gamedev-architecture-review
         required: true
         artifact:
           glob: "docs/architecture/architecture-review-*.md"
@@ -163,7 +165,7 @@ phases:
 
       - id: control-manifest
         name: "Control Manifest"
-        command: /gamedev:create-control-manifest
+        command: /skill:gamedev-create-control-manifest
         required: true
         artifact:
           glob: "docs/architecture/control-manifest.md"
@@ -188,14 +190,14 @@ phases:
     steps:
       - id: entity-inventory
         name: "Visual Entity & Screen Inventory"
-        command: /gamedev:asset-spec
+        command: /skill:gamedev-asset-spec
         required: false
         artifact:
           glob: "design/assets/entity-inventory.md"
         description: >-
           Enumerate everything the game needs visually: entities (characters,
           enemies, buildings, environment pieces), UI screens, HUD elements,
-          panels. Run /gamedev:asset-spec with no arguments to start a
+          panels. Run /skill:gamedev-asset-spec with no arguments to start a
           collaborative inventory session — brief or detailed based on your
           responses. Reads GDDs and art bible to propose a starting list; you
           add, remove, and adjust. Becomes the source of truth for all art and
@@ -204,7 +206,7 @@ phases:
 
       - id: asset-spec
         name: "Asset Specs"
-        command: /gamedev:asset-spec
+        command: /skill:gamedev-asset-spec
         required: false
         repeatable: true
         artifact:
@@ -213,12 +215,13 @@ phases:
         description: >-
           Generate per-asset visual specifications and AI generation prompts.
           Run once per entity, system, level, or character. If no source doc
-          exists, /gamedev:asset-spec interviews you inline — no narrative
+          exists, /skill:gamedev-asset-spec interviews you inline — no
+          narrative
           document required.
 
       - id: ux-design
         name: "UX Specs (key screens)"
-        command: /gamedev:ux-design
+        command: /skill:gamedev-ux-design
         required: true
         repeatable: true
         artifact:
@@ -232,7 +235,7 @@ phases:
 
       - id: ux-review
         name: "UX Review"
-        command: /gamedev:ux-review
+        command: /skill:gamedev-ux-review
         required: true
         description: >-
           Validate all key screen UX specs for GDD alignment and accessibility
@@ -240,7 +243,7 @@ phases:
 
       - id: prototype
         name: "Prototype"
-        command: /gamedev:prototype
+        command: /skill:gamedev-prototype
         required: false
         artifact:
           glob: "prototypes/*/README.md"
@@ -253,7 +256,7 @@ phases:
 
       - id: create-epics
         name: "Create Epics"
-        command: /gamedev:create-epics
+        command: /skill:gamedev-create-epics
         required: true
         repeatable: true
         artifact:
@@ -261,12 +264,12 @@ phases:
           min_count: 1
         description: >-
           Translate GDDs + ADRs into epics — one per architectural module. Run
-          per layer: /gamedev:create-epics layer: foundation, then
-          /gamedev:create-epics layer: core
+          per layer: /skill:gamedev-create-epics layer: foundation, then
+          /skill:gamedev-create-epics layer: core
 
       - id: create-stories
         name: "Create Stories"
-        command: /gamedev:create-stories
+        command: /skill:gamedev-create-stories
         required: true
         repeatable: true
         artifact:
@@ -274,23 +277,24 @@ phases:
           min_count: 2
         description: >-
           Break each epic into implementable story files. Run per epic:
-          /gamedev:create-stories [epic-slug]
+          /skill:gamedev-create-stories [epic-slug]
 
       - id: test-setup
         name: "Test Framework Setup"
-        command: /gamedev:test-setup
+        command: /skill:gamedev-test-setup
         required: false
         artifact:
           note: >-
             Check tests/ directory for engine-specific test framework scaffold
         description: >-
           Scaffold the test framework and CI pipeline once before the first
-          sprint. Leads to /gamedev:test-helpers for fixture generation,
-          /gamedev:qa-plan per epic, and /gamedev:smoke-check per sprint.
+          sprint. Leads to /skill:gamedev-test-helpers for fixture generation,
+          /skill:gamedev-qa-plan per epic, and
+          /skill:gamedev-smoke-check per sprint.
 
       - id: vertical-slice
         name: "Vertical Slice"
-        command: /gamedev:vertical-slice
+        command: /skill:gamedev-vertical-slice
         required: false
         artifact:
           glob: "prototypes/*/REPORT.md"
@@ -311,7 +315,7 @@ phases:
     steps:
       - id: story-readiness
         name: "Story Readiness Check"
-        command: /gamedev:story-readiness
+        command: /skill:gamedev-story-readiness
         required: false
         description: >-
           Validate a story is implementation-ready before a developer picks it
@@ -319,7 +323,7 @@ phases:
 
       - id: implement
         name: "Implement Stories"
-        command: /gamedev:dev-story
+        command: /skill:gamedev-dev-story
         required: true
         repeatable: true
         artifact:
@@ -327,21 +331,22 @@ phases:
             Check src/ for active code and production/epics/**/*.md for In
             Progress stories
         description: >-
-          Pick the next ready story and implement it with /gamedev:dev-story
+          Pick the next ready story and implement it with
+          /skill:gamedev-dev-story
           [story-path]. Routes to the correct programmer agent.
 
       - id: code-review
         name: "Code Review"
-        command: /gamedev:code-review
+        command: /skill:gamedev-code-review
         required: false
         repeatable: true
         description: >-
           Architectural code review after each story implementation. Run after
-          /gamedev:dev-story, before /gamedev:story-done.
+          /skill:gamedev-dev-story, before /skill:gamedev-story-done.
 
       - id: story-done
         name: "Story Done Review"
-        command: /gamedev:story-done
+        command: /skill:gamedev-story-done
         required: true
         repeatable: true
         description: >-
@@ -350,21 +355,23 @@ phases:
 
       - id: qa-plan
         name: "QA Plan"
-        command: /gamedev:qa-plan
+        command: /skill:gamedev-qa-plan
         required: false
         repeatable: true
         description: >-
-          Generate a QA test plan per epic or sprint. Run /gamedev:qa-plan
-          [epic-slug]. Produces test cases for /gamedev:smoke-check,
-          /gamedev:regression-suite, and /gamedev:test-evidence-review.
+          Generate a QA test plan per epic or sprint. Run /skill:gamedev-qa-plan
+          [epic-slug]. Produces test cases for /skill:gamedev-smoke-check,
+          /skill:gamedev-regression-suite, and
+          /skill:gamedev-test-evidence-review.
 
       - id: bug-report
         name: "Bug Report"
-        command: /gamedev:bug-report
+        command: /skill:gamedev-bug-report
         required: false
         repeatable: true
         description: >-
-          Log bugs found during implementation. /gamedev:bug-report files a
+          Log bugs found during implementation.
+          /skill:gamedev-bug-report files a
           Backlog task with a `bug` label; triage is the board filtered by `bug`
           and sorted by priority.
 
@@ -374,13 +381,16 @@ phases:
         repeatable: true
         description: >-
           Coordinate multiple agents on a complex feature. Use:
-          /gamedev:team-combat, /gamedev:team-narrative, /gamedev:team-ui,
-          /gamedev:team-audio, /gamedev:team-level, /gamedev:team-live-ops,
-          /gamedev:team-qa. Run when a feature spans multiple agent domains.
+          /skill:gamedev-team-combat, /skill:gamedev-team-narrative,
+          /skill:gamedev-team-ui,
+          /skill:gamedev-team-audio, /skill:gamedev-team-level,
+          /skill:gamedev-team-live-ops,
+          /skill:gamedev-team-qa. Run when a feature spans multiple
+          agent domains.
 
       - id: scope-check
         name: "Scope Check"
-        command: /gamedev:scope-check
+        command: /skill:gamedev-scope-check
         required: false
         repeatable: true
         description: >-
@@ -395,13 +405,13 @@ phases:
     steps:
       - id: perf-profile
         name: "Performance Profile"
-        command: /gamedev:perf-profile
+        command: /skill:gamedev-perf-profile
         required: false
         description: "Profile and optimize CPU/GPU/memory bottlenecks"
 
       - id: balance-check
         name: "Balance Check"
-        command: /gamedev:balance-check
+        command: /skill:gamedev-balance-check
         required: false
         description: >-
           Analyze game balance formulas and data for outliers and broken
@@ -409,14 +419,14 @@ phases:
 
       - id: asset-audit
         name: "Asset Audit"
-        command: /gamedev:asset-audit
+        command: /skill:gamedev-asset-audit
         required: false
         description: >-
           Verify naming conventions, file format standards, and size budgets
 
       - id: playtest-polish
         name: "Playtest Sessions (×3)"
-        command: /gamedev:playtest-report
+        command: /skill:gamedev-playtest-report
         required: true
         artifact:
           glob: "production/playtests/*.md"
@@ -426,7 +436,7 @@ phases:
 
       - id: team-polish
         name: "Polish Team Pass"
-        command: /gamedev:team-polish
+        command: /skill:gamedev-team-polish
         required: true
         description: >-
           Coordinated polish pass across performance, audio, visual, and UX
@@ -438,7 +448,7 @@ phases:
     steps:
       - id: release-checklist
         name: "Release Checklist"
-        command: /gamedev:release-checklist
+        command: /skill:gamedev-release-checklist
         required: true
         description: >-
           Pre-release validation across all departments: code, content, store,
@@ -446,14 +456,14 @@ phases:
 
       - id: patch-notes
         name: "Patch Notes"
-        command: /gamedev:patch-notes
+        command: /skill:gamedev-patch-notes
         required: false
         description: >-
           Generate player-facing patch notes from git history and sprint data
 
       - id: changelog
         name: "Changelog"
-        command: /gamedev:changelog
+        command: /skill:gamedev-changelog
         required: false
         description: >-
           Auto-generate internal changelog from commits, sprints, and design
@@ -461,7 +471,7 @@ phases:
 
       - id: launch-checklist
         name: "Launch Checklist"
-        command: /gamedev:launch-checklist
+        command: /skill:gamedev-launch-checklist
         required: true
         description: >-
           Final launch readiness — last gate before shipping to players

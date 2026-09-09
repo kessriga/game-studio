@@ -1,6 +1,6 @@
 ---
 name: gamedev-team-ui
-description: "Orchestrate the UI team through the full UX pipeline: from UX spec authoring through visual design, implementation, review, and polish. Integrates with /gamedev:ux-design, /gamedev:ux-review, and studio UX templates."
+description: "Orchestrate the UI team through the full UX pipeline: from UX spec authoring through visual design, implementation, review, and polish. Integrates with /skill:gamedev-ux-design, /skill:gamedev-ux-review, and studio UX templates."
 ---
 
 # Game Studio: team-ui

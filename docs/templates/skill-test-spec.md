@@ -2,17 +2,16 @@
 
 ## Skill Summary
 
-[One paragraph: what this skill does, when to use it, what it produces. Include
-the primary output artifact, the verdict format it uses, and which pipeline stage
-it belongs to.]
+[One paragraph: what this skill does, when to use it, what it produces. Include the primary output artifact, the verdict
+format it uses, and which pipeline stage it belongs to.]
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/gamedev:skill-test static` — no fixture needed.
+Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
 
-- [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
+- [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings (## Phase N or numbered ## sections)
 - [ ] Contains verdict keywords: [list the ones expected, e.g., PASS, FAIL, CONCERNS]
 - [ ] Contains "May I write" collaborative protocol language (if skill writes files)
@@ -24,18 +23,19 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 ### Case 1: Happy Path — [short description]
 
-**Fixture:** [Describe the assumed project state. Which files exist? What do they
-contain? E.g., "game-concept.md exists with all 8 required sections complete.
-systems-index.md exists. All MVP GDDs are present and individually reviewed."]
+**Fixture:** [Describe the assumed project state. Which files exist? What do they contain? E.g., "game-concept.md exists
+with all 8 required sections complete. systems-index.md exists. All MVP GDDs are present and individually reviewed."]
 
 **Input:** `/[skill-name] [args]`
 
 **Expected behavior:**
+
 1. [Phase 1 action — what the skill should read or check]
 2. [Phase 2 action — what the skill should evaluate]
 3. [Phase N action — what the skill should output]
 
 **Assertions:**
+
 - [ ] Skill reads [specific file] before producing output
 - [ ] Output includes verdict keyword [PASS/FAIL/etc.]
 - [ ] Output lists [specific content] from the fixture
@@ -45,17 +45,18 @@ systems-index.md exists. All MVP GDDs are present and individually reviewed."]
 
 ### Case 2: Failure Path — [short description, e.g., "Missing required artifact"]
 
-**Fixture:** [Describe the failure state. E.g., "game-concept.md is missing.
-No files exist in design/gdd/."]
+**Fixture:** [Describe the failure state. E.g., "game-concept.md is missing. No files exist in design/gdd/."]
 
 **Input:** `/[skill-name] [args]`
 
 **Expected behavior:**
+
 1. [Phase 1: skill detects missing file]
 2. [Phase 2: skill surfaces the gap rather than assuming OK]
 3. [Output: FAIL or BLOCKED verdict with specific blocker named]
 
 **Assertions:**
+
 - [ ] Skill does NOT output PASS when the fixture is incomplete
 - [ ] Skill names the specific missing artifact
 - [ ] Skill suggests a remediation action (e.g., "Run /[other-skill]")
@@ -70,9 +71,11 @@ No files exist in design/gdd/."]
 **Input:** `/[skill-name]` (no argument)
 
 **Expected behavior:**
+
 1. [What the skill should do when invoked without arguments]
 
 **Assertions:**
+
 - [ ] [assertion]
 
 ---
@@ -90,7 +93,8 @@ No files exist in design/gdd/."]
 ## Coverage Notes
 
 [Document what is intentionally NOT tested in this spec and why. Examples:
-- "Case 3 (all-mode) is not covered because it runs too many checks to evaluate
-  in a single spec — test each sub-mode individually."
+
+- "Case 3 (all-mode) is not covered because it runs too many checks to evaluate in a single spec — test each sub-mode
+  individually."
 - "The database integration path is not covered as it requires a live environment."
 - "Edge cases involving corrupted YAML files are deferred to a future spec."]

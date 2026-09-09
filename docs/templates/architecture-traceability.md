@@ -1,6 +1,6 @@
 # Architecture Traceability Index
 
-<!-- Living document — updated by /gamedev:architecture-review after each review run.
+<!-- Living document — updated by /skill:gamedev-architecture-review after each review run.
      Do not edit manually unless correcting an error. -->
 
 ## Document Status
@@ -14,7 +14,7 @@
 ## Coverage Summary
 
 | Status | Count | Percentage |
-|--------|-------|-----------|
+| -------- | ------- | ----------- |
 | ✅ Covered | [X] | [%] |
 | ⚠️ Partial | [Y] | [%] |
 | ❌ Gap | [Z] | [%] |
@@ -32,7 +32,7 @@
 | Req ID | GDD | System | Requirement Summary | ADR(s) | Status | Notes |
 |--------|-----|--------|---------------------|--------|--------|-------|
 | TR-[gdd]-001 | [filename] | [system name] | [one-line summary] | [ADR-NNNN] | ✅ | |
-| TR-[gdd]-002 | [filename] | [system name] | [one-line summary] | — | ❌ GAP | Needs `/gamedev:architecture-decision [title]` |
+| TR-[gdd]-002 | [filename] | [system name] | [one-line summary] | — | ❌ GAP | Needs `/skill:gamedev-architecture-decision [title]` |
 
 ---
 
@@ -41,15 +41,19 @@
 Requirements with no ADR coverage, prioritised by layer (Foundation first):
 
 ### Foundation Layer Gaps (BLOCKING — must resolve before coding)
+
 - [ ] TR-[id]: [requirement] — GDD: [file] — Suggested ADR: "[title]"
 
 ### Core Layer Gaps (must resolve before relevant system is built)
+
 - [ ] TR-[id]: [requirement] — GDD: [file] — Suggested ADR: "[title]"
 
 ### Feature Layer Gaps (should resolve before feature sprint)
+
 - [ ] TR-[id]: [requirement] — GDD: [file] — Suggested ADR: "[title]"
 
 ### Presentation Layer Gaps (can defer to implementation)
+
 - [ ] TR-[id]: [requirement] — GDD: [file] — Suggested ADR: "[title]"
 
 ---
@@ -87,15 +91,13 @@ Requirements with no ADR coverage, prioritised by layer (Foundation first):
 
 ## How to Use This Document
 
-**When writing a new ADR**: Add it to the "ADR → GDD Coverage" table and mark
-the requirements it satisfies as ✅ in the matrix.
+**When writing a new ADR**: Add it to the "ADR → GDD Coverage" table and mark the requirements it satisfies as ✅ in the
+matrix.
 
-**When approving a GDD change**: Scan the matrix for requirements from that GDD
-and check whether the change invalidates any existing ADR. Add to "Superseded
-Requirements" if so.
+**When approving a GDD change**: Scan the matrix for requirements from that GDD and check whether the change invalidates
+any existing ADR. Add to "Superseded Requirements" if so.
 
-**When running `/gamedev:architecture-review`**: The skill will update this document
-automatically with the current state.
+**When running `/skill:gamedev-architecture-review`**: The skill will update this document automatically with the
+current state.
 
-**Gate check**: The Pre-Production gate requires this document to exist and to
-have zero Foundation Layer Gaps.
+**Gate check**: The Pre-Production gate requires this document to exist and to have zero Foundation Layer Gaps.

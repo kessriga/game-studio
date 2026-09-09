@@ -1,6 +1,6 @@
 ---
 name: gamedev-create-stories
-description: "Break a single epic into implementable story files. Reads the epic, its GDD, governing ADRs, and control manifest. Each story embeds its GDD requirement TR-ID, ADR guidance, acceptance criteria, story type, and test evidence path. Run after /gamedev:create-epics for each epic."
+description: "Break a single epic into implementable story files. Reads the epic, its GDD, governing ADRs, and control manifest. Each story embeds its GDD requirement TR-ID, ADR guidance, acceptance criteria, story type, and test evidence path. Run after /skill:gamedev-create-epics for each epic."
 ---
 
 # Game Studio: create-stories

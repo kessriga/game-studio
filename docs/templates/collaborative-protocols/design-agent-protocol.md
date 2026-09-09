@@ -16,14 +16,14 @@ Before proposing any design:
    - What are the constraints (scope, complexity, existing systems)?
    - Any reference games or mechanics the user loves/hates?
    - How does this connect to the game's pillars?
-   - *Use `AskUserQuestion` to batch up to 4 constrained questions at once*
+   - *Use a user-input tool or chat to batch up to 4 constrained questions at once*
 
 2. **Present 2-4 options with reasoning:**
    - Explain pros/cons for each option
    - Reference game design theory (MDA, SDT, Bartle, etc.)
    - Align each option with the user's stated goals
    - Make a recommendation, but explicitly defer the final decision to the user
-   - *After the full explanation, use `AskUserQuestion` to capture the decision*
+   - *After the full explanation, use a user-input tool or chat to capture the decision*
 
 3. **Draft based on user's choice:**
    - Create sections iteratively (show one section, get feedback, refine)
@@ -39,10 +39,11 @@ Before proposing any design:
 #### Example Interaction Pattern
 
 ```
+
 User: "Design a crafting system"
 
-You (ask questions):
-"I'd love to help design your crafting system. First, some questions:
+You (ask questions): "I'd love to help design your crafting system. First, some questions:
+
  1. Should recipes be discovered through experimentation or learned from NPCs/books?
  2. How punishing should failed craft attempts be? (materials lost vs. partial recovery)
  3. Is this a core pillar system or a supporting feature?
@@ -50,10 +51,10 @@ You (ask questions):
 
 User: [answers questions]
 
-You (present options):
-"Based on your answers, here are three approaches:
+You (present options): "Based on your answers, here are three approaches:
 
 **Option A: Full Discovery System**
+
 - Mechanics: [detailed description]
 - ✅ Pros: [list with reasoning]
 - ❌ Cons: [list with reasoning]
@@ -61,17 +62,19 @@ You (present options):
 - Reference games: Minecraft, Doodle God
 
 **Option B: Recipe Book System**
+
 - [similar structure]
 
 **Option C: Hybrid Discovery + Hints**
+
 - [similar structure]
 
-I recommend Option C because [reasoning based on their goals], but you should choose based on what excites you most. Which approach fits your vision?"
+I recommend Option C because [reasoning based on their goals], but you should choose based on what excites you most.
+Which approach fits your vision?"
 
 User: "Option C, but with X modification"
 
-You (draft iteratively):
-"Great choice. Here's a draft of the Overview and Player Fantasy sections:
+You (draft iteratively): "Great choice. Here's a draft of the Overview and Player Fantasy sections:
 
 [Draft content]
 
@@ -83,17 +86,16 @@ You: [drafts next section, shows it, iterates]
 
 [After all sections complete]
 
-You (request approval):
-"The complete crafting system design is ready. I've covered:
- ✓ Overview, ✓ Player Fantasy, ✓ Detailed Rules, ✓ Formulas,
- ✓ Edge Cases, ✓ Dependencies, ✓ Tuning Knobs, ✓ Acceptance Criteria
+You (request approval): "The complete crafting system design is ready. I've covered: ✓ Overview, ✓ Player Fantasy, ✓
+Detailed Rules, ✓ Formulas, ✓ Edge Cases, ✓ Dependencies, ✓ Tuning Knobs, ✓ Acceptance Criteria
 
  May I write this to design/gdd/crafting-system.md?"
 
 User: "Yes"
 
-You: [uses Write tool]
-     "Created design/gdd/crafting-system.md. Would you like me to run /gamedev:design-review to validate it?"
+You: [uses Write tool] "Created design/gdd/crafting-system.md. Would you like me to run /skill:gamedev-design-review to
+validate it?"
+
 ```
 
 #### Collaborative Mindset
@@ -107,27 +109,27 @@ You: [uses Write tool]
 
 #### Structured Decision UI
 
-Use the `AskUserQuestion` tool to present decisions as a selectable UI instead of
+Use a user-input tool or chat to present decisions as a selectable UI instead of
 plain text. Follow the **Explain → Capture** pattern:
 
 1. **Explain first** — Write your full analysis in conversation text: detailed
    pros/cons, theory references, example games, pillar alignment. This is where
    the expert reasoning lives — don't try to fit it into the tool.
 
-2. **Capture the decision** — Call `AskUserQuestion` with concise option labels
+2. **Capture the decision** — Call a user-input tool or chat with concise option labels
    and short descriptions. The user picks from the UI or types a custom answer.
 
 **When to use it:**
 - Every decision point where you present 2-4 options (step 2)
 - Initial clarifying questions that have constrained answers (step 1)
-- Batch up to 4 independent questions in a single `AskUserQuestion` call
+- Batch up to 4 independent questions in a single a user-input tool or chat call
 - Next-step choices ("Draft formulas section or refine rules first?")
 
 **When NOT to use it:**
 - Open-ended discovery questions ("What excites you about roguelikes?")
 - Single yes/no confirmations ("May I write to file?")
-- When running as a Task subagent (tool may not be available) — structure your
-  text output so the orchestrator can present options via AskUserQuestion
+- When running as a delegated subagent (tool may not be available) — structure your
+  text output so the orchestrator can present options via a user-input tool or chat
 
 **Format guidelines:**
 - Labels: 1-5 words (e.g., "Hybrid Discovery", "Full Randomized")
@@ -137,7 +139,7 @@ plain text. Follow the **Explain → Capture** pattern:
 
 **Example — multi-question batch for clarifying questions:**
 
-  AskUserQuestion with questions:
+  a user-input tool or chat with questions:
     1. question: "Should crafting recipes be discovered or learned?"
        header: "Discovery"
        options: "Experimentation", "NPC/Book Learning", "Tiered Hybrid"
@@ -147,7 +149,7 @@ plain text. Follow the **Explain → Capture** pattern:
 
 **Example — capturing a design decision (after full analysis in conversation):**
 
-  AskUserQuestion with questions:
+  a user-input tool or chat with questions:
     1. question: "Which crafting approach fits your vision?"
        header: "Approach"
        options:

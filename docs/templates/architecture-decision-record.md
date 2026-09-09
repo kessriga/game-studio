@@ -10,9 +10,8 @@
 
 ## Last Verified
 
-[YYYY-MM-DD — when this ADR was last confirmed accurate against the current
-engine version and design. Update this date when you re-read and confirm it
-is still correct, even if nothing changed.]
+[YYYY-MM-DD — when this ADR was last confirmed accurate against the current engine version and design. Update this date
+when you re-read and confirm it is still correct, even if nothing changed.]
 
 ## Decision Makers
 
@@ -20,15 +19,14 @@ is still correct, even if nothing changed.]
 
 ## Summary
 
-[2 sentences: what problem this ADR solves, and what was decided. Written for
-tiered context loading — a skill scanning 20 ADRs uses this to decide whether
-to read the full decision. Be specific: name the system, the problem, and the
-chosen approach.]
+[2 sentences: what problem this ADR solves, and what was decided. Written for tiered context loading — a skill scanning
+20 ADRs uses this to decide whether to read the full decision. Be specific: name the system, the problem, and the chosen
+approach.]
 
 ## Engine Compatibility
 
 | Field | Value |
-|-------|-------|
+| ------- | ------- |
 | **Engine** | [e.g. Godot 4.6 / Unity 6 / Unreal Engine 5.4 / Bevy 0.19] |
 | **Domain** | [Physics / Rendering / UI / Audio / Navigation / Animation / Networking / Core / Input / Scripting] |
 | **Knowledge Risk** | [LOW — in training data / MEDIUM — near cutoff, verify / HIGH — post-cutoff, must verify] |
@@ -36,13 +34,13 @@ chosen approach.]
 | **Post-Cutoff APIs Used** | [Specific APIs from post-cutoff engine versions this decision depends on, or "None"] |
 | **Verification Required** | [Concrete behaviours to test against the target engine version before shipping, or "None"] |
 
-> **Note**: If Knowledge Risk is MEDIUM or HIGH, this ADR must be re-validated if the
-> project upgrades engine versions. Flag it as "Superseded" and write a new ADR.
+> **Note**: If Knowledge Risk is MEDIUM or HIGH, this ADR must be re-validated if the project upgrades engine versions.
+> Flag it as "Superseded" and write a new ADR.
 
 ## ADR Dependencies
 
 | Field | Value |
-|-------|-------|
+| ------- | ------- |
 | **Depends On** | [ADR-NNNN (must be Accepted before this can be implemented), or "None"] |
 | **Enables** | [ADR-NNNN (this ADR unlocks that decision), or "None"] |
 | **Blocks** | [Epic/Story name — cannot start until this ADR is Accepted, or "None"] |
@@ -52,8 +50,7 @@ chosen approach.]
 
 ### Problem Statement
 
-[What problem are we solving? Why must this decision be made now? What is the
-cost of not deciding?]
+[What problem are we solving? Why must this decision be made now? What is the cost of not deciding?]
 
 ### Current State
 
@@ -75,8 +72,7 @@ cost of not deciding?]
 
 ## Decision
 
-[The specific technical decision, described in enough detail for someone to
-implement it without further clarification.]
+[The specific technical decision, described in enough detail for someone to implement it without further clarification.]
 
 ### Architecture
 
@@ -132,7 +128,7 @@ creates. These become the contracts that implementers must respect.]
 ## Performance Implications
 
 | Metric | Before | Expected After | Budget |
-|--------|--------|---------------|--------|
+| -------- | -------- | --------------- | -------- |
 | CPU (frame time) | [X]ms | [Y]ms | [Z]ms |
 | Memory | [X]MB | [Y]MB | [Z]MB |
 | Load Time | [X]s | [Y]s | [Z]s |
@@ -160,15 +156,14 @@ creates. These become the contracts that implementers must respect.]
 
 <!-- This section is MANDATORY. Every ADR must trace back to at least one GDD
      requirement, or explicitly state it is a foundational decision with no GDD
-     dependency. Traceability is audited by /gamedev:architecture-review. -->
+     dependency. Traceability is audited by /skill:gamedev-architecture-review. -->
 
 | GDD Document | System | Requirement | How This ADR Satisfies It |
 |-------------|--------|-------------|--------------------------|
 | [e.g. `design/gdd/combat.md`] | [e.g. Combat] | [e.g. "Hitbox detection must resolve within 1 frame"] | [e.g. "Jolt physics collision queries run synchronously in _physics_process"] |
 
-> If this is a foundational decision with no direct GDD dependency, write:
-> "Foundational — no GDD requirement. Enables: [list what GDD systems this
-> decision unlocks or constrains]"
+> If this is a foundational decision with no direct GDD dependency, write: "Foundational — no GDD requirement. Enables:
+> [list what GDD systems this decision unlocks or constrains]"
 
 ## Related
 

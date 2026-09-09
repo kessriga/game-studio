@@ -1,15 +1,12 @@
 # Economy Model: [System Name]
 
-*Created: [Date]*
-*Owner: economy-designer*
-*Status: [Draft / Balanced / Live]*
+*Created: [Date]* *Owner: economy-designer* *Status: [Draft / Balanced / Live]*
 
 ---
 
 ## Overview
 
-[What resources, currencies, and exchange systems does this economy cover?
-What player behaviors does it incentivize?]
+[What resources, currencies, and exchange systems does this economy cover? What player behaviors does it incentivize?]
 
 ---
 
@@ -22,6 +19,7 @@ What player behaviors does it incentivize?]
 | [XP] | Progression | [per action] | [level-up cost] | [none] | [Cannot be traded] |
 
 ### Currency Rules
+
 - [Rule 1 — e.g., "Soft currency has no cap but inflation is controlled via sinks"]
 - [Rule 2 — e.g., "Premium currency cannot be converted back to real money"]
 - [Rule 3]
@@ -65,6 +63,7 @@ What player behaviors does it incentivize?]
 ## Progression Curves
 
 ### Level XP Requirements
+
 | Level | XP Required | Cumulative XP | Estimated Time |
 | ---- | ---- | ---- | ---- |
 | 1→2 | [100] | [100] | [10 min] |
@@ -75,6 +74,7 @@ What player behaviors does it incentivize?]
 *Formula*: `XP(n) = [formula, e.g., 100 * n^1.5]`
 
 ### Item Price Scaling
+
 *Formula*: `Price(tier) = [formula, e.g., base_price * 2^(tier-1)]`
 
 ---
@@ -82,6 +82,7 @@ What player behaviors does it incentivize?]
 ## Loot Tables
 
 ### [Drop Source Name]
+
 | Item | Rarity | Drop Rate | Pity Timer | Notes |
 | ---- | ---- | ---- | ---- | ---- |
 | [Common item] | Common | [60%] | [N/A] | [Always useful, never feels bad] |
@@ -90,6 +91,7 @@ What player behaviors does it incentivize?]
 | [Legendary item] | Legendary | [3%] | [30 drops] | [Game-changing, celebration moment] |
 
 ### Pity System
+
 [Describe how the pity system works to prevent extreme bad luck streaks.]
 
 ---
@@ -118,8 +120,8 @@ What player behaviors does it incentivize?]
 
 ## Simulation Results
 
-[Include results from economy simulations if available: player wealth
-distribution over time, sink effectiveness, inflation rate, etc.]
+[Include results from economy simulations if available: player wealth distribution over time, sink effectiveness,
+inflation rate, etc.]
 
 ---
 
@@ -127,4 +129,4 @@ distribution over time, sink effectiveness, inflation rate, etc.]
 
 - Depends on: [combat balance, quest design, crafting system]
 - Affects: [difficulty curve, player retention, monetization]
-- Must coordinate with: `game-designer`, `live-ops-designer`, `analytics-engineer`
+- Must coordinate with: `gamedev:game-designer`, `gamedev:live-ops-designer`, `gamedev:analytics-engineer`

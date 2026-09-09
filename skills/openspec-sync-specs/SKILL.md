@@ -1,30 +1,29 @@
 ---
 name: openspec-sync-specs
-description: Sync delta specs from a change to main specs. Use when the user wants to update main specs with changes from a delta spec, without archiving the change.
-allowed-tools: Bash(openspec:*)
-license: MIT
-compatibility: Requires openspec CLI.
-metadata:
-  author: openspec
-  version: "1.0"
-  generatedBy: "1.6.0"
+description: "Sync delta specs from a change to main specs. Use when the user wants to update main specs with changes from a delta spec, without archiving the change."
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
 Sync delta specs from a change to main specs.
 
-This is an **agent-driven** operation - you will read delta specs and directly edit main specs to apply the changes. This allows intelligent merging (e.g., adding a scenario without copying the entire requirement).
+This is an **agent-driven** operation - you will read delta specs and directly edit main specs to apply the changes.
+This allows intelligent merging (e.g., adding a scenario without copying the entire requirement).
 
-**Store selection:** If the user names a store (a store is a standalone OpenSpec repo registered on this machine) or the work lives in one, run `openspec store list --json` to discover registered store ids, then pass `--store <id>` on the commands that read or write specs and changes (`new change`, `status`, `instructions`, `list`, `show`, `validate`, `archive`, `doctor`, `context`). Other commands do not take the flag. Hints printed by commands already carry the flag; keep it on follow-ups. Without a store, commands act on the nearest local `openspec/` root.
+**Store selection:** If the user names a store (a store is a standalone OpenSpec repo registered on this machine) or the
+work lives in one, run `openspec store list --json` to discover registered store ids, then pass `--store <id>` on the
+commands that read or write specs and changes (`new change`, `status`, `instructions`, `list`, `show`, `validate`,
+`archive`, `doctor`, `context`). Other commands do not take the flag. Hints printed by commands already carry the flag;
+keep it on follow-ups. Without a store, commands act on the nearest local `openspec/` root.
 
-**Input**: Optionally specify a change name. If omitted, check if it can be inferred from conversation context. If vague or ambiguous you MUST prompt for available changes.
+**Input**: Optionally specify a change name. If omitted, check if it can be inferred from conversation context. If vague
+or ambiguous you MUST prompt for available changes.
 
 **Steps**
 
 1. **If no change name provided, prompt for selection**
 
-   Run `openspec list --json` to get available changes. Use the **AskUserQuestion tool** to let the user select.
+   Run `openspec list --json` to get available changes. Use **a user-input tool or chat** to let the user select.
 
    Show changes that have delta specs (under `specs/` directory).
 
@@ -33,6 +32,7 @@ This is an **agent-driven** operation - you will read delta specs and directly e
 2. **Resolve change context**
 
    Run:
+
    ```bash
    openspec status --change "<name>" --json
    ```
@@ -120,6 +120,7 @@ The system SHALL do something new.
 **Key Principle: Intelligent Merging**
 
 Unlike programmatic merging, you can apply **partial updates**:
+
 - To add a scenario, just include that scenario under MODIFIED - don't copy existing scenarios
 - The delta represents *intent*, not a wholesale replacement
 - Use your judgment to merge changes sensibly
@@ -143,6 +144,7 @@ Main specs are now updated. The change remains active - archive when implementat
 ```
 
 **Guardrails**
+
 - Read both delta and main specs before making changes
 - Preserve existing content not mentioned in delta
 - If something is unclear, ask for clarification

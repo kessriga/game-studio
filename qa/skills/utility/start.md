@@ -2,14 +2,12 @@
 
 ## Skill Summary
 
-The start skill adds missing project files, reads existing work, and asks the
-user where to begin. It supports Godot, Unity, Unreal, Bevy, and deferred engine
-selection. The Python scaffold preserves existing files. Shared guidance lives
-in `AGENTS.md`; sibling `CLAUDE.md` files import it for Claude Code.
+The start skill adds missing project files, reads existing work, and asks the user where to begin. It supports Godot,
+Unity, Unreal, Bevy, and deferred engine selection. The Python scaffold preserves existing files. Shared guidance lives
+in root and nested `AGENTS.md` files, with explicit neutral preferences and rule loading.
 
-The skill records the chosen starting stage and review mode, then recommends
-and hands off to the next skill. It does not run director gates. Use the host's
-invocation syntax and input tools, as described in `docs/host-runtime.md`.
+The skill records the chosen starting stage and review mode, then recommends and hands off to the next skill. It does
+not run director gates. Use the host's invocation syntax and input tools, as described in `docs/host-runtime.md`.
 
 ## Static Assertions
 
@@ -23,8 +21,8 @@ invocation syntax and input tools, as described in `docs/host-runtime.md`.
 
 ### Case 1: Fresh project with an engine choice
 
-**Fixture:** Empty game repository, Python available, user requests setup and
-chooses Bevy. The user has a vague game concept.
+**Fixture:** Empty game repository, Python available, user requests setup and chooses Bevy. The user has a vague game
+concept.
 
 **Expected behavior:**
 
@@ -37,7 +35,7 @@ chooses Bevy. The user has a vague game concept.
 
 **Assertions:**
 
-- [ ] Root and nested shared guides are created with Claude import files
+- [ ] Root and nested shared guides are created without host files
 - [ ] Only the Bevy engine reference is copied
 - [ ] The guide names the copied engine reference
 - [ ] No per-file permission loop repeats authorization already given for setup
@@ -45,8 +43,8 @@ chooses Bevy. The user has a vague game concept.
 
 ### Case 2: Existing project with a legacy guide
 
-**Fixture:** The game has a full `CLAUDE.md`, a configured Godot engine, and
-project files. Root or nested `AGENTS.md` files are missing.
+**Fixture:** The game has a full `AGENTS.md`, a configured Godot engine, and project files. Root or nested `AGENTS.md`
+files are missing.
 
 **Expected behavior:**
 
@@ -59,15 +57,14 @@ project files. Root or nested `AGENTS.md` files are missing.
 
 - [ ] A configured marker does not skip the missing-file check
 - [ ] The scaffold script does not overwrite the legacy guide or project files
-- [ ] Replacing a full Claude guide with an import follows a reviewed merge
+- [ ] Legacy configuration blocks before writes until reviewed migration preserves user data
 - [ ] Remaining migration decisions are reported accurately
 
 ### Case 3: Engine selection deferred
 
 **Fixture:** Fresh game repository; user wants to explore ideas before choosing an engine.
 
-**Expected behavior:** Run the scaffold with `--engine undecided`, then route
-from the user's starting point.
+**Expected behavior:** Run the scaffold with `--engine undecided`, then route from the user's starting point.
 
 **Assertions:**
 
@@ -78,12 +75,11 @@ from the user's starting point.
 
 ### Case 4: Interrupted scaffold and rerun
 
-**Fixture:** Some scaffold files exist, including user-edited guides. The user
-requests continuation. Some nested guides are still missing.
+**Fixture:** Some scaffold files exist, including user-edited guides. The user requests continuation. Some nested guides
+are still missing.
 
-**Expected behavior:** Add only missing files, preserve edits, and ask only
-about unresolved choices. If Python is unavailable or a destination path
-conflicts with a required directory, report that limit without claiming success.
+**Expected behavior:** Add only missing files, preserve edits, and ask only about unresolved choices. If Python is
+unavailable or a destination path conflicts with a required directory, report that limit without claiming success.
 
 **Assertions:**
 
@@ -94,23 +90,22 @@ conflicts with a required directory, report that limit without claiming success.
 
 ### Case 5: Review mode and host-specific handoff
 
-**Fixture:** Scaffolding is complete, the starting path is chosen, and the user
-selects `lean` review mode. No independent review is requested during onboarding.
+**Fixture:** Scaffolding is complete, the starting path is chosen, and the user selects `lean` review mode. No
+independent review is requested during onboarding.
 
-**Expected behavior:** Save the chosen mode and stage, confirm the recommended
-next step, and return a short handoff in the current host's syntax.
+**Expected behavior:** Save the chosen mode and stage, confirm the recommended next step, and return a short handoff in
+the current host's syntax.
 
 **Assertions:**
 
 - [ ] `production/review-mode.txt` records `lean`
 - [ ] An existing review mode is read without asking the user to choose again
 - [ ] No director gate is invoked by the start skill
-- [ ] Claude Code receives `/gamedev:<skill>`; Codex receives `$gamedev:<skill>`
+- [ ] Pi receives `/skill:gamedev-<skill>`; role labels are not assumed registered agent types
 - [ ] The next skill is recommended, not automatically run
 
 ## Coverage Notes
 
-`scripts/test_scaffold_project.py` executes the filesystem contracts for engine
-selection, reruns, legacy guides, path conflicts, symlinks, and relocated plugin
-paths. The scenarios here review the surrounding conversational instructions;
+`scripts/test_scaffold_project.py` executes the filesystem contracts for engine selection, reruns, legacy guides, path
+conflicts, symlinks, and relocated plugin paths. The scenarios here review the surrounding conversational instructions;
 they do not establish that a conversation or engine build ran successfully.

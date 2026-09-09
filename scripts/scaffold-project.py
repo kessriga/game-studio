@@ -14,9 +14,12 @@ def selected_sources(engine):
         if not source.is_file():
             continue
         relative = source.relative_to(TEMPLATES)
-        if relative.parts[:2] == ("docs", "engine-reference"):
-            if len(relative.parts) > 3 and relative.parts[2] != engine:
-                continue
+        if (
+            relative.parts[:2] == ("docs", "engine-reference")
+            and len(relative.parts) > 3
+            and relative.parts[2] != engine
+        ):
+            continue
         yield source, relative
 
 
@@ -55,6 +58,16 @@ def scaffold(project, engine):
     if engine not in ENGINES:
         raise ValueError(f"Unknown engine: {engine}")
     project = project.absolute()
+    # Legacy configuration must be reviewed before defaults can be introduced.
+    # Even a dangling symlink counts: never follow or replace user-owned data.
+    for relative in (".claude/docs/technical-preferences.md", ".claude/rules"):
+        legacy = project / relative
+        links = (project / ".claude", project / ".claude/docs", legacy)
+        if any(path.is_symlink() for path in links) or legacy.exists():
+            raise ValueError(
+                f"Legacy configuration requires reviewed migration: {legacy}. "
+                "See docs/migration-0.4.md in the Game Studio package; no files written."
+            )
     files = destination_files(project, engine)
     created, preserved = [], []
     for source, target in files:
@@ -79,7 +92,7 @@ def main():
         print(f"Scaffolding failed: {error}", file=sys.stderr)
         return 1
     print(f"Created {len(created)} files; preserved {len(preserved)} existing files.")
-    for name in ("AGENTS.md", "CLAUDE.md"):
+    for name in ("AGENTS.md",):
         if name in preserved:
             print(f"Preserved {name}; review it for shared project guidance.")
     return 0

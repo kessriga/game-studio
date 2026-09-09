@@ -1,34 +1,27 @@
-# Directory Structure
+# Directory structure
 
-For the plugin package and shared project instruction layout, see
-[AGENTS.md](../AGENTS.md) and [Codex setup](codex.md). Project AGENTS.md files are
-shared; their sibling CLAUDE.md files import them for Claude Code.
+The installed Game Studio package provides `skills/`, specialist `agents/`, framework `docs/`, Pi integration, and
+scaffold `templates/`. See [AGENTS.md](../AGENTS.md) and [Pi setup](pi.md). Project paths are separate from package
+paths; configure games only in their own repositories.
 
-The skills, agents, and hooks are provided by the installed `gamedev` plugin.
-Your project holds only the game and its project-side config, scaffolded by
-`/gamedev:start`:
+`/skill:gamedev-start` adds missing project files without replacing existing data:
 
 ```text
-/
-├── AGENTS.md                    # Shared project guidance, engine references, and sources of truth
-├── CLAUDE.md                    # Imports AGENTS.md for Claude Code
-├── .claude/
-│   ├── rules/                   # Path-scoped coding standards (scaffolded — plugins can't ship rules)
-│   └── docs/
-│       └── technical-preferences.md  # Engine, naming, budgets (project-owned)
-├── src/                         # Game source code (core, gameplay, ai, networking, ui, tools)
-├── assets/                      # Game assets (art, audio, vfx, shaders, data)
-├── design/                      # Game design documents (gdd, narrative, levels, balance)
-├── docs/                        # Technical documentation (architecture, registries)
-│   └── engine-reference/        # Your engine's API snapshot (version-pinned)
-├── tests/                       # Test suites (unit, integration, performance, playtest)
-├── tools/                       # Build and pipeline tools (ci, build, asset-pipeline)
-├── prototypes/                  # Throwaway prototypes (isolated from src/)
-└── production/                  # Production management (milestones, releases, QA evidence)
-    ├── session-state/           # Session checkpoint shared across hosts (active.md — gitignored)
-    └── session-logs/            # Claude hook audit trail (gitignored)
+AGENTS.md                         # Canonical instructions and explicit sources to read
+src/                              # Game source, with nested AGENTS.md
+assets/                           # Art, audio, VFX, shaders, data
+design/                           # GDDs, narrative, levels, balance, registries, nested AGENTS.md
+docs/AGENTS.md                    # Technical documentation guide
+docs/technical-preferences.md     # Engine, version, naming, budgets
+docs/rules/                       # Eleven explicit path-scoped rule files
+docs/engine-reference/            # Only the chosen engine's snapshot (none when undecided)
+docs/architecture/                # Architecture, ADRs and technical requirement registry
+docs/registry/                    # Shared architecture facts
+tests/                            # Unit, integration, performance, playtest
+tools/                            # Build, CI and asset pipeline
+prototypes/                       # Throwaway experiments isolated from src/
+production/                       # Milestones, releases, QA, workflow progress and handoffs
 ```
 
-> The plugin itself (skills, agents, hooks, framework docs, scaffold templates)
-> lives in the install location, not in your project. See the repository README
-> for the plugin's own layout.
+Existing session logs and state remain user data. Nothing archives or deletes them automatically. See
+[reviewed migration](migration-0.4.md) for older layouts; the scaffold creates no host files.
