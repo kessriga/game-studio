@@ -1,28 +1,25 @@
 ---
 name: skill-test
 description: "Validate skill files for structural compliance and behavioral correctness. Three modes: static (linter), spec (behavioral), audit (coverage report)."
-argument-hint: "static [skill-name | all] | spec [skill-name] | category [skill-name | all] | audit"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** static [skill-name | all] | spec [skill-name] | category [skill-name | all] | audit
+
 # Skill Test
 
-Validates `skills/*/SKILL.md` files for structural compliance and
-behavioral correctness. No external dependencies — runs entirely within the
-existing skill/hook/template architecture.
+Validates `skills/*/SKILL.md` files for structural compliance and behavioral correctness. No external dependencies —
+runs entirely within the existing skill/role/template structure.
 
 **Four modes:**
 
 | Mode | Command | Purpose | Token Cost |
-|------|---------|---------|------------|
-| `static` | `/gamedev:skill-test static [name\|all]` | Structural linter — 7 compliance checks per skill | Low (~1k/skill) |
-| `spec` | `/gamedev:skill-test spec [name]` | Behavioral verifier — evaluates assertions in test spec | Medium (~5k/skill) |
-| `category` | `/gamedev:skill-test category [name\|all]` | Category rubric — checks skill against its category-specific metrics | Low (~2k/skill) |
-| `audit` | `/gamedev:skill-test audit` | Coverage report — skills, agent specs, last test dates | Low (~3k total) |
+| ------ | --------- | --------- | ------------ |
+| `static` | `/skill:gamedev-skill-test static [name\|all]` | Structural linter — 7 compliance checks per skill | Low (~1k/skill) |
+| `spec` | `/skill:gamedev-skill-test spec [name]` | Behavioral verifier — evaluates assertions in test spec | Medium (~5k/skill) |
+| `category` | `/skill:gamedev-skill-test category [name\|all]` | Category rubric — checks skill against its category-specific metrics | Low (~2k/skill) |
+| `audit` | `/skill:gamedev-skill-test audit` | Coverage report — skills, agent specs, last test dates | Low (~3k total) |
 
 ---
 
@@ -46,17 +43,16 @@ If argument is missing or unrecognized, output usage and stop.
 For each skill being tested, read its `SKILL.md` fully and run all 7 checks:
 
 ### Check 1 — Required Frontmatter Fields
-The file must contain all of these in the YAML frontmatter block:
-- `name:`
-- `description:`
-- `argument-hint:`
-- `user-invocable:`
-- `allowed-tools:`
 
-**FAIL** if any are absent.
+The YAML frontmatter must contain only nonempty `name` and `description` fields, with a bare name matching the skill
+directory. Arguments and primary-role routing belong in the workflow body.
+
+**FAIL** if identity fields are missing, names disagree, or runtime configuration fields remain.
 
 ### Check 2 — Multiple Phases
+
 The skill must have ≥2 numbered phase headings. Look for patterns like:
+
 - `## Phase N` or `## Phase N:`
 - `## N.` (numbered top-level sections)
 - At least 2 distinct `##` headings if phases aren't explicitly numbered
@@ -64,47 +60,56 @@ The skill must have ≥2 numbered phase headings. Look for patterns like:
 **FAIL** if fewer than 2 phase-like headings are found.
 
 ### Check 3 — Verdict Keywords
-The skill must contain at least one of: `PASS`, `FAIL`, `CONCERNS`, `APPROVED`,
-`BLOCKED`, `COMPLETE`, `READY`, `COMPLIANT`, `NON-COMPLIANT`
+
+The skill must contain at least one of: `PASS`, `FAIL`, `CONCERNS`, `APPROVED`, `BLOCKED`, `COMPLETE`, `READY`,
+`COMPLIANT`, `NON-COMPLIANT`
 
 **FAIL** if none are present.
 
 ### Check 4 — Collaborative Protocol Language
+
 The skill must contain ask-before-write language. Look for:
+
 - `"May I write"` (canonical form)
 - `"before writing"` or `"approval"` near file-write instructions
 - `"ask"` + `"write"` in close proximity (within same section)
 
-**WARN** if absent (some read-only skills legitimately skip this).
-**FAIL** if `allowed-tools` includes `Write` or `Edit` but no ask-before-write language is found.
+**WARN** if absent (some read-only skills legitimately skip this). **FAIL** if the workflow authors files without
+requiring authorization or resolving unapproved decisions. Honor an existing concrete write request; do not demand the
+same permission twice.
 
 ### Check 5 — Next-Step Handoff
+
 The skill must end with a recommended next action or follow-up path. Look for:
-- A final section mentioning another skill (e.g., `/gamedev:story-done`, `/gamedev:gate-check`)
+
+- A final section mentioning another skill (e.g., `/skill:gamedev-story-done`, `/skill:gamedev-gate-check`)
 - "Recommended next" or "next step" phrasing
 - A "Follow-Up" or "After this" section
 
 **WARN** if absent.
 
-### Check 6 — Fork Context Complexity
-If frontmatter contains `context: fork`, the skill should have ≥5 phase headings
-(`##` level or numbered Phase N headers). Fork context is for complex multi-phase
-skills; simple skills should not use it.
+### Check 6 — Runtime and Delegation Contract
 
-**WARN** if `context: fork` is set but fewer than 5 phases found.
+The skill must link to the host guide before its workflow body. Any primary-role path must resolve from the skill.
+Delegation must use actual capabilities, preserve review modes and domain boundaries, and report unavailable independent
+review rather than assuming registered names or permissions.
 
-### Check 7 — Argument Hint Plausibility
-`argument-hint` must be non-empty. If the skill body mentions multiple modes
-(e.g., "Mode A | Mode B"), the hint should reflect them. Cross-reference the
-hint against the first phase's "Parse Arguments" section.
+**FAIL** for missing/broken links or invented runtime configuration. **WARN** when delegation requirements are
+ambiguous.
 
-**WARN** if hint is `""` or if documented modes don't match hint.
+### Check 7 — Argument Guidance
+
+Compare body-level **Arguments** guidance with documented modes and examples. Positional values and flags must agree;
+no-argument skills may omit guidance. Parse invocation text explicitly.
+
+**WARN** if documented arguments are missing or inconsistent.
 
 ---
 
 ### Static Mode Output Format
 
 For a single skill:
+
 ```
 === Skill Static Check: /[name] ===
 
@@ -113,16 +118,17 @@ Check 2 — Multiple Phases:       PASS (7 phases found)
 Check 3 — Verdict Keywords:      PASS (PASS, FAIL, CONCERNS)
 Check 4 — Collaborative Protocol: PASS ("May I write" found)
 Check 5 — Next-Step Handoff:     WARN (no follow-up section found)
-Check 6 — Fork Context Complexity: PASS (8 phases, context: fork set)
-Check 7 — Argument Hint:         PASS
+Check 6 — Runtime and Delegation: PASS (guide and role paths resolve)
+Check 7 — Argument Guidance:         PASS
 
 Verdict: WARNINGS (1 warning, 0 failures)
 Recommended: Add a "Follow-Up Actions" section at the end of the skill.
 ```
 
 For `static all`, produce a summary table then list any non-compliant skills:
+
 ```
-=== Skill Static Check: All 52 Skills ===
+=== Skill Static Check: All 72 Skills ===
 
 Skill                  | Result       | Issues
 -----------------------|--------------|-------
@@ -141,22 +147,21 @@ Aggregate Verdict: N WARNINGS / N FAILURES
 
 ### Step 1 — Locate Files
 
-Find skill at `skills/[name]/SKILL.md`.
-Look up the spec path from `qa/catalog.yaml` — use the
-`spec:` field for the matching skill entry.
+Find skill at `skills/[name]/SKILL.md`. Look up the spec path from `qa/catalog.yaml` — use the `spec:` field for the
+matching skill entry.
 
 If either is missing:
+
 - Missing skill: "Skill '[name]' not found in `skills/`."
 - Missing spec path in catalog: "No spec path set for '[name]' in catalog.yaml."
-- Spec file not found at path: "Spec file missing at [path]. Run `/gamedev:skill-test audit`
-  to see coverage gaps."
+- Spec file not found at path: "Spec file missing at [path]. Run `/skill:gamedev-skill-test audit` to see coverage
+  gaps."
 
 ### Step 2 — Read Both Files
 
-Read the skill file and test spec file completely.
-Read `qa/AGENTS.md` for host-specific checks. Interpret tool names through the
-host guide. Claude frontmatter assertions inspect metadata; they do not prove
-that a particular model ran or that Codex used Claude's tool configuration.
+Read the skill file and test spec file completely. Read `qa/AGENTS.md` for runtime checks. Interpret capabilities
+through the host guide. Metadata checks prove identity and structure, not model execution, tool availability, or
+independent review.
 
 ### Step 3 — Evaluate Assertions
 
@@ -166,16 +171,17 @@ For each **Test Case** in the spec:
 2. Read the **Expected behavior** steps
 3. Read each **Assertion** checkbox
 
-For each assertion, evaluate whether the skill's written instructions, if
-followed correctly given the fixture state, would satisfy it. This is a
-review of the written instructions, not an executed workflow or code test.
+For each assertion, evaluate whether the skill's written instructions, if followed correctly given the fixture state,
+would satisfy it. This is a review of the written instructions, not an executed workflow or code test.
 
 Mark each assertion:
+
 - **PASS** — skill instructions clearly satisfy this assertion
 - **PARTIAL** — skill instructions partially address it, but with ambiguity
 - **FAIL** — skill instructions would NOT satisfy this assertion given the fixture
 
 For **Protocol Compliance** assertions (always present):
+
 - Check whether the skill requires "May I write" before file writes
 - Check whether the skill presents findings before requesting approval
 - Check whether the skill ends with a recommended next step
@@ -210,10 +216,10 @@ Overall Verdict: FAIL (1 case failed, 1 warning)
 
 ### Step 5 — Offer to Write Results
 
-"May I write these results to `qa/results/skill-test-spec-[name]-[date].md`
-and update `qa/catalog.yaml`?"
+"May I write these results to `qa/results/skill-test-spec-[name]-[date].md` and update `qa/catalog.yaml`?"
 
 If yes:
+
 - Write results file to `qa/results/`
 - Update the skill's entry in `qa/catalog.yaml`:
   - `last_spec: [date]`
@@ -225,21 +231,18 @@ If yes:
 
 ### Step 1 — Locate Skill and Category
 
-Find skill at `skills/[name]/SKILL.md`.
-Look up `category:` field in `qa/catalog.yaml`.
+Find skill at `skills/[name]/SKILL.md`. Look up `category:` field in `qa/catalog.yaml`.
 
-If skill not found: "Skill '[name]' not found."
-If no `category:` field: "No category assigned for '[name]' in catalog.yaml.
-Add `category: [name]` to the skill entry first."
+If skill not found: "Skill '[name]' not found." If no `category:` field: "No category assigned for '[name]' in
+catalog.yaml. Add `category: [name]` to the skill entry first."
 
-For `category all`: collect all skills with a `category:` field and process each.
-`category: utility` skills are evaluated against U1 (static checks pass) and U2
-(gate mode correct if applicable) only — skip to the static mode for U1.
+For `category all`: collect all skills with a `category:` field and process each. `category: utility` skills are
+evaluated against U1 (static checks pass) and U2 (gate mode correct if applicable) only — skip to the static mode for
+U1.
 
 ### Step 2 — Read Rubric Section
 
-Read `qa/quality-rubric.md`.
-Extract the section matching the skill's category (e.g., `### gate`, `### team`).
+Read `qa/quality-rubric.md`. Extract the section matching the skill's category (e.g., `### gate`, `### team`).
 
 ### Step 3 — Read Skill
 
@@ -248,10 +251,10 @@ Read the skill's `SKILL.md` fully.
 ### Step 4 — Evaluate Rubric Metrics
 
 For each metric in the category's rubric table:
+
 1. Check whether the skill's written instructions clearly satisfy the criterion
 2. Mark PASS, FAIL, or WARN
-3. For FAIL/WARN, identify the exact gap in the skill text (quote the relevant section
-   or note its absence)
+3. For FAIL/WARN, identify the exact gap in the skill text (quote the relevant section or note its absence)
 
 ### Step 5 — Output Report
 
@@ -272,8 +275,7 @@ Fix: Add TD-PHASE-GATE, PR-PHASE-GATE, and AD-PHASE-GATE to the full-mode direct
 
 ### Step 6 — Offer to Update Catalog
 
-"May I update `qa/catalog.yaml` to record this category check
-(`last_category`, `last_category_result`) for [name]?"
+"May I update `qa/catalog.yaml` to record this category check (`last_category`, `last_category_result`) for [name]?"
 
 ---
 
@@ -281,29 +283,27 @@ Fix: Add TD-PHASE-GATE, PR-PHASE-GATE, and AD-PHASE-GATE to the full-mode direct
 
 ### Step 1 — Read Catalog
 
-Read `qa/catalog.yaml`. If missing, note that catalog doesn't exist
-yet (first-run state).
+Read `qa/catalog.yaml`. If missing, note that catalog doesn't exist yet (first-run state).
 
 ### Step 2 — Enumerate All Skills and Agents
 
-Glob `skills/*/SKILL.md` to get the complete list of skills.
-Extract skill name from each path (directory name).
+Glob `skills/*/SKILL.md` to get the complete list of skills. Extract skill name from each path (directory name).
 
-Also read the `agents:` section from `qa/catalog.yaml` to get the
-complete list of agents.
+Also read the `agents:` section from `qa/catalog.yaml` to get the complete list of agents.
 
 ### Step 3 — Build Skill Coverage Table
 
 For each skill:
+
 - Check if a spec file exists (use the `spec:` path from catalog, or glob `qa/skills/*/[name].md`)
-- Look up `last_static`, `last_static_result`, `last_spec`, `last_spec_result`,
-  `last_category`, `last_category_result`, `category` from catalog (or mark as
-  "never" / "—" if not in catalog)
+- Look up `last_static`, `last_static_result`, `last_spec`, `last_spec_result`, `last_category`, `last_category_result`,
+  `category` from catalog (or mark as "never" / "—" if not in catalog)
 - Priority comes from catalog `priority:` field (critical/high/medium/low)
 
 ### Step 3b — Build Agent Coverage Table
 
 For each agent in catalog's `agents:` section:
+
 - Check if a spec file exists (use the `spec:` path from catalog, or glob `qa/agents/*/[name].md`)
 - Look up `last_spec`, `last_spec_result`, `category` from catalog
 
@@ -340,9 +340,9 @@ Agent coverage:  49/49 specs (100%)
 
 No file writes in audit mode.
 
-Offer: "Would you like to run `/gamedev:skill-test static all` to check structural
-compliance across all skills? `/gamedev:skill-test category all` to run category rubric
-checks? Or `/gamedev:skill-test spec [name]` to run a specific behavioral test?"
+Offer: "Would you like to run `/skill:gamedev-skill-test static all` to check structural compliance across all skills?
+`/skill:gamedev-skill-test category all` to run category rubric checks? Or `/skill:gamedev-skill-test spec [name]` to
+run a specific behavioral test?"
 
 ---
 
@@ -350,13 +350,13 @@ checks? Or `/gamedev:skill-test spec [name]` to run a specific behavioral test?"
 
 After any mode completes, offer contextual follow-up:
 
-- After `static [name]`: "Run `/gamedev:skill-test spec [name]` to validate behavioral
-  correctness if a test spec exists."
-- After `static all` with failures: "Address NON-COMPLIANT skills first. Run
-  `/gamedev:skill-test static [name]` individually for detailed remediation guidance."
-- After `spec [name]` PASS: "Update `qa/catalog.yaml` to record this
-  pass date. Consider running `/gamedev:skill-test audit` to find the next spec gap."
-- After `spec [name]` FAIL: "Review the failing assertions and update the skill
-  or the test spec to resolve the mismatch."
-- After `audit`: "Start with the critical-priority gaps. Use the spec template
-  at `qa/templates/skill-test-spec.md` to create new specs."
+- After `static [name]`: "Run `/skill:gamedev-skill-test spec [name]` to validate behavioral correctness if a test spec
+  exists."
+- After `static all` with failures: "Address NON-COMPLIANT skills first. Run `/skill:gamedev-skill-test static [name]`
+  individually for detailed remediation guidance."
+- After `spec [name]` PASS: "Update `qa/catalog.yaml` to record this pass date. Consider running
+  `/skill:gamedev-skill-test audit` to find the next spec gap."
+- After `spec [name]` FAIL: "Review the failing assertions and update the skill or the test spec to resolve the
+  mismatch."
+- After `audit`: "Start with the critical-priority gaps. Use the spec template at `qa/templates/skill-test-spec.md` to
+  create new specs."

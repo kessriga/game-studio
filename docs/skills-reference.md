@@ -1,10 +1,9 @@
 # Available Skills
 
-The 72 skills below share the same workflows in Pi, Claude Code, and Codex. Names such as `gamedev:start` identify a
-skill. Invoke it as `/skill:gamedev-start` in Pi, `/gamedev:start` in Claude Code, or `$gamedev:start` in Codex. Pi
-loads namespaced entry points that link to these shared workflows. See [the host guide](host-runtime.md) for tools,
-subagents, and integration requirements. `gamedev:skill-test` and `gamedev:skill-improve` require a contributor
-checkout.
+The 72 shared skills below use logical identifiers such as `gamedev:start`. Invoke it as `/skill:gamedev-start` in Pi.
+Generated namespaced entry points link to the shared workflows. See [the host guide](host-runtime.md) for tool and
+delegation requirements. Framework maintenance skills `gamedev:skill-test` and `gamedev:skill-improve` require a
+contributor checkout.
 
 ## Onboarding & Navigation
 

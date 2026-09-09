@@ -1,13 +1,6 @@
 ---
 name: openspec-propose
-description: Propose a new change with all artifacts generated in one step. Use when the user wants to quickly describe what they want to build and get a complete proposal with design, specs, and tasks ready for implementation.
-allowed-tools: Bash(openspec:*)
-license: MIT
-compatibility: Requires openspec CLI.
-metadata:
-  author: openspec
-  version: "1.0"
-  generatedBy: "1.6.0"
+description: "Propose a new change with all artifacts generated in one step. Use when the user wants to quickly describe what they want to build and get a complete proposal with design, specs, and tasks ready for implementation."
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
@@ -15,6 +8,7 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 Propose a new change - create the change and generate all artifacts in one step.
 
 I'll create a change with artifacts:
+
 - proposal.md (what & why)
 - design.md (how)
 - tasks.md (implementation steps)
@@ -23,7 +17,11 @@ When ready to implement, run /opsx:apply
 
 ---
 
-**Store selection:** If the user names a store (a store is a standalone OpenSpec repo registered on this machine) or the work lives in one, run `openspec store list --json` to discover registered store ids, then pass `--store <id>` on the commands that read or write specs and changes (`new change`, `status`, `instructions`, `list`, `show`, `validate`, `archive`, `doctor`, `context`). Other commands do not take the flag. Hints printed by commands already carry the flag; keep it on follow-ups. Without a store, commands act on the nearest local `openspec/` root.
+**Store selection:** If the user names a store (a store is a standalone OpenSpec repo registered on this machine) or the
+work lives in one, run `openspec store list --json` to discover registered store ids, then pass `--store <id>` on the
+commands that read or write specs and changes (`new change`, `status`, `instructions`, `list`, `show`, `validate`,
+`archive`, `doctor`, `context`). Other commands do not take the flag. Hints printed by commands already carry the flag;
+keep it on follow-ups. Without a store, commands act on the nearest local `openspec/` root.
 
 **Input**: The user's request should include a change name (kebab-case) OR a description of what they want to build.
 
@@ -31,7 +29,7 @@ When ready to implement, run /opsx:apply
 
 1. **If no clear input provided, ask what they want to build**
 
-   Use the **AskUserQuestion tool** (open-ended, no preset options) to ask:
+   Use **a user-input tool or chat** (open-ended, no preset options) to ask:
    > "What change do you want to work on? Describe what you want to build or fix."
 
    From their description, derive a kebab-case name (e.g., "add user authentication" → `add-user-auth`).
@@ -39,31 +37,38 @@ When ready to implement, run /opsx:apply
    **IMPORTANT**: Do NOT proceed without understanding what the user wants to build.
 
 2. **Create the change directory**
+
    ```bash
    openspec new change "<name>"
    ```
+
    This creates a scaffolded change in the planning home resolved by the CLI with `.openspec.yaml`.
 
 3. **Get the artifact build order**
+
    ```bash
    openspec status --change "<name>" --json
    ```
+
    Parse the JSON to get:
    - `applyRequires`: array of artifact IDs needed before implementation (e.g., `["tasks"]`)
    - `artifacts`: list of all artifacts with their status and dependencies
-   - `planningHome`, `changeRoot`, `artifactPaths`, and `actionContext`: path and scope context. Use these instead of assuming repo-local paths.
+   - `planningHome`, `changeRoot`, `artifactPaths`, and `actionContext`: path and scope context. Use these instead of
+     assuming repo-local paths.
 
 4. **Create artifacts in sequence until apply-ready**
 
-   Use the **TodoWrite tool** to track progress through the artifacts.
+   Use the **a progress checklist tool** to track progress through the artifacts.
 
    Loop through artifacts in dependency order (artifacts with no pending dependencies first):
 
    a. **For each artifact that is `ready` (dependencies satisfied)**:
       - Get instructions:
+
         ```bash
         openspec instructions <artifact-id> --change "<name>" --json
         ```
+
       - The instructions JSON includes:
         - `context`: Project background (constraints for you - do NOT include in output)
         - `rules`: Artifact-specific rules (constraints for you - do NOT include in output)
@@ -82,10 +87,11 @@ When ready to implement, run /opsx:apply
       - Stop when all `applyRequires` artifacts are done
 
    c. **If an artifact requires user input** (unclear context):
-      - Use **AskUserQuestion tool** to clarify
+      - Use **a user-input tool or chat** to clarify
       - Then continue with creation
 
 5. **Show final status**
+
    ```bash
    openspec status --change "<name>"
    ```
@@ -93,6 +99,7 @@ When ready to implement, run /opsx:apply
 **Output**
 
 After completing all artifacts, summarize:
+
 - Change name and location
 - List of artifacts created with brief descriptions
 - What's ready: "All artifacts created! Ready for implementation."
@@ -109,6 +116,7 @@ After completing all artifacts, summarize:
   - These guide what you write, but should never appear in the output
 
 **Guardrails**
+
 - Create ALL artifacts needed for implementation (as defined by schema's `apply.requires`)
 - Always read dependency artifacts before creating a new one
 - If context is critically unclear, ask the user - but prefer making reasonable decisions to keep momentum

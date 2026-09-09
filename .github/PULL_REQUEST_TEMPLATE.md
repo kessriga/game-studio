@@ -6,24 +6,21 @@ Brief description of what this PR does.
 
 - [ ] New agent
 - [ ] New skill
-- [ ] New hook or rule
+- [ ] New rule
 - [ ] Bug fix
 - [ ] Documentation improvement
 - [ ] Other:
 
 ## Changes
 
--
--
--
+- - -
 
 ## Checklist
 
 - [ ] `just gate` passes
-- [ ] Host-specific checks are recorded for Claude Code and/or Codex
+- [ ] `npm run check` passes; Pi execution limits are recorded
 - [ ] Hosted CI is green
 - [ ] New agents include the Collaboration Protocol section
 - [ ] New skills use the subdirectory format (`skills/<name>/SKILL.md`)
-- [ ] Reference docs are updated (agent-roster, skills-reference, hooks-reference, rules-reference)
-- [ ] Hooks use `grep -E` (POSIX) and fail gracefully without jq/python
+- [ ] Reference docs are updated (agent-roster, skills-reference, rules-reference)
 - [ ] No hardcoded paths or platform-specific assumptions

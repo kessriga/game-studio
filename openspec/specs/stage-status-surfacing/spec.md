@@ -1,39 +1,21 @@
-# stage-status-surfacing Specification
+# Stage status specification
 
-## Purpose
-
-Surface the production stage and Epic > Feature > Task breadcrumb without a statusline: a shared `bin/gamedev-stage` executable computes it, the SessionStart hook and an on-demand `/gamedev:status` skill deliver it, and the fork-era statusline is fully retired.
+Supersedes the former session-hook delivery contract for 0.4.0; archived outcomes remain historical. See
+[the host-neutral decision](../../../docs/decisions/host-neutral-layout.md).
 
 ## Requirements
 
-### Requirement: Shared stage-detection executable
-The production-stage detection and Epic > Feature > Task breadcrumb logic of the fork-era `statusline.sh` SHALL live in a single shipped executable, `bin/gamedev-stage`, that reads `production/stage.txt`, the artifact heuristics, `technical-preferences.md`, and the `active.md` STATUS block from the current project and prints `<stage>` optionally followed by `| Epic > Feature > Task`. The ctx% and model segments SHALL NOT be replicated.
+- `bin/gamedev-stage` SHALL compute stage and optional Epic > Feature > Task breadcrumb from the current game directory,
+  using stage overrides, artifact heuristics, neutral preferences, and the active handoff.
+- Both bin helpers SHALL ignore inherited host directory variables and reject unrelated repositories. Incidental session
+  logs or state SHALL NOT qualify as game markers.
+- `gamedev:status` SHALL resolve the package helper explicitly and run it from the game directory. Pi invocation SHALL
+  be `/skill:gamedev-status`; no PATH injection or session-start hook is assumed.
+- No context/model segment or statusline configuration SHALL ship. Pi's widget and overlay SHALL leave the editor,
+  footer, and other extensions' handles alone.
 
-#### Scenario: Stage with breadcrumb in Production
-- **WHEN** `gamedev-stage` runs in a project in Production stage whose `active.md` STATUS block names an epic, feature, and task
-- **THEN** it prints the stage followed by the `Epic > Feature > Task` breadcrumb
+## Acceptance scenarios
 
-#### Scenario: Pre-production project
-- **WHEN** `gamedev-stage` runs in a project with a game concept but no ADRs or source
-- **THEN** it prints the detected early stage and no breadcrumb
-
-### Requirement: Stage surfaces at session start
-The shipped SessionStart hook SHALL invoke `${CLAUDE_PLUGIN_ROOT}/bin/gamedev-stage` and include its output in the session context block (AC #8 delivery channel 1).
-
-#### Scenario: Session start in a scaffolded project (AC #7, AC #8)
-- **WHEN** a session starts in a scaffolded project with the plugin enabled
-- **THEN** the session-start context includes the current stage (and breadcrumb when in Production+)
-
-### Requirement: Stage available on demand via /gamedev:status
-A `status` micro-skill (`model: haiku`, read-only) SHALL print the current stage and breadcrumb on demand by running `gamedev-stage` (available on the Bash tool PATH via the plugin's `bin/`), and SHALL be listed among the Haiku-tier skills in `coordination-rules.md`.
-
-#### Scenario: Mid-session status check (AC #8)
-- **WHEN** the user runs `/gamedev:status` after switching focus mid-session
-- **THEN** the current stage and breadcrumb from the project's present state are printed, without any full project audit
-
-### Requirement: The statusline is fully retired
-The repository SHALL ship no `statusLine` configuration and no `statusline.sh`; nothing in the plugin or scaffolding SHALL modify the user's status line.
-
-#### Scenario: User keeps their personal statusline (AC #8)
-- **WHEN** a user with a personal `statusLine` in their global settings installs the plugin and scaffolds a project
-- **THEN** their statusline is unchanged
+- Production+ reports a supplied breadcrumb; early phases report only stage.
+- Exported host variables pointing elsewhere cannot redirect detection or leak a stage into an unrelated cwd.
+- Installing/scaffolding never changes the user's statusline or global configuration.

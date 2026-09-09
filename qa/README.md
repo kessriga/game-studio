@@ -1,11 +1,10 @@
 # QA — Skill & Agent Testing Framework
 
-Quality assurance infrastructure for the **Game Studio** framework.
-Tests the skills and agents themselves — not any game built with them.
+Quality assurance infrastructure for the **Game Studio** framework. Tests the skills and agents themselves — not any
+game built with them.
 
-> **This folder is self-contained and optional.**
-> Game developers using Game Studio don't need it. To remove it entirely:
-> `rm -rf qa` — nothing in `.claude/` depends on it.
+> **This folder is self-contained and optional.** Game developers using Game Studio don't need it. To remove it
+> entirely: `rm -rf qa` — runtime workflows do not import it.
 
 ---
 
@@ -15,9 +14,9 @@ Tests the skills and agents themselves — not any game built with them.
 qa/
 ├── README.md              ← you are here
 ├── AGENTS.md              ← shared contributor instructions
-├── CLAUDE.md              ← imports AGENTS.md for Claude Code
+├── AGENTS.md              ← canonical contributor guidance
 ├── catalog.yaml           ← registry: 65 skill specs + 53 agent specs, coverage tracking
-├── quality-rubric.md      ← category-specific pass/fail metrics for /gamedev:skill-test category
+├── quality-rubric.md      ← category-specific pass/fail metrics for /skill:gamedev-skill-test category
 │
 ├── skills/                ← behavioral spec files for skills (one per skill)
 │   ├── gate/              ← gate category specs
@@ -44,48 +43,47 @@ qa/
 │   ├── skill-test-spec.md ← template for skill behavioral specs
 │   └── agent-test-spec.md ← template for agent behavioral specs
 │
-└── results/               ← test run outputs (written by /gamedev:skill-test spec, gitignored)
+└── results/               ← test run outputs (written by /skill:gamedev-skill-test spec, gitignored)
 ```
 
 ---
 
 ## How to use it
 
-Two skills drive these checks. Read [AGENTS.md](AGENTS.md#host-specific-checks)
-for host-specific metadata and execution rules. The examples below use Claude
-invocation syntax; in Codex use `$gamedev:<name>`.
+Two skills drive these checks. Read [AGENTS.md](AGENTS.md#host-specific-checks) for capability and execution rules. Pi
+examples use `/skill:gamedev-<name>`.
 
 ### Check structural compliance
 
 ```
-/gamedev:skill-test static [skill-name]     # Check one skill (7 checks)
-/gamedev:skill-test static all              # Check all installed skills
+/skill:gamedev-skill-test static [skill-name]     # Check one skill (7 checks)
+/skill:gamedev-skill-test static all              # Check all installed skills
 ```
 
 ### Run a behavioral spec test
 
 ```
-/gamedev:skill-test spec gate-check         # Evaluate a skill against its written spec
-/gamedev:skill-test spec design-review
+/skill:gamedev-skill-test spec gate-check         # Evaluate a skill against its written spec
+/skill:gamedev-skill-test spec design-review
 ```
 
 ### Check against category rubric
 
 ```
-/gamedev:skill-test category gate-check     # Evaluate one skill against its category metrics
-/gamedev:skill-test category all            # Run rubric checks across all categorized skills
+/skill:gamedev-skill-test category gate-check     # Evaluate one skill against its category metrics
+/skill:gamedev-skill-test category all            # Run rubric checks across all categorized skills
 ```
 
 ### See full coverage picture
 
 ```
-/gamedev:skill-test audit                   # Skills + agents: has-spec, last tested, result
+/skill:gamedev-skill-test audit                   # Skills + agents: has-spec, last tested, result
 ```
 
 ### Improve a failing skill
 
 ```
-/gamedev:skill-improve gate-check           # Test → diagnose → propose fix → retest loop
+/skill:gamedev-skill-improve gate-check           # Test → diagnose → propose fix → retest loop
 ```
 
 ---
@@ -93,7 +91,7 @@ invocation syntax; in Codex use `$gamedev:<name>`.
 ## Skill categories
 
 | Category | Skills | Key metrics |
-|----------|--------|-------------|
+| ---------- | -------- | ------------- |
 | `gate` | gate-check | Review mode read, full/lean/solo director panel, no auto-advance |
 | `review` | design-review, architecture-review, review-all-gdds | Read-only, 8-section check, correct verdicts |
 | `authoring` | design-system, quick-design, art-bible, create-architecture, … | Section-by-section May-I-write, skeleton-first |
@@ -109,7 +107,7 @@ invocation syntax; in Codex use `$gamedev:<name>`.
 ## Agent tiers
 
 | Tier | Agents |
-|------|--------|
+| ------ | -------- |
 | `directors` | creative-director, technical-director, producer, art-director |
 | `leads` | lead-programmer, narrative-director, audio-director, ux-designer, qa-lead, release-manager, localization-lead |
 | `specialists` | gameplay-programmer, engine-programmer, ui-programmer, tools-programmer, network-programmer, ai-programmer, level-designer, sound-designer, technical-artist |
@@ -125,9 +123,9 @@ invocation syntax; in Codex use `$gamedev:<name>`.
 
 `catalog.yaml` tracks test coverage for every skill and agent. After running a test:
 
-- `/gamedev:skill-test spec [name]` will offer to update `last_spec` and `last_spec_result`
-- `/gamedev:skill-test category [name]` will offer to update `last_category` and `last_category_result`
-- `last_static` and `last_static_result` are updated manually or via `/gamedev:skill-improve`
+- `/skill:gamedev-skill-test spec [name]` will offer to update `last_spec` and `last_spec_result`
+- `/skill:gamedev-skill-test category [name]` will offer to update `last_category` and `last_category_result`
+- `last_static` and `last_static_result` are updated manually or via `/skill:gamedev-skill-improve`
 
 ---
 
@@ -136,7 +134,7 @@ invocation syntax; in Codex use `$gamedev:<name>`.
 1. Find the spec template at `templates/skill-test-spec.md`
 2. Copy it to `skills/[category]/[skill-name].md`
 3. Update the `spec:` field in `catalog.yaml` to point to the new file
-4. Run `/gamedev:skill-test spec [skill-name]` to validate it
+4. Run `/skill:gamedev-skill-test spec [skill-name]` to validate it
 
 ---
 
@@ -148,6 +146,5 @@ This folder has no hooks into the main project. To remove:
 rm -rf qa
 ```
 
-The skills `/gamedev:skill-test` and `/gamedev:skill-improve` will still function — they'll simply
-report that `catalog.yaml` is missing and suggest running `/gamedev:skill-test audit` to
-initialize it.
+The skills `/skill:gamedev-skill-test` and `/skill:gamedev-skill-improve` will still function — they'll simply report
+that `catalog.yaml` is missing and suggest running `/skill:gamedev-skill-test audit` to initialize it.

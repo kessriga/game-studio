@@ -1,21 +1,19 @@
-# Skill Test Spec: /gamedev:balance-check
+# Skill Test Spec: /skill:gamedev-balance-check
 
 ## Skill Summary
 
-`/gamedev:balance-check` reads balance data files (JSON or YAML in `assets/data/`) and
-checks each value against the design formulas defined in GDDs under `design/gdd/`.
-It produces a findings table with columns: Value → Formula → Deviation → Severity.
-No director gates are invoked (read-only analysis). The skill may optionally write
-a balance report but asks "May I write" before doing so. Verdicts: BALANCED,
-CONCERNS, or OUT OF BALANCE.
+`/skill:gamedev-balance-check` reads balance data files (JSON or YAML in `assets/data/`) and checks each value against
+the design formulas defined in GDDs under `design/gdd/`. It produces a findings table with columns: Value → Formula →
+Deviation → Severity. No director gates are invoked (read-only analysis). The skill may optionally write a balance
+report but asks "May I write" before doing so. Verdicts: BALANCED, CONCERNS, or OUT OF BALANCE.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/gamedev:skill-test static` — no fixture needed.
+Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
 
-- [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
+- [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: BALANCED, CONCERNS, OUT OF BALANCE
 - [ ] Contains "May I write" language (optional report write)
@@ -34,13 +32,15 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 ### Case 1: Happy Path — All balance values within formula tolerances
 
 **Fixture:**
+
 - `assets/data/combat-balance.json` exists with 6 stat values
 - `design/gdd/combat-system.md` contains formulas for all 6 stats with ±10% tolerance
 - All 6 values fall within tolerance
 
-**Input:** `/gamedev:balance-check`
+**Input:** `/skill:gamedev-balance-check`
 
 **Expected behavior:**
+
 1. Skill reads all balance data files in `assets/data/`
 2. Skill reads GDD formulas from `design/gdd/`
 3. Skill computes deviation for each value against its formula
@@ -49,6 +49,7 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 6. Verdict is BALANCED
 
 **Assertions:**
+
 - [ ] Findings table is shown for all checked values
 - [ ] Each row shows: stat name, formula target, actual value, deviation percentage
 - [ ] All rows show PASS or equivalent when within tolerance
@@ -60,13 +61,15 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 ### Case 2: Out of Balance — Player damage 40% above formula target
 
 **Fixture:**
+
 - `assets/data/combat-balance.json` has `player_damage_base: 140`
 - `design/gdd/combat-system.md` formula specifies `player_damage_base = 100` (±10%)
 - All other stats are within tolerance
 
-**Input:** `/gamedev:balance-check`
+**Input:** `/skill:gamedev-balance-check`
 
 **Expected behavior:**
+
 1. Skill reads combat-balance.json and computes deviation for `player_damage_base`
 2. Deviation is +40% — far outside ±10% tolerance
 3. Skill flags this row as severity HIGH in the findings table
@@ -74,6 +77,7 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 5. Skill surfaces the HIGH severity item prominently before the table
 
 **Assertions:**
+
 - [ ] `player_damage_base` row shows deviation of +40%
 - [ ] Severity is HIGH for deviations exceeding tolerance by more than 2×
 - [ ] Verdict is OUT OF BALANCE when any stat has HIGH severity deviation
@@ -84,22 +88,25 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 ### Case 3: No GDD Formulas — Cannot validate, guidance given
 
 **Fixture:**
+
 - `assets/data/economy-balance.yaml` exists with 10 stat values
 - No GDD in `design/gdd/` contains formula definitions for economy stats
 
-**Input:** `/gamedev:balance-check`
+**Input:** `/skill:gamedev-balance-check`
 
 **Expected behavior:**
+
 1. Skill reads balance data files
 2. Skill searches GDDs for formula definitions — finds none for economy stats
-3. Skill outputs: "Cannot validate economy stats — no formulas defined. Run /gamedev:design-system first."
+3. Skill outputs: "Cannot validate economy stats — no formulas defined. Run /skill:gamedev-design-system first."
 4. No findings table is generated for the economy stats
 5. Verdict is CONCERNS (data exists but cannot be validated)
 
 **Assertions:**
+
 - [ ] Skill does not fabricate formula targets when none exist in GDDs
 - [ ] Output explicitly names the missing formula source
-- [ ] Output recommends running `/gamedev:design-system` to define formulas
+- [ ] Output recommends running `/skill:gamedev-design-system` to define formulas
 - [ ] Verdict is CONCERNS (not BALANCED, since validation was impossible)
 
 ---
@@ -107,13 +114,15 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 ### Case 4: Orphan Reference — Balance file references an undefined stat
 
 **Fixture:**
+
 - `assets/data/combat-balance.json` contains a stat `legacy_armor_mult: 1.5`
 - `design/gdd/combat-system.md` has no formula for `legacy_armor_mult`
 - All other stats have formula definitions and pass validation
 
-**Input:** `/gamedev:balance-check`
+**Input:** `/skill:gamedev-balance-check`
 
 **Expected behavior:**
+
 1. Skill reads all stats from combat-balance.json
 2. Skill cannot find a formula for `legacy_armor_mult` in any GDD
 3. Skill flags `legacy_armor_mult` as ORPHAN REFERENCE in the findings table
@@ -121,6 +130,7 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 5. Verdict is CONCERNS (orphan reference prevents full validation)
 
 **Assertions:**
+
 - [ ] `legacy_armor_mult` appears in findings table with status ORPHAN REFERENCE
 - [ ] Orphan references are distinguished from formula deviations in the table
 - [ ] Verdict is CONCERNS when any orphan references are found
@@ -131,12 +141,14 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 ### Case 5: Gate Compliance — Read-only; no gate; optional report requires approval
 
 **Fixture:**
+
 - Balance data and GDD formulas exist; 1 stat has CONCERNS-level deviation (15% above target)
 - `review-mode.txt` contains `full`
 
-**Input:** `/gamedev:balance-check`
+**Input:** `/skill:gamedev-balance-check`
 
 **Expected behavior:**
+
 1. Skill reads data and GDDs; generates findings table
 2. Verdict is CONCERNS (one stat slightly out of range)
 3. No director gate is invoked
@@ -146,6 +158,7 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 7. If user says no: skill ends without writing
 
 **Assertions:**
+
 - [ ] No director gate is invoked in any review mode
 - [ ] Findings table is presented without writing anything automatically
 - [ ] Optional report write is offered but not forced
@@ -165,8 +178,7 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 
 ## Coverage Notes
 
-- The case where `assets/data/` is entirely empty is not tested; behavior
-  follows the CONCERNS pattern with a message that no data files were found.
-- Tolerance thresholds (±10%, ±20%) are implementation details of the skill;
-  the tests verify that deviations are detected and classified, not the
-  exact threshold values.
+- The case where `assets/data/` is entirely empty is not tested; behavior follows the CONCERNS pattern with a message
+  that no data files were found.
+- Tolerance thresholds (±10%, ±20%) are implementation details of the skill; the tests verify that deviations are
+  detected and classified, not the exact threshold values.

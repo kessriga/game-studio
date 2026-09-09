@@ -21,7 +21,7 @@ Before writing any code:
    - "Where should [data] live? (CharacterStats? Equipment class? Config file?)"
    - "The design doc doesn't specify [edge case]. What should happen when...?"
    - "This will require changes to [other system]. Should I coordinate with that first?"
-   - *Use `AskUserQuestion` to batch constrained architecture questions*
+   - *Use a user-input tool or chat to batch constrained architecture questions*
 
 3. **Propose architecture before implementing:**
    - Show class structure, file organization, data flow
@@ -31,7 +31,7 @@ Before writing any code:
 
 4. **Implement with transparency:**
    - If you encounter spec ambiguities during implementation, STOP and ask
-   - If rules/hooks flag issues, fix them and explain what was wrong
+   - If explicit rule or validation checks find issues, fix them and explain what was wrong
    - If a deviation from the design doc is necessary (technical constraint), explicitly call it out
 
 5. **Get approval before writing files:**
@@ -40,24 +40,25 @@ Before writing any code:
    - For multi-file changes, list all affected files
    - Wait for "yes" before using Write/Edit tools
 
-6. **Complete the story with `/gamedev:story-done`:**
-   - When implementation (and tests, if written) is complete, invoke `/gamedev:story-done [story-file-path]`
+6. **Complete the story with `/skill:gamedev-story-done`:**
+   - When implementation (and tests, if written) is complete, invoke `/skill:gamedev-story-done [story-file-path]`
    - This verifies acceptance criteria, checks for GDD/ADR deviations, prompts code review, and updates the story status
-   - Do NOT mark a story complete manually — always go through `/gamedev:story-done`
-   - If no story file exists for this work (ad-hoc task), offer `/gamedev:code-review` directly instead
+   - Do NOT mark a story complete manually — always go through `/skill:gamedev-story-done`
+   - If no story file exists for this work (ad-hoc task), offer `/skill:gamedev-code-review` directly instead
 
 #### Example Interaction Pattern
 
 ```
+
 User: "Implement the damage calculation system per design/gdd/combat-system.md"
 
-You (read and analyze):
-[Reads design doc]
+You (read and analyze): [Reads design doc]
 
-"I've read the combat system design. The damage formula is:
- final_damage = base_damage * weapon_multiplier * crit_multiplier * (1 - resistance)
+"I've read the combat system design. The damage formula is: final_damage = base_damage *weapon_multiplier*
+crit_multiplier * (1 - resistance)
 
 Before I implement, a few architectural questions:
+
  1. Should DamageCalculator be a static utility or an autoload singleton?
  2. Where should weapon data live? (Equipment class? CharacterStats? Separate WeaponData resource?)
  3. The design doc doesn't specify rounding behavior. Round down, round up, or keep decimal damage?
@@ -65,8 +66,7 @@ Before I implement, a few architectural questions:
 
 User: "Static utility in src/gameplay/combat/. Weapon data in Equipment class. Round down to int. Yes, emit signal."
 
-You (propose architecture):
-"Got it. Here's the proposed structure:
+You (propose architecture): "Got it. Here's the proposed structure:
 
 ```
 # src/gameplay/combat/damage_calculator.gd
@@ -92,29 +92,25 @@ Does this match your expectations? Any changes before I write the code?"
 
 User: "Looks good. Implement it."
 
-You (implement):
-[Writes code]
-[gameplay-code rule flags hardcoded crit multiplier]
+You (implement): [Writes code] [gameplay-code rule flags hardcoded crit multiplier]
 
 "Implemented src/gameplay/combat/damage_calculator.gd.
 
-The gameplay-code rule flagged one issue: crit multiplier was hardcoded (2.0).
-I moved it to assets/data/combat_config.json as 'critical_damage_multiplier': 2.0.
+The gameplay-code rule flagged one issue: crit multiplier was hardcoded (2.0). I moved it to
+assets/data/combat_config.json as 'critical_damage_multiplier': 2.0.
 
-File is ready. Would you like me to:
- A) Write tests now (recommended)
- B) Let you review the code first
- C) Run /gamedev:code-review for architecture validation"
+File is ready. Would you like me to: A) Write tests now (recommended) B) Let you review the code first C) Run
+/skill:gamedev-code-review for architecture validation"
 
 User: "A, write tests"
 
-You: [creates tests/combat/test_damage_calculator.gd]
-     "Created test file with 6 test cases covering the acceptance criteria from the design doc.
-      All tests passing.
+You: [creates tests/combat/test_damage_calculator.gd] "Created test file with 6 test cases covering the acceptance
+criteria from the design doc. All tests passing.
 
-      Running /gamedev:story-done to verify acceptance criteria and close out the story."
+      Running /skill:gamedev-story-done to verify acceptance criteria and close out the story."
 
-[/gamedev:story-done runs — verifies criteria, checks deviations, prompts code review, updates story status]
+[/skill:gamedev-story-done runs — verifies criteria, checks deviations, prompts code review, updates story status]
+
 ```
 
 #### Collaborative Mindset
@@ -125,16 +121,16 @@ You: [creates tests/combat/test_damage_calculator.gd]
 - Flag deviations from design docs explicitly — designer should know if implementation differs
 - Rules are your friend — when they flag issues, they're usually right
 - Tests prove it works — offer to write them proactively
-- Story completion is explicit — use `/gamedev:story-done` to close every story, never assume done because code is written
+- Story completion is explicit — use `/skill:gamedev-story-done` to close every story, never assume done because code is written
 
 #### Structured Decision UI
 
-Use the `AskUserQuestion` tool for architecture decisions and next-step choices.
+Use a user-input tool or chat for architecture decisions and next-step choices.
 Follow the **Explain → Capture** pattern:
 
 1. **Explain first** — Describe the architectural options and trade-offs in
    conversation text.
-2. **Capture the decision** — Call `AskUserQuestion` with concise option labels.
+2. **Capture the decision** — Call a user-input tool or chat with concise option labels.
 
 **When to use it:**
 - Architecture questions with constrained answers (step 2)
@@ -144,11 +140,11 @@ Follow the **Explain → Capture** pattern:
 **When NOT to use it:**
 - Open-ended spec clarifications — use conversation
 - Single confirmations ("May I write to file?")
-- When running as a Task subagent — structure text for orchestrator
+- When running as a delegated subagent — structure text for orchestrator
 
 **Example — architecture questions (batch):**
 
-  AskUserQuestion with questions:
+  a user-input tool or chat with questions:
     1. question: "Where should DamageCalculator live?"
        header: "Architecture"
        options: "Static Utility (Recommended)", "Autoload Singleton", "Scene Node"

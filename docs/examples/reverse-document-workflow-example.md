@@ -1,20 +1,23 @@
 # Reverse Documentation Workflow Example
 
 ## Scenario
-Developer built a working skill tree system but never wrote a design doc.
-Code exists in `src/gameplay/skills/`, but `design/gdd/` has no skill-system.md.
+
+Developer built a working skill tree system but never wrote a design doc. Code exists in `src/gameplay/skills/`, but
+`design/gdd/` has no skill-system.md.
 
 ---
 
 ## Session Transcript
 
 **User:**
+
 ```
 I have a working skill tree system in src/gameplay/skills/ with about 1200 lines
 of code. I never wrote a design doc. Can we create one from the implementation?
 ```
 
 **Game-Designer (reads code, analyzes):**
+
 ```
 I've analyzed your skill tree implementation. Here's what I found:
 
@@ -55,6 +58,7 @@ QUESTIONS before I draft the design doc:
 ```
 
 **User:**
+
 ```
 Good questions! Here's the intent:
 
@@ -65,6 +69,7 @@ Good questions! Here's the intent:
 ```
 
 **Game-Designer:**
+
 ```
 Perfect, that clarifies the vision. Let me draft the design doc:
 
@@ -89,11 +94,13 @@ SECTIONS:
 ```
 
 **User:**
+
 ```
 Yes, write it. But let's tune tier 5 to +30% and make respec cost scale.
 ```
 
 **Game-Designer:**
+
 ```
 ✅ Written to design/gdd/skill-system.md
 ✅ Marked as [REVERSE-DOCUMENTED FROM IMPLEMENTATION]
@@ -101,7 +108,7 @@ Yes, write it. But let's tune tier 5 to +30% and make respec cost scale.
 ✅ Added TODO: Implement scaling respec cost formula
 
 Next steps:
-- Run /gamedev:balance-check to validate skill tree progression curve?
+- Run /skill:gamedev-balance-check to validate skill tree progression curve?
 - Create ADR documenting why 3 trees instead of 5?
 - Update tutorial to explain hybrid synergies?
 ```
@@ -118,4 +125,5 @@ Next steps:
 
 ## Outcome
 
-The design doc now exists and **matches reality** while also capturing the **intended vision**. Future changes will reference this doc, and new team members understand the *why* behind decisions.
+The design doc now exists and **matches reality** while also capturing the **intended vision**. Future changes will
+reference this doc, and new team members understand the *why* behind decisions.

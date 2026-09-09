@@ -56,6 +56,7 @@
 ```
 
 ### Legend
+
 ```
 sys  = systems-designer       gp  = gameplay-programmer
 lvl  = level-designer         ep  = engine-programmer
@@ -73,7 +74,7 @@ art-dir = art-director
 ### Who Can Delegate to Whom
 
 | From | Can Delegate To |
-|------|----------------|
+| ------ | ---------------- |
 | creative-director | game-designer, art-director, audio-director, narrative-director |
 | technical-director | lead-programmer, devops-engineer, performance-analyst, technical-artist (technical decisions) |
 | producer | Any agent (task assignment within their domain only) |
@@ -96,7 +97,7 @@ art-dir = art-director
 ### Escalation Paths
 
 | Situation | Escalate To |
-|-----------|------------|
+| ----------- | ------------ |
 | Two designers disagree on a mechanic | game-designer |
 | Game design vs narrative conflict | creative-director |
 | Game design vs technical feasibility | producer (facilitates), then creative-director + technical-director |
@@ -131,7 +132,7 @@ art-dir = art-director
 ### Pattern 2: Bug Fix
 
 ```
-1. qa-tester          -- Files bug report with /gamedev:bug-report
+1. qa-tester          -- Files bug report with /skill:gamedev-bug-report
 2. qa-lead            -- Triages severity and priority
 3. producer           -- Assigns to sprint (if not S1)
 4. lead-programmer    -- Identifies root cause, assigns to programmer
@@ -194,12 +195,12 @@ art-dir = art-director
 
 ```text
 1. producer             -- Declares release candidate, confirms milestone criteria met
-2. release-manager      -- Cuts release branch, generates /gamedev:release-checklist
+2. release-manager      -- Cuts release branch, generates /skill:gamedev-release-checklist
 3. qa-lead              -- Runs full regression, signs off on quality
 4. localization-lead    -- Verifies all strings translated, text fitting passes
 5. performance-analyst  -- Confirms performance benchmarks within targets
 6. devops-engineer      -- Builds release artifacts, runs deployment pipeline
-7. release-manager      -- Generates /gamedev:changelog, tags release, creates release notes
+7. release-manager      -- Generates /skill:gamedev-changelog, tags release, creates release notes
 8. technical-director   -- Final sign-off on major releases
 9. release-manager      -- Deploys and monitors for 48 hours
 10. producer            -- Marks release complete
@@ -209,7 +210,7 @@ art-dir = art-director
 
 ```text
 1. game-designer        -- Defines the hypothesis and success criteria
-2. prototyper           -- Scaffolds concept prototype with /gamedev:prototype
+2. prototyper           -- Scaffolds concept prototype with /skill:gamedev-prototype
 3. prototyper           -- Builds minimal implementation (1-3 days)
 4. game-designer        -- Evaluates prototype against criteria
 5. prototyper           -- Documents findings in REPORT.md
@@ -221,7 +222,7 @@ art-dir = art-director
 
 ```text
 1. game-designer        -- Confirms slice scope against GDDs
-2. prototyper           -- Builds production-quality end-to-end build with /gamedev:vertical-slice
+2. prototyper           -- Builds production-quality end-to-end build with /skill:gamedev-vertical-slice
 3. prototyper           -- Conducts internal playtest sessions (minimum 1)
 4. prototyper           -- Documents findings in REPORT.md
 5. creative-director    -- Go/no-go decision on proceeding to Production (full mode)
@@ -250,6 +251,7 @@ art-dir = art-director
 ### Design Change Notification
 
 When a design document changes, the game-designer must notify:
+
 - lead-programmer (implementation impact)
 - qa-lead (test plan update needed)
 - producer (schedule impact assessment)
@@ -258,6 +260,7 @@ When a design document changes, the game-designer must notify:
 ### Architecture Change Notification
 
 When an ADR is created or modified, the technical-director must notify:
+
 - lead-programmer (code changes needed)
 - All affected specialist programmers
 - qa-lead (testing strategy may change)
@@ -266,20 +269,20 @@ When an ADR is created or modified, the technical-director must notify:
 ### Asset Standard Change Notification
 
 When the art bible or asset standards change, the art-director must notify:
+
 - technical-artist (pipeline changes)
 - All content creators working with affected assets
 - devops-engineer (if build pipeline is affected)
 
 ## Anti-Patterns to Avoid
 
-1. **Bypassing the hierarchy**: A specialist agent should never make decisions
-   that belong to their lead without consultation.
-2. **Cross-domain implementation**: An agent should never modify files outside
-   their designated area without explicit delegation from the relevant owner.
-3. **Shadow decisions**: All decisions must be documented. Verbal agreements
-   without written records lead to contradictions.
-4. **Monolithic tasks**: Every task assigned to an agent should be completable
-   in 1-3 days. If it is larger, it must be broken down first.
-5. **Assumption-based implementation**: If a spec is ambiguous, the implementer
-   must ask the specifier rather than guessing. Wrong guesses are more expensive
-   than a question.
+1. **Bypassing the hierarchy**: A specialist agent should never make decisions that belong to their lead without
+   consultation.
+2. **Cross-domain implementation**: An agent should never modify files outside their designated area without explicit
+   delegation from the relevant owner.
+3. **Shadow decisions**: All decisions must be documented. Verbal agreements without written records lead to
+   contradictions.
+4. **Monolithic tasks**: Every task assigned to an agent should be completable in 1-3 days. If it is larger, it must be
+   broken down first.
+5. **Assumption-based implementation**: If a spec is ambiguous, the implementer must ask the specifier rather than
+   guessing. Wrong guesses are more expensive than a question.

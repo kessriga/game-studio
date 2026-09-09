@@ -1,19 +1,19 @@
 ---
 name: launch-checklist
 description: "Complete launch readiness validation covering every department: code, content, store, marketing, community, infrastructure, legal, and go/no-go sign-offs."
-argument-hint: "[launch-date or 'dry-run']"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
-> **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/gamedev:launch-checklist`. Do not auto-invoke based on context matching.
+**Arguments:** [launch-date or 'dry-run']
+
+> **Explicit invocation only**: This skill should only run when the user explicitly requests it with
+> `/skill:gamedev-launch-checklist`. Do not auto-invoke based on context matching.
 
 ## Phase 1: Parse Arguments
 
-Read the argument for the launch date or `dry-run` mode. Dry-run mode generates the checklist without creating sign-off entries or writing files.
+Read the argument for the launch date or `dry-run` mode. Dry-run mode generates the checklist without creating sign-off
+entries or writing files.
 
 ---
 
@@ -228,7 +228,8 @@ Generated: [Date]
 
 ## Phase 5: Save Checklist
 
-Present the completed checklist and summary to the user (total items, blocking items count, conditional items count, departments with incomplete sections).
+Present the completed checklist and summary to the user (total items, blocking items count, conditional items count,
+departments with incomplete sections).
 
 If not in dry-run mode, ask: "May I write this to `production/releases/launch-checklist-[date].md`?"
 
@@ -238,5 +239,5 @@ If yes, write the file, creating directories as needed.
 
 ## Phase 6: Next Steps
 
-- Run `/gamedev:gate-check` to get a formal PASS/CONCERNS/FAIL verdict before launch.
-- Coordinate sign-offs via `/gamedev:team-release`.
+- Run `/skill:gamedev-gate-check` to get a formal PASS/CONCERNS/FAIL verdict before launch.
+- Coordinate sign-offs via `/skill:gamedev-team-release`.

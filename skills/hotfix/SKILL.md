@@ -1,15 +1,14 @@
 ---
 name: hotfix
 description: "Emergency fix workflow that bypasses normal sprint processes with a full audit trail. Creates hotfix branch, tracks approvals, and ensures the fix is backported correctly."
-argument-hint: "[bug-id or description]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
-> **Explicit invocation only**: This skill should only run when the user explicitly requests it with `/gamedev:hotfix`. Do not auto-invoke based on context matching.
+**Arguments:** [bug-id or description]
+
+> **Explicit invocation only**: This skill should only run when the user explicitly requests it with
+> `/skill:gamedev-hotfix`. Do not auto-invoke based on context matching.
 
 ## Phase 1: Assess Severity
 
@@ -19,7 +18,8 @@ Read the bug description or ID. Assess severity using these criteria:
 - **S2 (Major)**: Significant feature broken, workaround exists
 - **S3 or lower**: Minor issue — normal bug fix workflow applies
 
-Confirm with `AskUserQuestion`:
+Confirm with a user-input tool or chat:
+
 - Prompt: "I've assessed this as **[assessed severity]** — [brief rationale]. Confirm severity to proceed:"
 - Options:
   - `[A] S1 (Critical) — game unplayable, data loss, or security issue`
@@ -74,16 +74,19 @@ Check whether this is a git repository:
 
 `Bash: git rev-parse --is-inside-work-tree 2>/dev/null`
 
-If this command fails or returns empty: note "Not a git repository — create the branch manually." and skip branch creation.
+If this command fails or returns empty: note "Not a git repository — create the branch manually." and skip branch
+creation.
 
-If the check passes, use `AskUserQuestion` before creating the branch:
+If the check passes, use a user-input tool or chat before creating the branch:
+
 - Prompt: "Ready to create hotfix branch 'hotfix/[short-name]' from [base-ref]?"
 - Options:
   - `[A] Yes — create branch`
   - `[B] Use a different base ref — I'll specify it`
   - `[C] Skip — I'll create the branch myself`
 
-Only run `git checkout -b hotfix/[short-name] [base-ref]` if user selects [A]. If [B]: ask the user for the base ref, then run the command with that ref. If [C]: skip branch creation and proceed to Phase 4.
+Only run `git checkout -b hotfix/[short-name] [base-ref]` if user selects [A]. If [B]: ask the user for the base ref,
+then run the command with that ref. If [C]: skip branch creation and proceed to Phase 4.
 
 ---
 
@@ -99,19 +102,22 @@ Update the hotfix record with root cause, fix details, and test results.
 
 ## Phase 5: Collect Approvals
 
-Use the Task tool to request sign-off in parallel:
+Follow the host guide to request independent sign-off in parallel when supported:
 
-- `subagent_type: gamedev:lead-programmer` — Review the fix for correctness and side effects
-- `subagent_type: gamedev:qa-tester` — Run targeted regression tests on the affected system
-- `subagent_type: gamedev:producer` — Approve deployment timing and communication plan
+- `gamedev:lead-programmer` — Review the fix for correctness and side effects
+- `gamedev:qa-tester` — Run targeted regression tests on the affected system
+- `gamedev:producer` — Approve deployment timing and communication plan
 
-All three must return APPROVE before proceeding. If any returns CONCERNS or REJECT, do not deploy — surface the issue and resolve it first.
+All three must return APPROVE before proceeding. If any returns CONCERNS or REJECT, do not deploy — surface the issue
+and resolve it first.
 
 ---
 
 ## Phase 5b: QA Re-Entry Gate
 
-After approvals, determine the QA scope required before deploying the hotfix. Spawn `qa-lead` via Task with:
+After approvals, determine the QA scope required before deploying the hotfix. Spawn `gamedev:qa-lead` through authorized
+delegation with:
+
 - The hotfix description and affected system
 - The regression test results from Phase 5
 - A list of all systems that touch the changed files (use Grep to find callers)
@@ -119,9 +125,12 @@ After approvals, determine the QA scope required before deploying the hotfix. Sp
 Ask qa-lead: **Is a full smoke check sufficient, or does this fix require a targeted team-qa pass?**
 
 Apply the verdict:
-- **Smoke check sufficient** — run `/gamedev:smoke-check` against the hotfix build. If PASS, proceed to Phase 6.
-- **Targeted QA pass required** — run `/gamedev:team-qa [affected-system]` scoped to the changed system only. If QA returns APPROVED or APPROVED WITH CONDITIONS, proceed to Phase 6.
-- **Full QA required** — S1 fixes that touch core systems may require a full `/gamedev:team-qa sprint`. This delays deployment but prevents a bad patch.
+
+- **Smoke check sufficient** — run `/skill:gamedev-smoke-check` against the hotfix build. If PASS, proceed to Phase 6.
+- **Targeted QA pass required** — run `/skill:gamedev-team-qa [affected-system]` scoped to the changed system only. If
+  QA returns APPROVED or APPROVED WITH CONDITIONS, proceed to Phase 6.
+- **Full QA required** — S1 fixes that touch core systems may require a full `/skill:gamedev-team-qa sprint`. This
+  delays deployment but prevents a bad patch.
 
 Do not skip this gate. A hotfix that breaks something else is worse than the original bug.
 
@@ -153,30 +162,33 @@ Output a deployment summary:
 **Rollback plan**: [from Phase 2 record]
 
 Merge to: release branch AND development branch
-Next: /gamedev:bug-report verify [TASK-ID] after deploy to confirm resolution
+Next: /skill:gamedev-bug-report verify [TASK-ID] after deploy to confirm resolution
 ```
 
 ### Rules
+
 - Hotfixes must be the MINIMUM change to fix the issue — no cleanup, no refactoring
 - Every hotfix must have a rollback plan documented before deployment
 - Hotfix branches merge to BOTH the release branch AND the development branch
 - All hotfixes require a post-incident review within 48 hours
-- If the fix is complex enough to need more than 4 hours, escalate to `technical-director`
+- If the fix is complex enough to need more than 4 hours, escalate to `gamedev:technical-director`
 
 ---
 
 ## Phase 7: Post-Deploy Verification
 
-After deploying, run `/gamedev:bug-report verify [TASK-ID]` to confirm the fix resolved the issue in the deployed build.
+After deploying, run `/skill:gamedev-bug-report verify [TASK-ID]` to confirm the fix resolved the issue in the deployed
+build.
 
-If VERIFIED FIXED: run `/gamedev:bug-report close [TASK-ID]` to formally close it.
-If STILL PRESENT: the hotfix failed — immediately re-open, assess rollback, and escalate.
+If VERIFIED FIXED: run `/skill:gamedev-bug-report close [TASK-ID]` to formally close it. If STILL PRESENT: the hotfix
+failed — immediately re-open, assess rollback, and escalate.
 
 Schedule a post-incident review within 48 hours (capture findings as Backlog tasks if follow-up work is needed).
 
-Use `AskUserQuestion`:
+Use a user-input tool or chat:
+
 - Prompt: "Hotfix complete. What's the next step?"
 - Options:
-  - `[A] Run /gamedev:smoke-check to verify the fix`
-  - `[B] Run /gamedev:patch-notes to document this hotfix`
+  - `[A] Run /skill:gamedev-smoke-check to verify the fix`
+  - `[B] Run /skill:gamedev-patch-notes to document this hotfix`
   - `[C] Stop here`

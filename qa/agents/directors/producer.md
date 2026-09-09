@@ -1,10 +1,11 @@
 # Agent Test Spec: producer
 
 ## Agent Summary
-**Domain owned:** Scope management, Backlog prioritisation validation, milestone tracking, epic prioritization, production phase gate.
-**Does NOT own:** Game design decisions (creative-director / game-designer), technical architecture (technical-director), creative direction.
-**Claude model metadata:** Opus 4.8 (department lead — multi-document synthesis, high-stakes phase gate verdicts).
-**Gate IDs handled:** PR-SCOPE, PR-MILESTONE, PR-EPIC, PR-PHASE-GATE.
+
+**Domain owned:** Scope management, Backlog prioritisation validation, milestone tracking, epic prioritization,
+production phase gate. **Does NOT own:** Game design decisions (creative-director / game-designer), technical
+architecture (technical-director), creative direction. **Gate IDs handled:** PR-SCOPE, PR-MILESTONE, PR-EPIC,
+PR-PHASE-GATE.
 
 ---
 
@@ -12,9 +13,9 @@
 
 Verified by reading the agent's `agents/producer.md` frontmatter:
 
-- [ ] `description:` field is present and domain-specific (references scope, prioritisation, milestone, production — not generic)
-- [ ] `allowed-tools:` list is primarily read-focused; Bash only if milestone files require parsing
-- [ ] Claude model metadata is `claude-opus-4-8` per docs/claude-code.md (department lead → Opus 4.8)
+- [ ] `description:` field is present and domain-specific (references scope, prioritisation, milestone, production — not
+      generic)
+- [ ] Uses only available authorized tools; role prose does not grant permissions
 - [ ] Agent definition does not claim authority over design decisions or technical architecture
 
 ---
@@ -22,44 +23,63 @@ Verified by reading the agent's `agents/producer.md` frontmatter:
 ## Test Cases
 
 ### Case 1: In-domain request — appropriate output format
-**Scenario:** A milestone risk check is requested for the "Combat System" milestone. The Backlog board shows 8 of 12 tasks Done, 1 carrying the `blocked` label, target date in two weeks. Request is tagged PR-MILESTONE.
-**Expected:** Returns `PR-MILESTONE: AT RISK` (or ON TRACK / OFF TRACK) with rationale citing the completed-vs-remaining task count and the blocked task.
-**Assertions:**
+
+**Scenario:** A milestone risk check is requested for the "Combat System" milestone. The Backlog board shows 8 of 12
+tasks Done, 1 carrying the `blocked` label, target date in two weeks. Request is tagged PR-MILESTONE. **Expected:**
+Returns `PR-MILESTONE: AT RISK` (or ON TRACK / OFF TRACK) with rationale citing the completed-vs-remaining task count
+and the blocked task. **Assertions:**
+
 - [ ] Verdict is exactly one of ON TRACK / AT RISK / OFF TRACK
 - [ ] Verdict token is formatted as `PR-MILESTONE: AT RISK`
 - [ ] Rationale references the board's completed/remaining/blocked task counts
-- [ ] Output stays within production scope — does not comment on whether the stories are well-designed or technically sound
+- [ ] Output stays within production scope — does not comment on whether the stories are well-designed or technically
+      sound
 
 ### Case 2: Out-of-domain request — redirects or escalates
-**Scenario:** Team member asks producer to evaluate whether the game's "weight-based inventory" mechanic feels fun and engaging.
-**Expected:** Agent declines to evaluate game feel and redirects to game-designer or creative-director.
+
+**Scenario:** Team member asks producer to evaluate whether the game's "weight-based inventory" mechanic feels fun and
+engaging. **Expected:** Agent declines to evaluate game feel and redirects to game-designer or creative-director.
 **Assertions:**
+
 - [ ] Does not make any binding assessment of the mechanic's design quality
-- [ ] Explicitly names `game-designer` or `creative-director` as the correct handler
-- [ ] May note if the mechanic's scope has production implications (e.g., dependencies on other systems), but defers all design evaluation
+- [ ] Explicitly names `gamedev:game-designer` or `gamedev:creative-director` as the correct handler
+- [ ] May note if the mechanic's scope has production implications (e.g., dependencies on other systems), but defers all
+      design evaluation
 
 ### Case 3: Gate verdict — correct vocabulary
-**Scenario:** A new feature proposal adds three new systems (crafting, weather, and faction reputation) to a milestone that was scoped for two systems only. None of these additions appear in the current milestone plan. Request is tagged PR-SCOPE.
-**Expected:** Returns `PR-SCOPE: CONCERNS` with specific identification of the three unplanned systems and their absence from the milestone scope document.
-**Assertions:**
+
+**Scenario:** A new feature proposal adds three new systems (crafting, weather, and faction reputation) to a milestone
+that was scoped for two systems only. None of these additions appear in the current milestone plan. Request is tagged
+PR-SCOPE. **Expected:** Returns `PR-SCOPE: CONCERNS` with specific identification of the three unplanned systems and
+their absence from the milestone scope document. **Assertions:**
+
 - [ ] Verdict is exactly one of REALISTIC / CONCERNS / UNREALISTIC — not freeform text
 - [ ] Verdict token is formatted as `PR-SCOPE: CONCERNS`
 - [ ] Rationale names the three specific systems being added out of scope
 - [ ] Does not evaluate whether the systems are good design — only whether they fit the plan
 
 ### Case 4: Conflict escalation — correct parent
-**Scenario:** game-designer wants to add a late-breaking mechanic (dynamic weather affecting all gameplay systems) that technical-director warns will require 3 additional sprints. game-designer and technical-director are in disagreement about whether to proceed.
-**Expected:** Producer does not take a side on whether the mechanic is worth adding (design decision) or feasible (technical decision). Producer quantifies the production impact (3 sprints of delay, milestone slip risk), presents the trade-off to the user, and follows docs/coordination-rules.md conflict resolution: escalate to the shared parent (in this case, surface the conflict for user decision since creative-director and technical-director are both top-tier).
-**Assertions:**
+
+**Scenario:** game-designer wants to add a late-breaking mechanic (dynamic weather affecting all gameplay systems) that
+technical-director warns will require 3 additional sprints. game-designer and technical-director are in disagreement
+about whether to proceed. **Expected:** Producer does not take a side on whether the mechanic is worth adding (design
+decision) or feasible (technical decision). Producer quantifies the production impact (3 sprints of delay, milestone
+slip risk), presents the trade-off to the user, and follows docs/coordination-rules.md conflict resolution: escalate to
+the shared parent (in this case, surface the conflict for user decision since creative-director and technical-director
+are both top-tier). **Assertions:**
+
 - [ ] Quantifies the production impact in concrete terms (sprint count, milestone date slip)
 - [ ] Does not make a binding design or technical decision
 - [ ] Surfaces the conflict to the user with the scope implications clearly stated
 - [ ] References docs/coordination-rules.md conflict resolution protocol (escalate to shared parent or user)
 
 ### Case 5: Context pass — uses provided context
-**Scenario:** Agent receives a gate context block that includes the current milestone deadline (8 weeks away) and velocity data from the last 4 sprints (8, 10, 9, 11 points). A sprint plan is submitted with 14 story points.
-**Expected:** Assessment uses the provided velocity data to project whether 14 points is achievable, and references the 8-week milestone window to assess whether the current sprint's scope leaves adequate buffer.
-**Assertions:**
+
+**Scenario:** Agent receives a gate context block that includes the current milestone deadline (8 weeks away) and
+velocity data from the last 4 sprints (8, 10, 9, 11 points). A sprint plan is submitted with 14 story points.
+**Expected:** Assessment uses the provided velocity data to project whether 14 points is achievable, and references the
+8-week milestone window to assess whether the current sprint's scope leaves adequate buffer. **Assertions:**
+
 - [ ] Uses the specific velocity figures from the provided context (not generic estimates)
 - [ ] References the 8-week deadline in the capacity assessment
 - [ ] Calculates or estimates remaining sprint count within the milestone window
@@ -78,7 +98,10 @@ Verified by reading the agent's `agents/producer.md` frontmatter:
 ---
 
 ## Coverage Notes
-- PR-EPIC (epic-level prioritization) is not covered — a dedicated case should be added when the /gamedev:create-epics skill produces structured epic documents.
-- PR-MILESTONE (milestone health review) is not covered — deferred to milestone health review on the Backlog board via the PR-MILESTONE gate.
+
+- PR-EPIC (epic-level prioritization) is not covered — a dedicated case should be added when the
+  /skill:gamedev-create-epics skill produces structured epic documents.
+- PR-MILESTONE (milestone health review) is not covered — deferred to milestone health review on the Backlog board via
+  the PR-MILESTONE gate.
 - PR-PHASE-GATE (full production phase advancement) involving synthesis of multiple sub-gate results is deferred.
 - Multi-sprint burn-down and velocity trend analysis are not covered here.

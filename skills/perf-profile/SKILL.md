@@ -1,14 +1,13 @@
 ---
 name: perf-profile
 description: "Structured performance profiling workflow. Identifies bottlenecks, measures against budgets, and generates optimization recommendations with priority rankings."
-argument-hint: "[system-name or 'full']"
-user-invocable: true
-agent: performance-analyst
-allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
+**Arguments:** [system-name or 'full']
+
+**Primary role:** Read `../../agents/performance-analyst.md` before following this workflow.
 
 ## Phase 1: Determine Scope
 
@@ -34,6 +33,7 @@ Check for existing performance targets in design docs or AGENTS.md:
 ## Phase 3: Analyze Codebase
 
 **CPU Profiling Targets:**
+
 - `_process()` / `Update()` / `Tick()` functions — list all and estimate cost
 - Nested loops over large collections
 - String operations in hot paths
@@ -42,6 +42,7 @@ Check for existing performance targets in design docs or AGENTS.md:
 - Expensive physics queries (raycasts, overlaps) every frame
 
 **Memory Profiling Targets:**
+
 - Large data structures and their growth patterns
 - Texture/asset memory footprint estimates
 - Object pool vs instantiate/destroy patterns
@@ -49,6 +50,7 @@ Check for existing performance targets in design docs or AGENTS.md:
 - Cache sizes and eviction policies
 
 **Rendering Targets (if applicable):**
+
 - Draw call estimates
 - Overdraw from overlapping transparent objects
 - Shader complexity
@@ -56,6 +58,7 @@ Check for existing performance targets in design docs or AGENTS.md:
 - Missing LODs or occlusion culling
 
 **I/O Targets:**
+
 - Save/load performance
 - Asset loading patterns (sync vs async)
 - Network message frequency and size
@@ -105,9 +108,9 @@ Activate this phase only if any hotspot has Fix Effort rated M or L.
 Present significant-effort items and ask the user to choose for each:
 
 - **A) Implement the optimization** (proceed with fix now or schedule it)
-- **B) Reduce feature scope** (run `/gamedev:scope-check [feature]` to analyze trade-offs)
+- **B) Reduce feature scope** (run `/skill:gamedev-scope-check [feature]` to analyze trade-offs)
 - **C) Accept the performance hit and defer to Polish phase** (log as known issue)
-- **D) Escalate to technical-director for an architectural decision** (run `/gamedev:architecture-decision`)
+- **D) Escalate to technical-director for an architectural decision** (run `/skill:gamedev-architecture-decision`)
 
 If multiple items are deferred to Polish (choice C), record them under `### Deferred to Polish`.
 
@@ -117,11 +120,12 @@ This skill is read-only — no files are written. Verdict: **COMPLETE** — perf
 
 ## Phase 6: Next Steps
 
-- If bottlenecks require architectural change: run `/gamedev:architecture-decision`.
-- If scope reduction is needed: run `/gamedev:scope-check [feature]`.
+- If bottlenecks require architectural change: run `/skill:gamedev-architecture-decision`.
+- If scope reduction is needed: run `/skill:gamedev-scope-check [feature]`.
 - To schedule optimizations: file them as Backlog tasks and prioritise on the board.
 
 ### Rules
+
 - Never optimize without measuring first — gut feelings about performance are unreliable
 - Recommendations must include estimated impact — "make it faster" is not actionable
 - Profile on target hardware, not just development machines

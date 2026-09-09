@@ -1,19 +1,17 @@
 ---
 name: reverse-document
 description: "Generate design or architecture documents from existing implementation. Works backwards from code/prototypes to create missing planning docs."
-argument-hint: "<type> <path> (e.g., 'design src/gameplay/combat' or 'architecture src/core')"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash
-model: sonnet
-# Read-only diagnostic skill — no specialist agent delegation needed
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** <type> <path> (e.g., 'design src/gameplay/combat' or 'architecture src/core')
+
 # Reverse Documentation
 
-This skill analyzes existing implementation (code, prototypes, systems) and generates
-appropriate design or architecture documentation. Use this when:
+This skill analyzes existing implementation (code, prototypes, systems) and generates appropriate design or architecture
+documentation. Use this when:
+
 - You built a feature without writing a design doc first
 - You inherited a codebase without documentation
 - You prototyped a mechanic and need to formalize it
@@ -25,23 +23,26 @@ appropriate design or architecture documentation. Use this when:
 
 ## Phase 1: Parse Arguments
 
-**Format**: `/gamedev:reverse-document <type> <path>`
+**Format**: `/skill:gamedev-reverse-document <type> <path>`
 
 **Type options**:
+
 - `design` → Generate a game design document (GDD section)
 - `architecture` → Generate an Architecture Decision Record (ADR)
 - `concept` → Generate a concept document from prototype
 
 **Path**: Directory or file to analyze
+
 - `src/gameplay/combat/` → All combat-related code
 - `src/core/event-system.cpp` → Specific file
 - `prototypes/stealth-mech/` → Prototype directory
 
 **Examples**:
+
 ```bash
-/gamedev:reverse-document design src/gameplay/magic-system
-/gamedev:reverse-document architecture src/core/entity-component
-/gamedev:reverse-document concept prototypes/vehicle-combat
+/skill:gamedev-reverse-document design src/gameplay/magic-system
+/skill:gamedev-reverse-document architecture src/core/entity-component
+/skill:gamedev-reverse-document concept prototypes/vehicle-combat
 ```
 
 ## Phase 2: Analyze Implementation
@@ -49,6 +50,7 @@ appropriate design or architecture documentation. Use this when:
 **Read and understand the code/prototype**:
 
 **For design docs (GDD):**
+
 - Identify mechanics, rules, formulas
 - Extract gameplay values (damage, cooldowns, ranges)
 - Find state machines, ability systems, progression
@@ -56,6 +58,7 @@ appropriate design or architecture documentation. Use this when:
 - Map dependencies (what systems interact?)
 
 **For architecture docs (ADR):**
+
 - Identify patterns (ECS, singleton, observer, etc.)
 - Understand technical decisions (threading, serialization, etc.)
 - Map dependencies and coupling
@@ -63,6 +66,7 @@ appropriate design or architecture documentation. Use this when:
 - Find constraints and trade-offs
 
 **For concept docs (prototype analysis):**
+
 - Identify core mechanic
 - Extract emergent gameplay patterns
 - Note what worked vs what didn't
@@ -74,6 +78,7 @@ appropriate design or architecture documentation. Use this when:
 **DO NOT** just describe the code. **ASK** about intent:
 
 **Design questions**:
+
 - "I see a [resource] system that depletes during [activity]. Was this for:
   - Pacing (prevent spam)?
   - Resource management (strategic depth)?
@@ -82,6 +87,7 @@ appropriate design or architecture documentation. Use this when:
 - "[Value] scales exponentially with [factor]. Intentional design, or needs rebalancing?"
 
 **Architecture questions**:
+
 - "You're using a service locator pattern. Was this chosen for:
   - Testability (mock dependencies)?
   - Decoupling (reduce hard references)?
@@ -89,6 +95,7 @@ appropriate design or architecture documentation. Use this when:
 - "I see manual memory management instead of smart pointers. Performance requirement, or legacy?"
 
 **Concept questions**:
+
 - "The prototype emphasizes stealth over combat. Is that the intended pillar?"
 - "Players seem to exploit the grappling hook for speed. Feature or bug?"
 
@@ -124,12 +131,13 @@ Wait for user to clarify intent before drafting.
 Based on type, use appropriate template:
 
 | Type | Template | Output Path |
-|------|----------|-------------|
+| ------ | ---------- | ------------- |
 | `design` | `templates/design-doc-from-implementation.md` | `design/gdd/[system-name].md` |
 | `architecture` | `templates/architecture-doc-from-code.md` | `docs/architecture/[decision-name].md` |
 | `concept` | `templates/concept-doc-from-prototype.md` | `prototypes/[name]/CONCEPT.md` or `design/concepts/[name].md` |
 
 **Draft structure**:
+
 - Capture **what exists** (mechanics, patterns, implementation)
 - Document **why it exists** (intent clarified with user)
 - Identify **what's missing** (edge cases not handled, gaps in design)
@@ -138,6 +146,7 @@ Based on type, use appropriate template:
 ## Phase 6: Show Draft and Request Approval
 
 **Collaborative protocol**:
+
 ```
 I've drafted the [system-name] design doc based on your code and clarifications.
 
@@ -186,7 +195,7 @@ After writing, suggest next steps:
 ✅ Written to design/gdd/combat-system.md
 
 FOLLOW-UP RECOMMENDED:
-1. Run /gamedev:balance-check on combat formulas (exponential scaling concern)
+1. Run /skill:gamedev-balance-check on combat formulas (exponential scaling concern)
 2. Create ADR for stamina system architecture decision
 3. Implement missing edge cases:
    - Stamina depletion mid-combo behavior
@@ -201,7 +210,7 @@ Would you like me to tackle any of these now?
 ## Template Selection Logic
 
 | If analyzing... | Use template... | Because... |
-|----------------|-----------------|------------|
+| ---------------- | ----------------- | ------------ |
 | `src/gameplay/*` | design-doc-from-implementation.md | Gameplay mechanics → GDD |
 | `src/core/*`, `src/ai/*` | architecture-doc-from-code.md | Core systems → ADR |
 | `prototypes/*` | concept-doc-from-prototype.md | Experiments → concept doc |
@@ -213,7 +222,7 @@ Would you like me to tackle any of these now?
 ## Example Session: Reverse-Document a System
 
 ```
-User: /gamedev:reverse-document design src/gameplay/[system]
+User: /skill:gamedev-reverse-document design src/gameplay/[system]
 
 Agent: I'll analyze your [system] implementation to create a design doc.
        [Reads code, discovers mechanics, formulas]
@@ -243,7 +252,7 @@ Agent: ✅ Written to design/gdd/[system-name].md
 
        Next steps:
        - Update [formula] to [corrected scaling]
-       - Run /gamedev:balance-check to validate [curve]
+       - Run /skill:gamedev-balance-check to validate [curve]
        - Document [mechanic] as core pillar in game-pillars.md
 ```
 
@@ -259,7 +268,8 @@ This skill follows the collaborative design principle:
 4. **User Clarifies**: Separate intent from accidents
 5. **Draft Document**: Create doc based on reality + intent
 6. **Show Draft**: Display key sections, explain additions
-7. **Get Approval**: "May I write to [filepath]?" On approval: Verdict: **COMPLETE** — document generated. On decline: Verdict: **BLOCKED** — user declined write.
+7. **Get Approval**: "May I write to [filepath]?" On approval: Verdict: **COMPLETE** — document generated. On decline:
+   Verdict: **BLOCKED** — user declined write.
 8. **Flag Follow-Up**: Suggest related work, don't auto-execute
 
 **Never assume intent. Always ask before documenting "why".**

@@ -1,9 +1,6 @@
 ---
 name: status
 description: "Print the current production stage and Epic > Feature > Task breadcrumb on demand. Use when the user asks what stage are we in, where are we, or show status."
-user-invocable: true
-allowed-tools: Read, Bash
-model: haiku
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
@@ -21,4 +18,4 @@ with empty output means this is not a recognized game project; recommend gamedev
 command failed: report the error rather than inventing a stage.
 
 Do not run a full audit or write files. Use gamedev's project-stage-detect skill for a gap analysis. This explicit
-command works in Pi, Claude Code, and Codex without injected frontmatter context.
+command uses the game working directory without injected frontmatter context.

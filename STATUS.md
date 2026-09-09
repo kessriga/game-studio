@@ -1,27 +1,49 @@
 # Implementation status
 
-## Working now
+## Current implementation: 0.4.0 (unreleased)
 
-- Game Studio supports Pi, Claude Code, and Codex through shared workflows and AGENTS.md guidance. Host-specific setup
-  and metadata rules live in their host guides.
-- The unreleased 0.3.1 manifests agree across Pi, Claude Code, and Codex. Pi exposes 72 namespaced entry points linked
-  to the shared skills and includes 53 role guides. Claude/Codex frontmatter remains unchanged.
-- Root and nested game-project instructions use AGENTS.md, with CLAUDE.md imports. The contributor and QA guides use the
-  same arrangement.
-- Scaffolding supports Godot, Unity, Unreal, Bevy, and deferred engine selection. It adds missing files, preserves
-  existing bytes, and reports guides that may need a reviewed migration. It rejects conflicting paths before copying.
-- Status and changelog gather their inputs explicitly; help reads project state from files. None relies on Claude
-  frontmatter shell injection.
-- Claude's 11 hooks remain explicitly registered. Codex uses explicit validation and handoff steps; no Codex hooks are
-  registered. Pi adds progress events, not automatic parity with Claude's validation hooks.
-- Pi records named workflow runs, evidence fingerprints, user approvals, scope confirmations, and advisory gate
-  decisions in `production/workflow-state.json`. Repeatable work is scoped by subject. Shared aggregate indexes are
-  reviewed at scope closure rather than attached to every subject's approval.
-- Pi's compact widget and optional noncapturing side overlay use the shared workflow catalog. Pending current and next
-  steps show Pi skill commands; the overlay lists each available command beneath its step. They leave the editor and
-  footer alone. The overlay can cover transcript text; it is not a reserved sidebar column.
-- Delegation uses the installed subagent runner with shared role instructions. No second runner or extension-specific
-  agent configurations are installed.
+- Shared Markdown workflows and roles are host-neutral; Pi is the only packaged integration.
+- All 72 skills and 53 roles retain identity metadata, host-guide links, domain responsibilities, arguments, routing,
+  review modes, and evidence requirements. Runtime permission/model metadata is removed.
+- Fresh scaffolds use canonical root/nested AGENTS.md, `docs/technical-preferences.md`, and eleven explicitly loaded
+  `docs/rules/` files. All five engine choices preserve existing files and preflight conflicts.
+- Legacy configuration blocks before writes until a [reviewed migration](docs/migration-0.4.md) preserves user data.
+  There is no normal-workflow fallback to legacy preferences.
+- Stage/project detection uses cwd only. Pi retains its generated entry points, progress state, evidence fingerprints,
+  user approvals, scope confirmations, widget and noncapturing overlay.
+- Safety checks and session handoffs are explicit; no validation, notification, or audit hooks ship.
+
+## Migration validation
+
+Local macOS checks on 2026-09-09 against the uncommitted 0.4.0 worktree:
+
+- `just gate` passed using the local virtual environment: 57 shell assertions and 17 Python test methods, including all
+  five engine selections, reruns, custom data/worktree preservation, legacy conflicts and dangling links, cwd-only
+  detection, relocated paths with spaces, shared identity/routing, and generated drift checks.
+- `npm run check` passed: formatting, TypeScript types, 34 tests, native discovery of 72 skills and 53 role guides plus
+  one extension, and relocated discovery from a 484-file npm tarball.
+- Changed Markdown was formatted with `rumdl fmt --no-cache --enable MD013`; source paths and local links were
+  inventoried. Template placeholders and the optional patch-notes-template probe are not required files.
+- Validation caught and corrected an inverted negative Pi-command assertion, one wrapped legacy delegation reference,
+  and an overly broad legacy symlink guard. These failed intermediate checks are not passing evidence.
+- Review fixes allow architecture write approvals in chat while retaining drafts, labeled choices, and grouped
+  multi-file approval. Onboarding asks for the concept in ordinary chat. Audio, narrative, and polish teams output
+  missing-argument usage directly without follow-up questions or delegation; their QA assertions match.
+- After these prose fixes, both full gates passed again with the counts above. Targeted `rumdl fmt` changed only the
+  edited paragraphs. Targeted `rumdl check --no-cache --enable MD013` still reports two pre-existing long lines in
+  `skills/architecture-review/SKILL.md` and `qa/skills/team/team-narrative.md`; no clean Markdown-lint pass is claimed.
+- Independent review passed after the architecture-approval and chat-guidance fixes; the recheck found no remaining
+  findings. The parent independently reran both full gates with the counts above and verified that the tree did not
+  change during validation. Primary language-server checks reported no errors in eight changed source files.
+- Earlier results below do not verify 0.4.0. No current hosted CI, conversational game workflow, engine build, live
+  migration, or interactive UI smoke test was run. No package was published or installed into user settings. The
+  migration preserves progress state; stale approvals require new evidence and user approval, not fingerprint rewriting.
+
+## Historical verification (pre-0.4)
+
+The following outcomes, `tasks/todo.md`, backlog records, and archived OpenSpec changes are preserved records of earlier
+releases. Their host compatibility, metadata, hook, package-size, and approval claims are not current guarantees. See
+the [reversal decision](docs/decisions/host-neutral-layout.md) and migration guidance for stale evidence.
 
 ## Command display fix verified on 2026-09-08
 
@@ -79,7 +101,7 @@ environment. Earlier evidence is retained below.
   UTF-8 and the absolute Git Bash executable found on PATH, avoiding Windows native process search selecting WSL Bash.
   Encoding lint now runs explicitly to prevent locale-dependent text reads.
 
-## Limits of verification
+## Historical limits of verification (pre-0.4)
 
 - Conversational execution of all 72 skills, full game-team orchestration, and engine builds have not been exercised end
   to end. Role prompts and explicit checks do not imply automatic hook parity with Claude Code.
@@ -93,7 +115,9 @@ environment. Earlier evidence is retained below.
 - Backlog.md, OpenSpec, and engines must be available separately for workflows that require them. No integrations or
   global settings were installed here.
 
-## Recent changes
+## Release history
+
+- 0.4.0 (unreleased): host-neutral layout, explicit checks, reviewed migration, and removal of retired integrations.
 
 - 0.3.1 (unreleased): show catalog commands in Pi's current/next-step labels and side overlay, using Pi skill syntax.
 - 0.3.0 (unreleased): Pi packaging, namespaced skill entry points, installed-runner delegation guidance, persistent

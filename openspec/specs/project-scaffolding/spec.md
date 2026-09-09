@@ -1,36 +1,23 @@
-# project-scaffolding Specification
+# Project scaffolding specification
 
-## Purpose
-
-`/gamedev:start` creates the project-side content a plugin cannot ship: the project CLAUDE.md, the directory tree, the `.claude/rules/` files, the technical-preferences skeleton, and the selected engine-reference snapshot — consensually and idempotently, without touching the user's settings.
+Supersedes the former host-layout contract for 0.4.0; see [reviewed migration](../../../docs/migration-0.4.md). Archived
+outcomes remain historical.
 
 ## Requirements
 
-### Requirement: First-run scaffolding via /gamedev:start
-The `start` skill SHALL offer a scaffolding phase that creates the project-side content into the user's repository: project `CLAUDE.md` (from the shipped template), the `production/`–`design/`–`docs/`–`tests/` directory tree, `.claude/rules/` (all 11 rules files), `.claude/docs/technical-preferences.md` (placeholder skeleton), and the engine-reference snapshot for the engine the user selects. Scaffold sources SHALL ship in the plugin's `templates/` directory.
+- Start SHALL obtain consent unless already authorized, then add root/nested AGENTS.md guides,
+  `docs/technical-preferences.md`, eleven `docs/rules/` files, and the shared project tree.
+- Sources SHALL live under package `templates/`. Godot, Unity, Unreal, Bevy, and undecided selection SHALL copy only the
+  selected engine references, with no engine snapshot for undecided.
+- Existing files SHALL remain byte-identical on reruns. Missing files SHALL be added and preserved guides reported for
+  review; settings and unrelated data SHALL not be modified.
+- Legacy preferences/rules SHALL block before any writes, including when neutral destinations exist. A reviewed
+  migration SHALL preserve or explicitly merge custom data, never silently replace it with defaults.
+- Symlinks and destination type conflicts SHALL fail preflight before any copy. Fresh scaffolds SHALL contain no
+  host-specific files. No fallback SHALL read retired preferences during normal workflows.
 
-#### Scenario: Fresh project onboarding (AC #2)
-- **WHEN** a user runs `/gamedev:start` in an empty repository and consents to scaffolding
-- **THEN** project CLAUDE.md, the directory tree, the 11 rules files, and `technical-preferences.md` exist in the user's repo afterward
+## Acceptance scenarios
 
-#### Scenario: Engine-reference selection (AC #2)
-- **WHEN** the user selects an engine during onboarding
-- **THEN** only that engine's reference snapshot is copied into the project's `docs/engine-reference/`
-
-### Requirement: Rules are delivered by scaffolding
-Because Claude Code plugins cannot ship `.claude/rules/` (verified against the plugins reference 2026-08-08), the rules files SHALL be delivered exclusively by the scaffolding flow, and this delivery decision SHALL be documented in the shipped framework docs.
-
-#### Scenario: Rules present after scaffold (AC #6)
-- **WHEN** scaffolding completes
-- **THEN** the user's project contains `.claude/rules/` with the same 11 files the fork-era template committed, and the framework docs state that rules are scaffolded, not shipped
-
-### Requirement: Scaffolding is consensual and idempotent
-Scaffolding SHALL require explicit user consent before writing (per the collaboration protocol), SHALL never overwrite an existing file, and on re-run SHALL report already-present files instead of modifying them. It SHALL NOT write to the user's `settings.json` at any scope.
-
-#### Scenario: Re-run on a scaffolded project
-- **WHEN** `/gamedev:start` runs in a project that was already scaffolded
-- **THEN** every existing file is left byte-identical and reported as present, and only missing files are offered for creation
-
-#### Scenario: No settings intrusion
-- **WHEN** scaffolding completes
-- **THEN** the user's `settings.json` files are unmodified
+- All five selections work from external directories and relocated package paths containing spaces.
+- Reruns preserve custom settings/rules and add only missing files.
+- Legacy, conflict, and symlink fixtures preserve existing data and create no partial scaffold.

@@ -1,25 +1,23 @@
 ---
 name: test-evidence-review
 description: "Quality review of test files and manual evidence documents. Goes beyond existence checks — evaluates assertion coverage, edge case handling, naming conventions, and evidence completeness. Produces ADEQUATE/INCOMPLETE/MISSING verdict per story. Run before QA sign-off or on demand."
-argument-hint: "[story-path | milestone | system-name]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [story-path | milestone | system-name]
+
 # Test Evidence Review
 
-`/gamedev:smoke-check` verifies that test files **exist** and **pass**. This skill
-goes further — it reviews the **quality** of those tests and evidence documents.
-A test file that exists and passes may still leave critical behaviour uncovered.
-A manual evidence doc that exists may lack the sign-offs required for closure.
+`/skill:gamedev-smoke-check` verifies that test files **exist** and **pass**. This skill goes further — it reviews the
+**quality** of those tests and evidence documents. A test file that exists and passes may still leave critical behaviour
+uncovered. A manual evidence doc that exists may lack the sign-offs required for closure.
 
 **Output:** Summary report (in conversation) + optional `production/qa/evidence-review-[date].md`
 
 **When to run:**
-- Before QA hand-off sign-off (`/gamedev:team-qa` Phase 5)
+
+- Before QA hand-off sign-off (`/skill:gamedev-team-qa` Phase 5)
 - On any story where test quality is in question
 - As part of milestone review for Logic and Integration story quality audit
 
@@ -28,9 +26,10 @@ A manual evidence doc that exists may lack the sign-offs required for closure.
 ## 1. Parse Arguments
 
 **Modes:**
-- `/gamedev:test-evidence-review [story-path]` — review a single story's evidence
-- `/gamedev:test-evidence-review milestone` — review all stories (tasks) in the current milestone
-- `/gamedev:test-evidence-review [system-name]` — review all stories in an epic/system
+
+- `/skill:gamedev-test-evidence-review [story-path]` — review a single story's evidence
+- `/skill:gamedev-test-evidence-review milestone` — review all stories (tasks) in the current milestone
+- `/skill:gamedev-test-evidence-review [system-name]` — review all stories in an epic/system
 - No argument — ask which scope: "Single story", "Current milestone", "A system"
 
 ---
@@ -39,16 +38,15 @@ A manual evidence doc that exists may lack the sign-offs required for closure.
 
 Based on the argument:
 
-**Single story**: Read the story file directly. Extract: Story Type, Test
-Evidence section, story slug, system name.
+**Single story**: Read the story file directly. Extract: Story Type, Test Evidence section, story slug, system name.
 
-**Milestone**: Review the batch of stories for the current milestone — Glob
-`production/epics/**/story-*.md` (each story has a Backlog task on the board)
-and read each.
+**Milestone**: Review the batch of stories for the current milestone — Glob `production/epics/**/story-*.md` (each story
+has a Backlog task on the board) and read each.
 
 **System**: Glob `production/epics/[system-name]/story-*.md`. Read each.
 
 For each story, collect:
+
 - `Type:` field (Logic / Integration / Visual/Feel / UI / Config/Data)
 - `## Test Evidence` section — the stated expected test file path or evidence doc
 - Story slug (from file name)
@@ -62,11 +60,12 @@ For each story, collect:
 For each story, find the evidence:
 
 **Logic stories**: Glob `tests/unit/[system]/[story-slug]_test.*`
-  - If not found, also try: Grep in `tests/unit/[system]/` for files
-    containing the story slug
+
+- If not found, also try: Grep in `tests/unit/[system]/` for files containing the story slug
 
 **Integration stories**: Glob `tests/integration/[system]/[story-slug]_test.*`
-  - Also check `production/session-logs/` for playtest records mentioning the story
+
+- Also check `production/session-logs/` for playtest records mentioning the story
 
 **Visual/Feel and UI stories**: Glob `production/qa/evidence/[story-slug]-evidence.*`
 
@@ -82,43 +81,39 @@ For each test file found, read it and evaluate:
 
 ### Assertion coverage
 
-Count the number of distinct assertions (lines containing assert, expect,
-check, verify, or engine-specific assertion patterns). Low assertion count is
-a quality signal — a test that makes only 1 assertion per test function may
-not cover the range of expected behaviour.
+Count the number of distinct assertions (lines containing assert, expect, check, verify, or engine-specific assertion
+patterns). Low assertion count is a quality signal — a test that makes only 1 assertion per test function may not cover
+the range of expected behaviour.
 
 Thresholds:
+
 - **3+ assertions per test function** → normal
 - **1-2 assertions per test function** → note as potentially thin
-- **0 assertions** (test exists but no asserts) → flag as BLOCKING — the
-  test passes vacuously and proves nothing
+- **0 assertions** (test exists but no asserts) → flag as BLOCKING — the test passes vacuously and proves nothing
 
 ### Edge case coverage
 
-For each acceptance criterion in the story that contains a number, threshold,
-or "when X happens" conditional: check whether a test function name or
-test body references that specific case.
+For each acceptance criterion in the story that contains a number, threshold, or "when X happens" conditional: check
+whether a test function name or test body references that specific case.
 
 Heuristics:
-- Grep test file for "zero", "max", "null", "empty", "min", "invalid",
-  "boundary", "edge" — presence of any is a positive signal
-- If the story has a Formulas section with specific bounds: check whether
-  tests exercise at minimum/maximum values
+
+- Grep test file for "zero", "max", "null", "empty", "min", "invalid", "boundary", "edge" — presence of any is a
+  positive signal
+- If the story has a Formulas section with specific bounds: check whether tests exercise at minimum/maximum values
 
 ### Naming quality
 
-Test function names should describe: the scenario + the expected result.
-Pattern: `test_[scenario]_[expected_outcome]`
+Test function names should describe: the scenario + the expected result. Pattern: `test_[scenario]_[expected_outcome]`
 
-Flag functions named generically (`test_1`, `test_run`, `testBasic`) as
-**naming issues** — they make failures harder to diagnose.
+Flag functions named generically (`test_1`, `test_run`, `testBasic`) as **naming issues** — they make failures harder to
+diagnose.
 
 ### Formula traceability
 
-For Logic stories where the GDD has a Formulas section: check that the test
-file contains at least one test whose name or comment references the formula
-name or a formula value. A test that exercises a formula without mentioning
-it by name is harder to maintain when the formula changes.
+For Logic stories where the GDD has a Formulas section: check that the test file contains at least one test whose name
+or comment references the formula name or a formula value. A test that exercises a formula without mentioning it by name
+is harder to maintain when the formula changes.
 
 ---
 
@@ -128,34 +123,30 @@ For each evidence document found, read it and evaluate:
 
 ### Criterion linkage
 
-The evidence doc should reference each acceptance criterion from the story.
-Check: does the evidence doc contain each criterion (or a clear rephrasing)?
-Missing criteria mean a criterion was never verified.
+The evidence doc should reference each acceptance criterion from the story. Check: does the evidence doc contain each
+criterion (or a clear rephrasing)? Missing criteria mean a criterion was never verified.
 
 ### Sign-off completeness
 
 Check for three sign-off lines (or equivalent fields):
+
 - Developer sign-off
 - Designer / art-lead sign-off (for Visual/Feel)
 - QA lead sign-off
 
-If any are missing or blank: flag as INCOMPLETE — the story cannot be fully
-closed without all required sign-offs.
+If any are missing or blank: flag as INCOMPLETE — the story cannot be fully closed without all required sign-offs.
 
 ### Screenshot / artefact completeness
 
-For Visual/Feel stories: check whether screenshot file paths are referenced
-in the evidence doc. If referenced, Glob for them to confirm they exist.
+For Visual/Feel stories: check whether screenshot file paths are referenced in the evidence doc. If referenced, Glob for
+them to confirm they exist.
 
-For UI stories: check whether a walkthrough sequence (step-by-step interaction
-log) is present.
+For UI stories: check whether a walkthrough sequence (step-by-step interaction log) is present.
 
 ### Date coverage
 
-Evidence doc should have a date. If the date is earlier than the story's
-last major change (heuristic: compare against the milestone start date), flag
-as POTENTIALLY STALE — the evidence may not cover the final
-implementation.
+Evidence doc should have a date. If the date is earlier than the story's last major change (heuristic: compare against
+the milestone start date), flag as POTENTIALLY STALE — the evidence may not cover the final implementation.
 
 ---
 
@@ -164,7 +155,7 @@ implementation.
 For each story, assign a verdict:
 
 | Verdict | Meaning |
-|---------|---------|
+| --------- | --------- |
 | **ADEQUATE** | Test/evidence exists, passes quality checks, all criteria covered |
 | **INCOMPLETE** | Test/evidence exists but has quality gaps (thin assertions, missing sign-offs) |
 | **MISSING** | No test or evidence found for a story type that requires it |
@@ -224,20 +215,18 @@ The overall milestone/system verdict is the worst story verdict present.
 
 Present the report in conversation.
 
-Ask: "May I write this test evidence review to
-`production/qa/evidence-review-[date].md`?"
+Ask: "May I write this test evidence review to `production/qa/evidence-review-[date].md`?"
 
-This is optional — the report is useful standalone. Write only if the user
-wants a persistent record.
+This is optional — the report is useful standalone. Write only if the user wants a persistent record.
 
 After the report:
 
-- For BLOCKING items: "These must be resolved before `/gamedev:story-done` can mark the
-  story Complete. Would you like to address any of them now?"
-- For thin assertions: "Consider running `/gamedev:test-helpers [system]` to see
-  scaffolded assertion patterns for common cases."
-- For missing sign-offs: "Manual sign-off is required from [role]. Share
-  `[evidence-path]` with them to complete sign-off."
+- For BLOCKING items: "These must be resolved before `/skill:gamedev-story-done` can mark the story Complete. Would you
+  like to address any of them now?"
+- For thin assertions: "Consider running `/skill:gamedev-test-helpers [system]` to see scaffolded assertion patterns for
+  common cases."
+- For missing sign-offs: "Manual sign-off is required from [role]. Share `[evidence-path]` with them to complete
+  sign-off."
 
 Verdict: **COMPLETE** — evidence review finished. Use CONCERNS if BLOCKING items were found.
 
@@ -245,10 +234,10 @@ Verdict: **COMPLETE** — evidence review finished. Use CONCERNS if BLOCKING ite
 
 ## Collaborative Protocol
 
-- **Report quality issues, do not fix them** — this skill reads and evaluates;
-  it does not modify test files or evidence documents
-- **ADEQUATE means adequate for shipping, not perfect** — avoid nitpicking
-  tests that are functioning and comprehensive enough to give confidence
-- **BLOCKING vs. ADVISORY distinction is important** — only flag BLOCKING when
-  the gap leaves a story criterion genuinely unverified
+- **Report quality issues, do not fix them** — this skill reads and evaluates; it does not modify test files or evidence
+  documents
+- **ADEQUATE means adequate for shipping, not perfect** — avoid nitpicking tests that are functioning and comprehensive
+  enough to give confidence
+- **BLOCKING vs. ADVISORY distinction is important** — only flag BLOCKING when the gap leaves a story criterion
+  genuinely unverified
 - **Ask before writing** — the report file is optional; always confirm before writing

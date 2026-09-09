@@ -1,6 +1,6 @@
 ---
 name: gamedev-create-epics
-description: "Translate approved GDDs + architecture into epics — one epic per architectural module. Defines scope, governing ADRs, engine risk, and untraced requirements. Does NOT break into stories — run /gamedev:create-stories [epic-slug] after each epic is created."
+description: "Translate approved GDDs + architecture into epics — one epic per architectural module. Defines scope, governing ADRs, engine risk, and untraced requirements. Does NOT break into stories — run /skill:gamedev-create-stories [epic-slug] after each epic is created."
 ---
 
 # Game Studio: create-epics

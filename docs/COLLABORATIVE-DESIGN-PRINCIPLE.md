@@ -134,7 +134,7 @@ Every agent interaction should follow this pattern:
 11. AGENT WRITES FILE
     Agent: [Uses Write tool]
            "Created design/gdd/crafting-system.md. Would you like me to run
-            /gamedev:design-review to validate it against the standard?"
+            /skill:gamedev-design-review to validate it against the standard?"
 ```
 
 ---
@@ -215,15 +215,15 @@ Agent: [Writes code, runs through gameplay-code rule checks, fixes issues]
 
 ### 🎯 Brainstorming Tasks
 
-**Example:** `/gamedev:brainstorm roguelike`
+**Example:** `/skill:gamedev-brainstorm roguelike`
 
 ```
 ❌ WRONG:
-User: "/gamedev:brainstorm roguelike"
+User: "/skill:gamedev-brainstorm roguelike"
 Skill: [Generates 1 concept and writes it to design/concept.md]
 
 ✅ RIGHT:
-User: "/gamedev:brainstorm roguelike"
+User: "/skill:gamedev-brainstorm roguelike"
 Skill: "I'll help you brainstorm roguelike concepts using professional
        ideation frameworks. First:
 
@@ -278,6 +278,7 @@ Skill: "Writing design/concept.md..."
 ### Good Question Patterns
 
 ✅ **Multiple Choice with Reasoning:**
+
 ```
 "Should enemies telegraph attacks?
  A) Yes, 0.5s before (accessible, rhythm-based)
@@ -287,6 +288,7 @@ Skill: "Writing design/concept.md..."
 ```
 
 ✅ **Constrained Options with Trade-offs:**
+
 ```
 "Inventory system options:
  1. Grid-based (Resident Evil, Diablo): Deep space management, slower
@@ -297,6 +299,7 @@ Skill: "Writing design/concept.md..."
 ```
 
 ✅ **Open-Ended with Context:**
+
 ```
 "The design doc doesn't specify what happens when a player dies while crafting.
  Some options:
@@ -310,18 +313,21 @@ Skill: "Writing design/concept.md..."
 ### Bad Question Patterns
 
 ❌ **Too Open-Ended:**
+
 ```
 "What should the combat system be like?"
 ← Too broad, user doesn't know where to start
 ```
 
 ❌ **Leading/Assuming:**
+
 ```
 "I'll make combat real-time since that's standard for this genre."
 ← Didn't ask, just assumed
 ```
 
 ❌ **Binary Without Context:**
+
 ```
 "Should we have a skill tree? Yes or no?"
 ← No pros/cons, no reference to game pillars
@@ -329,27 +335,25 @@ Skill: "Writing design/concept.md..."
 
 ---
 
-## 🎛️ Structured Decision UI (AskUserQuestion)
+## 🎛️ Structured Decision UI (a user-input tool or chat)
 
-Use the `AskUserQuestion` tool to present decisions as a **selectable UI** instead
-of plain markdown text. This gives the user a clean interface to pick from options
-(or type "Other" for a custom answer).
+Use a user-input tool or chat to present decisions as a **selectable UI** instead of plain markdown text. This gives the
+user a clean interface to pick from options (or type "Other" for a custom answer).
 
 ### The Explain → Capture Pattern
 
-Detailed reasoning doesn't fit in the tool's short descriptions. So use a two-step
-pattern:
+Detailed reasoning doesn't fit in the tool's short descriptions. So use a two-step pattern:
 
-1. **Explain first** — Write your full expert analysis in conversation text:
-   detailed pros/cons, theory references, example games, pillar alignment. This is
-   where the reasoning lives.
+1. **Explain first** — Write your full expert analysis in conversation text: detailed pros/cons, theory references,
+   example games, pillar alignment. This is where the reasoning lives.
 
-2. **Capture the decision** — Call `AskUserQuestion` with concise option labels
-   and short descriptions. The user picks from the UI or types a custom answer.
+2. **Capture the decision** — Call a user-input tool or chat with concise option labels and short descriptions. The user
+   picks from the UI or types a custom answer.
 
-### When to Use AskUserQuestion
+### When to Use a user-input tool or chat
 
 ✅ **Use it for:**
+
 - Every decision point where you'd present 2-4 options
 - Initial clarifying questions with constrained answers
 - Batching up to 4 independent questions in one call
@@ -358,9 +362,10 @@ pattern:
 - Strategic choices ("Simplify scope, slip deadline, or cut feature?")
 
 ❌ **Don't use it for:**
+
 - Open-ended discovery questions ("What excites you about roguelikes?")
 - Single yes/no confirmations ("May I write to file?")
-- When running as a Task subagent (tool may not be available)
+- When running as a delegated subagent (tool may not be available)
 
 ### Format Guidelines
 
@@ -375,7 +380,7 @@ pattern:
 After introducing the topic in conversation, batch constrained questions:
 
 ```
-AskUserQuestion:
+a user-input tool or chat:
   questions:
     - question: "Should crafting recipes be discovered or learned?"
       header: "Discovery"
@@ -402,7 +407,7 @@ AskUserQuestion:
 After writing the full pros/cons analysis in conversation text:
 
 ```
-AskUserQuestion:
+a user-input tool or chat:
   questions:
     - question: "Which crafting approach fits your vision?"
       header: "Approach"
@@ -420,7 +425,7 @@ AskUserQuestion:
 After presenting the full strategic analysis with pillar alignment:
 
 ```
-AskUserQuestion:
+a user-input tool or chat:
   questions:
     - question: "How should we handle crafting scope for Alpha?"
       header: "Scope"
@@ -435,13 +440,13 @@ AskUserQuestion:
 
 ### Team Skill Orchestration
 
-In team skills, subagents return their analysis as text. The **orchestrator**
-(main session) calls `AskUserQuestion` at each decision point between phases:
+In team skills, subagents return their analysis as text. The **orchestrator** (main session) calls a user-input tool or
+chat at each decision point between phases:
 
 ```
 [game-designer returns 3 combat approaches with analysis]
 
-Orchestrator uses AskUserQuestion:
+Orchestrator uses a user-input tool or chat:
   question: "Which combat approach should we develop?"
   options: [concise summaries of the 3 approaches]
 
@@ -475,9 +480,9 @@ Every file write must follow:
 
 ### Incremental Section Writing (Design Documents)
 
-For multi-section documents (design docs, lore entries, architecture docs), write
-each section to the file as it's approved instead of building the full document
-in conversation. This prevents context overflow during long iterative sessions.
+For multi-section documents (design docs, lore entries, architecture docs), write each section to the file as it's
+approved instead of building the full document in conversation. This prevents context overflow during long iterative
+sessions.
 
 ```
 1. Agent creates file with skeleton (all section headers, empty bodies)
@@ -501,9 +506,8 @@ in conversation. This prevents context overflow during long iterative sessions.
    Agent: "Sections 1-4 are complete. Ready to work on section 5?"
 ```
 
-Why this matters: A full design doc session with 8 sections and 2-3 revision
-cycles per section can accumulate 30-50k tokens of conversation. Incremental
-writing keeps the live context at ~3-5k tokens (only the current section's
+Why this matters: A full design doc session with 8 sections and 2-3 revision cycles per section can accumulate 30-50k
+tokens of conversation. Incremental writing keeps the live context at ~3-5k tokens (only the current section's
 discussion), because completed sections are persisted to disk.
 
 ### Multi-File Writes
@@ -531,25 +535,30 @@ Agent: "This implementation requires changes to 3 files:
 Agents should be:
 
 ### ✅ Collaborative Consultants
+
 - "Let me suggest three approaches and you pick"
 - "Here's my recommendation based on [reasoning], but you decide"
 - "I need your input on [specific decision]"
 
 ### ✅ Experts Who Explain
+
 - "I recommend Option A because [reasoning with game design theory]"
 - "This approach aligns with your 'Meaningful Choices' pillar because..."
 - "Here's how [reference game] handles this, and why that works"
 
 ### ✅ Patient Iterators
+
 - "No problem, I'll adjust that formula. How does this look?"
 - "Would you like me to explore that edge case more, or is this resolution good?"
 
 ### ❌ NOT Autonomous Executors
+
 - ❌ "I've designed your combat system [done]"
 - ❌ "Implemented and committed"
 - ❌ "I decided to use approach X"
 
 ### ❌ NOT Passive Order-Takers
+
 - ❌ "Okay" [does it without any questions]
 - ❌ [Doesn't ask about ambiguities]
 - ❌ [Doesn't flag potential issues]
@@ -558,10 +567,10 @@ Agents should be:
 
 ## 🎯 Applying This to Team Skills
 
-Team skills (like `/gamedev:team-combat`) orchestrate multiple agents, but still collaborative:
+Team skills (like `/skill:gamedev-team-combat`) orchestrate multiple agents, but still collaborative:
 
 ```
-User: "/gamedev:team-combat 'grappling hook ability'"
+User: "/skill:gamedev-team-combat 'grappling hook ability'"
 
 Skill (Coordinator):
 "I'll coordinate the combat team to design and implement the grappling hook.
@@ -602,7 +611,7 @@ Skill (Coordinator):
 "All 4 subsystems implemented. Would you like me to:
  A) Have gameplay-programmer integrate them now
  B) Let you test each independently first
- C) Run /gamedev:code-review before integration?"
+ C) Run /skill:gamedev-code-review before integration?"
 ```
 
 The orchestration is automated, but **decision points stay with the user**.
@@ -625,9 +634,10 @@ If you answered "No" to any, the agent wasn't collaborative enough!
 
 ## 📚 Example Prompts That Enforce Collaboration
 
-### For Users:
+### For Users
 
 ✅ **Good User Prompts:**
+
 ```
 "I want to design a skill tree. Ask me questions about how it should work,
  then present options based on my answers."
@@ -639,6 +649,7 @@ If you answered "No" to any, the agent wasn't collaborative enough!
 ```
 
 ❌ **Bad User Prompts (Enable Autonomous Behavior):**
+
 ```
 "Create a combat system" ← No guidance, agent forced to guess
 
@@ -647,7 +658,7 @@ If you answered "No" to any, the agent wasn't collaborative enough!
 "Implement everything in the design doc" ← No approval points
 ```
 
-### For Agents:
+### For Agents
 
 Agents should internally follow:
 
@@ -678,10 +689,9 @@ WHEN implementing:
 
 ## Where the guidance lives
 
-- [Project AGENTS.md template](../templates/AGENTS.md#collaboration) defines
-  how the assistant handles creative decisions and authorized implementation.
-- Role definitions in `agents/` and the skill workflows apply those boundaries
-  to their domains.
-- [The host guide](host-runtime.md) maps user-input and delegation tools to the
-  current assistant. A named tool is not a requirement to use a particular host.
+- [Project AGENTS.md template](../templates/AGENTS.md#collaboration) defines how the assistant handles creative
+  decisions and authorized implementation.
+- Role definitions in `agents/` and the skill workflows apply those boundaries to their domains.
+- [The host guide](host-runtime.md) maps user-input and delegation tools to the current assistant. A named tool is not a
+  requirement to use a particular host.
 - [STATUS.md](../STATUS.md) records what has actually been verified.

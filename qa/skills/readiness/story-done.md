@@ -1,27 +1,26 @@
-# Skill Test Spec: /gamedev:story-done
+# Skill Test Spec: /skill:gamedev-story-done
 
 ## Skill Summary
 
-`/gamedev:story-done` closes the loop between design and implementation. Run at the
-end of implementing a story, it reads the story file and verifies each
-acceptance criterion against the implementation. It checks for GDD and ADR
-deviations, prompts a code review, sets the Backlog task to `Done` (status lives
-in Backlog, not a `Status:` field in the `.md`), logs any tech debt, and surfaces
-the next ready task from the Backlog board. It produces a COMPLETE / COMPLETE
-WITH NOTES / BLOCKED verdict, appends `## Completion Notes` to the story file, and
-optionally writes to `docs/tech-debt-register.md`.
+`/skill:gamedev-story-done` closes the loop between design and implementation. Run at the end of implementing a story,
+it reads the story file and verifies each acceptance criterion against the implementation. It checks for GDD and ADR
+deviations, prompts a code review, sets the Backlog task to `Done` (status lives in Backlog, not a `Status:` field in
+the `.md`), logs any tech debt, and surfaces the next ready task from the Backlog board. It produces a COMPLETE /
+COMPLETE WITH NOTES / BLOCKED verdict, appends `## Completion Notes` to the story file, and optionally writes to
+`docs/tech-debt-register.md`.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/gamedev:skill-test static` — no fixture needed.
+Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
 
-- [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
-- [ ] Has ≥5 phase headings (complex skill warranting `context: fork` if applicable)
+- [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
+- [ ] Has ≥5 phase headings (complex multi-phase workflow)
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED
 - [ ] Contains "May I write" collaborative protocol language (writes to story file and tech-debt register)
-- [ ] Has a next-step handoff (surfaces the next task from the Backlog board, or the milestone close-out sequence when none remain)
+- [ ] Has a next-step handoff (surfaces the next task from the Backlog board, or the milestone close-out sequence when
+      none remain)
 
 ---
 
@@ -30,6 +29,7 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 ### Case 1: Happy Path — All acceptance criteria met, no deviations
 
 **Fixture:**
+
 - Story file at `production/epics/core/story-light-pickup.md` with:
   - 3 acceptance criteria, all implemented as described
   - `TR-ID: TR-light-001` referencing a GDD requirement
@@ -39,9 +39,10 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 - GDD requirement text at TR-light-001 matches how the feature was implemented
 - ADR guidance was followed (no deviations)
 
-**Input:** `/gamedev:story-done production/epics/core/story-light-pickup.md`
+**Input:** `/skill:gamedev-story-done production/epics/core/story-light-pickup.md`
 
 **Expected behavior:**
+
 1. Skill reads the story file and extracts all key fields
 2. Skill reads the GDD requirement fresh from `tr-registry.yaml` (not from story's quoted text)
 3. Skill reads the referenced ADR to understand implementation constraints
@@ -55,6 +56,7 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 11. Skill surfaces the next `To Do` task from the Backlog board (the milestone)
 
 **Assertions:**
+
 - [ ] Skill reads `docs/architecture/tr-registry.yaml` for TR-ID requirement text (not just story)
 - [ ] Skill reads the referenced ADR file (not just the story reference)
 - [ ] Each acceptance criterion is listed with VERIFIED / DEFERRED / FAILED status
@@ -69,23 +71,26 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 ### Case 2: Blocked Path — Acceptance criterion cannot be verified
 
 **Fixture:**
+
 - Story file has an acceptance criterion: "Player sees correct animation on pickup"
 - No automated test for this criterion exists
 - Manual verification has not been performed
 - All other criteria are met
 
-**Input:** `/gamedev:story-done production/epics/core/story-light-pickup.md`
+**Input:** `/skill:gamedev-story-done production/epics/core/story-light-pickup.md`
 
 **Expected behavior:**
+
 1. Skill processes all acceptance criteria
 2. Reaches the animation criterion — cannot auto-verify
-3. Skill asks the user: "Acceptance criterion 'Player sees correct animation on
-   pickup' cannot be auto-verified. Has this been manually tested?"
+3. Skill asks the user: "Acceptance criterion 'Player sees correct animation on pickup' cannot be auto-verified. Has
+   this been manually tested?"
 4. If user says No: criterion is marked DEFERRED, verdict becomes COMPLETE WITH NOTES
 5. Skill records the deferred criterion in completion notes
 6. Asks "May I write updated story with deferred criterion noted?"
 
 **Assertions:**
+
 - [ ] Skill asks the user about unverifiable criteria rather than assuming PASS
 - [ ] Deferred criteria result in COMPLETE WITH NOTES (not COMPLETE or BLOCKED)
 - [ ] The deferred criterion is explicitly named in the completion notes
@@ -96,13 +101,15 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 ### Case 3: Blocked Path — GDD deviation detected
 
 **Fixture:**
+
 - Story TR-ID points to requirement: "Player can carry max 3 light sources"
 - Implementation in `src/` uses a variable `MAX_CARRIED_LIGHTS = 5`
 - This is a deliberate deviation from the GDD
 
-**Input:** `/gamedev:story-done production/epics/core/story-light-pickup.md`
+**Input:** `/skill:gamedev-story-done production/epics/core/story-light-pickup.md`
 
 **Expected behavior:**
+
 1. Skill reads the GDD requirement text (max 3)
 2. Skill detects discrepancy between requirement and implementation value (5)
 3. Skill flags this as a GDD deviation and asks the user to classify it:
@@ -113,6 +120,7 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 5. If ERROR: verdict is BLOCKED until implementation is corrected
 
 **Assertions:**
+
 - [ ] Skill detects the mismatch between GDD requirement and implementation value
 - [ ] Skill asks the user to classify the deviation (not auto-assumes either way)
 - [ ] INTENTIONAL deviation → COMPLETE WITH NOTES (not BLOCKED)
@@ -124,19 +132,22 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 ### Case 4: Edge Case — No argument, auto-detect current story
 
 **Fixture:**
-- `production/session-state/active.md` contains a reference to
-  `production/epics/core/story-oxygen-drain.md` as the active story
+
+- `production/session-state/active.md` contains a reference to `production/epics/core/story-oxygen-drain.md` as the
+  active story
 - That story file exists and is tracked by a Backlog task with status `In Progress`
 
-**Input:** `/gamedev:story-done` (no argument)
+**Input:** `/skill:gamedev-story-done` (no argument)
 
 **Expected behavior:**
+
 1. Skill reads `production/session-state/active.md`
 2. Skill finds the active story reference
 3. Skill reads that story file and proceeds normally
 4. Output confirms which story was auto-detected
 
 **Assertions:**
+
 - [ ] Skill reads `production/session-state/active.md` when no argument is given
 - [ ] Skill identifies and confirms the auto-detected story before proceeding
 - [ ] If no story is found in session state, skill asks the user to provide a path
@@ -148,16 +159,19 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 ### Case 5: Director Gate — LP-CODE-REVIEW behavior across review modes
 
 **Fixture:**
+
 - Story file at `production/epics/core/story-light-pickup.md`
 - All acceptance criteria verified, no GDD deviations
 - `production/session-state/review-mode.txt` exists
 
 **Case 5a — full mode:**
+
 - `review-mode.txt` contains `full`
 
-**Input:** `/gamedev:story-done production/epics/core/story-light-pickup.md` (full mode)
+**Input:** `/skill:gamedev-story-done production/epics/core/story-light-pickup.md` (full mode)
 
 **Expected behavior:**
+
 1. Skill reads review mode — determines `full`
 2. After implementation verification, skill invokes LP-CODE-REVIEW gate
 3. Lead programmer reviews the implementation
@@ -165,6 +179,7 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 5. If LP verdict is APPROVED → skill proceeds to mark story Complete
 
 **Assertions (5a):**
+
 - [ ] Skill reads review mode before deciding whether to invoke LP-CODE-REVIEW
 - [ ] LP-CODE-REVIEW gate is invoked in full mode after implementation check
 - [ ] An LP NEEDS CHANGES verdict prevents story from being marked Complete
@@ -172,15 +187,18 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 - [ ] Skill still asks "May I write" before updating story status even if LP approved
 
 **Case 5b — lean or solo mode:**
+
 - `review-mode.txt` contains `lean` or `solo`
 
 **Expected behavior:**
+
 1. Skill reads review mode — determines `lean` or `solo`
 2. LP-CODE-REVIEW gate is SKIPPED
 3. Output notes the skip: "[LP-CODE-REVIEW] skipped — Lean/Solo mode"
 4. Story completion proceeds based on acceptance criteria check only
 
 **Assertions (5b):**
+
 - [ ] LP-CODE-REVIEW gate does NOT spawn in lean or solo mode
 - [ ] Skip is explicitly noted in output
 - [ ] Skill still requires "May I write" approval before marking story Complete
@@ -192,7 +210,9 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 - [ ] Uses "May I write" before updating the story file
 - [ ] Uses "May I write" before adding entries to `docs/tech-debt-register.md`
 - [ ] Presents complete findings (criteria check, deviation check) before asking approval
-- [ ] Ends by surfacing the next ready task from the Backlog board (the milestone), or the milestone close-out sequence (`/gamedev:smoke-check` → `/gamedev:team-qa [milestone]` → `/gamedev:gate-check`) when no `To Do` tasks remain
+- [ ] Ends by surfacing the next ready task from the Backlog board (the milestone), or the milestone close-out sequence
+      (`/skill:gamedev-smoke-check` → `/skill:gamedev-team-qa [milestone]` → `/skill:gamedev-gate-check`) when no
+      `To Do` tasks remain
 - [ ] Does not mark a story Complete if any criteria are in ERROR state
 - [ ] Does not skip the code review prompt
 
@@ -200,12 +220,9 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 ## Coverage Notes
 
-- The full 8-phase flow of the skill is exercised across Cases 1-3; not all
-  edge cases within each phase are covered.
-- Tech debt logging (deferred items written to `docs/tech-debt-register.md`)
-  is mentioned in Case 2 but not the primary assertion focus; dedicated
-  coverage deferred.
-- The Backlog task Done update (Phase 7 in the skill, via `task_edit`) is implied
-  by Case 1 but not the primary assertion; it follows the same "May I write"
-  confirmation pattern before status changes.
+- The full 8-phase flow of the skill is exercised across Cases 1-3; not all edge cases within each phase are covered.
+- Tech debt logging (deferred items written to `docs/tech-debt-register.md`) is mentioned in Case 2 but not the primary
+  assertion focus; dedicated coverage deferred.
+- The Backlog task Done update (Phase 7 in the skill, via `task_edit`) is implied by Case 1 but not the primary
+  assertion; it follows the same "May I write" confirmation pattern before status changes.
 - Stories with multiple TR-IDs or multiple ADRs are not explicitly tested.

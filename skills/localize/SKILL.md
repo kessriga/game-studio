@@ -1,24 +1,22 @@
 ---
 name: localize
 description: "Full localization pipeline: scan for hardcoded strings, extract and manage string tables, validate translations, generate translator briefings, run cultural/sensitivity review, manage VO localization, test RTL/platform requirements, enforce string freeze, and report coverage."
-argument-hint: "[scan|extract|validate|status|brief|cultural-review|vo-pipeline|rtl-check|freeze|qa]"
-user-invocable: true
-agent: localization-lead
-allowed-tools: Read, Glob, Grep, Write, Bash, Task, AskUserQuestion
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [scan|extract|validate|status|brief|cultural-review|vo-pipeline|rtl-check|freeze|qa]
+
+**Primary role:** Read `../../agents/localization-lead.md` before following this workflow.
+
 # Localization Pipeline
 
-Localization is not just translation — it is the full process of making a game
-feel native in every language and region. Poor localization breaks immersion,
-confuses players, and blocks platform certification. This skill covers the
-complete pipeline from string extraction through cultural review, VO recording,
-RTL layout testing, and localization QA sign-off.
+Localization is not just translation — it is the full process of making a game feel native in every language and region.
+Poor localization breaks immersion, confuses players, and blocks platform certification. This skill covers the complete
+pipeline from string extraction through cultural review, VO recording, RTL layout testing, and localization QA sign-off.
 
 **Modes:**
+
 - `scan` — Find hardcoded strings and localization anti-patterns (read-only)
 - `extract` — Extract strings and generate translation-ready tables
 - `validate` — Check translations for completeness, placeholders, and length
@@ -38,7 +36,8 @@ If no subcommand is provided, output usage and stop. Verdict: **FAIL** — missi
 
 Search `src/` for hardcoded user-facing strings:
 
-- String literals in UI code not wrapped in a localization function (`tr()`, `Tr()`, `NSLocalizedString`, `GetText`, etc.)
+- String literals in UI code not wrapped in a localization function (`tr()`, `Tr()`, `NSLocalizedString`, `GetText`,
+  etc.)
 - Concatenated strings that should be parameterized
 - Strings with positional placeholders (`%s`, `%d`) instead of named ones (`{playerName}`)
 - Format strings that mix locale-sensitive data (numbers, dates, currencies) without locale-aware formatting
@@ -73,7 +72,8 @@ Output a diff of new strings to add to the string table.
 
 Present the diff to the user. Ask: "May I write these new entries to `assets/data/strings/strings-en.json`?"
 
-If yes, write only the diff (new entries), not a full replacement. Verdict: **COMPLETE** — strings extracted and written.
+If yes, write only the diff (new entries), not a full replacement. Verdict: **COMPLETE** — strings extracted and
+written.
 
 ---
 
@@ -110,7 +110,7 @@ String freeze: [Active / Not yet called / Lifted]
 | [locale] | [N] | [N] | [N] | [N] | [X]% |
 
 ### Issues
-- [N] hardcoded strings found in source code (run /gamedev:localize scan)
+- [N] hardcoded strings found in source code (run /skill:gamedev-localize scan)
 - [N] strings exceeding character limits
 - [N] placeholder mismatches
 - [N] orphaned keys
@@ -123,10 +123,11 @@ This mode is read-only — no files are written.
 
 ## Phase 2E: Brief Mode
 
-Generate a translator context briefing document. This document is sent to the
-external translation team or localisation vendor alongside the string table export.
+Generate a translator context briefing document. This document is sent to the external translation team or localisation
+vendor alongside the string table export.
 
 Read:
+
 - `design/gdd/` — extract game genre, tone, setting, character names
 - `assets/data/strings/strings-en.json` — the source string table
 - Any existing lore or narrative documents in `design/narrative/`
@@ -182,32 +183,39 @@ Ask: "May I write this translator brief to `production/localization/translator-b
 
 ## Phase 2F: Cultural Review Mode
 
-Spawn `localization-lead` via Task. Ask them to audit the following for cultural sensitivity across the target locales (read from `assets/data/strings/` and `assets/`):
+Spawn `gamedev:localization-lead` through authorized delegation. Ask them to audit the following for cultural
+sensitivity across the target locales (read from `assets/data/strings/` and `assets/`):
 
 ### Content Areas to Review
 
 **Symbols and gestures**
+
 - Thumbs up, OK hand, peace sign — meanings vary by region
 - Religious or spiritual symbols in art, UI, or audio
 - National flags, map representations, disputed territories
 
 **Colours**
+
 - White (mourning in some Asian cultures), green (political associations in some regions), red (luck vs danger)
 - Alert/warning colours that conflict with cultural associations
 
 **Numbers**
+
 - 4 (death in Japanese/Chinese), 13, 666 — flag use in UI (room numbers, item counts, prices)
 
 **Humour and idioms**
+
 - Idioms that translate as offensive in other locales
 - Toilet/bodily humour that is inappropriate in some markets (notably Japan, Germany, Middle East)
 - Dark humour around topics that are culturally sensitive in specific regions
 
 **Violence and content ratings**
+
 - Content that would require ratings changes in DE (Germany), AU (Australia), CN (China), or AE (UAE)
 - Blood colour, gore level, drug references — flag all for region-specific asset variants if needed
 
 **Names and representations**
+
 - Character names that are offensive, profane, or carry negative meaning in target locales
 - Stereotyped representation of nationalities, religions, or ethnic groups
 
@@ -235,6 +243,7 @@ Manage the voice-over localization process. Determine the sub-task from the argu
 ### VO Pipeline: Scan
 
 Read `assets/data/strings/` and `design/narrative/`. Identify:
+
 - All dialogue lines (keys matching `dialogue.*`) with source text
 - Lines already recorded (audio file exists in `assets/audio/vo/`)
 - Lines not yet recorded
@@ -264,42 +273,50 @@ Ask: "May I write the VO recording scripts to `production/localization/vo-script
 ### VO Pipeline: Validate
 
 Glob `assets/audio/vo/[locale]/` for all `.wav`/`.ogg` files. Cross-reference against the VO manifest. Report:
+
 - Missing files (line in script, no audio file)
 - Extra files (audio file exists, no matching string key)
 - Naming convention violations
 
 ### VO Pipeline: Integrate
 
-Grep `src/` for VO audio references. Verify each referenced path exists in `assets/audio/vo/[locale]/`. Report broken references.
+Grep `src/` for VO audio references. Verify each referenced path exists in `assets/audio/vo/[locale]/`. Report broken
+references.
 
 ---
 
 ## Phase 2H: RTL Check Mode
 
-Right-to-left languages (Arabic, Hebrew, Persian, Urdu) require layout mirroring beyond
-just translating text. This mode validates the implementation.
+Right-to-left languages (Arabic, Hebrew, Persian, Urdu) require layout mirroring beyond just translating text. This mode
+validates the implementation.
 
-Read `.claude/docs/technical-preferences.md` to determine the engine. Then check:
+Read `docs/technical-preferences.md` to determine the engine. Then check:
 
 **Layout mirroring**
-- Is RTL layout enabled in the engine? (Godot: `Control.layout_direction`, Unity: `RTL Support` package, Unreal: text direction flags, Bevy: per-`Node` layout direction / bidi text via the Parley text stack)
+
+- Is RTL layout enabled in the engine? (Godot: `Control.layout_direction`, Unity: `RTL Support` package, Unreal: text
+  direction flags, Bevy: per-`Node` layout direction / bidi text via the Parley text stack)
 - Are all UI containers set to auto-mirror, or are positions hardcoded?
 - Do progress bars, health bars, and directional indicators mirror correctly?
 
 **Text rendering**
+
 - Are fonts loaded that support Arabic/Hebrew character sets?
 - Is Arabic text rendered with correct ligatures (connected script)?
 - Are numbers displayed as Eastern Arabic numerals where required?
 
 **String assembly**
+
 - Are there any string concatenations that assume left-to-right reading order?
 - Do `{placeholder}` positions in sentences work correctly when sentence structure is reversed?
 
 **Asset review**
+
 - Are there UI icons with directional arrows or asymmetric designs that need mirrored variants?
 - Do any text-in-image assets exist that require RTL versions?
 
 Grep patterns to check:
+
 - Engine-specific RTL flags in scene/prefab files
 - Any `HBoxContainer`, `LinearLayout`, `HorizontalBox` nodes — verify layout_direction settings
 - String concatenation with `+` near dialogue or UI code
@@ -312,15 +329,16 @@ Ask: "May I write this RTL check report to `production/localization/rtl-check-[d
 
 ## Phase 2I: Freeze Mode
 
-String freeze locks the source (English) string table so that translations can proceed
-without the source changing under the translators.
+String freeze locks the source (English) string table so that translations can proceed without the source changing under
+the translators.
 
 ### freeze call
 
 Check current freeze status in `production/localization/freeze-status.md` (if it exists).
 
 If already frozen:
-> "String freeze is currently ACTIVE (called [date]). [N] strings have been added or modified since freeze. These are freeze violations — they require re-translation or an approved freeze lift."
+> "String freeze is currently ACTIVE (called [date]). [N] strings have been added or modified since freeze. These are
+> freeze violations — they require re-translation or an approved freeze lift."
 
 If not frozen, present the pre-freeze checklist:
 
@@ -329,12 +347,13 @@ Pre-Freeze Checklist
 [ ] All planned UI screens are implemented
 [ ] All dialogue lines are final (no further narrative revisions planned)
 [ ] All system strings (error messages, tutorial text) are complete
-[ ] /gamedev:localize scan shows zero hardcoded strings
-[ ] /gamedev:localize validate shows no placeholder mismatches in source (en)
+[ ] /skill:gamedev-localize scan shows zero hardcoded strings
+[ ] /skill:gamedev-localize validate shows no placeholder mismatches in source (en)
 [ ] Marketing strings (store description, achievements) are final
 ```
 
-Use `AskUserQuestion`:
+Use a user-input tool or chat:
+
 - Prompt: "Are all items above confirmed? Calling string freeze locks the source table."
 - Options: `[A] Yes — call string freeze now` / `[B] No — I still have strings to add`
 
@@ -349,40 +368,46 @@ If [A]: Write `production/localization/freeze-status.md`:
 **Total strings at freeze**: [N]
 
 ## Post-Freeze Changes
-[Any strings added or modified after freeze are listed here automatically by /gamedev:localize extract]
+[Any strings added or modified after freeze are listed here automatically by /skill:gamedev-localize extract]
 ```
 
 ### freeze lift
 
-If argument includes `lift`: update `freeze-status.md` Status to `LIFTED`, record the reason and date. Warn: "Lifting the freeze requires re-translation of all modified strings. Notify the translation team."
+If argument includes `lift`: update `freeze-status.md` Status to `LIFTED`, record the reason and date. Warn: "Lifting
+the freeze requires re-translation of all modified strings. Notify the translation team."
 
 ### freeze check (auto-integrated into extract)
 
-When `extract` mode finds new or modified strings and `freeze-status.md` shows Status: ACTIVE — append the new keys to `## Post-Freeze Changes` and warn:
-> "⚠️ String freeze is active. [N] new/modified strings have been added. These are freeze violations. Notify your localization vendor before proceeding."
+When `extract` mode finds new or modified strings and `freeze-status.md` shows Status: ACTIVE — append the new keys to
+`## Post-Freeze Changes` and warn:
+> "⚠️ String freeze is active. [N] new/modified strings have been added. These are freeze violations. Notify your
+> localization vendor before proceeding."
 
 ---
 
 ## Phase 2J: QA Mode
 
-Localization QA is a dedicated pass that runs after translations are delivered but
-before any locale ships. This is not the same as `/validate` (which checks completeness)
-— this is a structured playthrough-based quality check.
+Localization QA is a dedicated pass that runs after translations are delivered but before any locale ships. This is not
+the same as `/validate` (which checks completeness) — this is a structured playthrough-based quality check.
 
-Spawn `localization-lead` via Task with:
+Spawn `gamedev:localization-lead` through authorized delegation with:
+
 - The target locale(s) to QA
-- The list of all screens/flows in the game (from `design/gdd/` or `/gamedev:content-audit` output)
-- The current `/gamedev:localize validate` report
+- The list of all screens/flows in the game (from `design/gdd/` or `/skill:gamedev-content-audit` output)
+- The current `/skill:gamedev-localize validate` report
 - The cultural review report (if it exists)
 
 Ask the localization-lead to produce a QA plan covering:
 
-1. **Functional string check** — every string displays in-game without truncation, placeholder errors, or encoding corruption
-2. **UI overflow check** — translated strings that exceed UI bounds (even if within character limits, some languages expand)
+1. **Functional string check** — every string displays in-game without truncation, placeholder errors, or encoding
+   corruption
+2. **UI overflow check** — translated strings that exceed UI bounds (even if within character limits, some languages
+   expand)
 3. **Contextual accuracy** — a sample of 10% of strings reviewed in-game for translation accuracy and natural phrasing
 4. **Cultural review items** — verify all BLOCKING items from the cultural review are resolved
 5. **VO sync check** — if VO exists, verify lip sync or subtitle timing is acceptable after translation
-6. **Platform cert requirements** — check platform-specific localization requirements (age ratings text, legal notices, ESRB/PEGI/CERO text)
+6. **Platform cert requirements** — check platform-specific localization requirements (age ratings text, legal notices,
+   ESRB/PEGI/CERO text)
 
 Output a QA verdict per locale:
 
@@ -409,15 +434,18 @@ Output a QA verdict per locale:
 
 Ask: "May I write this localization QA report to `production/localization/loc-qa-[locale]-[date].md`?"
 
-**Gate integration**: The Polish → Release gate requires a PASS or PASS WITH CONDITIONS verdict for every locale being shipped. A FAIL blocks release for that locale only — other locales may still proceed if their QA passes.
+**Gate integration**: The Polish → Release gate requires a PASS or PASS WITH CONDITIONS verdict for every locale being
+shipped. A FAIL blocks release for that locale only — other locales may still proceed if their QA passes.
 
 ---
 
 ## Phase 3: Rules and Next Steps
 
 ### Rules
+
 - English (en) is always the source locale
-- Every string table entry must include a `context` field with translator notes, character limits, and placeholder meaning
+- Every string table entry must include a `context` field with translator notes, character limits, and placeholder
+  meaning
 - Never modify translation files directly — generate diffs for review
 - Character limits must be defined per-UI-element and enforced in validate mode
 - String freeze must be called before sending strings to translators — never translate a moving target
@@ -428,16 +456,17 @@ Ask: "May I write this localization QA report to `production/localization/loc-qa
 ### Recommended Workflow
 
 ```
-/gamedev:localize scan            → find hardcoded strings
-/gamedev:localize extract         → build string table
-/gamedev:localize freeze          → lock source before sending to translators
-/gamedev:localize brief           → generate translator briefing document
+/skill:gamedev-localize scan            → find hardcoded strings
+/skill:gamedev-localize extract         → build string table
+/skill:gamedev-localize freeze          → lock source before sending to translators
+/skill:gamedev-localize brief           → generate translator briefing document
 [Send to translators]
-/gamedev:localize validate        → check returned translations
-/gamedev:localize cultural-review → flag culturally sensitive content
-/gamedev:localize rtl-check       → if shipping Arabic / Hebrew / Persian
-/gamedev:localize vo-pipeline     → if shipping dubbed VO
-/gamedev:localize qa              → full localization QA pass
+/skill:gamedev-localize validate        → check returned translations
+/skill:gamedev-localize cultural-review → flag culturally sensitive content
+/skill:gamedev-localize rtl-check       → if shipping Arabic / Hebrew / Persian
+/skill:gamedev-localize vo-pipeline     → if shipping dubbed VO
+/skill:gamedev-localize qa              → full localization QA pass
 ```
 
-After `qa` returns PASS for all shipping locales, include the QA report path when running `/gamedev:gate-check release`.
+After `qa` returns PASS for all shipping locales, include the QA report path when running
+`/skill:gamedev-gate-check release`.

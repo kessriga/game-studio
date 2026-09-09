@@ -1,6 +1,6 @@
 ---
 name: gamedev-art-bible
-description: "Guided, section-by-section Art Bible authoring. Creates the visual identity specification that gates all asset production. Run after /gamedev:brainstorm is approved and before /gamedev:map-systems or any GDD authoring begins."
+description: "Guided, section-by-section Art Bible authoring. Creates the visual identity specification that gates all asset production. Run after /skill:gamedev-brainstorm is approved and before /skill:gamedev-map-systems or any GDD authoring begins."
 ---
 
 # Game Studio: art-bible

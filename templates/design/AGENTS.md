@@ -5,6 +5,7 @@ When authoring or editing files in this directory, follow these standards.
 ## GDD Files (`design/gdd/`)
 
 Every GDD must include all **8 required sections** in this order:
+
 1. Overview — one-paragraph summary
 2. Player Fantasy — intended feeling and experience
 3. Detailed Rules — unambiguous mechanics
@@ -20,13 +21,13 @@ Every GDD must include all **8 required sections** in this order:
 
 **Design order:** Foundation → Core → Feature → Presentation → Polish
 
-**Validation:** Run `/gamedev:design-review [path]` after authoring any GDD.
-Run `/gamedev:review-all-gdds` after completing a set of related GDDs.
+**Validation:** Run `/skill:gamedev-design-review [path]` after authoring any GDD. Run `/skill:gamedev-review-all-gdds`
+after completing a set of related GDDs.
 
 ## Quick Specs (`design/quick-specs/`)
 
-Lightweight specs for tuning changes, minor mechanics, or balance adjustments.
-Use `/gamedev:quick-design` to author.
+Lightweight specs for tuning changes, minor mechanics, or balance adjustments. Use `/skill:gamedev-quick-design` to
+author.
 
 ## UX Specs (`design/ux/`)
 
@@ -35,4 +36,5 @@ Use `/gamedev:quick-design` to author.
 - Interaction pattern library: `design/ux/interaction-patterns.md`
 - Accessibility requirements: `design/ux/accessibility-requirements.md`
 
-Use `/gamedev:ux-design` to author. Validate with `/gamedev:ux-review` before passing to `/gamedev:team-ui`.
+Use `/skill:gamedev-ux-design` to author. Validate with `/skill:gamedev-ux-review` before passing to
+`/skill:gamedev-team-ui`.

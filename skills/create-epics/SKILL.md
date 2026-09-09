@@ -1,36 +1,35 @@
 ---
 name: create-epics
-description: "Translate approved GDDs + architecture into epics — one epic per architectural module. Defines scope, governing ADRs, engine risk, and untraced requirements. Does NOT break into stories — run /gamedev:create-stories [epic-slug] after each epic is created."
-argument-hint: "[system-name | layer: foundation|core|feature|presentation | all] [--review full|lean|solo]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Task, AskUserQuestion, mcp__backlog__milestone_add, mcp__backlog__milestone_list, mcp__backlog__milestone_rename
-model: sonnet
-agent: technical-director
+description: "Translate approved GDDs + architecture into epics — one epic per architectural module. Defines scope, governing ADRs, engine risk, and untraced requirements. Does NOT break into stories — run /skill:gamedev-create-stories [epic-slug] after each epic is created."
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [system-name | layer: foundation|core|feature|presentation | all] [--review full|lean|solo]
+
+**Primary role:** Read `../../agents/technical-director.md` before following this workflow.
+
 # Create Epics
 
-An epic is a named, bounded body of work that maps to one architectural module.
-It defines **what** needs to be built and **who owns it architecturally**. It
-does not prescribe implementation steps — that is the job of stories.
+An epic is a named, bounded body of work that maps to one architectural module. It defines **what** needs to be built
+and **who owns it architecturally**. It does not prescribe implementation steps — that is the job of stories.
 
-**Run this skill once per layer** as you approach that layer in development.
-Do not create Feature layer epics until Core is nearly complete — the design
-will have changed.
+**Run this skill once per layer** as you approach that layer in development. Do not create Feature layer epics until
+Core is nearly complete — the design will have changed.
 
-**Output:** `production/epics/[epic-slug]/EPIC.md` (prose) + a Backlog milestone (tracking) + `production/epics/index.md` (prose navigation map)
+**Output:** `production/epics/[epic-slug]/EPIC.md` (prose) + a Backlog milestone (tracking) +
+`production/epics/index.md` (prose navigation map)
 
-**Next step after each epic:** `/gamedev:create-stories [epic-slug]`
+**Next step after each epic:** `/skill:gamedev-create-stories [epic-slug]`
 
-**When to run:** After `/gamedev:create-control-manifest` and `/gamedev:architecture-review` pass.
+**When to run:** After `/skill:gamedev-create-control-manifest` and `/skill:gamedev-architecture-review` pass.
 
 ---
 
 ## 1. Parse Arguments
 
 Resolve the review mode (once, store for all gate spawns this run):
+
 1. If `--review [full|lean|solo]` was passed → use that
 2. Else read `production/review-mode.txt` → use that value
 3. Else → default to `solo`
@@ -38,12 +37,13 @@ Resolve the review mode (once, store for all gate spawns this run):
 See `../../docs/director-gates.md` for the full check pattern.
 
 **Modes:**
-- `/gamedev:create-epics all` — process all systems in layer order
-- `/gamedev:create-epics layer: foundation` — Foundation layer only
-- `/gamedev:create-epics layer: core` — Core layer only
-- `/gamedev:create-epics layer: feature` — Feature layer only
-- `/gamedev:create-epics layer: presentation` — Presentation layer only
-- `/gamedev:create-epics [system-name]` — one specific system
+
+- `/skill:gamedev-create-epics all` — process all systems in layer order
+- `/skill:gamedev-create-epics layer: foundation` — Foundation layer only
+- `/skill:gamedev-create-epics layer: core` — Core layer only
+- `/skill:gamedev-create-epics layer: feature` — Feature layer only
+- `/skill:gamedev-create-epics layer: presentation` — Presentation layer only
+- `/skill:gamedev-create-epics [system-name]` — one specific system
 - No argument — ask: "Which layer or system would you like to create epics for?"
 
 ---
@@ -58,19 +58,21 @@ Grep all GDDs for their `## Summary` sections before reading anything fully:
 Grep pattern="## Summary" glob="design/gdd/*.md" output_mode="content" -A 5
 ```
 
-For `layer:` or `[system-name]` modes: filter to only in-scope GDDs based on
-the Summary quick-reference. Skip full-reading anything out of scope.
+For `layer:` or `[system-name]` modes: filter to only in-scope GDDs based on the Summary quick-reference. Skip
+full-reading anything out of scope.
 
 ### Step 2b — Full document load (in-scope systems only)
 
-Using the Step 2a grep results, identify which systems are in scope. Read full documents **only for in-scope systems** — do not read GDDs or ADRs for out-of-scope systems or layers.
+Using the Step 2a grep results, identify which systems are in scope. Read full documents **only for in-scope systems** —
+do not read GDDs or ADRs for out-of-scope systems or layers.
 
 Read for in-scope systems:
 
 - `design/gdd/systems-index.md` — authoritative system list, layers, priority
 - In-scope GDDs only (Approved or Designed status, filtered by Step 2a results)
 - `docs/architecture/architecture.md` — module ownership and API boundaries
-- Accepted ADRs **whose domains cover in-scope systems only** — read the "GDD Requirements Addressed", "Decision", and "Engine Compatibility" sections; skip ADRs for unrelated domains
+- Accepted ADRs **whose domains cover in-scope systems only** — read the "GDD Requirements Addressed", "Decision", and
+  "Engine Compatibility" sections; skip ADRs for unrelated domains
 - `docs/architecture/control-manifest.md` — manifest version date from header
 - `docs/architecture/tr-registry.yaml` — for tracing requirements to ADR coverage
 - `docs/engine-reference/[engine]/VERSION.md` — engine name, version, risk levels
@@ -82,6 +84,7 @@ Report: "Loaded [N] GDDs, [M] ADRs, engine: [name + version]."
 ## 3. Processing Order
 
 Process in dependency-safe layer order:
+
 1. **Foundation** (no dependencies)
 2. **Core** (depends on Foundation)
 3. **Feature** (depends on Core)
@@ -96,6 +99,7 @@ Within each layer, use the order from `systems-index.md`.
 For each system, map it to an architectural module from `architecture.md`.
 
 Check ADR coverage against the TR registry:
+
 - **Traced requirements**: TR-IDs that have an Accepted ADR covering them
 - **Untraced requirements**: TR-IDs with no ADR — warn before proceeding
 
@@ -114,11 +118,11 @@ Present to user before writing anything:
 ```
 
 If there are untraced requirements:
-> "⚠️ [N] requirements in [system] have no ADR. The epic can be created, but
-> stories for these requirements will be marked Blocked until ADRs exist.
-> Run `/gamedev:architecture-decision` first, or proceed with placeholders."
+> "⚠️ [N] requirements in [system] have no ADR. The epic can be created, but stories for these requirements will be
+> marked Blocked until ADRs exist. Run `/skill:gamedev-architecture-decision` first, or proceed with placeholders."
 
-Use `AskUserQuestion`:
+Use a user-input tool or chat:
+
 - Prompt: "Shall I create Epic: [name]?"
 - Options:
   - `[A] Yes, create it`
@@ -130,28 +134,32 @@ Use `AskUserQuestion`:
 ## 4b. Producer Epic Structure Gate
 
 **Review mode check** — apply before spawning PR-EPIC:
+
 - `solo` → skip. Note: "PR-EPIC skipped — Solo mode." Proceed to Step 5 (write epic files).
 - `lean` → skip (not a PHASE-GATE). Note: "PR-EPIC skipped — Lean mode." Proceed to Step 5 (write epic files).
 - `full` → spawn as normal.
 
-After all epics for the current layer are defined (Step 4 completed for all in-scope systems), and before writing any files, spawn `producer` via Task using gate **PR-EPIC** (`../../docs/director-gates.md`).
+After all epics for the current layer are defined (Step 4 completed for all in-scope systems), and before writing any
+files, spawn `gamedev:producer` through authorized delegation using gate **PR-EPIC** (`../../docs/director-gates.md`).
 
-Pass: the full epic structure summary (all epics, their scope summaries, governing ADR counts), the layer being processed, milestone timeline and team capacity.
+Pass: the full epic structure summary (all epics, their scope summaries, governing ADR counts), the layer being
+processed, milestone timeline and team capacity.
 
 Present the producer's assessment.
 
-If UNREALISTIC: offer to revise epic boundaries (split overscoped or merge underscoped epics). Revise and re-run the gate before writing.
+If UNREALISTIC: offer to revise epic boundaries (split overscoped or merge underscoped epics). Revise and re-run the
+gate before writing.
 
-If CONCERNS, use `AskUserQuestion`:
+If CONCERNS, use a user-input tool or chat:
+
 - Prompt: "Producer raised concerns about the epic structure. How do you want to proceed?"
 - Options:
   - `[A] Proceed as planned — I accept the producer's concerns`
   - `[B] Revise epic boundaries — split or merge as recommended`
   - `[C] Stop — I want to reconsider the scope`
 
-If [A]: proceed to Step 5.
-If [B]: revise epic definitions from Step 4 and re-run the producer gate.
-If [C]: stop. Verdict: **BLOCKED** — user wants to reconsider epic scope.
+If [A]: proceed to Step 5. If [B]: revise epic definitions from Step 4 and re-run the producer gate. If [C]: stop.
+Verdict: **BLOCKED** — user wants to reconsider epic scope.
 
 Do not write epic files until the producer gate resolves.
 
@@ -172,7 +180,7 @@ After user confirms, write:
 > **GDD**: design/gdd/[filename].md
 > **Architecture Module**: [module name]
 > **Milestone**: [epic name] *(tracked in Backlog; this `.md` is the prose spec)*
-> **Stories**: Not yet created — run `/gamedev:create-stories [epic-slug]`
+> **Stories**: Not yet created — run `/skill:gamedev-create-stories [epic-slug]`
 
 ## Overview
 
@@ -195,29 +203,34 @@ and the architecture module's stated responsibilities]
 ## Definition of Done
 
 This epic is complete when:
-- All stories are implemented, reviewed, and closed via `/gamedev:story-done`
+- All stories are implemented, reviewed, and closed via `/skill:gamedev-story-done`
 - All acceptance criteria from `design/gdd/[filename].md` are verified
 - All Logic and Integration stories have passing test files in `tests/`
 - All Visual/Feel and UI stories have evidence docs with sign-off in `production/qa/evidence/`
 
 ## Next Step
 
-Run `/gamedev:create-stories [epic-slug]` to break this epic into implementable stories.
+Run `/skill:gamedev-create-stories [epic-slug]` to break this epic into implementable stories.
 ```
 
 ### Mint the Backlog milestone
 
-After writing `EPIC.md`, create the tracking milestone with `mcp__backlog__milestone_add`:
-- `name`: the epic name (e.g. "Combat System") — story tasks are later assigned to this milestone by `/gamedev:create-stories`
+After writing `EPIC.md`, create the tracking milestone with Backlog `milestone_add`:
+
+- `name`: the epic name (e.g. "Combat System") — story tasks are later assigned to this milestone by
+  `/skill:gamedev-create-stories`
 - `description`: the epic's goal and Definition of Done (a compact form of the EPIC.md Overview + Definition of Done)
 
-First `milestone_list` to check the milestone does not already exist (idempotent re-runs). If an epic is later renamed, use `milestone_rename` to keep the milestone in sync with `EPIC.md`.
+First `milestone_list` to check the milestone does not already exist (idempotent re-runs). If an epic is later renamed,
+use `milestone_rename` to keep the milestone in sync with `EPIC.md`.
 
-The milestone is the epic's live tracking home; `EPIC.md` is its prose spec. Backlog owns roster and status — do not track story status in `EPIC.md`.
+The milestone is the epic's live tracking home; `EPIC.md` is its prose spec. Backlog owns roster and status — do not
+track story status in `EPIC.md`.
 
 ### Update `production/epics/index.md`
 
-Create or update the master index as a **prose navigation map** — no Status or story-count columns (those live in Backlog):
+Create or update the master index as a **prose navigation map** — no Status or story-count columns (those live in
+Backlog):
 
 ```markdown
 # Epics Index
@@ -239,10 +252,10 @@ Engine: [name + version]
 
 After writing all epics for the requested scope:
 
-- **Foundation + Core complete**: These are required for the Pre-Production →
-  Production gate. Run `/gamedev:gate-check production` to check readiness.
-- **Reminder**: Epics define scope. Stories define implementation steps. Run
-  `/gamedev:create-stories [epic-slug]` for each epic before developers can pick up work.
+- **Foundation + Core complete**: These are required for the Pre-Production → Production gate. Run
+  `/skill:gamedev-gate-check production` to check readiness.
+- **Reminder**: Epics define scope. Stories define implementation steps. Run `/skill:gamedev-create-stories [epic-slug]`
+  for each epic before developers can pick up work.
 
 ---
 
@@ -256,5 +269,5 @@ After writing all epics for the requested scope:
 
 After all requested epics are processed:
 
-- **Verdict: COMPLETE** — [N] epic(s) written. Run `/gamedev:create-stories [epic-slug]` per epic.
+- **Verdict: COMPLETE** — [N] epic(s) written. Run `/skill:gamedev-create-stories [epic-slug]` per epic.
 - **Verdict: BLOCKED** — user declined all epics, or no eligible systems found.

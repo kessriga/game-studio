@@ -1,17 +1,16 @@
 ---
 name: playtest-report
 description: "Generates a structured playtest report template or analyzes existing playtest notes into a structured format. Use this to standardize playtest feedback collection and analysis."
-argument-hint: "[new|analyze path-to-notes] [--review full|lean|solo]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Task, AskUserQuestion
-model: sonnet
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
 
+**Arguments:** [new|analyze path-to-notes] [--review full|lean|solo]
+
 ## Phase 1: Parse Arguments
 
 Resolve the review mode (once, store for all gate spawns this run):
+
 1. If `--review [full|lean|solo]` was passed → use that
 2. Else read `production/review-mode.txt` → use that value
 3. Else → default to `solo`
@@ -23,7 +22,10 @@ Determine the mode:
 - `new` → generate a blank playtest report template
 - `analyze [path]` → read raw notes and fill in the template with structured findings
 
-For both modes, follow the Playtest Discipline in `../../docs/game-design-lenses.md`: every test answers a *stated question* (not "is it fun?"), watch faces not screens, and debrief with FFWWDD (Frustrating / Favorite / Wanted-but-couldn't / magic-Wand / were-Doing / Describe-to-a-friend). Cadence is WUBALEW — when useful, at least weekly.
+For both modes, follow the Playtest Discipline in `../../docs/game-design-lenses.md`: every test answers a
+*stated question* (not "is it fun?"), watch faces not screens, and debrief with FFWWDD (Frustrating / Favorite /
+Wanted-but-couldn't / magic-Wand / were-Doing / Describe-to-a-friend). Cadence is WUBALEW — when useful, at least
+weekly.
 
 ---
 
@@ -97,7 +99,8 @@ Generate this template and output it to the user:
 
 ## Phase 2B: Analyze Mode
 
-Read the raw notes at the provided path. Cross-reference with existing design documents. Fill in the template above with structured findings. Flag any playtest observations that conflict with design intent.
+Read the raw notes at the provided path. Cross-reference with existing design documents. Fill in the template above with
+structured findings. Flag any playtest observations that conflict with design intent.
 
 ---
 
@@ -105,16 +108,19 @@ Read the raw notes at the provided path. Cross-reference with existing design do
 
 Categorize all findings into four buckets:
 
-- **Design changes needed** — fun issues, player confusion, broken mechanics, observations that conflict with the GDD's intended experience
+- **Design changes needed** — fun issues, player confusion, broken mechanics, observations that conflict with the GDD's
+  intended experience
 - **Balance adjustments** — numbers feel wrong, difficulty too spiked or too flat
 - **Bug reports** — clear implementation defects that are reproducible
 - **Polish items** — not blocking progress, but friction or feel issues for later
 
 Present the categorized list, then route:
 
-- **Design changes:** "Run `/gamedev:propagate-design-change [path]` on the affected design document to find downstream impacts before making changes."
-- **Balance adjustments:** "Run `/gamedev:balance-check [system]` to verify the full balance picture before tuning values."
-- **Bugs:** "Use `/gamedev:bug-report` to formally track these."
+- **Design changes:** "Run `/skill:gamedev-propagate-design-change [path]` on the affected design document to find
+  downstream impacts before making changes."
+- **Balance adjustments:** "Run `/skill:gamedev-balance-check [system]` to verify the full balance picture before tuning
+  values."
+- **Bugs:** "Use `/skill:gamedev-bug-report` to formally track these."
 - **Polish items:** "Add to the polish backlog in `production/` when the team reaches that phase."
 
 ---
@@ -122,15 +128,20 @@ Present the categorized list, then route:
 ## Phase 3b: Creative Director Player Experience Review
 
 **Review mode check** — apply before spawning CD-PLAYTEST:
+
 - `solo` → skip. Note: "CD-PLAYTEST skipped — Solo mode." Proceed to Phase 4 (save the report).
 - `lean` → skip (not a PHASE-GATE). Note: "CD-PLAYTEST skipped — Lean mode." Proceed to Phase 4 (save the report).
 - `full` → spawn as normal.
 
-After categorising findings, spawn `creative-director` via Task using gate **CD-PLAYTEST** (`../../docs/director-gates.md`).
+After categorising findings, spawn `gamedev:creative-director` through authorized delegation using gate **CD-PLAYTEST**
+(`../../docs/director-gates.md`).
 
-Pass: the structured report content, game pillars and core fantasy (from `design/gdd/game-concept.md`), the specific hypothesis being tested.
+Pass: the structured report content, game pillars and core fantasy (from `design/gdd/game-concept.md`), the specific
+hypothesis being tested.
 
-Present the creative director's assessment before saving the report. If CONCERNS or REJECT, add a `## Creative Director Assessment` section to the report capturing the verdict and feedback. If APPROVE, note the approval in the report.
+Present the creative director's assessment before saving the report. If CONCERNS or REJECT, add a
+`## Creative Director Assessment` section to the report capturing the verdict and feedback. If APPROVE, note the
+approval in the report.
 
 ---
 
@@ -147,5 +158,5 @@ If yes, write the file, creating the directory if needed.
 Verdict: **COMPLETE** — playtest report generated.
 
 - Act on the highest-priority finding category first.
-- After addressing design changes: re-run `/gamedev:design-review` on the updated GDD.
+- After addressing design changes: re-run `/skill:gamedev-design-review` on the updated GDD.
 - After fixing bugs: re-prioritise bugs on the Backlog board (filter by the `bug` label).

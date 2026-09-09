@@ -1,20 +1,18 @@
 ---
 name: gate-check
 description: "Validate readiness to advance between development phases. Produces a PASS/CONCERNS/FAIL verdict with specific blockers and required artifacts. Use when user says 'are we ready to move to X', 'can we advance to production', 'check if we can start the next phase', 'pass the gate'."
-argument-hint: "[target-phase: systems-design | technical-setup | pre-production | production | polish | release] [--review full|lean|solo]"
-user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion
-model: opus
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
+
+**Arguments:** [target-phase: systems-design | technical-setup | pre-production | production | polish | release] [--review full|lean|solo]
 
 # Phase Gate Validation
 
 This skill validates whether the project is ready to advance to the next development phase. It checks for required
 artifacts, quality standards, and blockers.
 
-**Distinct from `/gamedev:project-stage-detect`**: That skill is diagnostic ("where are we?"). This skill is
+**Distinct from `/skill:gamedev-project-stage-detect`**: That skill is diagnostic ("where are we?"). This skill is
 prescriptive ("are we ready to advance?" with a formal verdict).
 
 ## Production Stages (7)
@@ -36,7 +34,7 @@ The next status check reads this saved stage.
 
 ## 1. Parse Arguments
 
-**Target phase:** `$ARGUMENTS[0]` (blank = auto-detect current stage, then validate next transition)
+**Target phase:** the first invocation argument (blank = auto-detect current stage, then validate next transition)
 
 Also resolve the review mode (once, store for all gate spawns this run):
 
@@ -48,11 +46,11 @@ Note: in `solo` mode, director spawns (CD-PHASE-GATE, TD-PHASE-GATE, PR-PHASE-GA
 gate-check becomes artifact-existence checks only. In `lean` mode, all four directors still run (phase gates are the
 purpose of lean mode).
 
-- **With argument**: `/gamedev:gate-check production` — validate readiness for that specific phase
-- **No argument**: Auto-detect current stage using the same heuristics as `/gamedev:project-stage-detect`, then
+- **With argument**: `/skill:gamedev-gate-check production` — validate readiness for that specific phase
+- **No argument**: Auto-detect current stage using the same heuristics as `/skill:gamedev-project-stage-detect`, then
   **confirm with the user before running**:
 
-  Use `AskUserQuestion`:
+  Use a user-input tool or chat:
   - Prompt: "Detected stage: **[current stage]**. Running gate for [Current] → [Next] transition. Is this correct?"
   - Options:
     - `[A] Yes — run this gate`
@@ -78,12 +76,12 @@ purpose of lean mode).
 **Recommended (not blocking):**
 
 - [ ] Concept prototype exists in `prototypes/` with a REPORT.md showing PROCEED verdict
-      (`/gamedev:prototype [core-mechanic]`) — skipping this means GDDs may be written for an idea that hasn't been
-      played. Acceptable if the concept is proven by other means.
+      (`/skill:gamedev-prototype [core-mechanic]`) — skipping this means GDDs may be written for an idea that hasn't
+      been played. Acceptable if the concept is proven by other means.
 
 **Quality Checks:**
 
-- [ ] Game concept has been reviewed (`/gamedev:design-review` verdict not MAJOR REVISION NEEDED)
+- [ ] Game concept has been reviewed (`/skill:gamedev-design-review` verdict not MAJOR REVISION NEEDED)
 - [ ] Core loop is described and understood
 - [ ] Target audience is identified
 - [ ] Visual Identity Anchor contains a one-line visual rule and at least 2 supporting visual principles
@@ -95,14 +93,14 @@ purpose of lean mode).
 **Required Artifacts:**
 
 - [ ] Systems index exists at `design/gdd/systems-index.md` with at least MVP systems enumerated
-- [ ] All MVP-tier GDDs exist in `design/gdd/` and individually pass `/gamedev:design-review`
-- [ ] A cross-GDD review report exists in `design/gdd/` (from `/gamedev:review-all-gdds`)
+- [ ] All MVP-tier GDDs exist in `design/gdd/` and individually pass `/skill:gamedev-design-review`
+- [ ] A cross-GDD review report exists in `design/gdd/` (from `/skill:gamedev-review-all-gdds`)
 
 **Quality Checks:**
 
 - [ ] All MVP GDDs pass individual design review (8 required sections, no MAJOR REVISION NEEDED verdict)
-- [ ] `/gamedev:review-all-gdds` verdict is not FAIL (cross-GDD consistency and design theory checks pass)
-- [ ] All cross-GDD consistency issues flagged by `/gamedev:review-all-gdds` are resolved or explicitly accepted
+- [ ] `/skill:gamedev-review-all-gdds` verdict is not FAIL (cross-GDD consistency and design theory checks pass)
+- [ ] All cross-GDD consistency issues flagged by `/skill:gamedev-review-all-gdds` are resolved or explicitly accepted
 - [ ] System dependencies are mapped in the systems index and are bidirectionally consistent
 - [ ] MVP priority tier is defined
 - [ ] No stale GDD references flagged (older GDDs updated to reflect decisions made in later GDDs)
@@ -114,7 +112,7 @@ purpose of lean mode).
 **Required Artifacts:**
 
 - [ ] Engine chosen (AGENTS.md Technology Stack names an engine rather than a placeholder)
-- [ ] Technical preferences configured (`.claude/docs/technical-preferences.md` populated)
+- [ ] Technical preferences configured (`docs/technical-preferences.md` populated)
 - [ ] Art bible exists at `design/art/art-bible.md` with at least Sections 1–4 (Visual Identity Foundation)
 - [ ] At least 3 Architecture Decision Records in `docs/architecture/` covering Foundation-layer systems (scene
       management, event architecture, save/load)
@@ -124,7 +122,7 @@ purpose of lean mode).
 - [ ] At least one example test file exists to confirm the framework is functional
 - [ ] Master architecture document exists at `docs/architecture/architecture.md`
 - [ ] Architecture traceability index exists at `docs/architecture/requirements-traceability.md`
-- [ ] `/gamedev:architecture-review` has been run (a review report file exists in `docs/architecture/`)
+- [ ] `/skill:gamedev-architecture-review` has been run (a review report file exists in `docs/architecture/`)
 - [ ] `design/accessibility-requirements.md` exists with accessibility tier committed
 - [ ] `design/ux/interaction-patterns.md` exists (pattern library initialized, even if minimal)
 
@@ -152,7 +150,7 @@ A→B→C→A):
 **Engine Validation** (read `docs/engine-reference/[engine]/VERSION.md` first):
 
 - [ ] ADRs that touch post-cutoff engine APIs are flagged with Knowledge Risk: HIGH/MEDIUM
-- [ ] `/gamedev:architecture-review` engine audit shows no deprecated API usage
+- [ ] `/skill:gamedev-architecture-review` engine audit shows no deprecated API usage
 - [ ] All ADRs agree on the same engine version (no stale version references)
 
 ---
@@ -161,22 +159,22 @@ A→B→C→A):
 
 **Required Artifacts:**
 
-- [ ] Vertical slice exists in `prototypes/` with a REPORT.md (run `/gamedev:vertical-slice`) —
+- [ ] Vertical slice exists in `prototypes/` with a REPORT.md (run `/skill:gamedev-vertical-slice`) —
       **recommended, not blocking**; if absent, surface as CONCERNS
 - [ ] First milestone is set up on the Backlog board with at least one task (`backlog/tasks/` is non-empty)
 - [ ] Art bible is complete (all 9 sections) and AD-ART-BIBLE sign-off verdict is recorded in `design/art/art-bible.md`
-- [ ] Entity inventory exists at `design/assets/entity-inventory.md` (recommended — run `/gamedev:asset-spec` with no
-      arguments to generate collaboratively from GDDs + art bible)
+- [ ] Entity inventory exists at `design/assets/entity-inventory.md` (recommended — run `/skill:gamedev-asset-spec` with
+      no arguments to generate collaboratively from GDDs + art bible)
 - [ ] All MVP-tier GDDs from systems index are complete
 - [ ] Master architecture document exists at `docs/architecture/architecture.md`
 - [ ] At least 3 ADRs covering Foundation-layer decisions exist in `docs/architecture/`
 - [ ] All Foundation and Core layer ADRs have status `Accepted` (not `Proposed`) — stories cannot be unblocked until
       their governing ADR is accepted
 - [ ] Control manifest exists at `docs/architecture/control-manifest.md` (generated by
-      `/gamedev:create-control-manifest` from Accepted ADRs)
+      `/skill:gamedev-create-control-manifest` from Accepted ADRs)
 - [ ] Epics defined in `production/epics/` with at least Foundation and Core layer epics present (use
-      `/gamedev:create-epics layer: foundation` and `/gamedev:create-epics layer: core` to create them, then
-      `/gamedev:create-stories [epic-slug]` for each epic)
+      `/skill:gamedev-create-epics layer: foundation` and `/skill:gamedev-create-epics layer: core` to create them, then
+      `/skill:gamedev-create-stories [epic-slug]` for each epic)
 - [ ] Vertical Slice build exists and is playable (not just scope-defined) — **recommended, not blocking**; if absent,
       surface as CONCERNS
 - [ ] Vertical Slice has been playtested with at least 1 documented session — **recommended, not blocking**; if absent,
@@ -185,7 +183,7 @@ A→B→C→A):
       absent, surface as CONCERNS
 - [ ] UX specs exist for key screens: main menu, core gameplay HUD (at `design/ux/`), pause menu
 - [ ] HUD design document exists at `design/ux/hud.md` (if game has in-game HUD)
-- [ ] All key screen UX specs have passed `/gamedev:ux-review` (verdict APPROVED or NEEDS REVISION accepted)
+- [ ] All key screen UX specs have passed `/skill:gamedev-ux-review` (verdict APPROVED or NEEDS REVISION accepted)
 
 **Quality Checks:**
 
@@ -201,8 +199,8 @@ A→B→C→A):
 - [ ] Architecture document has no unresolved open questions in Foundation or Core layers
 - [ ] All ADRs have Engine Compatibility sections stamped with the engine version
 - [ ] All ADRs have ADR Dependencies sections (even if all fields are "None")
-- [ ] Manual validation confirms GDDs + architecture + epics are coherent (run `/gamedev:review-all-gdds` and
-      `/gamedev:architecture-review` if not done recently)
+- [ ] Manual validation confirms GDDs + architecture + epics are coherent (run `/skill:gamedev-review-all-gdds` and
+      `/skill:gamedev-architecture-review` if not done recently)
 - [ ] **Core fantasy is delivered** — at least one playtester independently described an experience that matches the
       Player Fantasy section of the core system GDDs (without being prompted).
 
@@ -234,12 +232,12 @@ A→B→C→A):
 - [ ] Test files exist in `tests/unit/` and `tests/integration/` covering Logic and Integration stories
 - [ ] All Logic stories in this milestone have corresponding unit test files in `tests/unit/`
 - [ ] Smoke check has been run with a PASS or PASS WITH WARNINGS verdict — report exists in `production/qa/`
-- [ ] QA plan exists in `production/qa/` (generated by `/gamedev:qa-plan`) covering this milestone or final production
-      milestone
-- [ ] At least one QA plan exists in `production/qa/` covering this production phase — run `/gamedev:qa-plan` if missing
-      (CONCERNS — advisory, not blocking)
-- [ ] QA sign-off report exists in `production/qa/` (generated by `/gamedev:team-qa`) with verdict APPROVED or APPROVED
-      WITH CONDITIONS
+- [ ] QA plan exists in `production/qa/` (generated by `/skill:gamedev-qa-plan`) covering this milestone or final
+      production milestone
+- [ ] At least one QA plan exists in `production/qa/` covering this production phase — run `/skill:gamedev-qa-plan` if
+      missing (CONCERNS — advisory, not blocking)
+- [ ] QA sign-off report exists in `production/qa/` (generated by `/skill:gamedev-team-qa`) with verdict APPROVED or
+      APPROVED WITH CONDITIONS
 - [ ] At least 3 distinct playtest sessions documented in `production/playtests/`
 - [ ] Playtest reports cover: new player experience, mid-game systems, and difficulty curve
 - [ ] Fun hypothesis from Game Concept has been explicitly validated or revised
@@ -266,20 +264,20 @@ A→B→C→A):
 - [ ] All features from milestone plan are implemented
 - [ ] Content is complete (all levels, assets, dialogue referenced in design docs exist)
 - [ ] Localization strings are externalized (no hardcoded player-facing text in `src/`)
-- [ ] QA test plan exists (`/gamedev:qa-plan` output in `production/qa/`)
-- [ ] QA sign-off report exists (`/gamedev:team-qa` output — APPROVED or APPROVED WITH CONDITIONS)
+- [ ] QA test plan exists (`/skill:gamedev-qa-plan` output in `production/qa/`)
+- [ ] QA sign-off report exists (`/skill:gamedev-team-qa` output — APPROVED or APPROVED WITH CONDITIONS)
 - [ ] All Must Have story test evidence is present (Logic/Integration: test files pass; Visual/Feel/UI: sign-off docs in
       `production/qa/evidence/`)
 - [ ] Smoke check passes cleanly (PASS verdict) on the release candidate build
 - [ ] No test regressions from previous milestone (test suite passes fully)
-- [ ] Balance data has been reviewed (`/gamedev:balance-check` run)
-- [ ] Release checklist completed (`/gamedev:release-checklist` or `/gamedev:launch-checklist` run)
+- [ ] Balance data has been reviewed (`/skill:gamedev-balance-check` run)
+- [ ] Release checklist completed (`/skill:gamedev-release-checklist` or `/skill:gamedev-launch-checklist` run)
 - [ ] Store metadata prepared (if applicable)
 - [ ] Changelog / patch notes drafted
 
 **Quality Checks:**
 
-- [ ] Full QA pass signed off by `qa-lead`
+- [ ] Full QA pass signed off by `gamedev:qa-lead`
 - [ ] All tests passing
 - [ ] Performance targets met across all target platforms
 - [ ] No known critical, high, or medium-severity bugs
@@ -301,23 +299,23 @@ For each item in the target gate:
 
 ### Artifact Checks
 
-- Use `Glob` and `Read` to verify files exist and have meaningful content
+- Use file discovery and file reading to verify files exist and have meaningful content
 - Don't just check existence — verify the file has real content (not just a template header)
 - For code checks, verify directory structure and file counts
 
 **Systems Design → Technical Setup gate — cross-GDD review check**: Use `Glob('design/gdd/gdd-cross-review-*.md')` to
-find the `/gamedev:review-all-gdds` report. If no file matches, mark the "cross-GDD review report exists" artifact as
-**FAIL** and surface it prominently: "No `/gamedev:review-all-gdds` report found in `design/gdd/`. Run
-`/gamedev:review-all-gdds` before advancing to Technical Setup." If a file is found, read it and check the verdict line:
-a FAIL verdict means the cross-GDD consistency check failed and must be resolved before advancing.
+find the `/skill:gamedev-review-all-gdds` report. If no file matches, mark the "cross-GDD review report exists" artifact
+as **FAIL** and surface it prominently: "No `/skill:gamedev-review-all-gdds` report found in `design/gdd/`. Run
+`/skill:gamedev-review-all-gdds` before advancing to Technical Setup." If a file is found, read it and check the verdict
+line: a FAIL verdict means the cross-GDD consistency check failed and must be resolved before advancing.
 
 ### Quality Checks
 
-- For test checks: Run the test suite via `Bash` if a test runner is configured
-- For design review checks: `Read` the GDD and check for the 8 required sections
-- For performance checks: `Read` technical-preferences.md and compare against any profiling data in `tests/performance/`
-  or recent `/gamedev:perf-profile` output
-- For localization checks: `Grep` for hardcoded strings in `src/`
+- For test checks: Run the test suite via the shell if a test runner is configured
+- For design review checks: file reading the GDD and check for the 8 required sections
+- For performance checks: file reading technical-preferences.md and compare against any profiling data in
+  `tests/performance/` or recent `/skill:gamedev-perf-profile` output
+- For localization checks: content search for hardcoded strings in `src/`
 
 ### Cross-Reference Checks
 
@@ -333,7 +331,7 @@ For items that can't be automatically verified, **ask the user**:
 
 - "I can't automatically verify that the core loop plays well. Has it been playtested?"
 - "No playtest report found. Has informal testing been done?"
-- "Performance profiling data isn't available. Would you like to run `/gamedev:perf-profile`?"
+- "Performance profiling data isn't available. Would you like to run `/skill:gamedev-perf-profile`?"
 
 **Never assume PASS for unverifiable items.** Mark them as MANUAL CHECK NEEDED.
 
@@ -350,16 +348,16 @@ For items that can't be automatically verified, **ask the user**:
 
 (Review mode was resolved in Phase 1. Use that stored value here.)
 
-Before generating the final verdict, spawn all four directors as **parallel subagents** via Task using the parallel gate
-protocol from `../../docs/director-gates.md`. Issue all four Task calls simultaneously — do not wait for one before
-starting the next.
+Before generating the final verdict, spawn all four directors as **parallel subagents** through authorized delegation
+using the parallel gate protocol from `../../docs/director-gates.md`. Issue all four delegation calls simultaneously —
+do not wait for one before starting the next.
 
 **Spawn in parallel:**
 
-1. **`creative-director`** — gate **CD-PHASE-GATE** (`../../docs/director-gates.md`)
-2. **`technical-director`** — gate **TD-PHASE-GATE** (`../../docs/director-gates.md`)
-3. **`producer`** — gate **PR-PHASE-GATE** (`../../docs/director-gates.md`)
-4. **`art-director`** — gate **AD-PHASE-GATE** (`../../docs/director-gates.md`)
+1. **`gamedev:creative-director`** — gate **CD-PHASE-GATE** (`../../docs/director-gates.md`)
+2. **`gamedev:technical-director`** — gate **TD-PHASE-GATE** (`../../docs/director-gates.md`)
+3. **`gamedev:producer`** — gate **PR-PHASE-GATE** (`../../docs/director-gates.md`)
+4. **`gamedev:art-director`** — gate **AD-PHASE-GATE** (`../../docs/director-gates.md`)
 
 Pass to each: target phase name, list of artifacts present, and the context fields listed in that gate's definition.
 
@@ -408,7 +406,7 @@ Art Director:       [READY / CONCERNS / NOT READY]
 - [?] Core loop playtested — MANUAL CHECK NEEDED
 
 ### Blockers
-1. **No Architecture Decision Records** — Run `/gamedev:architecture-decision` to create one
+1. **No Architecture Decision Records** — Run `/skill:gamedev-architecture-decision` to create one
    covering core system architecture before entering production.
 2. **3 test failures** — Fix failing tests in tests/unit/ before advancing.
 
@@ -479,7 +477,7 @@ ask the user.
 When the verdict is **PASS** and the user confirms they want to advance:
 
 1. Write the new stage name to `production/stage.txt` (single line, no trailing newline)
-2. The next status check or Claude session-start hook reports this stage
+2. The next explicit status check or Pi progress refresh reports this stage
 
 Example: if passing the "Pre-Production → Production" gate:
 
@@ -493,8 +491,8 @@ echo -n "Production" > production/stage.txt
 
 ## 7. Closing Next-Step Widget
 
-After the verdict is presented and any stage.txt update is complete, close with a structured next-step prompt using
-`AskUserQuestion`.
+After the verdict is presented and any stage.txt update is complete, close with a structured next-step prompt using a
+user-input tool or chat.
 
 **Tailor the options to the gate that just ran:**
 
@@ -502,36 +500,38 @@ For **systems-design PASS**:
 
 ```
 Gate passed. What would you like to do next?
-[A] Run /gamedev:create-architecture — produce your master architecture blueprint and ADR work plan (recommended next step)
+[A] Run /skill:gamedev-create-architecture — produce your master architecture blueprint and ADR work plan (recommended next step)
 [B] Design more GDDs first — return here when all MVP systems are complete
 [C] Stop here for this session
 ```
 
-> **Note for systems-design PASS**: `/gamedev:create-architecture` is the required next step before writing any ADRs. It
-> produces the master architecture document and a prioritized list of ADRs to write. Running
-> `/gamedev:architecture-decision` without this step means writing ADRs without a blueprint — skip it at your own risk.
+> **Note for systems-design PASS**: `/skill:gamedev-create-architecture` is the required next step before writing any
+> ADRs. It produces the master architecture document and a prioritized list of ADRs to write. Running
+> `/skill:gamedev-architecture-decision` without this step means writing ADRs without a blueprint — skip it at your own
+> risk.
 
 For **technical-setup PASS**:
 
 ```
 Gate passed. What would you like to do next?
-[A] Run /gamedev:create-control-manifest — generate the layer rules manifest from your Accepted ADRs (do this first)
-[B] Run /gamedev:vertical-slice — build the Vertical Slice (do this before writing epics — validate fun first)
-[C] Write more ADRs first — run /gamedev:architecture-decision [next-system]
+[A] Run /skill:gamedev-create-control-manifest — generate the layer rules manifest from your Accepted ADRs (do this first)
+[B] Run /skill:gamedev-vertical-slice — build the Vertical Slice (do this before writing epics — validate fun first)
+[C] Write more ADRs first — run /skill:gamedev-architecture-decision [next-system]
 [D] Stop here for this session
 ```
 
 > **Note for technical-setup PASS**: The Pre-Production sequence is deliberately ordered to validate fun before
 > committing to detailed planning:
 >
-> 1. `/gamedev:create-control-manifest` — extract technical rules from Accepted ADRs (required before epics)
-> 2. `/gamedev:vertical-slice` — build the Vertical Slice **FIRST**, before writing epics or stories
-> 3. Playtest → `/gamedev:playtest-report` — at least 1 session required to pass the Pre-Production gate; 3+ recommended
->    before committing the full team
-> 4. `/gamedev:ux-design [screen]` — UX specs for main menu, core HUD, pause menu (if not done)
-> 5. `/gamedev:create-epics layer:foundation` then `/gamedev:create-epics layer:core` — plan after fun is validated
-> 6. `/gamedev:create-stories [epic-slug]` for each epic — mints Backlog tasks under the epic's milestone
-> 7. Work the Backlog board — pick the highest-priority ready task and run `/gamedev:dev-story`
+> 1. `/skill:gamedev-create-control-manifest` — extract technical rules from Accepted ADRs (required before epics)
+> 2. `/skill:gamedev-vertical-slice` — build the Vertical Slice **FIRST**, before writing epics or stories
+> 3. Playtest → `/skill:gamedev-playtest-report` — at least 1 session required to pass the Pre-Production gate; 3+
+>    recommended before committing the full team
+> 4. `/skill:gamedev-ux-design [screen]` — UX specs for main menu, core HUD, pause menu (if not done)
+> 5. `/skill:gamedev-create-epics layer:foundation` then `/skill:gamedev-create-epics layer:core` — plan after fun is
+>    validated
+> 6. `/skill:gamedev-create-stories [epic-slug]` for each epic — mints Backlog tasks under the epic's milestone
+> 7. Work the Backlog board — pick the highest-priority ready task and run `/skill:gamedev-dev-story`
 >
 > **Why prototype before epics?** If the prototype reveals the core loop needs to change, epics written before that
 > discovery will be partially wrong. Validate fun cheaply first, then plan in detail. This is the #1 lesson from GDC
@@ -545,44 +545,47 @@ For all other gates, offer the two most logical next steps for that phase plus "
 
 Based on the verdict, suggest specific next steps:
 
-- **No art bible?** → `/gamedev:art-bible` to create the visual identity specification
-- **Art bible exists but no asset specs?** → `/gamedev:asset-spec system:[name]` to generate per-asset visual specs and
-  generation prompts from approved GDDs
-- **No game concept?** → `/gamedev:brainstorm` to create one
-- **No systems index?** → `/gamedev:map-systems` to decompose the concept into systems
-- **Missing design docs?** → `/gamedev:reverse-document` or delegate to `game-designer`
-- **Small design change needed?** → `/gamedev:quick-design` for changes under ~4 hours (bypasses full GDD pipeline)
-- **No UX specs?** → `/gamedev:ux-design [screen name]` to author specs, or `/gamedev:team-ui [feature]` for full
-  pipeline
-- **UX specs not reviewed?** → `/gamedev:ux-review [file]` or `/gamedev:ux-review all` to validate
-- **No accessibility requirements doc?** → run `/gamedev:ux-design` which creates both
+- **No art bible?** → `/skill:gamedev-art-bible` to create the visual identity specification
+- **Art bible exists but no asset specs?** → `/skill:gamedev-asset-spec system:[name]` to generate per-asset visual
+  specs and generation prompts from approved GDDs
+- **No game concept?** → `/skill:gamedev-brainstorm` to create one
+- **No systems index?** → `/skill:gamedev-map-systems` to decompose the concept into systems
+- **Missing design docs?** → `/skill:gamedev-reverse-document` or delegate to `gamedev:game-designer`
+- **Small design change needed?** → `/skill:gamedev-quick-design` for changes under ~4 hours (bypasses full GDD
+  pipeline)
+- **No UX specs?** → `/skill:gamedev-ux-design [screen name]` to author specs, or `/skill:gamedev-team-ui [feature]` for
+  full pipeline
+- **UX specs not reviewed?** → `/skill:gamedev-ux-review [file]` or `/skill:gamedev-ux-review all` to validate
+- **No accessibility requirements doc?** → run `/skill:gamedev-ux-design` which creates both
   `design/accessibility-requirements.md` and `design/ux/interaction-patterns.md` in one step
-- **No interaction pattern library?** → `/gamedev:ux-design patterns` to initialize it
-- **GDDs not cross-reviewed?** → `/gamedev:review-all-gdds` (run after all MVP GDDs are individually approved)
-- **Cross-GDD consistency issues?** → fix flagged GDDs, then re-run `/gamedev:review-all-gdds`
-- **No test framework?** → `/gamedev:test-setup` to scaffold the framework for your engine
-- **No QA plan for the current epic?** → `/gamedev:qa-plan [epic]` to generate one before implementation begins
-- **Missing ADRs?** → `/gamedev:architecture-decision` for individual decisions
-- **No master architecture doc?** → `/gamedev:create-architecture` for the full blueprint
-- **ADRs missing engine compatibility sections?** → Re-run `/gamedev:architecture-decision` or manually add Engine
+- **No interaction pattern library?** → `/skill:gamedev-ux-design patterns` to initialize it
+- **GDDs not cross-reviewed?** → `/skill:gamedev-review-all-gdds` (run after all MVP GDDs are individually approved)
+- **Cross-GDD consistency issues?** → fix flagged GDDs, then re-run `/skill:gamedev-review-all-gdds`
+- **No test framework?** → `/skill:gamedev-test-setup` to scaffold the framework for your engine
+- **No QA plan for the current epic?** → `/skill:gamedev-qa-plan [epic]` to generate one before implementation begins
+- **Missing ADRs?** → `/skill:gamedev-architecture-decision` for individual decisions
+- **No master architecture doc?** → `/skill:gamedev-create-architecture` for the full blueprint
+- **ADRs missing engine compatibility sections?** → Re-run `/skill:gamedev-architecture-decision` or manually add Engine
   Compatibility sections to existing ADRs
-- **Missing control manifest?** → `/gamedev:create-control-manifest` (requires Accepted ADRs)
-- **Missing epics?** → `/gamedev:create-epics layer: foundation` then `/gamedev:create-epics layer: core` (requires
-  control manifest)
-- **Missing stories for an epic?** → `/gamedev:create-stories [epic-slug]` (run after each epic is created)
-- **Stories not implementation-ready?** → `/gamedev:story-readiness` to validate stories before developers pick them up
-- **Tests failing?** → delegate to `lead-programmer` or `qa-tester`
-- **No playtest data?** → `/gamedev:playtest-report`
+- **Missing control manifest?** → `/skill:gamedev-create-control-manifest` (requires Accepted ADRs)
+- **Missing epics?** → `/skill:gamedev-create-epics layer: foundation` then `/skill:gamedev-create-epics layer: core`
+  (requires control manifest)
+- **Missing stories for an epic?** → `/skill:gamedev-create-stories [epic-slug]` (run after each epic is created)
+- **Stories not implementation-ready?** → `/skill:gamedev-story-readiness` to validate stories before developers pick
+  them up
+- **Tests failing?** → delegate to `gamedev:lead-programmer` or `gamedev:qa-tester`
+- **No playtest data?** → `/skill:gamedev-playtest-report`
 - **No playtest sessions beyond the minimum?** → Additional sessions give more reliable signal. 3+ total is recommended
-  before committing the full team. Use `/gamedev:playtest-report` to structure findings.
+  before committing the full team. Use `/skill:gamedev-playtest-report` to structure findings.
 - **No Difficulty Curve doc?** → Create `design/difficulty-curve.md` from the template at
-  `../../docs/templates/difficulty-curve.md` — or use `/gamedev:quick-design "difficulty curve"` for a guided session.
+  `../../docs/templates/difficulty-curve.md` — or use `/skill:gamedev-quick-design "difficulty curve"` for a guided
+  session.
 - **No player journey map?** → Create `design/player-journey.md` from the template at
-  `../../docs/templates/player-journey.md` — or author it collaboratively using `/gamedev:ux-design` Phase 2b.
+  `../../docs/templates/player-journey.md` — or author it collaboratively using `/skill:gamedev-ux-design` Phase 2b.
 - **Need a progress snapshot?** → check the Backlog board (filter by milestone and status)
-- **Performance unknown?** → `/gamedev:perf-profile`
-- **Not localized?** → `/gamedev:localize`
-- **Ready for release?** → `/gamedev:launch-checklist`
+- **Performance unknown?** → `/skill:gamedev-perf-profile`
+- **Not localized?** → `/skill:gamedev-localize`
+- **Ready for release?** → `/skill:gamedev-launch-checklist`
 
 ---
 
@@ -596,8 +599,8 @@ This skill follows the collaborative design principle:
 4. **User decides**: The verdict is a recommendation — the user makes the final call
 5. **Get approval**: "May I write this gate check report to production/gate-checks/?"
 6. **Never auto-fix**: If required artifacts are missing, report the FAIL verdict and name the skill to run (e.g. "run
-   `/gamedev:test-setup`"). Do NOT create missing files or re-run the gate automatically. Creating files to manufacture
-   a PASS defeats the gate's purpose.
+   `/skill:gamedev-test-setup`"). Do NOT create missing files or re-run the gate automatically. Creating files to
+   manufacture a PASS defeats the gate's purpose.
 
 **Never** block a user from advancing — the verdict is advisory. Document the risks and let the user decide whether to
 proceed despite concerns.

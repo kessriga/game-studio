@@ -1,6 +1,6 @@
 ---
 name: gamedev-dev-story
-description: "Read a story file and implement it. Loads the full context (story, GDD requirement, ADR guidelines, control manifest), routes to the right programmer agent for the system and engine, implements the code and test, and confirms each acceptance criterion. The core implementation skill — run after /gamedev:story-readiness, before /gamedev:code-review and /gamedev:story-done."
+description: "Read a story file and implement it. Loads the full context (story, GDD requirement, ADR guidelines, control manifest), routes to the right programmer agent for the system and engine, implements the code and test, and confirms each acceptance criterion. The core implementation skill — run after /skill:gamedev-story-readiness, before /skill:gamedev-code-review and /skill:gamedev-story-done."
 ---
 
 # Game Studio: dev-story

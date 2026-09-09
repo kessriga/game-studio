@@ -1,7 +1,8 @@
 # Technical Requirement ID Registry
 #
 # PURPOSE: Persistent, stable IDs for every GDD technical requirement.
-# Prevents TR-ID renumbering across /gamedev:architecture-review runs, which would
+# Prevents TR-ID renumbering across /skill:gamedev-architecture-review
+#   runs, which would
 # break story references.
 #
 # RULES:
@@ -13,10 +14,13 @@
 #   - When a requirement is split or replaced: set status: superseded-by with
 #     the new TR-ID(s).
 #
-# WRITTEN BY: /gamedev:architecture-review (appends new entries, never overwrites)
-# READ BY:    /gamedev:create-stories (embed IDs in stories)
-#             /gamedev:story-done (look up current requirement text at review time)
-#             /gamedev:story-readiness (validate TR-ID exists and is active)
+# WRITTEN BY: /skill:gamedev-architecture-review (appends new entries,
+#   never overwrites)
+# READ BY:    /skill:gamedev-create-stories (embed IDs in stories)
+#             /skill:gamedev-story-done (look up current requirement
+#   text at review time)
+#             /skill:gamedev-story-readiness (validate TR-ID exists and
+#   is active)
 #
 # ID FORMAT: TR-[system-slug]-[NNN]
 #   system-slug = short slug matching the GDD system name
@@ -34,7 +38,8 @@ requirements: []
 # - id: TR-combat-001
 #   system: combat
 #   gdd: design/gdd/combat-system.md
-#   requirement: "Player takes damage from enemies based on attack power minus defence"
+#   requirement: "Player takes damage from enemies based on attack power
+#   minus defence"
 #   created: 2026-03-10
 #   revised: ""
 #   status: active

@@ -1,13 +1,15 @@
 # Collaborative Session Examples
 
-This directory contains realistic, end-to-end session transcripts showing how the Game Studio Agent Architecture works in practice. Each example demonstrates the **collaborative workflow** where agents ask questions, present options, and wait for user approval rather than autonomously generating content.
+This directory contains realistic, end-to-end session transcripts showing how the Game Studio Agent Architecture works
+in practice. Each example demonstrates the **collaborative workflow** where agents ask questions, present options, and
+wait for user approval rather than autonomously generating content.
 
 ---
 
 ## Visual Reference
 
-**New to the system? Start here:**
-[Skill Flow Diagrams](skill-flow-diagrams.md) — visual maps of all 7 phases and how skills chain together.
+**New to the system? Start here:** [Skill Flow Diagrams](skill-flow-diagrams.md) — visual maps of all 7 phases and how
+skills chain together.
 
 ---
 
@@ -16,33 +18,35 @@ This directory contains realistic, end-to-end session transcripts showing how th
 ### CORE WORKFLOW
 
 ### [Skill Flow Diagrams](skill-flow-diagrams.md)
-**Type:** Visual Reference
-**Complexity:** All levels
 
-Full pipeline overview (zero to ship), plus detailed chain diagrams for:
-design-system, story lifecycle, UX pipeline, and brownfield onboarding.
-**Start here if you want to understand how the pieces fit together.**
+**Type:** Visual Reference **Complexity:** All levels
+
+Full pipeline overview (zero to ship), plus detailed chain diagrams for: design-system, story lifecycle, UX pipeline,
+and brownfield onboarding. **Start here if you want to understand how the pieces fit together.**
 
 ---
 
-### [Session: Authoring a GDD with /gamedev:design-system](session-design-system-skill.md)
-**Type:** Design (skill-driven)
-**Skill:** `/gamedev:design-system`
-**Duration:** ~60 minutes (14 turns)
+### [Session: Authoring a GDD with /skill:gamedev-design-system](session-design-system-skill.md)
+
+**Type:** Design (skill-driven) **Skill:** `/skill:gamedev-design-system` **Duration:** ~60 minutes (14 turns)
 **Complexity:** Medium
 
-**Scenario:**
-Dev runs `/gamedev:design-system movement` after `/gamedev:map-systems` produced the systems index. The skill loads context from the game concept and dependency GDDs, runs a technical feasibility pre-check, then guides through all 8 GDD sections one at a time — drafting, approving, and writing each section to disk before moving to the next.
+**Scenario:** Dev runs `/skill:gamedev-design-system movement` after `/skill:gamedev-map-systems` produced the systems
+index. The skill loads context from the game concept and dependency GDDs, runs a technical feasibility pre-check, then
+guides through all 8 GDD sections one at a time — drafting, approving, and writing each section to disk before moving to
+the next.
 
 **Key Moments:**
+
 - Technical feasibility pre-check flags Jolt physics default change (Godot 4.6)
 - Incremental writing: each section on disk immediately after approval
 - Session crash during section 5 → agent resumes from first empty section
 - Dependency signals (stamina, inventory) surfaced during the Dependencies section
-- Ends with explicit handoff: "run `/gamedev:design-review` before the next system"
+- Ends with explicit handoff: "run `/skill:gamedev-design-review` before the next system"
 
 **Learn:**
-- How `/gamedev:design-system` is different from asking an agent to "write a GDD"
+
+- How `/skill:gamedev-design-system` is different from asking an agent to "write a GDD"
 - How the section-by-section cycle prevents 30k-token context bloat
 - How incremental file writing survives session crashes
 - How the skill surfaces downstream dependency contracts
@@ -50,23 +54,25 @@ Dev runs `/gamedev:design-system movement` after `/gamedev:map-systems` produced
 ---
 
 ### [Session: Full Story Lifecycle](session-story-lifecycle.md)
-**Type:** Full Workflow
-**Skills:** `/gamedev:story-readiness` → implementation → `/gamedev:story-done`
-**Duration:** ~50 minutes (13 turns)
-**Complexity:** Medium
 
-**Scenario:**
-Dev pulls a story off the Backlog board. `/gamedev:story-readiness` catches a roll-direction ambiguity before any code is written. After implementation, `/gamedev:story-done` verifies 9 acceptance criteria, identifies 2 deferred criteria (inventory not integrated yet), and closes the story with notes.
+**Type:** Full Workflow **Skills:** `/skill:gamedev-story-readiness` → implementation → `/skill:gamedev-story-done`
+**Duration:** ~50 minutes (13 turns) **Complexity:** Medium
+
+**Scenario:** Dev pulls a story off the Backlog board. `/skill:gamedev-story-readiness` catches a roll-direction
+ambiguity before any code is written. After implementation, `/skill:gamedev-story-done` verifies 9 acceptance criteria,
+identifies 2 deferred criteria (inventory not integrated yet), and closes the story with notes.
 
 **Key Moments:**
-- `/gamedev:story-readiness` catches spec ambiguity in Turn 2 — resolved before implementation starts
+
+- `/skill:gamedev-story-readiness` catches spec ambiguity in Turn 2 — resolved before implementation starts
 - ADR status check: story would be BLOCKED if ADR was still Proposed
 - Manifest version check: confirms story's guidance hasn't drifted from current architecture
 - Deferred criteria tracked (not lost) when integration not yet possible
 - The story's Backlog task set to Done at story close, next ready task surfaced automatically
 
 **Learn:**
-- Why `/gamedev:story-readiness` prevents late-implementation ambiguity
+
+- Why `/skill:gamedev-story-readiness` prevents late-implementation ambiguity
 - How deferred criteria work (COMPLETE WITH NOTES vs. BLOCKED)
 - How TR-ID references prevent false deviation flags
 - The full loop from backlog → implemented → closed
@@ -74,22 +80,23 @@ Dev pulls a story off the Backlog board. `/gamedev:story-readiness` catches a ro
 ---
 
 ### [Session: Gate Check and Phase Transition](session-gate-check-phase-transition.md)
-**Type:** Phase Gate
-**Skill:** `/gamedev:gate-check`
-**Duration:** ~20 minutes (7 turns)
-**Complexity:** Low
 
-**Scenario:**
-Dev completes the Systems Design phase and runs `/gamedev:gate-check` to advance. The gate finds all 6 MVP GDDs complete, cross-review passed with one low-severity concern. Gate passes, `stage.txt` updated, and the agent provides a specific ordered checklist for Technical Setup.
+**Type:** Phase Gate **Skill:** `/skill:gamedev-gate-check` **Duration:** ~20 minutes (7 turns) **Complexity:** Low
+
+**Scenario:** Dev completes the Systems Design phase and runs `/skill:gamedev-gate-check` to advance. The gate finds all
+6 MVP GDDs complete, cross-review passed with one low-severity concern. Gate passes, `stage.txt` updated, and the agent
+provides a specific ordered checklist for Technical Setup.
 
 **Key Moments:**
+
 - Gate validates artifact presence AND internal completeness (8 sections per GDD)
 - CONCERNS ≠ FAIL: low-severity cross-review note passes the gate
-- stage.txt update changes what `/gamedev:help` and all skills see going forward
+- stage.txt update changes what `/skill:gamedev-help` and all skills see going forward
 - Agent surfaces the cross-review concern as a concrete ADR to write next
 - Next phase checklist is specific and ordered, not generic
 
 **Learn:**
+
 - What a gate check actually validates (not just "do files exist?")
 - How PASS/CONCERNS/FAIL verdicts work
 - Why stage.txt is the authority for phase tracking
@@ -97,48 +104,53 @@ Dev completes the Systems Design phase and runs `/gamedev:gate-check` to advance
 
 ---
 
-### [Session: UX Pipeline — /gamedev:ux-design → /gamedev:ux-review → /gamedev:team-ui](session-ux-pipeline.md)
-**Type:** UX Design Pipeline
-**Skills:** `/gamedev:ux-design`, `/gamedev:ux-review`, `/gamedev:team-ui`
-**Duration:** ~90 minutes (16 turns)
-**Complexity:** Medium-High
+### [Session: UX Pipeline — /skill:gamedev-ux-design → /skill:gamedev-ux-review → /skill:gamedev-team-ui](session-ux-pipeline.md)
 
-**Scenario:**
-Dev designs the HUD and inventory screen. `/gamedev:ux-design` reads the player journey and GDDs to ground decisions in player emotional state. `/gamedev:ux-review` catches a blocking accessibility gap (no keyboard alternative to drag-drop) and an advisory colorblind issue. After fixes, `/gamedev:team-ui` accepts the handoff.
+**Type:** UX Design Pipeline **Skills:** `/skill:gamedev-ux-design`, `/skill:gamedev-ux-review`,
+`/skill:gamedev-team-ui` **Duration:** ~90 minutes (16 turns) **Complexity:** Medium-High
+
+**Scenario:** Dev designs the HUD and inventory screen. `/skill:gamedev-ux-design` reads the player journey and GDDs to
+ground decisions in player emotional state. `/skill:gamedev-ux-review` catches a blocking accessibility gap (no keyboard
+alternative to drag-drop) and an advisory colorblind issue. After fixes, `/skill:gamedev-team-ui` accepts the handoff.
 
 **Key Moments:**
+
 - HUD philosophy choice (diegetic vs. persistent vs. tactical) grounded in survival genre conventions
-- `/gamedev:ux-review` distinguishes BLOCKING (stops handoff) vs. ADVISORY (can fix in visual pass)
+- `/skill:gamedev-ux-review` distinguishes BLOCKING (stops handoff) vs. ADVISORY (can fix in visual pass)
 - Accessibility caught before implementation, not during QA
 - Keyboard alternative added in one turn; review re-runs and passes
-- `/gamedev:team-ui` checks for a passing `/gamedev:ux-review` before starting visual design
+- `/skill:gamedev-team-ui` checks for a passing `/skill:gamedev-ux-review` before starting visual design
 
 **Learn:**
-- How `/gamedev:ux-design` uses player journey context to ground UI decisions
-- What `/gamedev:ux-review` actually checks (not just "does a spec exist?")
+
+- How `/skill:gamedev-ux-design` uses player journey context to ground UI decisions
+- What `/skill:gamedev-ux-review` actually checks (not just "does a spec exist?")
 - The difference between HUD doc (`design/ux/hud.md`) and per-screen specs
 - How accessibility issues are handled at design time vs. implementation time
 
 ---
 
-### [Session: Brownfield Onboarding with /gamedev:adopt](session-adopt-brownfield.md)
-**Type:** Brownfield Adoption
-**Skill:** `/gamedev:adopt`
-**Duration:** ~30 minutes (8 turns)
-**Complexity:** Low-Medium
+### [Session: Brownfield Onboarding with /skill:gamedev-adopt](session-adopt-brownfield.md)
 
-**Scenario:**
-Dev has 3 months of existing code and rough design notes but nothing in the right format. `/gamedev:adopt` audits format compliance (not just file existence), classifies 4 gaps by severity, builds an ordered 7-step migration plan, and immediately fixes the BLOCKING gap (missing systems index) by inferring it from the codebase.
+**Type:** Brownfield Adoption **Skill:** `/skill:gamedev-adopt` **Duration:** ~30 minutes (8 turns) **Complexity:**
+Low-Medium
+
+**Scenario:** Dev has 3 months of existing code and rough design notes but nothing in the right format.
+`/skill:gamedev-adopt` audits format compliance (not just file existence), classifies 4 gaps by severity, builds an
+ordered 7-step migration plan, and immediately fixes the BLOCKING gap (missing systems index) by inferring it from the
+codebase.
 
 **Key Moments:**
+
 - FORMAT audit distinguishes "file exists" from "file has required internal structure"
 - BLOCKING gap identified: missing systems index prevents 4+ skills from running
 - Migration plan is ordered: blocking gaps first, then high, then medium
 - Systems index bootstrapped from code structure — brownfield code contains the answer
-- Retrofit mode vs. new authoring: `/gamedev:design-system retrofit` fills gaps without overwriting
+- Retrofit mode vs. new authoring: `/skill:gamedev-design-system retrofit` fills gaps without overwriting
 
 **Learn:**
-- The difference between `/gamedev:adopt` and `/gamedev:project-stage-detect`
+
+- The difference between `/skill:gamedev-adopt` and `/skill:gamedev-project-stage-detect`
 - How format compliance is checked (section detection, not just file presence)
 - How brownfield projects can onboard without losing existing work
 - When to use retrofit mode vs. full authoring
@@ -148,15 +160,15 @@ Dev has 3 months of existing code and rough design notes but nothing in the righ
 ### FOUNDATIONAL EXAMPLES
 
 ### [Session: Designing the Crafting System](session-design-crafting-system.md)
-**Type:** Design
-**Agent:** game-designer
-**Duration:** ~45 minutes (12 turns)
-**Complexity:** Medium
 
-**Scenario:**
-Solo dev needs to design a crafting system that serves Pillar 2 ("Emergent Discovery Through Experimentation"). The agent guides them through question/answer, presents 3 design options with game theory analysis, incorporates user modifications, and iteratively drafts the GDD with approval at each step.
+**Type:** Design **Agent:** game-designer **Duration:** ~45 minutes (12 turns) **Complexity:** Medium
+
+**Scenario:** Solo dev needs to design a crafting system that serves Pillar 2 ("Emergent Discovery Through
+Experimentation"). The agent guides them through question/answer, presents 3 design options with game theory analysis,
+incorporates user modifications, and iteratively drafts the GDD with approval at each step.
 
 **Key Collaborative Moments:**
+
 - Agent asks 5 clarifying questions upfront
 - Presents 3 distinct options with pros/cons + MDA alignment
 - User modifies recommended option, agent incorporates immediately
@@ -165,6 +177,7 @@ Solo dev needs to design a crafting system that serves Pillar 2 ("Emergent Disco
 - Explicit "May I write to [file]?" before creating file
 
 **Learn:**
+
 - How design agents ask about goals, constraints, references
 - How to present options using game design theory (MDA, SDT, Bartle)
 - How to iterate on drafts section-by-section
@@ -173,15 +186,15 @@ Solo dev needs to design a crafting system that serves Pillar 2 ("Emergent Disco
 ---
 
 ### [Session: Implementing Combat Damage Calculation](session-implement-combat-damage.md)
-**Type:** Implementation
-**Agent:** gameplay-programmer
-**Duration:** ~30 minutes (10 turns)
-**Complexity:** Low-Medium
 
-**Scenario:**
-User has a complete design doc and wants the damage calculation implemented. Agent reads the spec, identifies 7 ambiguities/gaps, asks clarifying questions, proposes architecture for approval, implements with rule enforcement, and proactively writes tests.
+**Type:** Implementation **Agent:** gameplay-programmer **Duration:** ~30 minutes (10 turns) **Complexity:** Low-Medium
+
+**Scenario:** User has a complete design doc and wants the damage calculation implemented. Agent reads the spec,
+identifies 7 ambiguities/gaps, asks clarifying questions, proposes architecture for approval, implements with rule
+enforcement, and proactively writes tests.
 
 **Key Collaborative Moments:**
+
 - Agent reads design doc first, identifies 7 spec ambiguities
 - Architecture proposed with code samples BEFORE implementation
 - User requests type safety, agent refines and re-proposes
@@ -190,24 +203,25 @@ User has a complete design doc and wants the damage calculation implemented. Age
 - Agent offers options for next steps rather than assuming
 
 **Learn:**
+
 - How implementation agents clarify specs before coding
 - How to propose architecture with code samples for approval
-- How rules enforce standards automatically
+- How explicit rule checks verify standards
 - How to handle spec gaps (ask, don't assume)
 - Verification-driven development (tests prove it works)
 
 ---
 
 ### [Session: Scope Crisis - Strategic Decision Making](session-scope-crisis-decision.md)
-**Type:** Strategic Decision
-**Agent:** creative-director
-**Duration:** ~25 minutes (8 turns)
-**Complexity:** High
 
-**Scenario:**
-Solo dev faces crisis: Alpha milestone in 2 weeks, crafting system needs 3 weeks, investor demo is make-or-break. Creative director gathers context, frames the decision, presents 3 strategic options with honest trade-off analysis, makes recommendation but defers to user, then documents decision with ADR and demo script.
+**Type:** Strategic Decision **Agent:** creative-director **Duration:** ~25 minutes (8 turns) **Complexity:** High
+
+**Scenario:** Solo dev faces crisis: Alpha milestone in 2 weeks, crafting system needs 3 weeks, investor demo is
+make-or-break. Creative director gathers context, frames the decision, presents 3 strategic options with honest
+trade-off analysis, makes recommendation but defers to user, then documents decision with ADR and demo script.
 
 **Key Collaborative Moments:**
+
 - Agent reads context docs before proposing solutions
 - Asks 5 questions to understand decision constraints
 - Frames decision properly (what's at stake, evaluation criteria)
@@ -216,6 +230,7 @@ Solo dev faces crisis: Alpha milestone in 2 weeks, crafting system needs 3 weeks
 - Documents decision + provides demo script to support user
 
 **Learn:**
+
 - How leadership agents frame strategic decisions
 - How to present options with trade-off analysis
 - How to use game dev precedent and theory in recommendations
@@ -225,13 +240,11 @@ Solo dev faces crisis: Alpha milestone in 2 weeks, crafting system needs 3 weeks
 ---
 
 ### [Reverse Documentation Workflow](reverse-document-workflow-example.md)
-**Type:** Brownfield Documentation
-**Agent:** game-designer
-**Duration:** ~20 minutes
-**Complexity:** Low
 
-**Scenario:**
-Developer built a skill tree system but never wrote a design doc. Agent reads the code, infers the design intent, asks clarifying questions about ambiguous decisions, and produces a retroactive GDD.
+**Type:** Brownfield Documentation **Agent:** game-designer **Duration:** ~20 minutes **Complexity:** Low
+
+**Scenario:** Developer built a skill tree system but never wrote a design doc. Agent reads the code, infers the design
+intent, asks clarifying questions about ambiguous decisions, and produces a retroactive GDD.
 
 ---
 
@@ -243,11 +256,10 @@ All examples follow the **collaborative workflow pattern:**
 Question → Options → Decision → Draft → Approval
 ```
 
-> **Note:** These examples show the collaborative pattern as conversational text.
-> In practice, agents now use the `AskUserQuestion` tool at decision points to
-> present structured option pickers (with labels, descriptions, and multi-select).
-> The pattern is **Explain → Capture**: agents explain their analysis in
-> conversation first, then present a structured UI picker for the user's decision.
+> **Note:** These examples show the collaborative pattern as conversational text. In practice, agents now use a
+> user-input tool or chat at decision points to present structured option pickers (with labels, descriptions, and
+> multi-select). The pattern is **Explain → Capture**: agents explain their analysis in conversation first, then present
+> a structured UI picker for the user's decision.
 
 ### ✅ **Collaborative Behaviors Shown:**
 
@@ -280,15 +292,18 @@ Question → Options → Decision → Draft → Approval
 
 ## 📖 **How to Use These Examples**
 
-### For New Users:
+### For New Users
+
 Read these examples BEFORE your first session. They show realistic expectations for how agents work:
+
 - Agents are consultants, not autonomous executors
 - You make all creative/strategic decisions
 - Agents provide expert guidance and options
 
-### For Understanding Specific Workflows:
+### For Understanding Specific Workflows
+
 - **New to the system?** → Read skill-flow-diagrams.md first
-- **Running /gamedev:design-system for the first time?** → Read session-design-system-skill.md
+- **Running /skill:gamedev-design-system for the first time?** → Read session-design-system-skill.md
 - **Picking up a story?** → Read session-story-lifecycle.md
 - **Finishing a phase?** → Read session-gate-check-phase-transition.md
 - **Starting UI work?** → Read session-ux-pipeline.md
@@ -297,8 +312,10 @@ Read these examples BEFORE your first session. They show realistic expectations 
 - **Implementing code?** → Read session-implement-combat-damage.md
 - **Making strategic decisions?** → Read session-scope-crisis-decision.md
 
-### For Training:
+### For Training
+
 If you're teaching someone to use this system, walk through one example turn-by-turn to show:
+
 - What good questions look like
 - How to evaluate presented options
 - When to approve vs. request changes
@@ -309,22 +326,26 @@ If you're teaching someone to use this system, walk through one example turn-by-
 ## 🔍 **Common Patterns Across All Examples**
 
 ### Turn 1-2: **Understand Before Acting**
+
 - Agent reads context (design docs, specs, constraints)
 - Agent asks clarifying questions
 - No assumptions or guesses
 
 ### Turn 3-5: **Present Options with Reasoning**
+
 - 2-4 distinct approaches
 - Pros/cons for each
 - Theory/precedent supporting the analysis
 - Recommendation made, decision deferred to user
 
 ### Turn 6-8: **Iterate on Drafts**
+
 - Show work incrementally
 - Incorporate feedback immediately
 - Flag edge cases or ambiguities proactively
 
 ### Turn 9-10: **Approval and Completion**
+
 - "May I write to [file]?"
 - User: "Yes"
 - Agent writes files
@@ -352,5 +373,5 @@ If the agent skips any of these, remind it:
 ## 📝 **Additional Resources**
 
 - **Full Principle Documentation:** [docs/COLLABORATIVE-DESIGN-PRINCIPLE.md](../COLLABORATIVE-DESIGN-PRINCIPLE.md)
-- **Agent Roster:** [../agent-roster.md](../../../agent-roster.md)
+- **Agent Roster:** [../agent-roster.md](../agent-roster.md)
 - **Project collaboration guidance:** [AGENTS.md template](../../templates/AGENTS.md#collaboration)

@@ -1,6 +1,6 @@
 ---
 name: gamedev-setup-engine
-description: "Configure the project's game engine and version. Pins the engine in the shared project guide, detects knowledge gaps, and populates engine reference docs via WebSearch when the version is beyond the LLM's training data."
+description: "Configure the project's game engine and version. Pins the engine in the shared project guide, detects knowledge gaps, and populates engine reference docs via available web search when the version is beyond the LLM's training data."
 ---
 
 # Game Studio: setup-engine

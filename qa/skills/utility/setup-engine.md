@@ -1,36 +1,34 @@
-# Skill Test Spec: /gamedev:setup-engine
+# Skill Test Spec: /skill:gamedev-setup-engine
 
 ## Skill Summary
 
-`/gamedev:setup-engine` configures the project's engine, language, rendering backend,
-physics engine, specialist agent assignments, and naming conventions by
-populating `technical-preferences.md`. It accepts an optional engine argument
-(e.g., `/gamedev:setup-engine godot`) to skip the engine-selection step. For each
-section of `technical-preferences.md`, the skill presents a draft and asks
-"May I write to `technical-preferences.md`?" before updating.
+`/skill:gamedev-setup-engine` configures the project's engine, language, rendering backend, physics engine, specialist
+agent assignments, and naming conventions by populating `technical-preferences.md`. It accepts an optional engine
+argument (e.g., `/skill:gamedev-setup-engine godot`) to skip the engine-selection step. For each section of
+`technical-preferences.md`, the skill presents a draft and asks "May I write to `technical-preferences.md`?" before
+updating.
 
-The skill also populates the specialist routing table (file extension → agent
-mappings) based on the chosen engine. It has no director gates — configuration
-is a technical utility task. The verdict is always COMPLETE when the file is
-fully written.
+The skill also populates the specialist routing table (file extension → agent mappings) based on the chosen engine. It
+has no director gates — configuration is a technical utility task. The verdict is always COMPLETE when the file is fully
+written.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/gamedev:skill-test static` — no fixture needed.
+Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
 
-- [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
+- [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keyword: COMPLETE
 - [ ] Contains "May I write" collaborative protocol language before updating technical-preferences.md
-- [ ] Has a next-step handoff (e.g., `/gamedev:brainstorm` or `/gamedev:start` depending on flow)
+- [ ] Has a next-step handoff (e.g., `/skill:gamedev-brainstorm` or `/skill:gamedev-start` depending on flow)
 
 ---
 
 ## Director Gate Checks
 
-None. `/gamedev:setup-engine` is a technical configuration skill. No director gates apply.
+None. `/skill:gamedev-setup-engine` is a technical configuration skill. No director gates apply.
 
 ---
 
@@ -39,24 +37,26 @@ None. `/gamedev:setup-engine` is a technical configuration skill. No director ga
 ### Case 1: Godot 4 + GDScript — Full engine configuration
 
 **Fixture:**
+
 - `technical-preferences.md` contains only placeholders
 - Engine argument provided: `godot`
 
-**Input:** `/gamedev:setup-engine godot`
+**Input:** `/skill:gamedev-setup-engine godot`
 
 **Expected behavior:**
+
 1. Skill skips engine-selection step (argument provided)
 2. Skill presents language options for Godot: GDScript or C#
 3. User selects GDScript
-4. Skill drafts all engine sections: engine/language/rendering/physics fields,
-   naming conventions (snake_case for GDScript), specialist assignments
-   (godot-specialist, gdscript-specialist, godot-shader-specialist, etc.)
-5. Skill populates the routing table: `.gd` → gdscript-specialist, `.gdshader` →
-   godot-shader-specialist, `.tscn` → godot-specialist
+4. Skill drafts all engine sections: engine/language/rendering/physics fields, naming conventions (snake_case for
+   GDScript), specialist assignments (godot-specialist, gdscript-specialist, godot-shader-specialist, etc.)
+5. Skill populates the routing table: `.gd` → gdscript-specialist, `.gdshader` → godot-shader-specialist, `.tscn` →
+   godot-specialist
 6. Skill asks "May I write to `technical-preferences.md`?"
 7. File is written after approval; verdict is COMPLETE
 
 **Assertions:**
+
 - [ ] Engine field is set to Godot 4 (not a placeholder)
 - [ ] Language field is set to GDScript
 - [ ] Naming conventions are GDScript-appropriate (snake_case)
@@ -70,20 +70,22 @@ None. `/gamedev:setup-engine` is a technical configuration skill. No director ga
 ### Case 2: Unity + C# — Unity-specific configuration
 
 **Fixture:**
+
 - `technical-preferences.md` contains only placeholders
 - Engine argument provided: `unity`
 
-**Input:** `/gamedev:setup-engine unity`
+**Input:** `/skill:gamedev-setup-engine unity`
 
 **Expected behavior:**
+
 1. Skill sets engine to Unity, language to C#
 2. Naming conventions are C#-appropriate (PascalCase for classes, camelCase for fields)
 3. Specialist assignments reference unity-specialist, csharp-specialist
-4. Routing table: `.cs` → csharp-specialist, `.asmdef` → unity-specialist,
-   `.unity` (scene) → unity-specialist
+4. Routing table: `.cs` → csharp-specialist, `.asmdef` → unity-specialist, `.unity` (scene) → unity-specialist
 5. Skill asks "May I write to `technical-preferences.md`?" and writes on approval
 
 **Assertions:**
+
 - [ ] Engine field is set to Unity (not Godot or Unreal)
 - [ ] Language field is set to C#
 - [ ] Naming conventions reflect C# conventions
@@ -95,20 +97,22 @@ None. `/gamedev:setup-engine` is a technical configuration skill. No director ga
 ### Case 3: Unreal + Blueprint — Unreal-specific configuration
 
 **Fixture:**
+
 - `technical-preferences.md` contains only placeholders
 - Engine argument provided: `unreal`
 
-**Input:** `/gamedev:setup-engine unreal`
+**Input:** `/skill:gamedev-setup-engine unreal`
 
 **Expected behavior:**
+
 1. Skill sets engine to Unreal Engine 5, primary language to Blueprint (Visual Scripting)
 2. Specialist assignments reference unreal-specialist, blueprint-specialist
-3. Routing table: `.uasset` → blueprint-specialist or unreal-specialist,
-   `.umap` → unreal-specialist
+3. Routing table: `.uasset` → blueprint-specialist or unreal-specialist, `.umap` → unreal-specialist
 4. Performance budgets are pre-set with Unreal defaults (e.g., higher draw call budget)
 5. Skill asks "May I write" and writes on approval; verdict is COMPLETE
 
 **Assertions:**
+
 - [ ] Engine field is set to Unreal Engine 5
 - [ ] Routing table includes `.uasset` and `.umap` entries
 - [ ] Blueprint specialist is assigned
@@ -119,21 +123,24 @@ None. `/gamedev:setup-engine` is a technical configuration skill. No director ga
 ### Case 4: Engine Already Configured — Offers to reconfigure specific sections
 
 **Fixture:**
+
 - `technical-preferences.md` has engine set to Godot 4 with all fields populated
 - No engine argument provided
 
-**Input:** `/gamedev:setup-engine`
+**Input:** `/skill:gamedev-setup-engine`
 
 **Expected behavior:**
+
 1. Skill reads `technical-preferences.md` and detects fully configured engine (Godot 4)
 2. Skill reports: "Engine already configured as Godot 4 + GDScript"
-3. Skill presents options: reconfigure all, reconfigure specific section only
-   (Engine/Language, Naming Conventions, Specialists, Performance Budgets)
+3. Skill presents options: reconfigure all, reconfigure specific section only (Engine/Language, Naming Conventions,
+   Specialists, Performance Budgets)
 4. User selects "Reconfigure Performance Budgets only"
 5. Only the performance budget section is updated; all other fields unchanged
 6. Skill asks "May I write to `technical-preferences.md`?" and writes on approval
 
 **Assertions:**
+
 - [ ] Skill does NOT overwrite all fields when only a section update was requested
 - [ ] User is offered section-specific reconfiguration
 - [ ] Only the selected section is modified in the written file
@@ -144,16 +151,19 @@ None. `/gamedev:setup-engine` is a technical configuration skill. No director ga
 ### Case 5: Director Gate Check — No gate; setup-engine is a utility skill
 
 **Fixture:**
+
 - Fresh project with no engine configured
 
-**Input:** `/gamedev:setup-engine godot`
+**Input:** `/skill:gamedev-setup-engine godot`
 
 **Expected behavior:**
+
 1. Skill completes full engine configuration
 2. No director agents are spawned at any point
 3. No gate IDs appear in output
 
 **Assertions:**
+
 - [ ] No director gate is invoked
 - [ ] No gate skip messages appear
 - [ ] Verdict is COMPLETE without any gate check
@@ -173,10 +183,8 @@ None. `/gamedev:setup-engine` is a technical configuration skill. No director ga
 
 ## Coverage Notes
 
-- Godot 4 + C# (instead of GDScript) follows the same flow as Case 1 with
-  different naming conventions and the godot-csharp-specialist assignment.
-  This variant is not separately tested.
-- The engine-version-specific guidance (e.g., Godot 4.6 knowledge gap warning
-  from VERSION.md) is surfaced by the skill but not assertion-tested here.
-- Performance budget defaults per engine are noted as engine-specific but
-  exact default values are not assertion-tested.
+- Godot 4 + C# (instead of GDScript) follows the same flow as Case 1 with different naming conventions and the
+  godot-csharp-specialist assignment. This variant is not separately tested.
+- The engine-version-specific guidance (e.g., Godot 4.6 knowledge gap warning from VERSION.md) is surfaced by the skill
+  but not assertion-tested here.
+- Performance budget defaults per engine are noted as engine-specific but exact default values are not assertion-tested.

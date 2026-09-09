@@ -1,20 +1,19 @@
-# Skill Test Spec: /gamedev:test-flakiness
+# Skill Test Spec: /skill:gamedev-test-flakiness
 
 ## Skill Summary
 
-`/gamedev:test-flakiness` detects non-deterministic tests by analyzing test history logs
-(if available) or scanning test source code for common flakiness patterns (random
-numbers without seeds, real-time waits, external I/O). No director gates are
-invoked. The skill does not write without user approval. Verdicts: NO FLAKINESS,
-SUSPECT TESTS FOUND, or CONFIRMED FLAKY.
+`/skill:gamedev-test-flakiness` detects non-deterministic tests by analyzing test history logs (if available) or
+scanning test source code for common flakiness patterns (random numbers without seeds, real-time waits, external I/O).
+No director gates are invoked. The skill does not write without user approval. Verdicts: NO FLAKINESS, SUSPECT TESTS
+FOUND, or CONFIRMED FLAKY.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/gamedev:skill-test static` — no fixture needed.
+Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
 
-- [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
+- [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: NO FLAKINESS, SUSPECT TESTS FOUND, CONFIRMED FLAKY
 - [ ] Does NOT require "May I write" language (read-only; optional report requires approval)
@@ -24,8 +23,7 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 ## Director Gate Checks
 
-None. Flakiness detection is an advisory quality skill for the QA lead; no gates
-are invoked.
+None. Flakiness detection is an advisory quality skill for the QA lead; no gates are invoked.
 
 ---
 
@@ -34,19 +32,22 @@ are invoked.
 ### Case 1: Happy Path — Clean test history, no flakiness
 
 **Fixture:**
+
 - `production/qa/test-history/` contains logs for 10 test runs
 - All tests pass consistently across all 10 runs (100% pass rate per test)
 - No test has a failure pattern
 
-**Input:** `/gamedev:test-flakiness`
+**Input:** `/skill:gamedev-test-flakiness`
 
 **Expected behavior:**
+
 1. Skill reads test history logs from `production/qa/test-history/`
 2. Skill computes per-test pass rate across 10 runs
 3. All tests pass all 10 runs — no inconsistency detected
 4. Verdict is NO FLAKINESS
 
 **Assertions:**
+
 - [ ] Skill reads test history logs when available
 - [ ] Per-test pass rate is computed across all available runs
 - [ ] Verdict is NO FLAKINESS when all tests pass consistently
@@ -57,13 +58,15 @@ are invoked.
 ### Case 2: Suspect Tests Found — Test fails intermittently in history
 
 **Fixture:**
+
 - `production/qa/test-history/` contains logs for 10 test runs
 - `test_combat_damage_applies_crit_multiplier` passes 7 times, fails 3 times
 - Failure messages differ (sometimes timeout, sometimes wrong value)
 
-**Input:** `/gamedev:test-flakiness`
+**Input:** `/skill:gamedev-test-flakiness`
 
 **Expected behavior:**
+
 1. Skill reads test history logs — computes pass rates
 2. `test_combat_damage_applies_crit_multiplier` has 70% pass rate (threshold: 95%)
 3. Skill flags it as SUSPECT with pass rate (7/10) and failure pattern noted
@@ -71,6 +74,7 @@ are invoked.
 5. Skill recommends investigating the test for timing or state dependencies
 
 **Assertions:**
+
 - [ ] Tests below the pass-rate threshold are flagged by name
 - [ ] Pass rate (fraction and percentage) is shown for each suspect test
 - [ ] Failure pattern (e.g., inconsistent error messages) is noted if detectable
@@ -82,16 +86,19 @@ are invoked.
 ### Case 3: Source Pattern — Random number used without seed
 
 **Fixture:**
+
 - No test history logs exist
 - `tests/unit/loot/loot_drop_test.gd` contains:
+
   ```gdscript
   var roll = randf()  # unseeded random — non-deterministic
   assert_gt(roll, 0.5, "Loot should drop above 50%")
   ```
 
-**Input:** `/gamedev:test-flakiness`
+**Input:** `/skill:gamedev-test-flakiness`
 
 **Expected behavior:**
+
 1. Skill finds no test history logs
 2. Skill falls back to source code analysis
 3. Skill detects `randf()` call without a preceding `seed()` call
@@ -100,6 +107,7 @@ are invoked.
 6. Skill recommends seeding random before the call or mocking the random function
 
 **Assertions:**
+
 - [ ] Source code analysis is used as fallback when no history logs exist
 - [ ] Unseeded random number usage is detected as a flakiness risk
 - [ ] Verdict is SUSPECT TESTS FOUND (not CONFIRMED FLAKY — no history to confirm)
@@ -110,14 +118,16 @@ are invoked.
 ### Case 4: No Test History — Source-only analysis with common patterns
 
 **Fixture:**
+
 - `production/qa/test-history/` does not exist
 - `tests/` contains 15 test files
 - Scan finds 2 tests using `OS.get_ticks_msec()` for timing assertions
 - No other flakiness patterns found
 
-**Input:** `/gamedev:test-flakiness`
+**Input:** `/skill:gamedev-test-flakiness`
 
 **Expected behavior:**
+
 1. Skill checks for test history — not found
 2. Skill notes: "No test history available — analyzing source code for flakiness patterns only"
 3. Skill scans all test files for known patterns: unseeded random, real-time waits, system clock usage
@@ -125,6 +135,7 @@ are invoked.
 5. Verdict is SUSPECT TESTS FOUND
 
 **Assertions:**
+
 - [ ] Skill notes clearly that source-only analysis is being performed (no history)
 - [ ] Common flakiness patterns are scanned: random, time-based assertions, external I/O
 - [ ] `OS.get_ticks_msec()` usage for assertions is flagged as a flakiness risk
@@ -135,12 +146,14 @@ are invoked.
 ### Case 5: Gate Compliance — No gate; flakiness report is advisory
 
 **Fixture:**
+
 - Test history shows 1 CONFIRMED FLAKY test (fails 6 out of 10 runs)
 - `review-mode.txt` contains `full`
 
-**Input:** `/gamedev:test-flakiness`
+**Input:** `/skill:gamedev-test-flakiness`
 
 **Expected behavior:**
+
 1. Skill analyzes test history; identifies 1 confirmed flaky test
 2. No director gate is invoked regardless of review mode
 3. Verdict is CONFIRMED FLAKY
@@ -148,6 +161,7 @@ are invoked.
 5. If user opts in: "May I write to `production/qa/flakiness-report-[date].md`?"
 
 **Assertions:**
+
 - [ ] No director gate is invoked in any review mode
 - [ ] CONFIRMED FLAKY verdict requires history-based evidence (not just source patterns)
 - [ ] Optional report requires "May I write" before writing
@@ -169,9 +183,7 @@ are invoked.
 
 ## Coverage Notes
 
-- The pass-rate threshold for SUSPECT classification (95% suggested above) is an
-  implementation detail; the tests verify that intermittent failures are flagged,
-  not the exact threshold value.
-- Tests that fail due to environment issues (missing assets, wrong platform) are
-  not flakiness — the skill distinguishes environment failures from non-determinism
-  in the test itself; this distinction is not explicitly tested here.
+- The pass-rate threshold for SUSPECT classification (95% suggested above) is an implementation detail; the tests verify
+  that intermittent failures are flagged, not the exact threshold value.
+- Tests that fail due to environment issues (missing assets, wrong platform) are not flakiness — the skill distinguishes
+  environment failures from non-determinism in the test itself; this distinction is not explicitly tested here.

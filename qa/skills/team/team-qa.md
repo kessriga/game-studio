@@ -1,28 +1,26 @@
-# Skill Test Spec: /gamedev:team-qa
+# Skill Test Spec: /skill:gamedev-team-qa
 
 ## Skill Summary
 
-Orchestrates the QA team through a 7-phase structured testing cycle. Coordinates
-qa-lead (strategy, test plan, sign-off report) and qa-tester (test case writing,
-bug report writing). Covers scope detection, story classification, QA plan
-generation, smoke check gate, test case writing, manual QA execution with bug
-filing, and a final sign-off report with an APPROVED / APPROVED WITH CONDITIONS /
-NOT APPROVED verdict. Parallel qa-tester spawning is used in Phase 5 for
+Orchestrates the QA team through a 7-phase structured testing cycle. Coordinates qa-lead (strategy, test plan, sign-off
+report) and qa-tester (test case writing, bug report writing). Covers scope detection, story classification, QA plan
+generation, smoke check gate, test case writing, manual QA execution with bug filing, and a final sign-off report with
+an APPROVED / APPROVED WITH CONDITIONS / NOT APPROVED verdict. Parallel qa-tester spawning is used in Phase 5 for
 independent stories.
 
 ---
 
 ## Static Assertions (Structural)
 
-- [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
+- [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED
 - [ ] Contains verdict keywords for sign-off report: APPROVED, APPROVED WITH CONDITIONS, NOT APPROVED
 - [ ] Contains "May I write" language for both the QA plan and the sign-off report
 - [ ] Has an Error Recovery Protocol section
-- [ ] Uses `AskUserQuestion` at phase transitions to capture user approval before proceeding
+- [ ] Uses a user-input tool or chat at phase transitions to capture user approval before proceeding
 - [ ] Phase 4 (smoke check) is a hard gate: FAIL stops the cycle
-- [ ] Bugs are filed as Backlog tasks with the `bug` label (via `/gamedev:bug-report`)
+- [ ] Bugs are filed as Backlog tasks with the `bug` label (via `/skill:gamedev-bug-report`)
 - [ ] Next-step guidance differs by verdict (APPROVED / APPROVED WITH CONDITIONS / NOT APPROVED)
 - [ ] Independent qa-tester tasks in Phase 5 are spawned in parallel
 
@@ -33,25 +31,36 @@ independent stories.
 ### Case 1: Happy Path — All stories pass manual QA, APPROVED verdict
 
 **Fixture:**
+
 - The `Combat System` milestone has 4 story tasks on the Backlog board
 - Stories are a mix of types: 1 Logic, 1 Integration, 2 Visual/Feel
 - All stories have acceptance criteria populated
 - `tests/smoke/` contains a smoke test list; all items are verifiable
 - No existing bug tasks on the Backlog board
 
-**Input:** `/gamedev:team-qa "Combat System"`
+**Input:** `/skill:gamedev-team-qa "Combat System"`
 
 **Expected behavior:**
-1. Phase 1: `task_list`s the `Combat System` milestone and follows each task's `Spec:` reference to its story `.md`; reads `production/stage.txt`; reports "Found 4 stories. Current stage: [stage]. Ready to begin QA strategy?"
-2. Phase 2: Spawns `qa-lead` via Task; produces strategy table classifying all 4 stories; no blockers flagged; presents to user; AskUserQuestion: user selects "Looks good — proceed to test plan"
-3. Phase 3: Produces QA plan document; asks "May I write the QA plan to `production/qa/qa-plan-Combat-System-[date].md`?"; writes after approval
-4. Phase 4: Spawns `qa-lead` via Task; reviews `tests/smoke/`; returns PASS; reports "Smoke check passed. Proceeding to test case writing."
-5. Phase 5: Spawns `qa-tester` via Task for each Visual/Feel and Integration story (2–3 stories); run in parallel; presents test cases grouped by story; AskUserQuestion per group; user approves
-6. Phase 6: Walks through each approved story; user marks all as PASS; result summary: "Stories PASS: 4, FAIL: 0, BLOCKED: 0"
-7. Phase 7: Spawns `qa-lead` via Task to produce sign-off report; report shows all stories PASS; no bugs filed; Verdict: APPROVED; asks "May I write this QA sign-off report to `production/qa/qa-signoff-Combat-System-[date].md`?"; writes after approval
+
+1. Phase 1: `task_list`s the `Combat System` milestone and follows each task's `Spec:` reference to its story `.md`;
+   reads `production/stage.txt`; reports "Found 4 stories. Current stage: [stage]. Ready to begin QA strategy?"
+2. Phase 2: Spawns `gamedev:qa-lead` through authorized delegation; produces strategy table classifying all 4 stories;
+   no blockers flagged; presents to user; a user-input tool or chat: user selects "Looks good — proceed to test plan"
+3. Phase 3: Produces QA plan document; asks "May I write the QA plan to
+   `production/qa/qa-plan-Combat-System-[date].md`?"; writes after approval
+4. Phase 4: Spawns `gamedev:qa-lead` through authorized delegation; reviews `tests/smoke/`; returns PASS; reports "Smoke
+   check passed. Proceeding to test case writing."
+5. Phase 5: Spawns `gamedev:qa-tester` through authorized delegation for each Visual/Feel and Integration story (2–3
+   stories); run in parallel; presents test cases grouped by story; a user-input tool or chat per group; user approves
+6. Phase 6: Walks through each approved story; user marks all as PASS; result summary: "Stories PASS: 4, FAIL: 0,
+   BLOCKED: 0"
+7. Phase 7: Spawns `gamedev:qa-lead` through authorized delegation to produce sign-off report; report shows all stories
+   PASS; no bugs filed; Verdict: APPROVED; asks "May I write this QA sign-off report to
+   `production/qa/qa-signoff-Combat-System-[date].md`?"; writes after approval
 8. Verdict: COMPLETE — QA cycle finished
 
 **Assertions:**
+
 - [ ] Phase 1 correctly counts and reports 4 stories with current stage
 - [ ] Strategy table in Phase 2 classifies all 4 stories with correct types
 - [ ] QA plan written only after "May I write?" approval
@@ -60,29 +69,35 @@ independent stories.
 - [ ] Sign-off report includes Test Coverage Summary table and Verdict: APPROVED
 - [ ] Sign-off report written only after "May I write?" approval
 - [ ] Verdict: COMPLETE appears in final output
-- [ ] Next step: "Run `/gamedev:gate-check` to validate advancement."
+- [ ] Next step: "Run `/skill:gamedev-gate-check` to validate advancement."
 
 ---
 
 ### Case 2: Smoke Check Fail — QA cycle stops at Phase 4
 
 **Fixture:**
-- The `Enemy AI` milestone has 3 story tasks on the Backlog board
-- `tests/smoke/` exists with 5 smoke test items; 2 items cannot be verified (e.g., build is unstable, core navigation broken)
 
-**Input:** `/gamedev:team-qa "Enemy AI"`
+- The `Enemy AI` milestone has 3 story tasks on the Backlog board
+- `tests/smoke/` exists with 5 smoke test items; 2 items cannot be verified (e.g., build is unstable, core navigation
+  broken)
+
+**Input:** `/skill:gamedev-team-qa "Enemy AI"`
 
 **Expected behavior:**
+
 1. Phases 1–3 complete normally; QA plan is written
-2. Phase 4: Spawns `qa-lead` via Task; smoke check returns FAIL; two specific failures are identified
-3. Skill reports: "Smoke check failed. QA cannot begin until these issues are resolved: [list of 2 failures]. Fix them and re-run `/gamedev:smoke-check`, or re-run `/gamedev:team-qa` once resolved."
+2. Phase 4: Spawns `gamedev:qa-lead` through authorized delegation; smoke check returns FAIL; two specific failures are
+   identified
+3. Skill reports: "Smoke check failed. QA cannot begin until these issues are resolved: [list of 2 failures]. Fix them
+   and re-run `/skill:gamedev-smoke-check`, or re-run `/skill:gamedev-team-qa` once resolved."
 4. Skill stops immediately after Phase 4 — no Phase 5, 6, or 7 is executed
 5. No sign-off report is produced; no "May I write?" for a sign-off is issued
 
 **Assertions:**
+
 - [ ] Smoke check FAIL causes the pipeline to halt at Phase 4 — Phases 5, 6, 7 are NOT executed
 - [ ] Failure list is shown to the user explicitly (not summarized vaguely)
-- [ ] Skill recommends `/gamedev:smoke-check` and `/gamedev:team-qa` re-run as remediation steps
+- [ ] Skill recommends `/skill:gamedev-smoke-check` and `/skill:gamedev-team-qa` re-run as remediation steps
 - [ ] No QA sign-off report is written or offered
 - [ ] Skill does NOT produce a COMPLETE verdict
 - [ ] Any QA plan already written in Phase 3 is preserved (not deleted)
@@ -92,59 +107,79 @@ independent stories.
 ### Case 3: Bug Found — Visual/Feel story fails manual QA, bug report filed
 
 **Fixture:**
+
 - The `Level Streaming` milestone has 2 story tasks on the board: 1 Logic (passes automated tests), 1 Visual/Feel
 - `tests/smoke/` smoke check passes
 - The Visual/Feel story's animation timing is visibly wrong (acceptance criterion not met)
 - the Backlog board is available (with or without existing bug tasks)
 
-**Input:** `/gamedev:team-qa "Level Streaming"`
+**Input:** `/skill:gamedev-team-qa "Level Streaming"`
 
 **Expected behavior:**
+
 1. Phases 1–5 complete normally; test cases are written for the Visual/Feel story
-2. Phase 6: User marks Visual/Feel story as FAIL; AskUserQuestion collects failure description: "Animation plays at 2x speed — jitter visible on every loop"
-3. Phase 6: Spawns `qa-tester` via Task to file a bug as a Backlog task with the `bug` label (via `/gamedev:bug-report`); the task includes a severity in its description and a severity-mapped priority
+2. Phase 6: User marks Visual/Feel story as FAIL; a user-input tool or chat collects failure description: "Animation
+   plays at 2x speed — jitter visible on every loop"
+3. Phase 6: Spawns `gamedev:qa-tester` through authorized delegation to file a bug as a Backlog task with the `bug`
+   label (via `/skill:gamedev-bug-report`); the task includes a severity in its description and a severity-mapped
+   priority
 4. Result summary: "Stories PASS: 1, FAIL: 1 — bugs filed: BUG-001"
-5. Phase 7: Spawns `qa-lead` to produce sign-off report; Bugs Found table lists BUG-001 with severity and status Open; Verdict: NOT APPROVED (S1/S2 bug open, or FAIL without documented workaround)
+5. Phase 7: Spawns `gamedev:qa-lead` to produce sign-off report; Bugs Found table lists BUG-001 with severity and status
+   Open; Verdict: NOT APPROVED (S1/S2 bug open, or FAIL without documented workaround)
 6. Sign-off report write is offered; writes after approval
-7. Next step: "Resolve S1/S2 bugs and re-run `/gamedev:team-qa` or targeted manual QA before advancing."
+7. Next step: "Resolve S1/S2 bugs and re-run `/skill:gamedev-team-qa` or targeted manual QA before advancing."
 
 **Assertions:**
-- [ ] FAIL result in Phase 6 triggers AskUserQuestion to collect the failure description before the bug task is filed
-- [ ] the bug is filed via `/gamedev:bug-report` as a Backlog `bug` task — the orchestrator does not write a markdown bug file
+
+- [ ] FAIL result in Phase 6 triggers a user-input tool or chat to collect the failure description before the bug task
+      is filed
+- [ ] the bug is filed via `/skill:gamedev-bug-report` as a Backlog `bug` task — the orchestrator does not write a
+      markdown bug file
 - [ ] Bug is filed as a Backlog task carrying the `bug` label (no markdown bug file)
 - [ ] Bug report NNN is incremented correctly from existing bugs in the directory
 - [ ] Phase 7 sign-off report Bugs Found table includes the bug ID, story name, severity, and status
 - [ ] Verdict in sign-off report is NOT APPROVED
-- [ ] Next step explicitly mentions re-running `/gamedev:team-qa`
-- [ ] Verdict: COMPLETE is still issued by the orchestrator (the QA cycle finished — the verdict is NOT APPROVED, but the skill completed its pipeline)
+- [ ] Next step explicitly mentions re-running `/skill:gamedev-team-qa`
+- [ ] Verdict: COMPLETE is still issued by the orchestrator (the QA cycle finished — the verdict is NOT APPROVED, but
+      the skill completed its pipeline)
 
 ---
 
 ### Case 4: No Argument — Skill infers active milestone from the board or asks
 
 **Fixture (variant A — active work discoverable):**
+
 - `production/session-state/active.md` exists and references the `Combat System` milestone
 - The Backlog board has `In Progress`/`Done` tasks grouped under the `Combat System` milestone
 
 **Fixture (variant B — no active work discoverable):**
+
 - `production/session-state/active.md` does NOT exist
 - The Backlog board has no `In Progress` or `Done` tasks to infer a milestone from
 
-**Input:** `/gamedev:team-qa` (no argument)
+**Input:** `/skill:gamedev-team-qa` (no argument)
 
 **Expected behavior (variant A):**
-1. Phase 1: No argument provided; reads `production/session-state/active.md`; `task_list`s the Backlog board (status `In Progress`/`Done`)
+
+1. Phase 1: No argument provided; reads `production/session-state/active.md`; `task_list`s the Backlog board (status
+   `In Progress`/`Done`)
 2. Infers `Combat System` as the active milestone from both sources
-3. Proceeds as if `/gamedev:team-qa "Combat System"` was the input; reports "No milestone argument provided — inferred Combat System from session state and the board. Found [N] stories."
+3. Proceeds as if `/skill:gamedev-team-qa "Combat System"` was the input; reports "No milestone argument provided —
+   inferred Combat System from session state and the board. Found [N] stories."
 
 **Expected behavior (variant B):**
-1. Phase 1: No argument provided; `production/session-state/active.md` is missing; `task_list` returns no in-progress/done work to infer a milestone from
-2. Cannot infer a milestone; uses AskUserQuestion: "Which milestone or feature should QA cover?" with options to name one or cancel
+
+1. Phase 1: No argument provided; `production/session-state/active.md` is missing; `task_list` returns no
+   in-progress/done work to infer a milestone from
+2. Cannot infer a milestone; uses a user-input tool or chat: "Which milestone or feature should QA cover?" with options
+   to name one or cancel
 
 **Assertions:**
+
 - [ ] Skill does NOT default to a hardcoded milestone name when no argument is provided
-- [ ] Skill reads `production/session-state/active.md` AND `task_list`s the Backlog board before asking the user (variant A)
-- [ ] When no active work is discoverable, skill uses AskUserQuestion rather than guessing (variant B)
+- [ ] Skill reads `production/session-state/active.md` AND `task_list`s the Backlog board before asking the user
+      (variant A)
+- [ ] When no active work is discoverable, skill uses a user-input tool or chat rather than guessing (variant B)
 - [ ] Inferred milestone is reported to the user before proceeding (variant A transparency)
 - [ ] Skill does NOT error out when session state is missing — it falls back to asking (variant B)
 
@@ -153,6 +188,7 @@ independent stories.
 ### Case 5: Mixed Results — Some PASS, one FAIL with S1 bug, one BLOCKED
 
 **Fixture:**
+
 - The `Inventory` milestone has 4 story tasks on the board
 - Smoke check passes
 - Story A (Logic): automated test passes — PASS
@@ -160,18 +196,21 @@ independent stories.
 - Story C (Visual/Feel): manual QA — FAIL; tester identifies S1 crash on ability activation
 - Story D (Integration): cannot test — BLOCKED (dependency system not yet implemented)
 
-**Input:** `/gamedev:team-qa "Inventory"`
+**Input:** `/skill:gamedev-team-qa "Inventory"`
 
 **Expected behavior:**
+
 1. Phases 1–5 proceed; Phase 5 test cases cover stories B, C, D
 2. Phase 6: User marks Story A as implicitly PASS (automated); Story B: PASS WITH NOTES; Story C: FAIL; Story D: BLOCKED
 3. After Story C FAIL: a Backlog `bug` task filed for the crash with S1 severity (priority high)
 4. Result summary presented: "Stories PASS: 1, PASS WITH NOTES: 1, FAIL: 1 — bugs filed: BUG-001 (S1), BLOCKED: 1"
-5. Phase 7: qa-lead produces sign-off report covering all 4 stories; BUG-001 listed as S1/Open; Story D listed as BLOCKED; Verdict: NOT APPROVED
+5. Phase 7: qa-lead produces sign-off report covering all 4 stories; BUG-001 listed as S1/Open; Story D listed as
+   BLOCKED; Verdict: NOT APPROVED
 6. Sign-off report written after "May I write?" approval
-7. Next step: "Resolve S1/S2 bugs and re-run `/gamedev:team-qa` or targeted manual QA before advancing."
+7. Next step: "Resolve S1/S2 bugs and re-run `/skill:gamedev-team-qa` or targeted manual QA before advancing."
 
 **Assertions:**
+
 - [ ] All 4 stories appear in the Phase 7 sign-off report Test Coverage Summary table — none are silently omitted
 - [ ] Story D (BLOCKED) is listed in the report with a BLOCKED status, not silently dropped
 - [ ] S1 bug causes Verdict: NOT APPROVED regardless of the other stories passing
@@ -184,12 +223,14 @@ independent stories.
 
 ## Protocol Compliance
 
-- [ ] `AskUserQuestion` used at Phase 2 (strategy review), Phase 5 (test case approval per group), and Phase 6 (per-story manual QA result)
+- [ ] a user-input tool or chat used at Phase 2 (strategy review), Phase 5 (test case approval per group), and Phase 6
+      (per-story manual QA result)
 - [ ] Phase 4 smoke check is a hard gate: FAIL halts the pipeline at Phase 4 with no exceptions
 - [ ] "May I write?" asked separately for QA plan (Phase 3) and sign-off report (Phase 7)
-- [ ] Bug reports are always written by `qa-tester` via Task — orchestrator does not write directly
+- [ ] Bug reports are always written by `gamedev:qa-tester` through authorized delegation — orchestrator does not write
+      directly
 - [ ] Phase 5 qa-tester tasks for independent stories are issued in parallel where possible
-- [ ] Error recovery: any BLOCKED agent is surfaced immediately with AskUserQuestion options
+- [ ] Error recovery: any BLOCKED agent is surfaced immediately with a user-input tool or chat options
 - [ ] Partial report always produced — no work is discarded because one story failed or blocked
 - [ ] Sign-off verdict rules are strictly applied: any S1/S2 bug open = NOT APPROVED; no exceptions
 - [ ] Orchestrator-level Verdict: COMPLETE is distinct from the sign-off report's APPROVED/NOT APPROVED verdict
@@ -198,7 +239,13 @@ independent stories.
 
 ## Coverage Notes
 
-- The "APPROVED WITH CONDITIONS" verdict path (S3/S4 bugs, PASS WITH NOTES) is covered implicitly by Case 5's PASS WITH NOTES story (Story B) — if no S1/S2 bugs existed, that case would produce APPROVED WITH CONDITIONS. A dedicated case is not required as the verdict logic is table-driven.
-- The `feature: [system-name]` argument form is not separately tested — it follows the same Phase 1 logic as the milestone form, using glob instead of a milestone `task_list`. The no-argument inference path (Case 4) provides sufficient coverage of the detection logic.
-- Logic stories with passing automated tests do not need manual QA — this is validated implicitly by Case 5 (Story A) where the Logic story receives no manual QA phase.
-- Parallel qa-tester spawning in Phase 5 is validated implicitly by Case 1 (multiple Visual/Feel stories issued simultaneously); no dedicated parallelism case is required beyond the Static Assertions check.
+- The "APPROVED WITH CONDITIONS" verdict path (S3/S4 bugs, PASS WITH NOTES) is covered implicitly by Case 5's PASS WITH
+  NOTES story (Story B) — if no S1/S2 bugs existed, that case would produce APPROVED WITH CONDITIONS. A dedicated case
+  is not required as the verdict logic is table-driven.
+- The `feature: [system-name]` argument form is not separately tested — it follows the same Phase 1 logic as the
+  milestone form, using glob instead of a milestone `task_list`. The no-argument inference path (Case 4) provides
+  sufficient coverage of the detection logic.
+- Logic stories with passing automated tests do not need manual QA — this is validated implicitly by Case 5 (Story A)
+  where the Logic story receives no manual QA phase.
+- Parallel qa-tester spawning in Phase 5 is validated implicitly by Case 1 (multiple Visual/Feel stories issued
+  simultaneously); no dedicated parallelism case is required beyond the Static Assertions check.

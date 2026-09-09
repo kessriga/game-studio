@@ -12,8 +12,8 @@ A clear description of what the bug is.
 
 ## Steps to Reproduce
 
-1. Open Claude Code in a project using this template
-2. Run `/<skill>` or trigger `<agent>`
+1. Open Pi in a game repository using Game Studio
+2. Run `/skill:gamedev-<skill>` or delegate to a role through an available runner
 3. ...
 4. See error
 
@@ -29,16 +29,14 @@ What actually happened. Include any error messages or unexpected output.
 
 - **OS**: (e.g., Windows 10, macOS 14, Ubuntu 24.04)
 - **Shell**: (e.g., Git Bash, zsh, bash)
-- **Claude Code version**: (run `claude --version`)
+- **Pi version**: (run `pi --version`)
 - **Node.js version**: (run `node --version`)
-- **jq installed?**: Yes / No
 - **Python installed?**: Yes / No
 
 ## Affected Component
 
 - [ ] Agent (which one?):
 - [ ] Skill (which one?):
-- [ ] Hook (which one?):
 - [ ] Rule (which one?):
 - [ ] Template
 - [ ] Documentation

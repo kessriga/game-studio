@@ -24,9 +24,7 @@ export function boundedLines(lines: string[], width: number): string[] {
 }
 
 function stepLabel(step: Step): string {
-  return step.command
-    ? `${step.command.replace(/^\/gamedev:/, "/skill:gamedev-")} · ${step.name}`
-    : step.name;
+  return step.command ? `${step.command} · ${step.name}` : step.name;
 }
 
 export function compactLines(view: Snapshot): string[] {
@@ -78,10 +76,7 @@ export function panelLines(view: Snapshot): string[] {
       `${marker} ${row.step.name}${row.step.required ? "" : " (optional)"}`,
     );
     lines.push(`  ${row.status}`);
-    if (row.step.command)
-      lines.push(
-        `  ${row.step.command.replace(/^\/gamedev:/, "/skill:gamedev-")}`,
-      );
+    if (row.step.command) lines.push(`  ${row.step.command}`);
   }
   lines.push(
     "",

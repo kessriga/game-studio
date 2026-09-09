@@ -1,30 +1,29 @@
 # Context Management
 
-Keep the current task and its evidence within your assistant's available context.
-Save progress in files so work can continue after a summary or a new session.
+Keep the current task and its evidence within your assistant's available context. Save progress in files so work can
+continue after a summary or a new session.
 
 ## File-Backed State (Primary Strategy)
 
-**The file is the memory, not the conversation.** Conversations are ephemeral and
-will be compacted or lost. Files on disk persist across compactions and session crashes.
+**The file is the memory, not the conversation.** Conversations are ephemeral and will be compacted or lost. Files on
+disk persist across compactions and session crashes.
 
 ### Session State File
 
-Maintain `production/session-state/active.md` as a living checkpoint. Update it
-after each significant milestone:
+Maintain `production/session-state/active.md` as a living checkpoint. Update it after each significant milestone:
 
 - Design section approved and written to file
 - Architecture decision made
 - Implementation milestone reached
 - Test results obtained
 
-The state file should contain: current task, progress checklist, key decisions
-made, files being worked on, and open questions.
+The state file should contain: current task, progress checklist, key decisions made, files being worked on, and open
+questions.
 
 ### Active Work Block (Production+ only)
 
-When the project is in Production, Polish, or Release stage, include a structured
-status block in `active.md` that `gamedev:status` can report:
+When the project is in Production, Polish, or Release stage, include a structured status block in `active.md` that
+`gamedev:status` can report:
 
 ```markdown
 <!-- STATUS -->
@@ -49,22 +48,21 @@ When creating multi-section documents (design docs, architecture docs, lore entr
 2. Discuss and draft one section at a time in conversation
 3. Write each section to the file as soon as it's approved
 4. Update the session state file after each section
-5. After writing a section, previous discussion about that section can be safely
-   compacted — the decisions are in the file
+5. After writing a section, previous discussion about that section can be safely compacted — the decisions are in the
+   file
 
-This keeps the context window holding only the *current* section's discussion
-(~3-5k tokens) instead of the entire document's conversation history (~30-50k tokens).
+This keeps the context window holding only the *current* section's discussion (~3-5k tokens) instead of the entire
+document's conversation history (~30-50k tokens).
 
 ## Proactive Compaction
 
-- **Save a checkpoint early** when context is becoming full. Use the host's
-  summarization controls when available; some hosts compact automatically.
+- **Save a checkpoint early** when context is becoming full. Use the host's summarization controls when available; some
+  hosts compact automatically.
 - **Start a fresh session** between unrelated tasks when old context gets in the way.
-- **Natural compaction points:** after writing a section to file, after committing,
-  after completing a task, before starting a new topic
-- **Focused summary:** name the current task, sections already written, the
-  next step, and unresolved questions. Host-specific commands are covered in
-  [the Claude Code guide](claude-code.md#delegation-and-session-controls).
+- **Natural compaction points:** after writing a section to file, after committing, after completing a task, before
+  starting a new topic
+- **Focused summary:** name the current task, sections already written, the next step, and unresolved questions.
+  Host-specific commands are covered in [the Pi guide](pi.md).
 
 ## Context Budgets by Task Type
 
@@ -74,12 +72,11 @@ This keeps the context window holding only the *current* section's discussion
 
 ## Subagent Delegation
 
-When host policy and user authorization permit delegation, use subagents for
-bounded research or exploration. Follow [the host guide](host-runtime.md).
-Return the relevant findings, evidence, and limits:
+When host policy and user authorization permit delegation, use subagents for bounded research or exploration. Follow
+[the host guide](host-runtime.md). Return the relevant findings, evidence, and limits:
 
-- **Use subagents** when investigating across multiple files, exploring unfamiliar code,
-  or doing research that would consume >5k tokens of file reads
+- **Use subagents** when investigating across multiple files, exploring unfamiliar code, or doing research that would
+  consume >5k tokens of file reads
 - **Use direct reads** when you know exactly which 1-2 files to check
 - Do not rely on conversation inheritance; provide the task, inputs, and constraints explicitly
 
@@ -97,16 +94,14 @@ When context is compacted, preserve the following in the summary:
 - The current task and what step we are on
 - Which sections of the current document are written to file vs. still in progress
 
-**After compaction:** Read `production/session-state/active.md` and any files being
-actively worked on to recover full context. The files contain the decisions; the
-conversation history is secondary.
+**After compaction:** Read `production/session-state/active.md` and any files being actively worked on to recover full
+context. The files contain the decisions; the conversation history is secondary.
 
 ## Recovery After Session Crash
 
 If a session dies ("prompt too long") or you start a new session to continue work:
 
-1. Locate `production/session-state/active.md`. Claude's session-start hook may
-   preview it; other hosts must open it explicitly.
+1. Locate and explicitly open `production/session-state/active.md`.
 2. Read the full state file for context
 3. Read the partially-completed file(s) listed in the state
 4. Continue from the next incomplete section or task

@@ -1,29 +1,27 @@
-# Skill Test Spec: /gamedev:dev-story
+# Skill Test Spec: /skill:gamedev-dev-story
 
 ## Skill Summary
 
-`/gamedev:dev-story` reads a story file, loads all required context (referenced ADR,
-TR-ID from the registry, control manifest, engine preferences), implements the
-story, verifies that all acceptance criteria are met, and marks the story
-Complete. The skill routes implementation to the correct specialist agent based
-on the engine and file type — it does not write source code directly.
+`/skill:gamedev-dev-story` reads a story file, loads all required context (referenced ADR, TR-ID from the registry,
+control manifest, engine preferences), implements the story, verifies that all acceptance criteria are met, and marks
+the story Complete. The skill routes implementation to the correct specialist agent based on the engine and file type —
+it does not write source code directly.
 
-In `full` review mode, an LP-CODE-REVIEW gate runs before marking the story
-Complete. In `lean` or `solo` mode, LP-CODE-REVIEW is skipped and the story is
-marked Complete after the user confirms all criteria are met. The skill asks
+In `full` review mode, an LP-CODE-REVIEW gate runs before marking the story Complete. In `lean` or `solo` mode,
+LP-CODE-REVIEW is skipped and the story is marked Complete after the user confirms all criteria are met. The skill asks
 "May I write" before updating story status and before writing code files.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/gamedev:skill-test static` — no fixture needed.
+Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
 
-- [ ] Has required frontmatter fields: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
+- [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED, IN PROGRESS, NEEDS CHANGES
 - [ ] Contains "May I write" collaborative protocol language (story status + code files)
-- [ ] Has a next-step handoff at the end (`/gamedev:story-done`)
+- [ ] Has a next-step handoff at the end (`/skill:gamedev-story-done`)
 - [ ] Documents LP-CODE-REVIEW gate: active in full mode, skipped in lean/solo
 - [ ] Notes that implementation is delegated to specialist agents (not done directly)
 
@@ -31,11 +29,11 @@ Verified automatically by `/gamedev:skill-test static` — no fixture needed.
 
 ## Director Gate Checks
 
-In `full` mode: LP-CODE-REVIEW gate runs after implementation is complete and all
-criteria are verified, before marking the story Complete.
+In `full` mode: LP-CODE-REVIEW gate runs after implementation is complete and all criteria are verified, before marking
+the story Complete.
 
-In `lean` mode: LP-CODE-REVIEW is skipped. Output notes:
-"LP-CODE-REVIEW skipped — lean mode". Story is marked Complete after user confirms.
+In `lean` mode: LP-CODE-REVIEW is skipped. Output notes: "LP-CODE-REVIEW skipped — lean mode". Story is marked Complete
+after user confirms.
 
 In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 
@@ -46,6 +44,7 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 ### Case 1: Happy Path — Story implemented and marked Complete (full mode)
 
 **Fixture:**
+
 - A story file exists at `production/epics/[layer]/story-[name].md` with:
   - `Status: Ready`
   - A TR-ID referencing a registered requirement
@@ -53,12 +52,13 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
   - A test evidence path
 - Referenced ADR has `Status: Accepted`
 - `docs/architecture/control-manifest.md` exists
-- `.claude/docs/technical-preferences.md` has engine and language configured
+- `docs/technical-preferences.md` has engine and language configured
 - `production/session-state/review-mode.txt` contains `full`
 
-**Input:** `/gamedev:dev-story production/epics/[layer]/story-[name].md`
+**Input:** `/skill:gamedev-dev-story production/epics/[layer]/story-[name].md`
 
 **Expected behavior:**
+
 1. Skill reads the story file and all referenced context
 2. Skill verifies the ADR is Accepted (no block)
 3. Skill routes implementation to the correct specialist agent
@@ -68,6 +68,7 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 7. Story status is updated to Complete
 
 **Assertions:**
+
 - [ ] Skill reads story before spawning any agent
 - [ ] ADR status is checked before implementation begins
 - [ ] Implementation is delegated to a specialist agent (not done inline)
@@ -81,23 +82,26 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 ### Case 2: Failure Path — Referenced ADR is Proposed
 
 **Fixture:**
+
 - A story file exists with `Status: Ready`
 - The story's TR-ID points to a requirement covered by an ADR with `Status: Proposed`
 
-**Input:** `/gamedev:dev-story production/epics/[layer]/story-[name].md`
+**Input:** `/skill:gamedev-dev-story production/epics/[layer]/story-[name].md`
 
 **Expected behavior:**
+
 1. Skill reads the story file
 2. Skill resolves the TR-ID and reads the governing ADR
 3. ADR status is Proposed — skill outputs a BLOCKED message
 4. Skill names the specific ADR blocking the story
-5. Skill recommends running `/gamedev:architecture-decision` to advance the ADR
+5. Skill recommends running `/skill:gamedev-architecture-decision` to advance the ADR
 6. Implementation does NOT begin
 
 **Assertions:**
+
 - [ ] Skill does NOT begin implementation with a Proposed ADR
 - [ ] BLOCKED message names the specific ADR number and title
-- [ ] Skill recommends `/gamedev:architecture-decision` as the next action
+- [ ] Skill recommends `/skill:gamedev-architecture-decision` as the next action
 - [ ] Story status remains unchanged (not set to In Progress or Complete)
 
 ---
@@ -105,13 +109,15 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 ### Case 3: Ambiguous Acceptance Criteria — Skill asks for clarification
 
 **Fixture:**
+
 - A story file exists with `Status: Ready`
 - Referenced ADR is Accepted
 - One acceptance criterion is ambiguous (not Given-When-Then; uses subjective language like "feels responsive")
 
-**Input:** `/gamedev:dev-story production/epics/[layer]/story-[name].md`
+**Input:** `/skill:gamedev-dev-story production/epics/[layer]/story-[name].md`
 
 **Expected behavior:**
+
 1. Skill reads the story and identifies the ambiguous criterion
 2. Before routing to the specialist, skill asks the user to clarify the criterion
 3. User provides a concrete, testable restatement
@@ -119,6 +125,7 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 5. Skill does NOT guess at the intended behavior
 
 **Assertions:**
+
 - [ ] Skill surfaces the ambiguous criterion before implementation starts
 - [ ] Skill asks for user clarification (not auto-interpretation)
 - [ ] Implementation begins only after clarification is provided
@@ -129,13 +136,15 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 ### Case 4: Edge Case — No argument; reads from session state
 
 **Fixture:**
+
 - No argument is provided
 - `production/session-state/active.md` references an active story file
 - That story file exists with `Status: In Progress`
 
-**Input:** `/gamedev:dev-story` (no argument)
+**Input:** `/skill:gamedev-dev-story` (no argument)
 
 **Expected behavior:**
+
 1. Skill detects no argument is provided
 2. Skill reads `production/session-state/active.md`
 3. Skill finds the active story reference
@@ -143,6 +152,7 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 5. After confirmation, skill proceeds with that story
 
 **Assertions:**
+
 - [ ] Skill reads session state when no argument is provided
 - [ ] Skill confirms the active story with the user before proceeding
 - [ ] Skill does NOT silently assume the active story without confirmation
@@ -153,31 +163,37 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 ### Case 5: Director Gate — LP-CODE-REVIEW returns NEEDS CHANGES; lean mode skips gate
 
 **Fixture (full mode):**
+
 - Story is implemented and all criteria appear met
 - `production/session-state/review-mode.txt` contains `full`
 - LP-CODE-REVIEW gate returns NEEDS CHANGES with specific feedback
 
 **Full mode expected behavior:**
+
 1. LP-CODE-REVIEW gate spawns after implementation
 2. Gate returns NEEDS CHANGES with 2 specific issues
 3. Story status remains In Progress — NOT marked Complete
 4. User is shown the gate feedback and asked how to proceed
 
 **Assertions (full mode):**
+
 - [ ] Story is NOT marked Complete when LP-CODE-REVIEW returns NEEDS CHANGES
 - [ ] Gate feedback is shown to the user verbatim
 - [ ] Story status stays In Progress until issues are resolved and gate passes
 
 **Fixture (lean mode):**
+
 - Same story, `production/session-state/review-mode.txt` contains `lean`
 
 **Lean mode expected behavior:**
+
 1. Implementation completes
 2. LP-CODE-REVIEW gate is skipped — noted in output
 3. User is asked to confirm all criteria are met
 4. Story is marked Complete after user confirmation
 
 **Assertions (lean mode):**
+
 - [ ] "LP-CODE-REVIEW skipped — lean mode" appears in output
 - [ ] Story is marked Complete after user confirms criteria (no gate required)
 - [ ] Skill does NOT block on a gate that is skipped
@@ -191,15 +207,15 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 - [ ] "May I write" asked before updating story status and before writing code files
 - [ ] Skipped gates noted by name and mode in output
 - [ ] Updates `production/session-state/active.md` after story completion
-- [ ] Ends with next-step handoff: `/gamedev:story-done`
+- [ ] Ends with next-step handoff: `/skill:gamedev-story-done`
 
 ---
 
 ## Coverage Notes
 
-- Engine routing logic (Godot vs Unity vs Unreal) is not tested per engine —
-  the routing pattern is consistent; engine selection is a config fact.
-- Visual/Feel and UI story types (no automated test required) have different
-  evidence requirements and are not covered in these cases.
-- Integration story type follows the same pattern as Logic but with a different
-  evidence path — not independently fixture-tested.
+- Engine routing logic (Godot vs Unity vs Unreal) is not tested per engine — the routing pattern is consistent; engine
+  selection is a config fact.
+- Visual/Feel and UI story types (no automated test required) have different evidence requirements and are not covered
+  in these cases.
+- Integration story type follows the same pattern as Logic but with a different evidence path — not independently
+  fixture-tested.
