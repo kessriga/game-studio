@@ -116,6 +116,9 @@ test("the pane lists the phase steps after a session start in a game project", a
     },
   }));
   on("command.register", (_, e) => ({ value: { command: e.name } }));
+  on("tool.register", (_, e) => ({
+    value: { tool: `mcp__gamedev__${e.name}` },
+  }));
   let status: string | undefined;
   on("ui.status", (_, e) => {
     status = e.text;

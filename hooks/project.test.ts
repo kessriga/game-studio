@@ -84,6 +84,9 @@ test("the mod runs the CLI in the project and leaves other directories alone", a
     };
   });
   on("command.register", (_, e) => ({ value: { command: e.name } }));
+  on("tool.register", (_, e) => ({
+    value: { tool: `mcp__gamedev__${e.name}` },
+  }));
   on("ui.status", () => ({ value: undefined }));
   on("session.start", (_, e) => ({ cwd: e.cwd }));
   await $.session.start({
