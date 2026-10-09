@@ -14,6 +14,29 @@ import {
   toolBody,
 } from "./commands.ts";
 import type { WorkflowCommand } from "./commands.ts";
+import {
+  ACTIVE_STATE,
+  GUIDE,
+  handoffNote,
+  hasRootGuide,
+  nestedGuideNote,
+  newNestedGuides,
+  promptContext,
+  rootGuideFile,
+  touchedPath,
+} from "./context.ts";
+import {
+  checkAsset,
+  checksNote,
+  checkStagedFiles,
+  isAssetPath,
+  isGitCommit,
+  isGitPush,
+  pathsToRead,
+  protectedPushTarget,
+  pushReminder,
+} from "./validators.ts";
+import type { Finding, StagedFile } from "./validators.ts";
 import { PANE, paneTree, statusText, summaryText } from "./view.tsx";
 
 const tracking = atom(
@@ -40,6 +63,8 @@ const NOT_A_PROJECT =
 /** The game repository this session tracks; undefined outside a game project. A reload re-detects it. */
 let root: string | undefined;
 let pending: Timer | undefined;
+/** Directories whose nested AGENTS.md this session has already shown. */
+const shownGuides = new Set<string>();
 
 async function isGameProject(
   $: EngineInterface,
@@ -163,6 +188,83 @@ async function approveFromUser(
   return "Approval recorded. Changed evidence will require a new review.";
 }
 
+/** Attach notes the model reads after a tool's result; the person never sees them typed. */
+function withNotes<R extends { context?: readonly string[] }>(
+  result: R,
+  notes: readonly string[],
+): R {
+  if (!notes.length) return result;
+  return { ...result, context: [...(result.context ?? []), ...notes] };
+}
+
+async function readOptional(
+  $: EngineInterface,
+  path: string,
+): Promise<string | undefined> {
+  try {
+    const text = await $.fs.read(path);
+    return typeof text === "string" ? text : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+async function stagedFinding($: EngineInterface): Promise<Finding> {
+  const staged = await $.process.run(
+    ["git", "diff", "--cached", "--name-only"],
+    {
+      cwd: root,
+    },
+  );
+  if (staged.exitCode !== 0) return { notes: [] };
+  const paths = pathsToRead(
+    staged.stdout
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean),
+  );
+  const files: StagedFile[] = [];
+  for (const path of paths)
+    files.push({ path, content: await readOptional($, `${root}/${path}`) });
+  return checkStagedFiles(files);
+}
+
+async function currentBranch($: EngineInterface): Promise<string | undefined> {
+  const result = await $.process.run(
+    ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+    {
+      cwd: root,
+    },
+  );
+  return result.exitCode === 0 ? result.stdout.trim() : undefined;
+}
+
+async function assetNotes(
+  $: EngineInterface,
+  path: string,
+  content: string | undefined,
+): Promise<string[]> {
+  const finding = checkAsset(path, content ?? (await readOptional($, path)));
+  return finding.notes.length
+    ? [checksNote("asset checks", finding.notes)]
+    : [];
+}
+
+/** Nested AGENTS.md guides above a touched path, each shown once per session. */
+async function nestedGuideNotes(
+  $: EngineInterface,
+  path: string,
+): Promise<string[]> {
+  if (!root) return [];
+  let found;
+  try {
+    found = await $.fs.ancestors({ names: [GUIDE], of: path, below: root });
+  } catch {
+    return [];
+  }
+  return newNestedGuides(found, root, shownGuides).map(nestedGuideNote);
+}
+
 function refreshSoon($: EngineInterface): void {
   pending?.cancel();
   pending = $.clock.after(250, () => {
@@ -173,6 +275,7 @@ function refreshSoon($: EngineInterface): void {
 
 export const register: Register = (on) => {
   on("session.start", async ($, e, next) => {
+    shownGuides.clear();
     root = (await isGameProject($, e.cwd)) ? e.cwd : undefined;
     if (!root) {
       $.ui.status(undefined);
@@ -259,6 +362,80 @@ export const register: Register = (on) => {
     }
   });
 
+  on("tool.call", { tool: "Bash" }, async ($, e, next) => {
+    if (!root) return next(e);
+    const notes: string[] = [];
+    if (isGitCommit(e.command)) {
+      const finding = await stagedFinding($);
+      if (finding.deny) return { deny: finding.deny };
+      if (finding.notes.length)
+        notes.push(checksNote("commit checks", finding.notes));
+    } else if (isGitPush(e.command)) {
+      const target = protectedPushTarget(e.command, await currentBranch($));
+      if (target) notes.push(pushReminder(target));
+    }
+    return withNotes(await next(e), notes);
+  });
+
+  on("tool.call", { tool: "Write" }, async ($, e, next) => {
+    const result = await next(e);
+    if (!root || result.deny || result.isError || !isAssetPath(e.file_path))
+      return result;
+    return withNotes(result, await assetNotes($, e.file_path, e.content));
+  });
+
+  on("tool.call", { tool: "Edit" }, async ($, e, next) => {
+    const result = await next(e);
+    if (!root || result.deny || result.isError || !isAssetPath(e.file_path))
+      return result;
+    return withNotes(result, await assetNotes($, e.file_path, undefined));
+  });
+
+  on("prompt.submit", async ($, e, next) => {
+    if (!root) return next(e);
+    const text = promptContext(summaryText(await refresh($)));
+    return next({ ...e, context: [...(e.context ?? []), text] });
+  });
+
+  on("prompt.context", async ($, e, next) => {
+    const result = await next(e);
+    if (!root || !result.instructionFiles) return result;
+    if (hasRootGuide(result.instructionFiles, root)) return result;
+    const content = await readOptional($, `${root}/${GUIDE}`);
+    if (content === undefined) return result;
+    return {
+      ...result,
+      instructionFiles: [
+        ...result.instructionFiles,
+        rootGuideFile(root, content),
+      ],
+    };
+  });
+
+  on("classic.PreCompact", async ($, e, next) => {
+    if (root) {
+      const content = await readOptional($, `${root}/${ACTIVE_STATE}`);
+      if (content?.trim()) {
+        try {
+          await $.session.append({
+            message: {
+              type: "user",
+              content: [{ type: "text", text: handoffNote(content) }],
+            },
+          });
+        } catch {
+          $.ui.log(
+            "Game Studio could not keep the handoff before compaction.",
+            {
+              to: "debug",
+            },
+          );
+        }
+      }
+    }
+    return next(e);
+  });
+
   on("turn.complete", async ($, e, next) => {
     const result = await next(e);
     if (root) refreshSoon($);
@@ -267,7 +444,10 @@ export const register: Register = (on) => {
 
   on("tool.call", async ($, e, next) => {
     const result = await next(e);
-    if (root && REFRESH_TOOLS.has(e.tool)) refreshSoon($);
-    return result;
+    if (!root) return result;
+    if (REFRESH_TOOLS.has(e.tool)) refreshSoon($);
+    const path = touchedPath(e as unknown as Record<string, unknown>);
+    if (!path || result.deny) return result;
+    return withNotes(result, await nestedGuideNotes($, path));
   });
 };
