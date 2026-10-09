@@ -33,6 +33,10 @@ Local macOS checks on 2026-10-09 against the uncommitted 0.5.0 worktree with Cla
 - Independent review of the branch found two confirmed bugs (commit `-a` bypassed the staged-file checks; a `#` or `%`
   in the plugin path broke the CLI's entry guard) and eight lower findings; all code findings were fixed with regression
   tests before the PR. CI with the Claude CLI installed runs on the PR.
+- Hosted [run 37933123083](https://github.com/kessriga/game-studio/actions/runs/37933123083) at `945d69b` on
+  [PR #22](https://github.com/kessriga/game-studio/pull/22) passed on Linux, macOS, and Windows with the Claude CLI
+  installed. The first Windows run failed 15 mod tests because the engine resolves the test root to a drive path; the
+  fixtures now compare normalised paths. Later pushes must be checked at the PR head.
 - Not run: interactive pane and status line smoke, a live `/compact`, a conversational game workflow, a marketplace
   install from GitHub, hosted CI with the Claude CLI installed, Windows, and a Pi session. No release was made.
 
