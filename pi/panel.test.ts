@@ -14,8 +14,8 @@ import {
   panelLines,
   plain,
 } from "./panel.ts";
-import { phases } from "./workflow.ts";
-import type { Snapshot } from "./workflow.ts";
+import { phases } from "../workflow/workflow.ts";
+import type { Snapshot } from "../workflow/workflow.ts";
 
 function pendingPhase(phase: string): Snapshot {
   return {

@@ -7,8 +7,8 @@ import {
   truncateToWidth,
 } from "@earendil-works/pi-tui";
 import type { OverlayHandle, TUI } from "@earendil-works/pi-tui";
-import { blockers, phases } from "./workflow.ts";
-import type { Snapshot, Step } from "./workflow.ts";
+import { blockers, phases } from "../workflow/workflow.ts";
+import type { Snapshot, Step } from "../workflow/workflow.ts";
 
 export function plain(text: string): string {
   return stripTerminalSequences(text).replace(

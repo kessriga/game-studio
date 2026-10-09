@@ -12,7 +12,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test, type TestContext } from "node:test";
 import { fingerprint, readState, STATE_FILE } from "./progress-store.ts";
-import { compactLines } from "./panel.ts";
+import { compactLines } from "../pi/panel.ts";
 import {
   blockers,
   phases,

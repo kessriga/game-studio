@@ -19,8 +19,8 @@ import type {
 } from "@earendil-works/pi-coding-agent";
 import { TuiMainScreen, type Terminal, type TUI } from "@earendil-works/pi-tui";
 import gameStudio from "./extension.ts";
-import { readState } from "./progress-store.ts";
-import { snapshot } from "./workflow.ts";
+import { readState } from "../workflow/progress-store.ts";
+import { snapshot } from "../workflow/workflow.ts";
 
 type Handler = (
   event: unknown,

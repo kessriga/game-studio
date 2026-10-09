@@ -49,6 +49,7 @@ class PiPackageTests(unittest.TestCase):
             "templates/",
             "docs/",
             "bin/",
+            "workflow/",
             "scripts/scaffold-project.py",
         ):
             self.assertIn(path, package["files"])
