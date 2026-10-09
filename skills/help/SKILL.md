@@ -12,7 +12,7 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 This skill is read-only — it reports findings but writes no files.
 
 This skill figures out exactly where you are in the game development pipeline and tells you what comes next. It is
-**lightweight** — not a full audit. For a full gap analysis, use `/skill:gamedev-project-stage-detect`.
+**lightweight** — not a full audit. For a full gap analysis, use the `gamedev:project-stage-detect` skill.
 
 ---
 
@@ -174,7 +174,7 @@ Command: `[/command]`
 - [Next required step name] (`/command`)
 
 ---
-Approaching **[next phase]** gate → run `/skill:gamedev-gate-check` when ready.
+Approaching **[next phase]** gate → run `gamedev:gate-check` when ready.
 ```
 
 **Formatting rules:**
@@ -195,7 +195,7 @@ Verdict: **COMPLETE** — next steps identified.
 After the current phase's steps, check if the user is likely approaching a gate:
 
 - If all required steps in the current phase are complete (or nearly complete), add: "You're close to the
-  **[Current] → [Next]** gate. Run `/skill:gamedev-gate-check` when ready."
+  **[Current] → [Next]** gate. Run the `gamedev:gate-check` skill when ready."
 - If multiple required steps remain, skip the gate warning — it's not relevant yet.
 
 ---
@@ -207,9 +207,9 @@ After the recommendations, if the user seems stuck or confused, add:
 ```
 ---
 Need more detail?
-- `/skill:gamedev-project-stage-detect` — full gap analysis with all missing artifacts listed
-- `/skill:gamedev-gate-check` — formal readiness check for your next phase
-- `/skill:gamedev-start` — re-orient from scratch
+- `gamedev:project-stage-detect` — full gap analysis with all missing artifacts listed
+- `gamedev:gate-check` — formal readiness check for your next phase
+- `gamedev:start` — re-orient from scratch
 ```
 
 Only show this if the user's input suggested confusion (e.g. "I don't know", "stuck", "lost", "not sure"). Don't show it

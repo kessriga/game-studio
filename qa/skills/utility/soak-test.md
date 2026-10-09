@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-soak-test
+# Skill Test Spec: gamedev:soak-test
 
 ## Skill Summary
 
-`/skill:gamedev-soak-test` generates a structured soak test protocol — an extended runtime test plan designed to surface
+`gamedev:soak-test` generates a structured soak test protocol — an extended runtime test plan designed to surface
 memory leaks, performance drift, and stability issues that only appear under sustained gameplay. The skill produces a
 document specifying the test duration, system under test, monitoring checkpoints (e.g., memory sample every 30 minutes),
 pass/fail thresholds, and conditions for early termination.
@@ -15,19 +15,19 @@ verdict is COMPLETE when the soak test protocol is written.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keyword: COMPLETE
 - [ ] Contains "May I write" collaborative protocol language before writing the protocol
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-regression-suite` or `/skill:gamedev-release-checklist`)
+- [ ] Has a next-step handoff (e.g., `gamedev:regression-suite` or `gamedev:release-checklist`)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-soak-test` is a QA planning utility. No director gates apply.
+None. `gamedev:soak-test` is a QA planning utility. No director gates apply.
 
 ---
 
@@ -40,7 +40,7 @@ None. `/skill:gamedev-soak-test` is a QA planning utility. No director gates app
 - User specifies: system = "online multiplayer lobby", duration = "2 hours"
 - `technical-preferences.md` has engine configured
 
-**Input:** `/skill:gamedev-soak-test online-lobby 2h`
+**Input:** `gamedev:soak-test online-lobby 2h`
 
 **Expected behavior:**
 
@@ -68,7 +68,7 @@ None. `/skill:gamedev-soak-test` is a QA planning utility. No director gates app
 - No arguments provided
 - No soak test config in session state
 
-**Input:** `/skill:gamedev-soak-test`
+**Input:** `gamedev:soak-test`
 
 **Expected behavior:**
 
@@ -95,7 +95,7 @@ None. `/skill:gamedev-soak-test` is a QA planning utility. No director gates app
 - `production/qa/soak-online-lobby-2026-03-15.md` exists with a 1-hour protocol
 - User wants to extend to 4 hours with new memory threshold conditions
 
-**Input:** `/skill:gamedev-soak-test online-lobby 4h`
+**Input:** `gamedev:soak-test online-lobby 4h`
 
 **Expected behavior:**
 
@@ -123,7 +123,7 @@ None. `/skill:gamedev-soak-test` is a QA planning utility. No director gates app
 - `technical-preferences.md` specifies target platform: Mobile
 - User requests soak test for "gameplay session" at 30 minutes
 
-**Input:** `/skill:gamedev-soak-test gameplay 30m`
+**Input:** `gamedev:soak-test gameplay 30m`
 
 **Expected behavior:**
 
@@ -150,7 +150,7 @@ None. `/skill:gamedev-soak-test` is a QA planning utility. No director gates app
 
 - Valid system and duration provided
 
-**Input:** `/skill:gamedev-soak-test combat 1h`
+**Input:** `gamedev:soak-test combat 1h`
 
 **Expected behavior:**
 

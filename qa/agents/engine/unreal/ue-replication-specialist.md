@@ -101,4 +101,4 @@ clients can see other players' equipment changes immediately." **Expected behavi
 - Case 5 is the most important context-awareness test; agent must use actual budget numbers, not generic advice
 - Case 1 GAS branch: if GAS is configured, agent should detect it and defer to ue-gas-specialist for GAS-managed
   attributes
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

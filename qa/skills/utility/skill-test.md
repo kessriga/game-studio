@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-skill-test
+# Skill Test Spec: gamedev:skill-test
 
 ## Skill Summary
 
-`/skill:gamedev-skill-test` validates skill files for structural correctness, behavioral compliance, and category-rubric
+`gamedev:skill-test` validates skill files for structural correctness, behavioral compliance, and category-rubric
 scoring. It operates in three modes:
 
 - **static**: Checks a single skill file for structural requirements (frontmatter fields, phase headings, verdict
@@ -19,20 +19,20 @@ against rubric criteria. The verdict system differs by mode.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdicts: COMPLIANT, NON-COMPLIANT, WARNINGS (static mode); PASS, FAIL, PARTIAL (spec mode); COMPLETE
       (audit mode)
 - [ ] Does NOT contain "May I write" language (skill is read-only in all modes)
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-skill-improve` to fix issues found)
+- [ ] Has a next-step handoff (e.g., `gamedev:skill-improve` to fix issues found)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-skill-test` is a meta-utility skill. No director gates apply.
+None. `gamedev:skill-test` is a meta-utility skill. No director gates apply.
 
 ---
 
@@ -51,7 +51,7 @@ None. `/skill:gamedev-skill-test` is a meta-utility skill. No director gates app
   - Documents director gates
   - Documents gate mode behavior (lean/solo skips)
 
-**Input:** `/skill:gamedev-skill-test static brainstorm`
+**Input:** `gamedev:skill-test static brainstorm`
 
 **Expected behavior:**
 
@@ -77,7 +77,7 @@ None. `/skill:gamedev-skill-test` is a meta-utility skill. No director gates app
 - `skills/some-skill/SKILL.md` has file-writing steps in its workflow body
 - The skill body has no "May I write" or "May I update" language
 
-**Input:** `/skill:gamedev-skill-test static some-skill`
+**Input:** `gamedev:skill-test static some-skill`
 
 **Expected behavior:**
 
@@ -103,7 +103,7 @@ None. `/skill:gamedev-skill-test` is a meta-utility skill. No director gates app
 - `tests/skills/gate-check.md` exists with 5 test cases
 - `skills/gate-check/SKILL.md` exists
 
-**Input:** `/skill:gamedev-skill-test spec gate-check`
+**Input:** `gamedev:skill-test spec gate-check`
 
 **Expected behavior:**
 
@@ -130,7 +130,7 @@ None. `/skill:gamedev-skill-test` is a meta-utility skill. No director gates app
 - `agents/` contains 49+ agent files
 - `tests/skills/` contains spec files for a subset of skills
 
-**Input:** `/skill:gamedev-skill-test audit`
+**Input:** `gamedev:skill-test audit`
 
 **Expected behavior:**
 
@@ -159,7 +159,7 @@ None. `/skill:gamedev-skill-test` is a meta-utility skill. No director gates app
   guard, G2: has verdict table, etc.)
 - `skills/gate-check/SKILL.md` is a gate skill
 
-**Input:** `/skill:gamedev-skill-test category gate-check`
+**Input:** `gamedev:skill-test category gate-check`
 
 **Expected behavior:**
 
@@ -185,7 +185,7 @@ None. `/skill:gamedev-skill-test` is a meta-utility skill. No director gates app
 - [ ] Audit mode covers all skills AND agents (not just one category)
 - [ ] Category mode reads quality-rubric.md to get criteria (not hardcoded)
 - [ ] Does not write any files in any mode
-- [ ] Suggests `/skill:gamedev-skill-improve` as the next step when issues are found
+- [ ] Suggests `gamedev:skill-improve` as the next step when issues are found
 
 ---
 

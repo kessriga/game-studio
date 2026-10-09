@@ -13,15 +13,15 @@ Detects cross-document inconsistencies by comparing all GDDs against the entity 
 (`design/registry/entities.yaml`). Uses a grep-first approach: reads the registry once, then targets only the GDD
 sections that mention registered names — no full document reads unless a conflict needs investigation.
 
-**This skill is the write-time safety net.** It catches what `/skill:gamedev-design-system`'s per-section checks may
-have missed and what `/skill:gamedev-review-all-gdds`'s holistic review catches too late.
+**This skill is the write-time safety net.** It catches what `gamedev:design-system`'s per-section checks may have
+missed and what `gamedev:review-all-gdds`'s holistic review catches too late.
 
 **When to run:**
 
 - After writing each new GDD (before moving to the next system)
-- Before `/skill:gamedev-review-all-gdds` (so that skill starts with a clean baseline)
-- Before `/skill:gamedev-create-architecture` (inconsistencies poison downstream ADRs)
-- On demand: `/skill:gamedev-consistency-check entity:[name]` to check one entity specifically
+- Before `gamedev:review-all-gdds` (so that skill starts with a clean baseline)
+- Before `gamedev:create-architecture` (inconsistencies poison downstream ADRs)
+- On demand: `gamedev:consistency-check entity:[name]` to check one entity specifically
 
 **Output:** Conflict report + optional registry corrections
 
@@ -43,8 +43,8 @@ Read path="design/registry/entities.yaml"
 ```
 
 If the file does not exist or has no entries:
-> "Entity registry is empty. Run `/skill:gamedev-design-system` to write GDDs — the registry is populated automatically
-> after each GDD is completed. Nothing to check yet."
+> "Entity registry is empty. Run the `gamedev:design-system` skill to write GDDs — the registry is populated
+> automatically after each GDD is completed. Nothing to check yet."
 
 Stop and exit.
 
@@ -258,7 +258,7 @@ If any 🔴 CONFLICT entries were found (regardless of whether they were resolve
 `docs/consistency-failures.md` for each conflict:
 
 ```markdown
-### [YYYY-MM-DD] — /skill:gamedev-consistency-check — 🔴 CONFLICT
+### [YYYY-MM-DD] — gamedev:consistency-check — 🔴 CONFLICT
 **Domain**: [system domain(s) involved]
 **Documents involved**: [source GDD] vs [conflicting GDD]
 **What happened**: [specific conflict — entity name, attribute, differing values]
@@ -272,7 +272,7 @@ If `docs/consistency-failures.md` does not exist, create it with this header bef
 ```markdown
 # Consistency Failure Log
 
-<!-- Auto-maintained by /skill:gamedev-consistency-check. Do not edit manually. -->
+<!-- Auto-maintained by gamedev:consistency-check. Do not edit manually. -->
 <!-- One entry per detected conflict, in chronological order. -->
 
 | Date | GDD A | GDD B | Conflict Type | Status |
@@ -297,7 +297,7 @@ Then close with a user-input tool or chat widget:
 - **Options**:
   - `[A] Fix the highest-priority conflict now`
   - `[B] Save full report and stop`
-  - `[C] Run /skill:gamedev-design-review on the most conflicted GDD`
+  - `[C] Run gamedev:design-review on the most conflicted GDD`
   - `[D] Stop here`
 
 Never end the skill with plain text. Always close with this widget.
@@ -306,8 +306,8 @@ Never end the skill with plain text. Always close with this widget.
 
 ## Recovery / Reference
 
-- **If PASS**: Run `/skill:gamedev-review-all-gdds` for holistic design-theory review, or
-  `/skill:gamedev-create-architecture` if all MVP GDDs are complete.
-- **If CONFLICTS FOUND**: Fix the flagged GDDs, then re-run `/skill:gamedev-consistency-check` to confirm resolution.
+- **If PASS**: Run the `gamedev:review-all-gdds` skill for holistic design-theory review, or
+  `gamedev:create-architecture` if all MVP GDDs are complete.
+- **If CONFLICTS FOUND**: Fix the flagged GDDs, then re-run the `gamedev:consistency-check` skill to confirm resolution.
 - **If STALE REGISTRY**: Update the registry (Phase 6), then re-run to verify.
-- Run `/skill:gamedev-consistency-check` after writing each new GDD to catch issues early, not at architecture time.
+- Run the `gamedev:consistency-check` skill after writing each new GDD to catch issues early, not at architecture time.

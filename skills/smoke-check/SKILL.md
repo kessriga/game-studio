@@ -21,7 +21,7 @@ and demoralises the team.
 
 ## Parse Arguments
 
-Arguments can be combined: `/skill:gamedev-smoke-check --platform console`
+Arguments can be combined: `gamedev:smoke-check --platform console`
 
 **Base mode** (first argument, default: `milestone`):
 
@@ -45,7 +45,7 @@ addition to the overall verdict.
 Before running anything, understand the environment:
 
 1. **Test framework check**: verify `tests/` directory exists. If it does not: "No test directory found at `tests/`. Run
-   `/skill:gamedev-test-setup` to scaffold the testing infrastructure, or create the directory manually if tests live
+   `gamedev:test-setup` to scaffold the testing infrastructure, or create the directory manually if tests live
    elsewhere." Then stop.
 
 2. **CI check**: check whether `.github/workflows/` contains a workflow file referencing tests. Note in the report
@@ -59,8 +59,8 @@ Before running anything, understand the environment:
    fallback).
 
 5. **QA plan check**: glob `production/qa/qa-plan-*.md` and take the most recently modified file. If found, note the
-   path — it will be used in Phase 3 and Phase 4. If not found, note: "No QA plan found. Run
-   `/skill:gamedev-qa-plan milestone` before smoke-checking for best results."
+   path — it will be used in Phase 3 and Phase 4. If not found, note: "No QA plan found. Run `gamedev:qa-plan milestone`
+   before smoke-checking for best results."
 
 Report findings before proceeding: "Environment: [engine]. Test directory: [found / not found]. CI configured: [yes /
 no]. QA plan: [path / not found]."
@@ -119,7 +119,7 @@ Parse the trailing `test result: ok. N passed; M failed; ...` summary line(s) fo
 means the smoke check FAILS.
 
 **Unknown engine / not configured:** "Engine not configured in `docs/technical-preferences.md`. Run
-`/skill:gamedev-setup-engine` to specify the engine, then re-run `/skill:gamedev-smoke-check`."
+`gamedev:setup-engine` to specify the engine, then re-run the `gamedev:smoke-check` skill."
 
 **If the test runner is not available in this environment** (engine binary not on PATH, runner script not found, etc.),
 report clearly:
@@ -149,7 +149,7 @@ Draw the story list from, in priority order:
 2. The current milestone's story tasks from the Backlog board (`task_list` by milestone), following each task's `Spec:`
    reference to its story `.md`
 3. If the `quick` argument was passed, skip this phase entirely and note: "Coverage scan skipped — run
-   `/skill:gamedev-smoke-check` for full coverage analysis."
+   `gamedev:smoke-check` for full coverage analysis."
 
 For each story in scope:
 
@@ -169,7 +169,7 @@ Assign a coverage status to each story:
 | **UNKNOWN** | Story file missing or unreadable |
 
 MISSING entries are advisory gaps. They do not cause a FAIL verdict but must appear prominently in the report and must
-be resolved before `/skill:gamedev-story-done` can fully close those stories.
+be resolved before `gamedev:story-done` can fully close those stories.
 
 ---
 
@@ -286,7 +286,7 @@ Assemble the full smoke check report:
 **Date**: [date]
 **Milestone**: [milestone name / number, or "Not identified"]
 **Engine**: [engine]
-**QA Plan**: [path, or "Not found — run /skill:gamedev-qa-plan first"]
+**QA Plan**: [path, or "Not found — run gamedev:qa-plan first"]
 **Argument**: [milestone | quick | blank]
 
 ---
@@ -332,7 +332,7 @@ will determine whether the automated test row contributes to a FAIL verdict."
 ### Missing Test Evidence
 
 Stories that must have test evidence before they can be marked COMPLETE via
-`/skill:gamedev-story-done`:
+`gamedev:story-done`:
 
 - **[story title]** (`[path]`) — Logic story has no test file.
   Expected location: `tests/unit/[system]/[story-slug]_test.[ext]`
@@ -393,13 +393,13 @@ After writing, deliver the gate verdict:
 
 [List each failing automated test or smoke check with a one-line description]
 
-Fix the failures and run `/skill:gamedev-smoke-check` again to re-gate before QA hand-off."
+Fix the failures and run the `gamedev:smoke-check` skill again to re-gate before QA hand-off."
 
 **If verdict is PASS WITH WARNINGS:**
 
 "Smoke check passed with warnings. The build is ready for manual QA.
 
-Advisory items to resolve before running `/skill:gamedev-story-done` on affected stories: [list MISSING test evidence
+Advisory items to resolve before running the `gamedev:story-done` skill on affected stories: [list MISSING test evidence
 entries]
 
 QA hand-off: share `production/qa/qa-plan-[milestone].md` with the qa-tester agent to begin manual verification."
@@ -418,8 +418,7 @@ QA hand-off: share `production/qa/qa-plan-[milestone].md` with the qa-tester age
   Unconfirmed NOT RUN contributes to PASS WITH WARNINGS, not FAIL.
 - **Never auto-fix failures** — report them and state what must be resolved. Do not attempt to edit source code or test
   files.
-- **PASS WITH WARNINGS does not block QA hand-off** — it records advisory gaps for `/skill:gamedev-story-done` to follow
-  up on.
+- **PASS WITH WARNINGS does not block QA hand-off** — it records advisory gaps for `gamedev:story-done` to follow up on.
 - **`quick` argument** skips Phase 3 (coverage scan) and Phase 4 Batch 3. Use it for rapid re-checks after fixing a
   specific failure.
 - Use a user-input tool or chat for all manual smoke check verification.

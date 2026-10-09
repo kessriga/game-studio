@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-tech-debt
+# Skill Test Spec: gamedev:tech-debt
 
 ## Skill Summary
 
-`/skill:gamedev-tech-debt` tracks, categorizes, and prioritizes technical debt across the codebase. It reads
+`gamedev:tech-debt` tracks, categorizes, and prioritizes technical debt across the codebase. It reads
 `docs/tech-debt-register.md` for the existing debt register and scans source files in `src/` for inline `TODO` and
 `FIXME` comments. It merges and sorts items by severity. No director gates are invoked. The skill asks "May I write to
 `docs/tech-debt-register.md`?" before updating. Verdicts: REGISTER UPDATED or NO NEW DEBT FOUND.
@@ -11,7 +11,7 @@
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -37,7 +37,7 @@ None. Tech debt tracking is an internal codebase analysis skill; no gates are in
 - `src/gameplay/combat.gd` has 2 `# TODO` comments and 1 `# FIXME` comment
 - `src/ui/hud.gd` has 0 inline debt comments
 
-**Input:** `/skill:gamedev-tech-debt`
+**Input:** `gamedev:tech-debt`
 
 **Expected behavior:**
 
@@ -65,7 +65,7 @@ None. Tech debt tracking is an internal codebase analysis skill; no gates are in
 - `docs/tech-debt-register.md` does NOT exist
 - `src/` contains 4 inline TODO/FIXME comments
 
-**Input:** `/skill:gamedev-tech-debt`
+**Input:** `gamedev:tech-debt`
 
 **Expected behavior:**
 
@@ -92,7 +92,7 @@ None. Tech debt tracking is an internal codebase analysis skill; no gates are in
 - `src/gameplay/legacy_input.gd` has been deleted (refactored away)
 - The referenced TODO comment no longer exists in source
 
-**Input:** `/skill:gamedev-tech-debt`
+**Input:** `gamedev:tech-debt`
 
 **Expected behavior:**
 
@@ -118,7 +118,7 @@ None. Tech debt tracking is an internal codebase analysis skill; no gates are in
 - `src/core/network_sync.gd` has a comment: `# FIXME(CRITICAL): race condition in sync buffer — can corrupt save data`
 - `docs/tech-debt-register.md` exists with 5 lower-severity items
 
-**Input:** `/skill:gamedev-tech-debt`
+**Input:** `gamedev:tech-debt`
 
 **Expected behavior:**
 
@@ -144,7 +144,7 @@ None. Tech debt tracking is an internal codebase analysis skill; no gates are in
 - Inline scan finds 2 new TODOs; register has 3 existing items
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-tech-debt`
+**Input:** `gamedev:tech-debt`
 
 **Expected behavior:**
 

@@ -16,7 +16,7 @@ qa/
 ├── AGENTS.md              ← shared contributor instructions
 ├── AGENTS.md              ← canonical contributor guidance
 ├── catalog.yaml           ← registry: 65 skill specs + 53 agent specs, coverage tracking
-├── quality-rubric.md      ← category-specific pass/fail metrics for /skill:gamedev-skill-test category
+├── quality-rubric.md      ← category-specific pass/fail metrics for gamedev:skill-test category
 │
 ├── skills/                ← behavioral spec files for skills (one per skill)
 │   ├── gate/              ← gate category specs
@@ -43,7 +43,7 @@ qa/
 │   ├── skill-test-spec.md ← template for skill behavioral specs
 │   └── agent-test-spec.md ← template for agent behavioral specs
 │
-└── results/               ← test run outputs (written by /skill:gamedev-skill-test spec, gitignored)
+└── results/               ← test run outputs (written by gamedev:skill-test spec, gitignored)
 ```
 
 ---
@@ -51,39 +51,39 @@ qa/
 ## How to use it
 
 Two skills drive these checks. Read [AGENTS.md](AGENTS.md#host-specific-checks) for capability and execution rules. Pi
-examples use `/skill:gamedev-<name>`.
+examples use `gamedev:<name>`.
 
 ### Check structural compliance
 
 ```
-/skill:gamedev-skill-test static [skill-name]     # Check one skill (7 checks)
-/skill:gamedev-skill-test static all              # Check all installed skills
+gamedev:skill-test static [skill-name]     # Check one skill (7 checks)
+gamedev:skill-test static all              # Check all installed skills
 ```
 
 ### Run a behavioral spec test
 
 ```
-/skill:gamedev-skill-test spec gate-check         # Evaluate a skill against its written spec
-/skill:gamedev-skill-test spec design-review
+gamedev:skill-test spec gate-check         # Evaluate a skill against its written spec
+gamedev:skill-test spec design-review
 ```
 
 ### Check against category rubric
 
 ```
-/skill:gamedev-skill-test category gate-check     # Evaluate one skill against its category metrics
-/skill:gamedev-skill-test category all            # Run rubric checks across all categorized skills
+gamedev:skill-test category gate-check     # Evaluate one skill against its category metrics
+gamedev:skill-test category all            # Run rubric checks across all categorized skills
 ```
 
 ### See full coverage picture
 
 ```
-/skill:gamedev-skill-test audit                   # Skills + agents: has-spec, last tested, result
+gamedev:skill-test audit                   # Skills + agents: has-spec, last tested, result
 ```
 
 ### Improve a failing skill
 
 ```
-/skill:gamedev-skill-improve gate-check           # Test → diagnose → propose fix → retest loop
+gamedev:skill-improve gate-check           # Test → diagnose → propose fix → retest loop
 ```
 
 ---
@@ -123,9 +123,9 @@ examples use `/skill:gamedev-<name>`.
 
 `catalog.yaml` tracks test coverage for every skill and agent. After running a test:
 
-- `/skill:gamedev-skill-test spec [name]` will offer to update `last_spec` and `last_spec_result`
-- `/skill:gamedev-skill-test category [name]` will offer to update `last_category` and `last_category_result`
-- `last_static` and `last_static_result` are updated manually or via `/skill:gamedev-skill-improve`
+- `gamedev:skill-test spec [name]` will offer to update `last_spec` and `last_spec_result`
+- `gamedev:skill-test category [name]` will offer to update `last_category` and `last_category_result`
+- `last_static` and `last_static_result` are updated manually or via `gamedev:skill-improve`
 
 ---
 
@@ -134,7 +134,7 @@ examples use `/skill:gamedev-<name>`.
 1. Find the spec template at `templates/skill-test-spec.md`
 2. Copy it to `skills/[category]/[skill-name].md`
 3. Update the `spec:` field in `catalog.yaml` to point to the new file
-4. Run `/skill:gamedev-skill-test spec [skill-name]` to validate it
+4. Run the `gamedev:skill-test` skill with `spec [skill-name]` to validate it
 
 ---
 
@@ -146,5 +146,5 @@ This folder has no hooks into the main project. To remove:
 rm -rf qa
 ```
 
-The skills `/skill:gamedev-skill-test` and `/skill:gamedev-skill-improve` will still function — they'll simply report
-that `catalog.yaml` is missing and suggest running `/skill:gamedev-skill-test audit` to initialize it.
+The skills `gamedev:skill-test` and `gamedev:skill-improve` will still function — they'll simply report that
+`catalog.yaml` is missing and suggest running the `gamedev:skill-test` skill with `audit` to initialize it.

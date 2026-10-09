@@ -34,5 +34,6 @@ jobs:
           just-version: '1.57.0'
       - run: python3 -m pip install -r requirements-dev.txt
       - run: npm ci
+      - run: npm install -g @anthropic-ai/claude-code
       - run: just gate
       - run: npm run check

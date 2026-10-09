@@ -93,7 +93,7 @@ Detailed Rules, ✓ Formulas, ✓ Edge Cases, ✓ Dependencies, ✓ Tuning Knobs
 
 User: "Yes"
 
-You: [uses Write tool] "Created design/gdd/crafting-system.md. Would you like me to run /skill:gamedev-design-review to
+You: [uses Write tool] "Created design/gdd/crafting-system.md. Would you like me to run gamedev:design-review to
 validate it?"
 
 ```

@@ -66,8 +66,7 @@ Analyze project structure and content:
 ### 2. Classify Project Stage
 
 Based on scanned artifacts, determine stage. Check `production/stage.txt` first — if it exists, use its value (explicit
-override from `/skill:gamedev-gate-check`). Otherwise, auto-detect using these heuristics (check from most-advanced
-backward):
+override from `gamedev:gate-check`). Otherwise, auto-detect using these heuristics (check from most-advanced backward):
 
 | Stage | Indicators |
 | ------- | ----------- |
@@ -76,8 +75,8 @@ backward):
 | **Technical Setup** | Systems index exists, engine not configured |
 | **Pre-Production** | Engine configured, `src/` has <10 source files |
 | **Production** | `src/` has 10+ source files, active development |
-| **Polish** | Explicit only (set by `/skill:gamedev-gate-check` Production → Polish gate) |
-| **Release** | Explicit only (set by `/skill:gamedev-gate-check` Polish → Release gate) |
+| **Polish** | Explicit only (set by `gamedev:gate-check` Production → Polish gate) |
+| **Release** | Explicit only (set by `gamedev:gate-check` Polish → Release gate) |
 
 ### 3. Collaborative Gap Identification
 
@@ -88,7 +87,7 @@ backward):
 - "You have 15 ADRs but no architecture overview. Should I create one to help new contributors?"
 - "No sprint plans in `production/`. Are you tracking work elsewhere (Jira, Trello, etc.)?"
 - "I found a game concept but no systems index. Have you decomposed the concept into individual systems yet, or should
-  we run `/skill:gamedev-map-systems`?"
+  we run the `gamedev:map-systems` skill?"
 - "Prototypes directory has 3 projects with no READMEs. Were these experiments, or do they need documentation?"
 
 ### 4. Generate Stage Report
@@ -121,7 +120,7 @@ Use template: `../../docs/templates/project-stage-report.md`
 
 ### 5. Role-Filtered Recommendations (Optional)
 
-If user provided a role argument (e.g., `/skill:gamedev-project-stage-detect programmer`):
+If user provided a role argument (e.g., `gamedev:project-stage-detect programmer`):
 
 **Programmer**:
 
@@ -172,13 +171,13 @@ Wait for user approval before creating the file.
 
 ```bash
 # General project analysis
-/skill:gamedev-project-stage-detect
+gamedev:project-stage-detect
 
 # Programmer-focused analysis
-/skill:gamedev-project-stage-detect programmer
+gamedev:project-stage-detect programmer
 
 # Designer-focused analysis
-/skill:gamedev-project-stage-detect designer
+gamedev:project-stage-detect designer
 ```
 
 ---
@@ -187,12 +186,11 @@ Wait for user approval before creating the file.
 
 After generating the report, suggest relevant next steps:
 
-- **Concept exists but no systems index?** → `/skill:gamedev-map-systems` to decompose into systems
-- **Missing design docs?** → `/skill:gamedev-reverse-document design src/[system]`
-- **Missing architecture docs?** → `/skill:gamedev-architecture-decision` or
-  `/skill:gamedev-reverse-document architecture`
-- **Prototypes need documentation?** → `/skill:gamedev-reverse-document concept prototypes/[name]`
-- **No epics/milestones yet?** → `/skill:gamedev-create-epics` then `/skill:gamedev-create-stories`
+- **Concept exists but no systems index?** → `gamedev:map-systems` to decompose into systems
+- **Missing design docs?** → `gamedev:reverse-document design src/[system]`
+- **Missing architecture docs?** → `gamedev:architecture-decision` or `gamedev:reverse-document architecture`
+- **Prototypes need documentation?** → `gamedev:reverse-document concept prototypes/[name]`
+- **No epics/milestones yet?** → `gamedev:create-epics` then `gamedev:create-stories`
 - **Approaching a milestone?** → review milestone progress on the Backlog board
 
 ---

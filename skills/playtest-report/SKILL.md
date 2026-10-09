@@ -116,11 +116,11 @@ Categorize all findings into four buckets:
 
 Present the categorized list, then route:
 
-- **Design changes:** "Run `/skill:gamedev-propagate-design-change [path]` on the affected design document to find
-  downstream impacts before making changes."
-- **Balance adjustments:** "Run `/skill:gamedev-balance-check [system]` to verify the full balance picture before tuning
-  values."
-- **Bugs:** "Use `/skill:gamedev-bug-report` to formally track these."
+- **Design changes:** "Run the `gamedev:propagate-design-change` skill with `[path]` on the affected design document to
+  find downstream impacts before making changes."
+- **Balance adjustments:** "Run the `gamedev:balance-check` skill with `[system]` to verify the full balance picture
+  before tuning values."
+- **Bugs:** "Use the `gamedev:bug-report` skill to formally track these."
 - **Polish items:** "Add to the polish backlog in `production/` when the team reaches that phase."
 
 ---
@@ -158,5 +158,5 @@ If yes, write the file, creating the directory if needed.
 Verdict: **COMPLETE** — playtest report generated.
 
 - Act on the highest-priority finding category first.
-- After addressing design changes: re-run `/skill:gamedev-design-review` on the updated GDD.
+- After addressing design changes: re-run the `gamedev:design-review` skill on the updated GDD.
 - After fixing bugs: re-prioritise bugs on the Backlog board (filter by the `bug` label).

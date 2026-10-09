@@ -34,10 +34,11 @@ The user owns creative decisions and scope. Present options and drafts before as
 to implement or write a change authorizes that work; do not ask for the same permission again. Ask when scope changes or
 a needed decision has not been made. Do not commit or publish without user authorization.
 
-Use the engine specialist that matches the configured engine. In Pi, use an installed subagent extension when available;
-pass the bundled role instructions, project context, task, edit scope, and required evidence through its actual tool
-schema. Do not assume the package's role names are registered agent names. Without delegation tools, follow role
-instructions sequentially and label the checks as self-review. This cannot satisfy a required independent review.
+Use the engine specialist that matches the configured engine. In Claude Code, delegate to the `gamedev:<role>` subagent
+types. In Pi, use an installed subagent extension when available; pass the bundled role instructions, project context,
+task, edit scope, and required evidence through its actual tool schema. Do not assume the package's role names are
+registered agent names. Without delegation tools, follow role instructions sequentially and label the checks as
+self-review. This cannot satisfy a required independent review.
 
 ## Validation and handoff
 
@@ -54,9 +55,11 @@ can still use design and navigation skills. Never claim a tracker update without
 
 ## Getting started
 
-In Pi run `/skill:gamedev-start`. These project files are yours to edit. Running start again adds missing files and
-preserves existing ones. Use the host's status skill for a stage snapshot. Pi also has a progress widget and
-`/gamedev-workflow panel` overlay; neither replaces the editor or footer. Its coordinating agent records catalog work
-with `gamedev_workflow`, while subagents return evidence without changing progress. Use `/gamedev-workflow` to inspect
-saved runs and approve verified work. Repeatable steps need explicit whole-scope confirmation; the Backlog board remains
-the story authority. Never infer approval from file presence or a subagent's completion claim.
+Run the host's `gamedev:start` skill; the installed package's host guide shows the exact command. These project files
+are yours to edit. Running start again adds missing files and preserves existing ones. Use the host's status skill for a
+stage snapshot. Pi and Claude Code show workflow progress in a widget or pane, and `/gamedev-workflow panel` opens the
+full list. The coordinating agent records catalog work with the host's workflow tool, `gamedev_workflow` in Pi or
+`mcp__gamedev__workflow` in Claude Code, while subagents return evidence without changing progress. Use
+`/gamedev-workflow` to inspect saved runs and approve verified work. Repeatable steps need explicit whole-scope
+confirmation; the Backlog board remains the story authority. Never infer approval from file presence or a subagent's
+completion claim.

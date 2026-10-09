@@ -1,35 +1,34 @@
-# Skill Test Spec: /skill:gamedev-release-checklist
+# Skill Test Spec: gamedev:release-checklist
 
 ## Skill Summary
 
-`/skill:gamedev-release-checklist` generates an internal release readiness checklist covering: sprint story completion,
-open bug severity, QA sign-off status, build stability, and changelog readiness. It is an internal gate — not a
-platform/store checklist (that is `/skill:gamedev-launch-checklist`). When a previous release checklist exists, it shows
-a delta of resolved and newly introduced issues.
+`gamedev:release-checklist` generates an internal release readiness checklist covering: sprint story completion, open
+bug severity, QA sign-off status, build stability, and changelog readiness. It is an internal gate — not a
+platform/store checklist (that is `gamedev:launch-checklist`). When a previous release checklist exists, it shows a
+delta of resolved and newly introduced issues.
 
 The skill writes its checklist report to `production/releases/release-checklist-[date].md` after a "May I write" ask. No
-director gates apply — `/skill:gamedev-gate-check` handles formal phase gate logic. Verdicts: RELEASE READY, RELEASE
-BLOCKED, or CONCERNS.
+director gates apply — `gamedev:gate-check` handles formal phase gate logic. Verdicts: RELEASE READY, RELEASE BLOCKED,
+or CONCERNS.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: RELEASE READY, RELEASE BLOCKED, CONCERNS
 - [ ] Contains "May I write" collaborative protocol language before writing the report
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-launch-checklist` for external or `/skill:gamedev-gate-check` for
-      phase)
+- [ ] Has a next-step handoff (e.g., `gamedev:launch-checklist` for external or `gamedev:gate-check` for phase)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-release-checklist` is an internal audit utility. Formal phase advancement is managed by
-`/skill:gamedev-gate-check`.
+None. `gamedev:release-checklist` is an internal audit utility. Formal phase advancement is managed by
+`gamedev:gate-check`.
 
 ---
 
@@ -45,7 +44,7 @@ None. `/skill:gamedev-release-checklist` is an internal audit utility. Formal ph
 - Changelog entry for this version exists
 - `production/stage.txt` contains `Polish`
 
-**Input:** `/skill:gamedev-release-checklist`
+**Input:** `gamedev:release-checklist`
 
 **Expected behavior:**
 
@@ -72,7 +71,7 @@ None. `/skill:gamedev-release-checklist` is an internal audit utility. Formal ph
 - All sprint stories are Done
 - `production/bugs/` contains 2 open bugs with severity HIGH
 
-**Input:** `/skill:gamedev-release-checklist`
+**Input:** `gamedev:release-checklist`
 
 **Expected behavior:**
 
@@ -97,20 +96,20 @@ None. `/skill:gamedev-release-checklist` is an internal audit utility. Formal ph
 - All stories Done, no HIGH/CRITICAL bugs
 - No changelog entry found for the current version/sprint
 
-**Input:** `/skill:gamedev-release-checklist`
+**Input:** `gamedev:release-checklist`
 
 **Expected behavior:**
 
 1. Skill checks all items
 2. Changelog check fails: no changelog entry found
 3. Skill reports: "CONCERNS — Changelog not generated for this release"
-4. Skill suggests running `/skill:gamedev-changelog` to generate it
+4. Skill suggests running the `gamedev:changelog` skill to generate it
 5. Verdict is CONCERNS (advisory — not a hard block)
 
 **Assertions:**
 
 - [ ] Verdict is CONCERNS (not RELEASE BLOCKED — changelog is advisory)
-- [ ] `/skill:gamedev-changelog` is suggested as the remediation
+- [ ] `gamedev:changelog` is suggested as the remediation
 - [ ] Other passing checks are shown in the report
 - [ ] Missing changelog is described as advisory, not blocking
 
@@ -124,7 +123,7 @@ None. `/skill:gamedev-release-checklist` is an internal audit utility. Formal ph
 - Previous: 1 story was incomplete, 1 HIGH bug open
 - Current: all stories Done, HIGH bug resolved, but now 1 MEDIUM bug appeared
 
-**Input:** `/skill:gamedev-release-checklist`
+**Input:** `gamedev:release-checklist`
 
 **Expected behavior:**
 
@@ -151,7 +150,7 @@ None. `/skill:gamedev-release-checklist` is an internal audit utility. Formal ph
 
 - Active sprint with stories and bug reports
 
-**Input:** `/skill:gamedev-release-checklist`
+**Input:** `gamedev:release-checklist`
 
 **Expected behavior:**
 

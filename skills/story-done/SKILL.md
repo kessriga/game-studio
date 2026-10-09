@@ -28,8 +28,8 @@ Resolve the review mode (once, store for all gate spawns this run):
 
 See `../../docs/director-gates.md` for the full check pattern.
 
-**If a file path is provided** (e.g., `/skill:gamedev-story-done production/epics/core/story-damage-calculator.md`):
-read that file directly.
+**If a file path is provided** (e.g., `gamedev:story-done production/epics/core/story-damage-calculator.md`): read that
+file directly.
 
 **If no argument is provided:**
 
@@ -174,7 +174,7 @@ for a playtest record referencing this story. If none found: flag as **BLOCKING*
   ADVISORY passed."
 
 **For Config/Data stories**: check for any `production/qa/smoke-*.md` file. If none: flag as **ADVISORY** — "No smoke
-check report found. Run `/skill:gamedev-smoke-check`."
+check report found. Run the `gamedev:smoke-check` skill."
 
 **If no Story Type is set**: flag as **ADVISORY** — "Story Type not declared. Add
 `Type: [Logic|Integration|Visual/Feel|UI|Config/Data]` to the story header to enable test evidence gate enforcement in
@@ -199,7 +199,7 @@ Run these checks automatically:
    `Manifest Version:` date in the current `docs/architecture/control-manifest.md` header.
    - If they match → pass silently.
    - If the story's version is older → flag as ADVISORY:
-     `ADVISORY: Story was written against manifest v[story-date]; current manifest is v[current-date]. New rules may apply. Run /skill:gamedev-story-readiness to check.`
+     `ADVISORY: Story was written against manifest v[story-date]; current manifest is v[current-date]. New rules may apply. Run gamedev:story-readiness to check.`
    - If control-manifest.md does not exist → skip this check.
 
 3. **ADR constraints check**: Read the referenced ADR's Decision section. Check for forbidden patterns from
@@ -258,11 +258,11 @@ Skip this phase for Config/Data stories (no code tests required).
 
 - `solo` → skip. Note: "LP-CODE-REVIEW skipped — Solo mode." Proceed to Phase 6 (completion report).
 - `lean` → use a user-input tool or chat before proceeding:
-  - Prompt: "Code review is skipped in lean mode. Did you run `/skill:gamedev-code-review` on the implemented files?"
+  - Prompt: "Code review is skipped in lean mode. Did you run the `gamedev:code-review` skill on the implemented files?"
   - Options:
-    - `Yes — /skill:gamedev-code-review passed or was approved with suggestions`
+    - `Yes — gamedev:code-review passed or was approved with suggestions`
     - `No — skipping code review for this story`
-    - `No — I'll run /skill:gamedev-code-review before the milestone close-out`
+    - `No — I'll run gamedev:code-review before the milestone close-out`
   - Record the answer in the completion notes (Phase 7). All three options proceed to Phase 6.
 - `full` → spawn as normal.
 
@@ -387,7 +387,7 @@ game's documented validation commands; do not assume automatic checks ran.
 
 After updating the story file, silently append to `production/session-state/active.md`:
 
-    ## Session Extract — /skill:gamedev-story-done [date]
+    ## Session Extract — gamedev:story-done [date]
     - Verdict: [COMPLETE / COMPLETE WITH NOTES / BLOCKED]
     - Story: [story file path] — [story title]
     - Tech debt logged: [N items, or "None"]
@@ -413,7 +413,7 @@ The following tasks are ready to pick up (milestone [name]):
 1. [Story name] — [1-line description] — [priority] — [TASK-N]
 2. [Story name] — [1-line description] — [priority] — [TASK-N]
 
-Run `/skill:gamedev-story-readiness [path]` to confirm a story is implementation-ready
+Run `gamedev:story-readiness [path]` to confirm a story is implementation-ready
 before starting.
 ```
 
@@ -425,11 +425,11 @@ If no `To Do` tasks remain in the milestone (all `Done`, `In Progress`, or block
 All ready stories in this milestone are done. QA sign-off is required before advancing.
 Run these in order:
 
-1. `/skill:gamedev-smoke-check` — verify the critical path still works end-to-end
-2. `/skill:gamedev-team-qa [milestone]` — full QA cycle: test case execution, bug triage, sign-off report
-3. `/skill:gamedev-gate-check` — advance to the next phase once QA approves (only if advancing a phase)
+1. `gamedev:smoke-check` — verify the critical path still works end-to-end
+2. `gamedev:team-qa [milestone]` — full QA cycle: test case execution, bug triage, sign-off report
+3. `gamedev:gate-check` — advance to the next phase once QA approves (only if advancing a phase)
 
-Do not run `/skill:gamedev-gate-check` until `/skill:gamedev-team-qa` returns APPROVED or APPROVED WITH CONDITIONS.
+Do not run `gamedev:gate-check` until `gamedev:team-qa` returns APPROVED or APPROVED WITH CONDITIONS.
 ```
 
 If tasks are still `In Progress` (not done), note: "No more `To Do` tasks in this milestone — [N] still in progress.
@@ -452,7 +452,8 @@ If tasks are blocked, surface them so the user can unblock (clear the `blocked` 
 
 ## Recommended Next Steps
 
-- Run `/skill:gamedev-story-readiness [next-story-path]` to validate the next story before starting implementation
-- If all ready stories in the milestone are done: run `/skill:gamedev-smoke-check` →
-  `/skill:gamedev-team-qa [milestone]` → `/skill:gamedev-gate-check`
-- If tech debt was logged: track it via `/skill:gamedev-tech-debt` to keep the register current
+- Run the `gamedev:story-readiness` skill with `[next-story-path]` to validate the next story before starting
+  implementation
+- If all ready stories in the milestone are done: run the `gamedev:smoke-check` skill → `gamedev:team-qa [milestone]` →
+  `gamedev:gate-check`
+- If tech debt was logged: track it via `gamedev:tech-debt` to keep the register current

@@ -40,11 +40,11 @@ Before writing any code:
    - For multi-file changes, list all affected files
    - Wait for "yes" before using Write/Edit tools
 
-6. **Complete the story with `/skill:gamedev-story-done`:**
-   - When implementation (and tests, if written) is complete, invoke `/skill:gamedev-story-done [story-file-path]`
+6. **Complete the story with `gamedev:story-done`:**
+   - When implementation (and tests, if written) is complete, invoke `gamedev:story-done [story-file-path]`
    - This verifies acceptance criteria, checks for GDD/ADR deviations, prompts code review, and updates the story status
-   - Do NOT mark a story complete manually — always go through `/skill:gamedev-story-done`
-   - If no story file exists for this work (ad-hoc task), offer `/skill:gamedev-code-review` directly instead
+   - Do NOT mark a story complete manually — always go through `gamedev:story-done`
+   - If no story file exists for this work (ad-hoc task), offer `gamedev:code-review` directly instead
 
 #### Example Interaction Pattern
 
@@ -100,16 +100,16 @@ The gameplay-code rule flagged one issue: crit multiplier was hardcoded (2.0). I
 assets/data/combat_config.json as 'critical_damage_multiplier': 2.0.
 
 File is ready. Would you like me to: A) Write tests now (recommended) B) Let you review the code first C) Run
-/skill:gamedev-code-review for architecture validation"
+gamedev:code-review for architecture validation"
 
 User: "A, write tests"
 
 You: [creates tests/combat/test_damage_calculator.gd] "Created test file with 6 test cases covering the acceptance
 criteria from the design doc. All tests passing.
 
-      Running /skill:gamedev-story-done to verify acceptance criteria and close out the story."
+      Running gamedev:story-done to verify acceptance criteria and close out the story."
 
-[/skill:gamedev-story-done runs — verifies criteria, checks deviations, prompts code review, updates story status]
+[gamedev:story-done runs — verifies criteria, checks deviations, prompts code review, updates story status]
 
 ```
 
@@ -121,7 +121,7 @@ criteria from the design doc. All tests passing.
 - Flag deviations from design docs explicitly — designer should know if implementation differs
 - Rules are your friend — when they flag issues, they're usually right
 - Tests prove it works — offer to write them proactively
-- Story completion is explicit — use `/skill:gamedev-story-done` to close every story, never assume done because code is written
+- Story completion is explicit — use `gamedev:story-done` to close every story, never assume done because code is written
 
 #### Structured Decision UI
 

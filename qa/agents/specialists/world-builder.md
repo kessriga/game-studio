@@ -110,4 +110,4 @@ energy (the White Sun), and arcane magic ceases to function during the 3-day lun
 - Case 4 (world rule/mechanic coordination) tests cross-domain awareness; verify the agent identifies the mechanic
   boundary without crossing it
 - Case 5 is the most important context-awareness test; the agent must use established facts, not creative alternatives
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

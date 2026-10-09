@@ -1,6 +1,6 @@
 ---
 name: architecture-review
-description: "Validates completeness and consistency of the project architecture against all GDDs. Builds a traceability matrix mapping every GDD technical requirement to ADRs, identifies coverage gaps, detects cross-ADR conflicts, verifies engine compatibility consistency across all decisions, and produces a PASS/CONCERNS/FAIL verdict. The architecture equivalent of /skill:gamedev-design-review."
+description: "Validates completeness and consistency of the project architecture against all GDDs. Builds a traceability matrix mapping every GDD technical requirement to ADRs, identifies coverage gaps, detects cross-ADR conflicts, verifies engine compatibility consistency across all decisions, and produces a PASS/CONCERNS/FAIL verdict. The architecture equivalent of gamedev:design-review."
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
@@ -421,7 +421,7 @@ Total requirements: [N]
 ### Coverage Gaps (no ADR exists)
 For each gap:
   ❌ TR-[id]: [GDD] → [system] → [requirement]
-     Suggested ADR: "/skill:gamedev-architecture-decision [suggested title]"
+     Suggested ADR: "gamedev:architecture-decision [suggested title]"
      Domain: [Physics/Rendering/etc]
      Engine Risk: [LOW/MEDIUM/HIGH]
 
@@ -483,7 +483,7 @@ RTM file format:
 # Requirements Traceability Matrix (RTM)
 
 > Last Updated: [date]
-> Mode: /skill:gamedev-architecture-review rtm
+> Mode: gamedev:architecture-review rtm
 > Coverage: [N]% full chain complete (GDD → ADR → Story → Test)
 
 ## How to read this matrix
@@ -555,7 +555,7 @@ After writing the review report, append any 🔴 CONFLICT entries found in Phase
 the file exists):
 
 ```markdown
-### [YYYY-MM-DD] — /skill:gamedev-architecture-review — 🔴 CONFLICT
+### [YYYY-MM-DD] — gamedev:architecture-review — 🔴 CONFLICT
 **Domain**: Architecture / [specific domain e.g. State Ownership, Performance]
 **Documents involved**: [ADR-NNNN] vs [ADR-MMMM]
 **What happened**: [specific conflict — what each ADR claims]
@@ -570,7 +570,7 @@ Do not create the file if missing — only append when it already exists.
 
 After writing all approved files, silently append to `production/session-state/active.md`:
 
-    ## Session Extract — /skill:gamedev-architecture-review [date]
+    ## Session Extract — gamedev:architecture-review [date]
     - Verdict: [PASS / CONCERNS / FAIL]
     - Requirements: [N] total — [X] covered, [Y] partial, [Z] gaps
     - New TR-IDs registered: [N, or "None"]
@@ -613,27 +613,27 @@ After completing the review and writing approved files, present:
 1. **Immediate actions**: List the top 3 ADRs to create (highest-impact gaps first, Foundation layer before Feature
    layer)
 2. **Pre-gate checklist**: Check whether these exist via Glob and mark each ✅ or ❌:
-   - `tests/unit/` and `tests/integration/` directories — if ❌: run `/skill:gamedev-test-setup`
-   - `.github/workflows/tests.yml` — if ❌: run `/skill:gamedev-test-setup`
-   - `design/accessibility-requirements.md` — if ❌: run `/skill:gamedev-ux-design`
-   - `design/ux/interaction-patterns.md` — if ❌: run `/skill:gamedev-ux-design`
-   Present ❌ items as required steps before gate-check. Do not offer `/skill:gamedev-gate-check` as an option if any
-   item is ❌ — offer the missing skill to run instead.
-3. **Rerun trigger**: "Re-run `/skill:gamedev-architecture-review` after each new ADR is written to verify coverage
+   - `tests/unit/` and `tests/integration/` directories — if ❌: run the `gamedev:test-setup` skill
+   - `.github/workflows/tests.yml` — if ❌: run the `gamedev:test-setup` skill
+   - `design/accessibility-requirements.md` — if ❌: run the `gamedev:ux-design` skill
+   - `design/ux/interaction-patterns.md` — if ❌: run the `gamedev:ux-design` skill
+   Present ❌ items as required steps before gate-check. Do not offer `gamedev:gate-check` as an option if any item is
+   ❌ — offer the missing skill to run instead.
+3. **Rerun trigger**: "Re-run the `gamedev:architecture-review` skill after each new ADR is written to verify coverage
    improves"
 
 Then close with a user-input tool or chat tailored to the pre-gate checklist state:
 
 - If ADR gaps remain or any pre-gate item is ❌:
   - "Architecture review complete. What would you like to do next?"
-    - [A] Write a missing ADR — open a fresh session and run `/skill:gamedev-architecture-decision [system]`
-    - [B] Run `/skill:gamedev-test-setup` — required before gate-check (only show if test infrastructure is ❌)
-    - [C] Run `/skill:gamedev-ux-design` — required before gate-check (only show if UX/accessibility files are ❌)
+    - [A] Write a missing ADR — open a fresh session and run the `gamedev:architecture-decision` skill with `[system]`
+    - [B] Run the `gamedev:test-setup` skill — required before gate-check (only show if test infrastructure is ❌)
+    - [C] Run the `gamedev:ux-design` skill — required before gate-check (only show if UX/accessibility files are ❌)
     - [D] Stop here for this session
 - If all pre-gate checklist items are ✅ and no blocking ADR gaps remain:
   - "Architecture review complete. All pre-gate items confirmed. What would you like to do next?"
-    - [A] Run `/skill:gamedev-gate-check pre-production`
-    - [B] Write a missing ADR — open a fresh session and run `/skill:gamedev-architecture-decision [system]`
+    - [A] Run the `gamedev:gate-check` skill with `pre-production`
+    - [B] Write a missing ADR — open a fresh session and run the `gamedev:architecture-decision` skill with `[system]`
     - [C] Stop here for this session
 
 ---

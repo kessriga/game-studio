@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-changelog
+# Skill Test Spec: gamedev:changelog
 
 ## Skill Summary
 
-`/skill:gamedev-changelog` is a skill that auto-generates a developer-facing changelog by reading git commit history and
+`gamedev:changelog` is a skill that auto-generates a developer-facing changelog by reading git commit history and
 closed sprint stories since the last release tag. It organizes entries into features, fixes, and known issues. No
 director gates are used. The skill asks "May I write to `docs/CHANGELOG.md`?" before persisting. Verdict is always
 COMPLETE.
@@ -11,13 +11,13 @@ COMPLETE.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keyword: COMPLETE
 - [ ] Contains "May I write" language (skill writes changelog)
-- [ ] Has a next-step handoff (e.g., run /skill:gamedev-patch-notes for player-facing version)
+- [ ] Has a next-step handoff (e.g., run gamedev:patch-notes for player-facing version)
 
 ---
 
@@ -38,7 +38,7 @@ None. Changelog generation is a fast compilation task; no gates are invoked.
 - Sprint story files reference task IDs matching commit messages
 - `docs/CHANGELOG.md` does not yet exist
 
-**Input:** `/skill:gamedev-changelog`
+**Input:** `gamedev:changelog`
 
 **Expected behavior:**
 
@@ -66,7 +66,7 @@ None. Changelog generation is a fast compilation task; no gates are invoked.
 - Git repository has commits but no tags exist
 - 20 commits in history across 3 sprints
 
-**Input:** `/skill:gamedev-changelog`
+**Input:** `gamedev:changelog`
 
 **Expected behavior:**
 
@@ -93,7 +93,7 @@ None. Changelog generation is a fast compilation task; no gates are invoked.
 - 5 commits have no task ID in the message (e.g., "fix typo", "tweak values")
 - 3 commits reference task IDs matching sprint stories
 
-**Input:** `/skill:gamedev-changelog`
+**Input:** `gamedev:changelog`
 
 **Expected behavior:**
 
@@ -119,7 +119,7 @@ None. Changelog generation is a fast compilation task; no gates are invoked.
 - `docs/CHANGELOG.md` already exists with sections for `v0.2.0` and `v0.3.0`
 - New commits exist since `v0.3.0` tag
 
-**Input:** `/skill:gamedev-changelog`
+**Input:** `gamedev:changelog`
 
 **Expected behavior:**
 
@@ -145,7 +145,7 @@ None. Changelog generation is a fast compilation task; no gates are invoked.
 - Git history has commits since last tag
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-changelog`
+**Input:** `gamedev:changelog`
 
 **Expected behavior:**
 
@@ -178,5 +178,5 @@ None. Changelog generation is a fast compilation task; no gates are invoked.
   handling.
 - Merge commits vs. squash commits are not explicitly differentiated in these tests; implementation detail of the git
   log parsing phase.
-- The `/skill:gamedev-patch-notes` skill should be run after `/skill:gamedev-changelog` for player-facing output; that
+- The `gamedev:patch-notes` skill should be run after `gamedev:changelog` for player-facing output; that
   handoff is verified in the patch-notes spec.

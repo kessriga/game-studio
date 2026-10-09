@@ -1,12 +1,12 @@
-# Skill Test Spec: /skill:gamedev-create-stories
+# Skill Test Spec: gamedev:create-stories
 
 ## Skill Summary
 
-`/skill:gamedev-create-stories` breaks a single epic into developer-ready story files. It reads the EPIC.md, the
-corresponding GDD, governing ADRs, the control manifest, and the TR registry. Each story gets structured frontmatter
-including: Title, Epic, Layer, Priority, Status, TR-ID, ADR references, Acceptance Criteria, and Definition of Done.
-Stories are classified by type (Logic / Integration / Visual/Feel / UI / Config/Data) which determines the required test
-evidence path.
+`gamedev:create-stories` breaks a single epic into developer-ready story files. It reads the EPIC.md, the corresponding
+GDD, governing ADRs, the control manifest, and the TR registry. Each story gets structured frontmatter including: Title,
+Epic, Layer, Priority, Status, TR-ID, ADR references, Acceptance Criteria, and Definition of Done. Stories are
+classified by type (Logic / Integration / Visual/Feel / UI / Config/Data) which determines the required test evidence
+path.
 
 In `full` review mode, a QL-STORY-READY check runs per story after creation. In `lean` or `solo` mode, QL-STORY-READY is
 skipped. The skill asks "May I write" before writing each story file. Stories are written to
@@ -16,13 +16,13 @@ skipped. The skill asks "May I write" before writing each story file. Stories ar
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED, NEEDS WORK
 - [ ] Contains "May I write" collaborative protocol language (per-story approval)
-- [ ] Has a next-step handoff at the end (`/skill:gamedev-story-readiness`, `/skill:gamedev-dev-story`)
+- [ ] Has a next-step handoff at the end (`gamedev:story-readiness`, `gamedev:dev-story`)
 - [ ] Documents story Status: Blocked when governing ADR is Proposed
 - [ ] Documents QL-STORY-READY gate: active in full mode, skipped in lean/solo
 
@@ -52,7 +52,7 @@ In `solo` mode: QL-STORY-READY is skipped with equivalent notes.
 - `docs/architecture/tr-registry.yaml` has TR-IDs for all 3 requirements
 - `production/session-state/review-mode.txt` contains `lean`
 
-**Input:** `/skill:gamedev-create-stories [epic-name]`
+**Input:** `gamedev:create-stories [epic-name]`
 
 **Expected behavior:**
 
@@ -81,21 +81,21 @@ In `solo` mode: QL-STORY-READY is skipped with equivalent notes.
 
 - The epic path provided does not exist in `production/epics/`
 
-**Input:** `/skill:gamedev-create-stories nonexistent-epic`
+**Input:** `gamedev:create-stories nonexistent-epic`
 
 **Expected behavior:**
 
 1. Skill attempts to read the EPIC.md file
 2. File not found
 3. Skill outputs a clear error with the path it searched
-4. Skill suggests checking `production/epics/` or running `/skill:gamedev-create-epics` first
+4. Skill suggests checking `production/epics/` or running the `gamedev:create-epics` skill first
 5. No story files are created
 
 **Assertions:**
 
 - [ ] Skill outputs a clear error naming the missing file path
 - [ ] No story files are written
-- [ ] Skill recommends the correct next action (`/skill:gamedev-create-epics`)
+- [ ] Skill recommends the correct next action (`gamedev:create-epics`)
 - [ ] Skill does NOT create stories without a valid EPIC.md
 
 ---
@@ -108,7 +108,7 @@ In `solo` mode: QL-STORY-READY is skipped with equivalent notes.
 - Requirement 1 is covered by an Accepted ADR
 - Requirement 2 is covered by an ADR with `Status: Proposed`
 
-**Input:** `/skill:gamedev-create-stories [epic-name]`
+**Input:** `gamedev:create-stories [epic-name]`
 
 **Expected behavior:**
 
@@ -121,7 +121,7 @@ In `solo` mode: QL-STORY-READY is skipped with equivalent notes.
 **Assertions:**
 
 - [ ] Story 2 has `Status: Blocked` in its frontmatter
-- [ ] Blocking note names the specific ADR number and recommends `/skill:gamedev-architecture-decision`
+- [ ] Blocking note names the specific ADR number and recommends `gamedev:architecture-decision`
 - [ ] Story 1 has `Status: Ready` — blocked status does not affect non-blocked stories
 - [ ] Blocked status is shown in the draft preview before writing
 - [ ] Both story files are written (blocked stories are still written — just flagged)
@@ -134,12 +134,12 @@ In `solo` mode: QL-STORY-READY is skipped with equivalent notes.
 
 - `production/epics/` directory exists with ≥2 epic subdirectories
 
-**Input:** `/skill:gamedev-create-stories` (no argument)
+**Input:** `gamedev:create-stories` (no argument)
 
 **Expected behavior:**
 
 1. Skill detects no argument is provided
-2. Outputs a usage error: "No epic specified. Usage: /skill:gamedev-create-stories [epic-name]"
+2. Outputs a usage error: "No epic specified. Usage: gamedev:create-stories [epic-name]"
 3. Skill lists available epics from `production/epics/`
 4. No story files are created
 
@@ -161,7 +161,7 @@ In `solo` mode: QL-STORY-READY is skipped with equivalent notes.
 - `production/session-state/review-mode.txt` contains `full`
 - QL-STORY-READY check finds one story has ambiguous acceptance criteria
 
-**Input:** `/skill:gamedev-create-stories [epic-name]`
+**Input:** `gamedev:create-stories [epic-name]`
 
 **Expected behavior:**
 
@@ -190,7 +190,7 @@ In `solo` mode: QL-STORY-READY is skipped with equivalent notes.
 - [ ] Blocked stories flagged before write approval — not discovered after writing
 - [ ] TR-IDs reference the registry — requirement text is not embedded inline in story files
 - [ ] Control manifest rules quoted per-story from the manifest, not invented
-- [ ] Ends with next-step handoff: `/skill:gamedev-story-readiness` → `/skill:gamedev-dev-story`
+- [ ] Ends with next-step handoff: `gamedev:story-readiness` → `gamedev:dev-story`
 
 ---
 
@@ -200,4 +200,4 @@ In `solo` mode: QL-STORY-READY is skipped with equivalent notes.
   independently fixture-tested.
 - Story ordering (foundational first, UI last) is validated implicitly via Case 1's multi-story fixture.
 - The story sizing rule (splitting large requirement groups) is not tested here — it is addressed in the
-  `/skill:gamedev-create-stories` skill's internal logic.
+  `gamedev:create-stories` skill's internal logic.

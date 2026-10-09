@@ -25,7 +25,7 @@ When in doubt, use the primary engine specialist configured in `AGENTS.md`.
 
 ## Tests
 
-Tests live in `tests/` — not in `src/`. Run `/skill:gamedev-test-setup` to scaffold the test framework if it doesn't
+Tests live in `tests/` — not in `src/`. Run the `gamedev:test-setup` skill to scaffold the test framework if it doesn't
 exist yet. Every gameplay system should have unit tests covering its formulas and edge cases.
 
 ## Verification-Driven Development

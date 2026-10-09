@@ -1,4 +1,4 @@
-# Skill Test Spec: /skill:gamedev-team-release
+# Skill Test Spec: gamedev:team-release
 
 ## Skill Summary
 
@@ -42,7 +42,7 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
 - No open S1/S2 bugs
 - `production/sprints/` contains the completed sprint stories for this milestone
 
-**Input:** `/skill:gamedev-team-release v1.0.0`
+**Input:** `gamedev:team-release v1.0.0`
 
 **Expected behavior:**
 
@@ -50,8 +50,8 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
    identifies any deferred scope; produces release authorization; presents to user; a user-input tool or chat: user
    approves before Phase 2
 2. Phase 2: Spawns `gamedev:release-manager` through authorized delegation; cuts release branch from agreed commit;
-   bumps version numbers; invokes `/skill:gamedev-release-checklist`; freezes branch; output: branch name and checklist;
-   a user-input tool or chat: user approves before Phase 3
+   bumps version numbers; invokes the `gamedev:release-checklist` skill; freezes branch; output: branch name and
+   checklist; a user-input tool or chat: user approves before Phase 3
 3. Phase 3 (parallel): Issues delegation calls simultaneously for `gamedev:qa-lead` (regression suite, critical path
    sign-off) and `gamedev:devops-engineer` (build artifacts, CI verification); security-engineer is NOT spawned (no
    online features); network-programmer is NOT spawned (no multiplayer); both complete successfully
@@ -61,8 +61,8 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
    devops-engineer; no open blocking issues; producer declares GO; a user-input tool or chat: user sees GO decision and
    confirms deployment
 6. Phase 6: Spawns `gamedev:release-manager` + `gamedev:devops-engineer` (parallel); tags release in version control;
-   invokes `/skill:gamedev-changelog`; deploys to staging; smoke test passes; deploys to production; simultaneously
-   spawns `gamedev:community-manager` to finalize patch notes via `/skill:gamedev-patch-notes v1.0.0` and prepare launch
+   invokes the `gamedev:changelog` skill; deploys to staging; smoke test passes; deploys to production; simultaneously
+   spawns `gamedev:community-manager` to finalize patch notes via `gamedev:patch-notes v1.0.0` and prepare launch
    announcement
 7. Phase 7: release-manager generates release report; producer updates milestone tracking; qa-lead begins monitoring for
    regressions; community-manager publishes communication; analytics-engineer confirms live dashboards healthy
@@ -74,8 +74,8 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
 - [ ] security-engineer is NOT spawned when the game has no online features, multiplayer, or player data
 - [ ] Phase 5 producer collects sign-offs from all required parties before declaring GO
 - [ ] Phase 6 deployment only begins after GO decision is confirmed by the user
-- [ ] `/skill:gamedev-changelog` is invoked by release-manager in Phase 6 (not written directly)
-- [ ] `/skill:gamedev-patch-notes v1.0.0` is invoked by community-manager in Phase 6
+- [ ] `gamedev:changelog` is invoked by release-manager in Phase 6 (not written directly)
+- [ ] `gamedev:patch-notes v1.0.0` is invoked by community-manager in Phase 6
 - [ ] Phase 7 monitoring plan includes a 48-hour post-release monitoring commitment
 - [ ] Next steps recommend updating `production/stage.txt` to `Live` after successful deployment
 - [ ] Verdict: COMPLETE appears in the final output
@@ -91,7 +91,7 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
 - devops-engineer build is clean and artifacts are ready
 - producer is aware of the S1 bug
 
-**Input:** `/skill:gamedev-team-release v0.9.0`
+**Input:** `gamedev:team-release v0.9.0`
 
 **Expected behavior:**
 
@@ -134,7 +134,7 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
 - qa-lead and devops-engineer both return clean sign-offs
 - security-engineer audit is required per team composition rules
 
-**Input:** `/skill:gamedev-team-release v2.1.0`
+**Input:** `gamedev:team-release v2.1.0`
 
 **Expected behavior:**
 
@@ -174,7 +174,7 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
   game's localization scope)
 - localization-lead is available as a delegatable agent
 
-**Input:** `/skill:gamedev-team-release v1.2.0`
+**Input:** `gamedev:team-release v1.2.0`
 
 **Expected behavior:**
 
@@ -215,7 +215,7 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
 - `production/session-state/active.md` does not reference a version
 - No git tags are present from which to infer a version
 
-**Input:** `/skill:gamedev-team-release` (no argument)
+**Input:** `gamedev:team-release` (no argument)
 
 **Expected behavior (variant A):**
 
@@ -224,7 +224,7 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
 2. Infers v1.1.0 as the target version; reports "No version argument provided — inferred v1.1.0 from milestone data.
    Proceeding."
 3. Confirms with a user-input tool or chat before beginning Phase 1 proper: "Releasing v1.1.0. Is this correct?"
-4. Proceeds as if `/skill:gamedev-team-release v1.1.0` was the input
+4. Proceeds as if `gamedev:team-release v1.1.0` was the input
 
 **Expected behavior (variant B):**
 

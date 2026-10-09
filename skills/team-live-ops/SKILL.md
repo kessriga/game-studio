@@ -8,8 +8,8 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 **Arguments:** [season name or event description] [--review full|lean|solo]
 
 **Argument check:** If no season name or event description is provided, output:
-> "Usage: `/skill:gamedev-team-live-ops [season name or event description]` — Provide the name or description of the
-season or live event to plan." Then stop immediately without spawning any subagents or reading any files.
+> "Usage: `gamedev:team-live-ops [season name or event description]` — Provide the name or description of the season or
+live event to plan." Then stop immediately without spawning any subagents or reading any files.
 
 When this skill is invoked with a valid argument, orchestrate the live-ops team through a structured planning pipeline.
 
@@ -144,7 +144,7 @@ Present a summary to the user with:
     user-input tool or chat with options: revise economy design / override with documented rationale / cancel. If user
     chooses to revise: re-spawn economy-designer to produce a corrected design, then return to Phase 7 review. If user
     selects Cancel: end with Verdict: BLOCKED — "Live ops design cancelled due to unresolved ethics violation. Resolve
-    the flagged issues and re-run /skill:gamedev-team-live-ops."
+    the flagged issues and re-run gamedev:team-live-ops."
 - **Open questions**: decisions still needed before production begins
 
 Ask the user to approve the season plan before delegating to production teams. Issue the COMPLETE verdict only after the
@@ -189,6 +189,6 @@ Verdict: **COMPLETE** — season plan produced and handed off for production.
 
 ## Next Steps
 
-- Run `/skill:gamedev-design-review` on the season design document for consistency validation.
+- Run the `gamedev:design-review` skill on the season design document for consistency validation.
 - File the season's content creation work as Backlog tasks (group them under a milestone).
-- Run `/skill:gamedev-team-release` when the season content is ready to deploy.
+- Run the `gamedev:team-release` skill when the season content is ready to deploy.

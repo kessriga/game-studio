@@ -100,7 +100,7 @@ velocity data from the last 4 sprints (8, 10, 9, 11 points). A sprint plan is su
 ## Coverage Notes
 
 - PR-EPIC (epic-level prioritization) is not covered — a dedicated case should be added when the
-  /skill:gamedev-create-epics skill produces structured epic documents.
+  gamedev:create-epics skill produces structured epic documents.
 - PR-MILESTONE (milestone health review) is not covered — deferred to milestone health review on the Backlog board via
   the PR-MILESTONE gate.
 - PR-PHASE-GATE (full production phase advancement) involving synthesis of multiple sub-gate results is deferred.

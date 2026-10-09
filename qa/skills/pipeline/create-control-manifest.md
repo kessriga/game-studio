@@ -1,11 +1,11 @@
-# Skill Test Spec: /skill:gamedev-create-control-manifest
+# Skill Test Spec: gamedev:create-control-manifest
 
 ## Skill Summary
 
-`/skill:gamedev-create-control-manifest` reads all Accepted ADRs from `docs/architecture/` and generates a control
-manifest — a summary document that captures all architectural constraints, required patterns, and forbidden patterns in
-one place. The manifest is the reference document that story authors use when writing story files, ensuring stories
-inherit the correct architectural rules without having to read all ADRs individually.
+`gamedev:create-control-manifest` reads all Accepted ADRs from `docs/architecture/` and generates a control manifest — a
+summary document that captures all architectural constraints, required patterns, and forbidden patterns in one place.
+The manifest is the reference document that story authors use when writing story files, ensuring stories inherit the
+correct architectural rules without having to read all ADRs individually.
 
 The skill only includes Accepted ADRs; Proposed ADRs are excluded and noted. It has no director gates. The skill asks
 "May I write" before writing `docs/architecture/control-manifest.md`.
@@ -14,13 +14,13 @@ The skill only includes Accepted ADRs; Proposed ADRs are excluded and noted. It 
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: CREATED, BLOCKED
 - [ ] Contains "May I write" collaborative protocol language (for control-manifest.md)
-- [ ] Has a next-step handoff at the end (`/skill:gamedev-create-epics` or `/skill:gamedev-create-stories`)
+- [ ] Has a next-step handoff at the end (`gamedev:create-epics` or `gamedev:create-stories`)
 - [ ] Documents that only Accepted ADRs are included (not Proposed)
 
 ---
@@ -42,7 +42,7 @@ Accepted ADRs; no creative or technical review gate is needed.
 - Each ADR has a "Required Patterns" and/or "Forbidden Patterns" section
 - No existing `docs/architecture/control-manifest.md`
 
-**Input:** `/skill:gamedev-create-control-manifest`
+**Input:** `gamedev:create-control-manifest`
 
 **Expected behavior:**
 
@@ -70,12 +70,12 @@ Accepted ADRs; no creative or technical review gate is needed.
 
 - `docs/architecture/` directory exists but contains no ADR files
 
-**Input:** `/skill:gamedev-create-control-manifest`
+**Input:** `gamedev:create-control-manifest`
 
 **Expected behavior:**
 
 1. Skill reads `docs/architecture/` and finds no ADR files
-2. Skill outputs: "No ADRs found. Run `/skill:gamedev-architecture-decision` to create ADRs before generating the
+2. Skill outputs: "No ADRs found. Run the `gamedev:architecture-decision` skill to create ADRs before generating the
    control manifest."
 3. Skill exits without creating any file
 4. Verdict is BLOCKED
@@ -84,7 +84,7 @@ Accepted ADRs; no creative or technical review gate is needed.
 
 - [ ] Skill outputs a clear error when no ADRs are found
 - [ ] No control manifest file is written
-- [ ] Skill recommends `/skill:gamedev-architecture-decision` as the next action
+- [ ] Skill recommends `gamedev:architecture-decision` as the next action
 - [ ] Verdict is BLOCKED (not an error crash)
 
 ---
@@ -95,7 +95,7 @@ Accepted ADRs; no creative or technical review gate is needed.
 
 - `docs/architecture/` contains 3 Accepted ADRs and 2 Proposed ADRs
 
-**Input:** `/skill:gamedev-create-control-manifest`
+**Input:** `gamedev:create-control-manifest`
 
 **Expected behavior:**
 
@@ -121,7 +121,7 @@ Accepted ADRs; no creative or technical review gate is needed.
 - `docs/architecture/control-manifest.md` already exists (version 1, dated last week)
 - `docs/architecture/` contains Accepted ADRs (some new since last manifest)
 
-**Input:** `/skill:gamedev-create-control-manifest`
+**Input:** `gamedev:create-control-manifest`
 
 **Expected behavior:**
 
@@ -147,7 +147,7 @@ Accepted ADRs; no creative or technical review gate is needed.
 - 4 Accepted ADRs exist
 - `production/session-state/review-mode.txt` exists with `full`
 
-**Input:** `/skill:gamedev-create-control-manifest`
+**Input:** `gamedev:create-control-manifest`
 
 **Expected behavior:**
 
@@ -173,7 +173,7 @@ Accepted ADRs; no creative or technical review gate is needed.
 - [ ] Manifest draft shown to user before "May I write" ask
 - [ ] "May I write `docs/architecture/control-manifest.md`?" asked before writing
 - [ ] No director gates — no review-mode.txt read
-- [ ] Ends with next-step handoff: `/skill:gamedev-create-epics` or `/skill:gamedev-create-stories`
+- [ ] Ends with next-step handoff: `gamedev:create-epics` or `gamedev:create-stories`
 
 ---
 

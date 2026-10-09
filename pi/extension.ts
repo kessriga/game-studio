@@ -20,17 +20,9 @@ import {
   recordGateDecision,
   recordUpdate,
   snapshot,
-} from "./workflow.ts";
-import type { Snapshot, Update } from "./workflow.ts";
-import type { Run } from "./progress-store.ts";
-
-function sourceLabel(run: Run): string {
-  if (run.handoff)
-    return `coordinator ${run.handoff.coordinator.root} (handed off from ${run.source!.checkout.root})`;
-  return run.source
-    ? `worktree ${run.source.checkout.root}`
-    : "coordinator checkout";
-}
+  sourceLabel,
+} from "../workflow/workflow.ts";
+import type { Snapshot, Update } from "../workflow/workflow.ts";
 
 function summary(view: Snapshot | undefined): string {
   if (!view)

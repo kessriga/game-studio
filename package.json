@@ -1,6 +1,6 @@
 {
   "name": "@kessriga/gamedev",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "type": "module",
   "description": "Game Studio: guided game development with 72 skills and 53 specialist role guides.",
   "license": "MIT",
@@ -20,6 +20,8 @@
   "files": [
     "pi/",
     "!pi/**/*.test.ts",
+    "workflow/",
+    "!workflow/**/*.test.ts",
     "skills/",
     "agents/",
     "docs/",
@@ -36,9 +38,9 @@
     "node": ">=22.17.0"
   },
   "scripts": {
-    "test": "node --experimental-strip-types --test pi/*.test.ts",
+    "test": "node --experimental-strip-types --test pi/*.test.ts workflow/*.test.ts",
     "typecheck": "tsc --noEmit",
-    "format:check": "prettier --check \"pi/*.ts\" \"scripts/check-pi*.mjs\" package.json tsconfig.json",
+    "format:check": "prettier --check \"pi/*.ts\" \"workflow/*.ts\" \"hooks/*.ts\" \"hooks/*.tsx\" \"types/*.d.ts\" \"scripts/check-pi*.mjs\" package.json tsconfig.json",
     "check:pack": "node scripts/check-pi-pack.mjs",
     "check": "npm run format:check && npm run typecheck && npm test && node scripts/check-pi.mjs && npm run check:pack"
   },

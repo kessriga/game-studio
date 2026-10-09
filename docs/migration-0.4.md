@@ -7,6 +7,9 @@ settings, and bundled `CLAUDE.md` import shims. Pi remains supported. This is no
 must review and disable their old host registrations using that host's own controls. Game Studio does not modify host
 settings or delete installed caches. Historical records describe older releases, not current support.
 
+Version 0.5 restores Claude Code as a plugin with a mod; see [Claude Code setup](claude-code.md). It reads the same
+neutral layout and does not reinstate the old shell hooks, `CLAUDE.md` shims, or model metadata. Codex stays retired.
+
 ## Preserve project data first
 
 Stop before running start or setup-engine on an old layout. Back up the game repository, including untracked and ignored

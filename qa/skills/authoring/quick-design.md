@@ -1,20 +1,20 @@
-# Skill Test Spec: /skill:gamedev-quick-design
+# Skill Test Spec: gamedev:quick-design
 
 ## Skill Summary
 
-`/skill:gamedev-quick-design` produces a lightweight design spec for features too small to warrant a full 8-section GDD.
-The target scope is under 4 hours of design time for a single-system feature. Instead of the full 8-section GDD format,
-the quick-design spec uses a streamlined 3-section format: Overview, Rules, and Acceptance Criteria.
+`gamedev:quick-design` produces a lightweight design spec for features too small to warrant a full 8-section GDD. The
+target scope is under 4 hours of design time for a single-system feature. Instead of the full 8-section GDD format, the
+quick-design spec uses a streamlined 3-section format: Overview, Rules, and Acceptance Criteria.
 
 The skill has no director gates — adding gate overhead would defeat the purpose of a lightweight design tool. The skill
 asks "May I write" before writing the design note to `design/quick-notes/[name].md`. If the feature scope is too large
-for a quick-design, the skill redirects to `/skill:gamedev-design-system` instead.
+for a quick-design, the skill redirects to `gamedev:design-system` instead.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -22,7 +22,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - [ ] Contains "May I write" collaborative protocol language (for quick-note file)
 - [ ] Has a next-step handoff at the end
 - [ ] Explicitly notes: no director gates (lightweight skill by design)
-- [ ] Mentions scope check: redirects to `/skill:gamedev-design-system` if scope exceeds sub-4h threshold
+- [ ] Mentions scope check: redirects to `gamedev:design-system` if scope exceeds sub-4h threshold
 
 ---
 
@@ -42,7 +42,7 @@ gate overhead is intentionally absent. Full GDD review is not needed for sub-4-h
 - No existing quick-note for the target feature
 - Feature is clearly scoped: a single UI element change with no cross-system impact
 
-**Input:** `/skill:gamedev-quick-design [feature-name]`
+**Input:** `gamedev:quick-design [feature-name]`
 
 **Expected behavior:**
 
@@ -63,28 +63,28 @@ gate overhead is intentionally absent. Full GDD review is not needed for sub-4-h
 
 ---
 
-### Case 2: Failure Path — Scope check fails; redirected to /skill:gamedev-design-system
+### Case 2: Failure Path — Scope check fails; redirected to gamedev:design-system
 
 **Fixture:**
 
 - Feature described spans multiple systems or would take more than 4 hours of design time (e.g., "redesign the entire
   combat system" or "new progression mechanic affecting all classes")
 
-**Input:** `/skill:gamedev-quick-design [large-feature]`
+**Input:** `gamedev:quick-design [large-feature]`
 
 **Expected behavior:**
 
 1. Skill asks scoping questions
 2. Skill determines scope exceeds the sub-4h / single-system threshold
-3. Skill outputs: "This feature is too large for a quick-design. Use `/skill:gamedev-design-system [name]` for a full
-   GDD."
+3. Skill outputs: "This feature is too large for a quick-design. Use the `gamedev:design-system` skill with `[name]` for
+   a full GDD."
 4. Skill does NOT write a quick-note file
 5. Verdict is REDIRECTED
 
 **Assertions:**
 
 - [ ] Skill detects the scope excess and stops before drafting
-- [ ] Message explicitly names `/skill:gamedev-design-system` as the correct alternative
+- [ ] Message explicitly names `gamedev:design-system` as the correct alternative
 - [ ] No quick-note file is written
 - [ ] Verdict is REDIRECTED (not CREATED or BLOCKED)
 
@@ -96,7 +96,7 @@ gate overhead is intentionally absent. Full GDD review is not needed for sub-4-h
 
 - `design/quick-notes/[name].md` already exists from a previous session
 
-**Input:** `/skill:gamedev-quick-design [name]`
+**Input:** `gamedev:quick-design [name]`
 
 **Expected behavior:**
 
@@ -121,13 +121,13 @@ gate overhead is intentionally absent. Full GDD review is not needed for sub-4-h
 
 - `design/quick-notes/` directory may or may not exist
 
-**Input:** `/skill:gamedev-quick-design` (no argument)
+**Input:** `gamedev:quick-design` (no argument)
 
 **Expected behavior:**
 
 1. Skill detects no argument is provided
-2. Skill outputs a usage error: "No feature name specified. Usage: /skill:gamedev-quick-design [feature-name]"
-3. Skill provides an example: `/skill:gamedev-quick-design pause-menu-settings`
+2. Skill outputs a usage error: "No feature name specified. Usage: gamedev:quick-design [feature-name]"
+3. Skill provides an example: `gamedev:quick-design pause-menu-settings`
 4. No file is created
 
 **Assertions:**
@@ -146,7 +146,7 @@ gate overhead is intentionally absent. Full GDD review is not needed for sub-4-h
 - Feature is within scope for quick-design
 - `production/session-state/review-mode.txt` exists with `full`
 
-**Input:** `/skill:gamedev-quick-design [feature-name]`
+**Input:** `gamedev:quick-design [feature-name]`
 
 **Expected behavior:**
 
@@ -162,18 +162,18 @@ gate overhead is intentionally absent. Full GDD review is not needed for sub-4-h
 - [ ] Skill does NOT read `production/session-state/review-mode.txt`
 - [ ] Output contains a note explaining why no gate review is needed
 - [ ] Review mode has no effect on this skill's behavior
-- [ ] Full GDD review path (`/skill:gamedev-design-system`) is mentioned as the alternative for larger features
+- [ ] Full GDD review path (`gamedev:design-system`) is mentioned as the alternative for larger features
 
 ---
 
 ## Protocol Compliance
 
-- [ ] Scope check runs before drafting (redirects to `/skill:gamedev-design-system` if scope too large)
+- [ ] Scope check runs before drafting (redirects to `gamedev:design-system` if scope too large)
 - [ ] 3-section format used (Overview, Rules, Acceptance Criteria) — NOT the 8-section GDD format
 - [ ] Draft shown to user before "May I write" ask
 - [ ] "May I write `design/quick-notes/[name].md`?" asked before writing
 - [ ] No director gates — no review-mode.txt read
-- [ ] Ends with next-step handoff (e.g., proceed to implementation or `/skill:gamedev-dev-story`)
+- [ ] Ends with next-step handoff (e.g., proceed to implementation or `gamedev:dev-story`)
 
 ---
 

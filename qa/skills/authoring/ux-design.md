@@ -1,34 +1,34 @@
-# Skill Test Spec: /skill:gamedev-ux-design
+# Skill Test Spec: gamedev:ux-design
 
 ## Skill Summary
 
-`/skill:gamedev-ux-design` is a guided, section-by-section UX spec authoring skill. It produces user flow diagrams
-(described textually), interaction state definitions, wireframe descriptions, and accessibility notes for a specified
-screen or HUD element. The skill follows the skeleton-first pattern: it creates the file with all section headers
-immediately, then fills each section through discussion and writes each section to disk after user approval.
+`gamedev:ux-design` is a guided, section-by-section UX spec authoring skill. It produces user flow diagrams (described
+textually), interaction state definitions, wireframe descriptions, and accessibility notes for a specified screen or HUD
+element. The skill follows the skeleton-first pattern: it creates the file with all section headers immediately, then
+fills each section through discussion and writes each section to disk after user approval.
 
-The skill has no inline director gates — `/skill:gamedev-ux-review` is the separate review step. Each section requires a
-"May I write section [N] to [filepath]?" ask. If a UX spec already exists for the named screen, the skill offers to
-retrofit individual sections rather than replace. Verdict is COMPLETE when all sections are written.
+The skill has no inline director gates — `gamedev:ux-review` is the separate review step. Each section requires a "May I
+write section [N] to [filepath]?" ask. If a UX spec already exists for the named screen, the skill offers to retrofit
+individual sections rather than replace. Verdict is COMPLETE when all sections are written.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keyword: COMPLETE
 - [ ] Contains "May I write" language per section
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-ux-review` to validate the completed spec)
+- [ ] Has a next-step handoff (e.g., `gamedev:ux-review` to validate the completed spec)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-ux-design` has no inline director gates. `/skill:gamedev-ux-review` is the separate review skill
-invoked after this skill completes.
+None. `gamedev:ux-design` has no inline director gates. `gamedev:ux-review` is the separate review skill invoked after
+this skill completes.
 
 ---
 
@@ -41,7 +41,7 @@ invoked after this skill completes.
 - No existing HUD UX spec in `design/ux/`
 - Engine and rendering preferences configured
 
-**Input:** `/skill:gamedev-ux-design hud`
+**Input:** `gamedev:ux-design hud`
 
 **Expected behavior:**
 
@@ -51,14 +51,14 @@ invoked after this skill completes.
 3. After each section is drafted and user confirms, skill asks "May I write section [N] to `design/ux/hud.md`?"
 4. Each section is written in sequence after approval
 5. After all sections are written, verdict is COMPLETE
-6. Skill suggests running `/skill:gamedev-ux-review` as the next step
+6. Skill suggests running the `gamedev:ux-review` skill as the next step
 
 **Assertions:**
 
 - [ ] Skeleton file is created first (with empty section bodies)
 - [ ] "May I write section [N]" is asked per section (not once at the end)
 - [ ] All required sections are present: User Flows, Interaction States, Wireframe Description, Accessibility Notes
-- [ ] Handoff to `/skill:gamedev-ux-review` is at the end
+- [ ] Handoff to `gamedev:ux-review` is at the end
 - [ ] Verdict is COMPLETE
 
 ---
@@ -70,7 +70,7 @@ invoked after this skill completes.
 - `design/ux/hud.md` already exists with all sections populated
 - User wants to update only the Accessibility Notes section
 
-**Input:** `/skill:gamedev-ux-design hud`
+**Input:** `gamedev:ux-design hud`
 
 **Expected behavior:**
 
@@ -98,7 +98,7 @@ invoked after this skill completes.
 - User is authoring a UX spec for the inventory screen
 - `design/gdd/inventory.md` does not exist
 
-**Input:** `/skill:gamedev-ux-design inventory-screen`
+**Input:** `gamedev:ux-design inventory-screen`
 
 **Expected behavior:**
 
@@ -114,7 +114,7 @@ invoked after this skill completes.
 - [ ] DEPENDENCY GAP label appears in the spec for the missing system doc
 - [ ] Skill does NOT block on the missing GDD — it continues with placeholders
 - [ ] Dependency gap is also noted in the skill output (not just in the file)
-- [ ] Handoff suggests both `/skill:gamedev-ux-review` and writing the missing GDD
+- [ ] Handoff suggests both `gamedev:ux-review` and writing the missing GDD
 
 ---
 
@@ -124,14 +124,13 @@ invoked after this skill completes.
 
 - No argument provided with the skill invocation
 
-**Input:** `/skill:gamedev-ux-design`
+**Input:** `gamedev:ux-design`
 
 **Expected behavior:**
 
 1. Skill detects no screen name or argument provided
-2. Skill outputs a usage error: "Screen name required. Usage: `/skill:gamedev-ux-design [screen-name]`"
-3. Skill provides examples: `/skill:gamedev-ux-design hud`, `/skill:gamedev-ux-design main-menu`,
-   `/skill:gamedev-ux-design inventory`
+2. Skill outputs a usage error: "Screen name required. Usage: `gamedev:ux-design [screen-name]`"
+3. Skill provides examples: `gamedev:ux-design hud`, `gamedev:ux-design main-menu`, `gamedev:ux-design inventory`
 4. No file is created; no "May I write" is asked
 
 **Assertions:**
@@ -149,7 +148,7 @@ invoked after this skill completes.
 
 - New screen spec with argument provided
 
-**Input:** `/skill:gamedev-ux-design settings-menu`
+**Input:** `gamedev:ux-design settings-menu`
 
 **Expected behavior:**
 
@@ -171,7 +170,7 @@ invoked after this skill completes.
 - [ ] Discusses and drafts one section at a time
 - [ ] Asks "May I write section [N]" after each section is approved
 - [ ] Detects existing spec and offers retrofit path
-- [ ] Ends with handoff to `/skill:gamedev-ux-review`
+- [ ] Ends with handoff to `gamedev:ux-review`
 - [ ] Verdict is COMPLETE when all sections are written
 
 ---
@@ -179,6 +178,6 @@ invoked after this skill completes.
 ## Coverage Notes
 
 - Interaction state enumeration (normal/hover/focus/disabled/error) is a core requirement of each spec; the
-  `/skill:gamedev-ux-review` skill checks for completeness.
+  `gamedev:ux-review` skill checks for completeness.
 - Wireframe descriptions are text-only (no images); image references may be added manually by a designer after the fact.
 - Responsive layout concerns (different screen sizes) are noted as optional content and not assertion-tested here.

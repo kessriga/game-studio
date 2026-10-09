@@ -26,15 +26,15 @@ and brownfield onboarding. **Start here if you want to understand how the pieces
 
 ---
 
-### [Session: Authoring a GDD with /skill:gamedev-design-system](session-design-system-skill.md)
+### [Session: Authoring a GDD with gamedev:design-system](session-design-system-skill.md)
 
-**Type:** Design (skill-driven) **Skill:** `/skill:gamedev-design-system` **Duration:** ~60 minutes (14 turns)
-**Complexity:** Medium
+**Type:** Design (skill-driven) **Skill:** `gamedev:design-system` **Duration:** ~60 minutes (14 turns) **Complexity:**
+Medium
 
-**Scenario:** Dev runs `/skill:gamedev-design-system movement` after `/skill:gamedev-map-systems` produced the systems
-index. The skill loads context from the game concept and dependency GDDs, runs a technical feasibility pre-check, then
-guides through all 8 GDD sections one at a time — drafting, approving, and writing each section to disk before moving to
-the next.
+**Scenario:** Dev runs the `gamedev:design-system` skill with `movement` after `gamedev:map-systems` produced the
+systems index. The skill loads context from the game concept and dependency GDDs, runs a technical feasibility
+pre-check, then guides through all 8 GDD sections one at a time — drafting, approving, and writing each section to disk
+before moving to the next.
 
 **Key Moments:**
 
@@ -42,11 +42,11 @@ the next.
 - Incremental writing: each section on disk immediately after approval
 - Session crash during section 5 → agent resumes from first empty section
 - Dependency signals (stamina, inventory) surfaced during the Dependencies section
-- Ends with explicit handoff: "run `/skill:gamedev-design-review` before the next system"
+- Ends with explicit handoff: "run the `gamedev:design-review` skill before the next system"
 
 **Learn:**
 
-- How `/skill:gamedev-design-system` is different from asking an agent to "write a GDD"
+- How `gamedev:design-system` is different from asking an agent to "write a GDD"
 - How the section-by-section cycle prevents 30k-token context bloat
 - How incremental file writing survives session crashes
 - How the skill surfaces downstream dependency contracts
@@ -55,16 +55,16 @@ the next.
 
 ### [Session: Full Story Lifecycle](session-story-lifecycle.md)
 
-**Type:** Full Workflow **Skills:** `/skill:gamedev-story-readiness` → implementation → `/skill:gamedev-story-done`
-**Duration:** ~50 minutes (13 turns) **Complexity:** Medium
+**Type:** Full Workflow **Skills:** `gamedev:story-readiness` → implementation → `gamedev:story-done` **Duration:** ~50
+minutes (13 turns) **Complexity:** Medium
 
-**Scenario:** Dev pulls a story off the Backlog board. `/skill:gamedev-story-readiness` catches a roll-direction
-ambiguity before any code is written. After implementation, `/skill:gamedev-story-done` verifies 9 acceptance criteria,
-identifies 2 deferred criteria (inventory not integrated yet), and closes the story with notes.
+**Scenario:** Dev pulls a story off the Backlog board. `gamedev:story-readiness` catches a roll-direction ambiguity
+before any code is written. After implementation, `gamedev:story-done` verifies 9 acceptance criteria, identifies 2
+deferred criteria (inventory not integrated yet), and closes the story with notes.
 
 **Key Moments:**
 
-- `/skill:gamedev-story-readiness` catches spec ambiguity in Turn 2 — resolved before implementation starts
+- `gamedev:story-readiness` catches spec ambiguity in Turn 2 — resolved before implementation starts
 - ADR status check: story would be BLOCKED if ADR was still Proposed
 - Manifest version check: confirms story's guidance hasn't drifted from current architecture
 - Deferred criteria tracked (not lost) when integration not yet possible
@@ -72,7 +72,7 @@ identifies 2 deferred criteria (inventory not integrated yet), and closes the st
 
 **Learn:**
 
-- Why `/skill:gamedev-story-readiness` prevents late-implementation ambiguity
+- Why `gamedev:story-readiness` prevents late-implementation ambiguity
 - How deferred criteria work (COMPLETE WITH NOTES vs. BLOCKED)
 - How TR-ID references prevent false deviation flags
 - The full loop from backlog → implemented → closed
@@ -81,17 +81,17 @@ identifies 2 deferred criteria (inventory not integrated yet), and closes the st
 
 ### [Session: Gate Check and Phase Transition](session-gate-check-phase-transition.md)
 
-**Type:** Phase Gate **Skill:** `/skill:gamedev-gate-check` **Duration:** ~20 minutes (7 turns) **Complexity:** Low
+**Type:** Phase Gate **Skill:** `gamedev:gate-check` **Duration:** ~20 minutes (7 turns) **Complexity:** Low
 
-**Scenario:** Dev completes the Systems Design phase and runs `/skill:gamedev-gate-check` to advance. The gate finds all
-6 MVP GDDs complete, cross-review passed with one low-severity concern. Gate passes, `stage.txt` updated, and the agent
-provides a specific ordered checklist for Technical Setup.
+**Scenario:** Dev completes the Systems Design phase and runs the `gamedev:gate-check` skill to advance. The gate finds
+all 6 MVP GDDs complete, cross-review passed with one low-severity concern. Gate passes, `stage.txt` updated, and the
+agent provides a specific ordered checklist for Technical Setup.
 
 **Key Moments:**
 
 - Gate validates artifact presence AND internal completeness (8 sections per GDD)
 - CONCERNS ≠ FAIL: low-severity cross-review note passes the gate
-- stage.txt update changes what `/skill:gamedev-help` and all skills see going forward
+- stage.txt update changes what `gamedev:help` and all skills see going forward
 - Agent surfaces the cross-review concern as a concrete ADR to write next
 - Next phase checklist is specific and ordered, not generic
 
@@ -104,41 +104,39 @@ provides a specific ordered checklist for Technical Setup.
 
 ---
 
-### [Session: UX Pipeline — /skill:gamedev-ux-design → /skill:gamedev-ux-review → /skill:gamedev-team-ui](session-ux-pipeline.md)
+### [Session: UX Pipeline — gamedev:ux-design → gamedev:ux-review → gamedev:team-ui](session-ux-pipeline.md)
 
-**Type:** UX Design Pipeline **Skills:** `/skill:gamedev-ux-design`, `/skill:gamedev-ux-review`,
-`/skill:gamedev-team-ui` **Duration:** ~90 minutes (16 turns) **Complexity:** Medium-High
+**Type:** UX Design Pipeline **Skills:** `gamedev:ux-design`, `gamedev:ux-review`, `gamedev:team-ui` **Duration:** ~90
+minutes (16 turns) **Complexity:** Medium-High
 
-**Scenario:** Dev designs the HUD and inventory screen. `/skill:gamedev-ux-design` reads the player journey and GDDs to
-ground decisions in player emotional state. `/skill:gamedev-ux-review` catches a blocking accessibility gap (no keyboard
-alternative to drag-drop) and an advisory colorblind issue. After fixes, `/skill:gamedev-team-ui` accepts the handoff.
+**Scenario:** Dev designs the HUD and inventory screen. `gamedev:ux-design` reads the player journey and GDDs to ground
+decisions in player emotional state. `gamedev:ux-review` catches a blocking accessibility gap (no keyboard alternative
+to drag-drop) and an advisory colorblind issue. After fixes, `gamedev:team-ui` accepts the handoff.
 
 **Key Moments:**
 
 - HUD philosophy choice (diegetic vs. persistent vs. tactical) grounded in survival genre conventions
-- `/skill:gamedev-ux-review` distinguishes BLOCKING (stops handoff) vs. ADVISORY (can fix in visual pass)
+- `gamedev:ux-review` distinguishes BLOCKING (stops handoff) vs. ADVISORY (can fix in visual pass)
 - Accessibility caught before implementation, not during QA
 - Keyboard alternative added in one turn; review re-runs and passes
-- `/skill:gamedev-team-ui` checks for a passing `/skill:gamedev-ux-review` before starting visual design
+- `gamedev:team-ui` checks for a passing `gamedev:ux-review` before starting visual design
 
 **Learn:**
 
-- How `/skill:gamedev-ux-design` uses player journey context to ground UI decisions
-- What `/skill:gamedev-ux-review` actually checks (not just "does a spec exist?")
+- How `gamedev:ux-design` uses player journey context to ground UI decisions
+- What `gamedev:ux-review` actually checks (not just "does a spec exist?")
 - The difference between HUD doc (`design/ux/hud.md`) and per-screen specs
 - How accessibility issues are handled at design time vs. implementation time
 
 ---
 
-### [Session: Brownfield Onboarding with /skill:gamedev-adopt](session-adopt-brownfield.md)
+### [Session: Brownfield Onboarding with gamedev:adopt](session-adopt-brownfield.md)
 
-**Type:** Brownfield Adoption **Skill:** `/skill:gamedev-adopt` **Duration:** ~30 minutes (8 turns) **Complexity:**
-Low-Medium
+**Type:** Brownfield Adoption **Skill:** `gamedev:adopt` **Duration:** ~30 minutes (8 turns) **Complexity:** Low-Medium
 
-**Scenario:** Dev has 3 months of existing code and rough design notes but nothing in the right format.
-`/skill:gamedev-adopt` audits format compliance (not just file existence), classifies 4 gaps by severity, builds an
-ordered 7-step migration plan, and immediately fixes the BLOCKING gap (missing systems index) by inferring it from the
-codebase.
+**Scenario:** Dev has 3 months of existing code and rough design notes but nothing in the right format. `gamedev:adopt`
+audits format compliance (not just file existence), classifies 4 gaps by severity, builds an ordered 7-step migration
+plan, and immediately fixes the BLOCKING gap (missing systems index) by inferring it from the codebase.
 
 **Key Moments:**
 
@@ -146,11 +144,11 @@ codebase.
 - BLOCKING gap identified: missing systems index prevents 4+ skills from running
 - Migration plan is ordered: blocking gaps first, then high, then medium
 - Systems index bootstrapped from code structure — brownfield code contains the answer
-- Retrofit mode vs. new authoring: `/skill:gamedev-design-system retrofit` fills gaps without overwriting
+- Retrofit mode vs. new authoring: `gamedev:design-system retrofit` fills gaps without overwriting
 
 **Learn:**
 
-- The difference between `/skill:gamedev-adopt` and `/skill:gamedev-project-stage-detect`
+- The difference between `gamedev:adopt` and `gamedev:project-stage-detect`
 - How format compliance is checked (section detection, not just file presence)
 - How brownfield projects can onboard without losing existing work
 - When to use retrofit mode vs. full authoring
@@ -303,7 +301,7 @@ Read these examples BEFORE your first session. They show realistic expectations 
 ### For Understanding Specific Workflows
 
 - **New to the system?** → Read skill-flow-diagrams.md first
-- **Running /skill:gamedev-design-system for the first time?** → Read session-design-system-skill.md
+- **Running gamedev:design-system for the first time?** → Read session-design-system-skill.md
 - **Picking up a story?** → Read session-story-lifecycle.md
 - **Finishing a phase?** → Read session-gate-check-phase-transition.md
 - **Starting UI work?** → Read session-ux-pipeline.md

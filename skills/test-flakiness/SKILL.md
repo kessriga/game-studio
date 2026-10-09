@@ -19,7 +19,7 @@ explains likely causes, and recommends whether to quarantine or fix each one.
 
 - Polish phase (tests have had many runs; statistical signal is reliable)
 - When developers start dismissing CI failures as "probably flaky"
-- After `/skill:gamedev-regression-suite` identifies quarantined tests that need diagnosis
+- After `gamedev:regression-suite` identifies quarantined tests that need diagnosis
 
 ---
 
@@ -27,10 +27,10 @@ explains likely causes, and recommends whether to quarantine or fix each one.
 
 **Modes:**
 
-- `/skill:gamedev-test-flakiness [ci-log-path]` — analyse a specific CI run log file
-- `/skill:gamedev-test-flakiness scan` — scan all available CI logs in `.github/` or standard log output directories
-- `/skill:gamedev-test-flakiness registry` — read existing regression-suite.md quarantine section and provide
-  remediation guidance for already-known flaky tests
+- `gamedev:test-flakiness [ci-log-path]` — analyse a specific CI run log file
+- `gamedev:test-flakiness scan` — scan all available CI logs in `.github/` or standard log output directories
+- `gamedev:test-flakiness registry` — read existing regression-suite.md quarantine section and provide remediation
+  guidance for already-known flaky tests
 - No argument — auto-detect: run `scan` if CI logs are accessible, else `registry`
 
 ---
@@ -67,7 +67,7 @@ If no logs found:
 >
 > 1. Run the test suite at least 3 times and collect the output logs
 > 2. Check CI pipeline output and save a log to `test-results/`
-> 3. Run `/skill:gamedev-test-flakiness registry` to review tests already flagged as flaky in
+> 3. Run the `gamedev:test-flakiness` skill with `registry` to review tests already flagged as flaky in
 >    `tests/regression-suite.md`"
 
 Stop and ask the user which option to pursue.

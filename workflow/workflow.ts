@@ -301,6 +301,15 @@ export async function snapshot(root: string): Promise<Snapshot | undefined> {
   };
 }
 
+/** Describe where a run's evidence is read from, for status text and prompts. */
+export function sourceLabel(run: Run): string {
+  if (run.handoff)
+    return `coordinator ${run.handoff.coordinator.root} (handed off from ${run.source!.checkout.root})`;
+  return run.source
+    ? `worktree ${run.source.checkout.root}`
+    : "coordinator checkout";
+}
+
 export function blockers(view: Snapshot): Row[] {
   return view.rows.filter((row) => row.step.required && !row.complete);
 }

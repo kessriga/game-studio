@@ -1,4 +1,4 @@
-# Skill Test Spec: /skill:gamedev-team-combat
+# Skill Test Spec: gamedev:team-combat
 
 ## Skill Summary
 
@@ -7,7 +7,7 @@ gameplay-programmer, ai-programmer, technical-artist, sound-designer, the primar
 through six structured phases: Design → Architecture (with engine specialist validation) → Implementation (parallel) →
 Integration → Validation → Sign-off. Uses a user-input tool or chat at each phase transition. Delegates all file writes
 to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BLOCKED and handoffs to
-`/skill:gamedev-code-review`, `/skill:gamedev-balance-check`, and `/skill:gamedev-team-polish`.
+`gamedev:code-review`, `gamedev:balance-check`, and `gamedev:team-polish`.
 
 ---
 
@@ -18,8 +18,8 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 - [ ] Contains verdict keywords: COMPLETE, NEEDS WORK, BLOCKED
 - [ ] Contains "May I write" or "File Write Protocol" — writes delegated to sub-agents, orchestrator does not write
       files directly
-- [ ] Has a next-step handoff at the end (references `/skill:gamedev-code-review`, `/skill:gamedev-balance-check`,
-      `/skill:gamedev-team-polish`)
+- [ ] Has a next-step handoff at the end (references `gamedev:code-review`, `gamedev:balance-check`,
+      `gamedev:team-polish`)
 - [ ] Error Recovery Protocol section is present with all four recovery steps
 - [ ] Uses a user-input tool or chat at phase transitions for user approval before proceeding
 - [ ] Phase 3 is explicitly marked as parallel (gameplay-programmer, ai-programmer, technical-artist, sound-designer)
@@ -39,7 +39,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 - Engine is configured in `docs/technical-preferences.md` (Engine Specialists section filled)
 - No existing GDD for the requested combat feature
 
-**Input:** `/skill:gamedev-team-combat parry and riposte system`
+**Input:** `gamedev:team-combat parry and riposte system`
 
 **Expected behavior:**
 
@@ -56,7 +56,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 5. Phase 5 — qa-tester spawned; writes test cases from acceptance criteria; verifies edge cases; performance impact
    checked against budget
 6. Phase 6 — summary report produced: design COMPLETE, all team members COMPLETE, test cases listed, verdict: COMPLETE
-7. Next steps listed: `/skill:gamedev-code-review`, `/skill:gamedev-balance-check`, `/skill:gamedev-team-polish`
+7. Next steps listed: `gamedev:code-review`, `gamedev:balance-check`, `gamedev:team-polish`
 
 **Assertions:**
 
@@ -66,7 +66,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 - [ ] Engine specialist runs in Phase 2 before Phase 3 begins (output incorporated into architecture)
 - [ ] All file writes delegated to sub-agents (orchestrator never calls Write/Edit directly)
 - [ ] Verdict COMPLETE present in final report
-- [ ] Next steps include `/skill:gamedev-code-review`, `/skill:gamedev-balance-check`, `/skill:gamedev-team-polish`
+- [ ] Next steps include `gamedev:code-review`, `gamedev:balance-check`, `gamedev:team-polish`
 - [ ] Design doc covers all 8 required GDD sections
 
 ---
@@ -78,7 +78,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 - `design/gdd/parry-riposte.md` exists (Phase 1 already complete)
 - ai-programmer agent returns BLOCKED because no AI system architecture ADR exists (ADR status is Proposed)
 
-**Input:** `/skill:gamedev-team-combat parry and riposte system`
+**Input:** `gamedev:team-combat parry and riposte system`
 
 **Expected behavior:**
 
@@ -87,7 +87,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
    system is Proposed — cannot implement until ADR is Accepted"
 3. Error Recovery Protocol triggered: "ai-programmer: BLOCKED — AI behavior ADR is Proposed"
 4. a user-input tool or chat presented with options: (a) Skip ai-programmer and note the gap; (b) Retry with narrower
-   scope; (c) Stop here and run `/skill:gamedev-architecture-decision` first
+   scope; (c) Stop here and run the `gamedev:architecture-decision` skill first
 5. If user chooses (a): Phase 3 proceeds with gameplay-programmer, technical-artist, sound-designer only; ai-programmer
    gap noted in partial report
 6. Final report produced: partial implementation documented, ai-programmer section marked BLOCKED, overall verdict:
@@ -99,7 +99,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 - [ ] a user-input tool or chat offers at minimum three options: skip / retry / stop
 - [ ] Partial report produced — completed agents' work is not discarded
 - [ ] Overall verdict is BLOCKED (not COMPLETE) when any agent is unresolved
-- [ ] Blocked reason references the ADR and suggests `/skill:gamedev-architecture-decision`
+- [ ] Blocked reason references the ADR and suggests `gamedev:architecture-decision`
 - [ ] Orchestrator does not silently proceed past the blocked dependency
 
 ---
@@ -110,13 +110,13 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 
 - Any project state
 
-**Input:** `/skill:gamedev-team-combat` (no argument)
+**Input:** `gamedev:team-combat` (no argument)
 
 **Expected behavior:**
 
 1. Skill detects no argument provided
 2. Outputs usage message explaining the required argument (combat feature description)
-3. Provides an example invocation: `/skill:gamedev-team-combat [combat feature description]`
+3. Provides an example invocation: `gamedev:team-combat [combat feature description]`
 4. Skill exits without spawning any subagents
 
 **Assertions:**
@@ -137,7 +137,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 - Architecture sketch has been approved
 - Engine specialist has validated architecture
 
-**Input:** `/skill:gamedev-team-combat parry and riposte system` (resuming from Phase 2 complete)
+**Input:** `gamedev:team-combat parry and riposte system` (resuming from Phase 2 complete)
 
 **Expected behavior:**
 
@@ -164,7 +164,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 - Architecture sketch produced by gameplay-programmer is available
 - Engine version pinned in `docs/engine-reference/godot/VERSION.md`
 
-**Input:** `/skill:gamedev-team-combat parry and riposte system`
+**Input:** `gamedev:team-combat parry and riposte system`
 
 **Expected behavior:**
 
@@ -197,8 +197,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 - [ ] Phase 3 agents launched in parallel per skill spec
 - [ ] Partial report always produced even when agents are BLOCKED
 - [ ] Verdict is one of COMPLETE / NEEDS WORK / BLOCKED
-- [ ] Next steps present at end of output: `/skill:gamedev-code-review`, `/skill:gamedev-balance-check`,
-      `/skill:gamedev-team-polish`
+- [ ] Next steps present at end of output: `gamedev:code-review`, `gamedev:balance-check`, `gamedev:team-polish`
 
 ---
 
@@ -207,7 +206,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 - The NEEDS WORK verdict path (qa-tester finds failures in Phase 5) is not separately tested here; it follows the same
   error recovery and partial report protocol as Case 2.
 - "Retry with narrower scope" error recovery option is listed in assertions but its full recursive behavior (splitting
-  via `/skill:gamedev-create-stories`) is covered by the `/skill:gamedev-create-stories` spec.
+  via `gamedev:create-stories`) is covered by the `gamedev:create-stories` spec.
 - Phase 4 integration logic (wiring gameplay, AI, VFX, audio) is validated implicitly by the Happy Path case; a
   dedicated integration test would require fixture code files.
 - Engine specialist unavailable (no engine configured) is partially covered in Case 5 assertions — a dedicated fixture

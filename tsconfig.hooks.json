@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["es2023"],
+    "types": [],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "strict": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true
+  },
+  "include": ["hooks/*.ts", "hooks/*.tsx", "types/*.d.ts", ".claude/types/*.d.ts"]
+}

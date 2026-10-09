@@ -1,6 +1,6 @@
 # Available Skills
 
-The 72 shared skills below use logical identifiers such as `gamedev:start`. Invoke it as `/skill:gamedev-start` in Pi.
+The 72 shared skills below use logical identifiers such as `gamedev:start`. Each host guide shows its invocation syntax.
 Generated namespaced entry points link to the shared workflows. See [the host guide](host-runtime.md) for tool and
 delegation requirements. Framework maintenance skills `gamedev:skill-test` and `gamedev:skill-improve` require a
 contributor checkout.

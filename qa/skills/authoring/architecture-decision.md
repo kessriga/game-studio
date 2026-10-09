@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-architecture-decision
+# Skill Test Spec: gamedev:architecture-decision
 
 ## Skill Summary
 
-`/skill:gamedev-architecture-decision` guides the user through section-by-section authoring of a new Architecture
+`gamedev:architecture-decision` guides the user through section-by-section authoring of a new Architecture
 Decision Record (ADR). Required sections are: Status, Context, Decision, Consequences, Alternatives, and Related ADRs.
 The skill also stamps the engine version reference from `docs/engine-reference/` into the ADR for traceability.
 
@@ -15,7 +15,7 @@ authoring. ADRs are written to `docs/architecture/adr-NNN-[name].md`.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -50,7 +50,7 @@ In `solo` mode: both gates are skipped. ADR is written with Status: Proposed.
 - `docs/engine-reference/[engine]/VERSION.md` exists
 - `production/session-state/review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-architecture-decision rendering-approach`
+**Input:** `gamedev:architecture-decision rendering-approach`
 
 **Expected behavior:**
 
@@ -82,7 +82,7 @@ In `solo` mode: both gates are skipped. ADR is written with Status: Proposed.
 - `production/session-state/review-mode.txt` contains `full`
 - TD-ADR gate returns CONCERNS: "The decision does not address [specific concern]"
 
-**Input:** `/skill:gamedev-architecture-decision [topic]`
+**Input:** `gamedev:architecture-decision [topic]`
 
 **Expected behavior:**
 
@@ -108,7 +108,7 @@ In `solo` mode: both gates are skipped. ADR is written with Status: Proposed.
 - `production/session-state/review-mode.txt` contains `lean`
 - ADR draft is authored for a new technical decision
 
-**Input:** `/skill:gamedev-architecture-decision [topic]`
+**Input:** `gamedev:architecture-decision [topic]`
 
 **Expected behavior:**
 
@@ -134,7 +134,7 @@ In `solo` mode: both gates are skipped. ADR is written with Status: Proposed.
 - `docs/architecture/` contains an existing ADR covering the same topic
 - The existing ADR has Status: Accepted
 
-**Input:** `/skill:gamedev-architecture-decision [same-topic]`
+**Input:** `gamedev:architecture-decision [same-topic]`
 
 **Expected behavior:**
 
@@ -198,7 +198,7 @@ In `solo` mode: both gates are skipped. ADR is written with Status: Proposed.
 - [ ] TD-ADR and LP-FEASIBILITY spawn in parallel in full mode
 - [ ] Skipped gates noted by name and mode in lean/solo output
 - [ ] ADR Status: Accepted only when full mode AND both gates APPROVED
-- [ ] Ends with next-step handoff: `/skill:gamedev-architecture-review` or `/skill:gamedev-create-control-manifest`
+- [ ] Ends with next-step handoff: `gamedev:architecture-review` or `gamedev:create-control-manifest`
 
 ---
 

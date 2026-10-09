@@ -47,5 +47,9 @@ format-check:
     {{python}} -m ruff format --check {{maintained_python}}
     git diff --check
 
+# Validate the Claude Code plugin and run the mod's tests; skipped when the CLI is absent.
+claude-check:
+    bash scripts/claude-check.sh
+
 # Full portable gate; host-specific reader checks are documented in CONTRIBUTING.md.
-gate: lint format-check test
+gate: lint format-check test claude-check

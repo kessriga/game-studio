@@ -164,8 +164,8 @@ Verdict: **COMPLETE** — changelog generated.
 
 ## Phase 7: Next Steps
 
-- Use `/skill:gamedev-patch-notes [version]` to generate a styled, saved version for public release.
-- Use `/skill:gamedev-release-checklist` before publishing the changelog externally.
+- Use the `gamedev:patch-notes` skill with `[version]` to generate a styled, saved version for public release.
+- Use the `gamedev:release-checklist` skill before publishing the changelog externally.
 
 ### Guidelines
 

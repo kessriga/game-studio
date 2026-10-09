@@ -80,7 +80,7 @@ Delegate to **release-manager**:
 
 - Cut release branch from the agreed commit
 - Bump version numbers in all relevant files
-- Generate the release checklist using `/skill:gamedev-release-checklist`
+- Generate the release checklist using the `gamedev:release-checklist` skill
 - Freeze the branch — no feature changes, bug fixes only
 - Output: release branch name and checklist
 
@@ -141,7 +141,7 @@ After the user selects "Override NO-GO with documented rationale":
 Delegate to **release-manager** + **devops-engineer**:
 
 - Tag the release in version control
-- Generate changelog using `/skill:gamedev-changelog`
+- Generate changelog using the `gamedev:changelog` skill
 - Deploy to staging for final smoke test
 - Deploy to production
 - Human team action: Monitor dashboards and error rates for 48 hours post-release. Capture any follow-up work as Backlog
@@ -149,7 +149,7 @@ Delegate to **release-manager** + **devops-engineer**:
 
 Delegate to **community-manager** (in parallel with deployment):
 
-- Finalize patch notes using `/skill:gamedev-patch-notes [version]`
+- Finalize patch notes using the `gamedev:patch-notes` skill with `[version]`
 - Prepare launch announcement (store page updates, social media, community post)
 - Draft known issues post if any S3+ issues shipped
 - Output: all player-facing release communication, ready to publish on deploy confirmation
@@ -179,8 +179,8 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/skill:gamedev-architecture-decision` first
-- Scope too large → split into two stories via `/skill:gamedev-create-stories`
+- ADR status is Proposed → do not implement; run the `gamedev:architecture-decision` skill first
+- Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## File Write Protocol

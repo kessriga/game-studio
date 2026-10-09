@@ -1,4 +1,4 @@
-# Example Session: UX Pipeline — /skill:gamedev-ux-design → /skill:gamedev-ux-review → /skill:gamedev-team-ui
+# Example Session: UX Pipeline — gamedev:ux-design → gamedev:ux-review → gamedev:team-ui
 
 **Context:** Solo indie dev, Pre-Production phase. The HUD and inventory screen are the first UI to design. The game has
 a player journey doc and GDDs for inventory and combat.
@@ -17,16 +17,16 @@ implementation
 
 ---
 
-## Part 1: HUD Design with /skill:gamedev-ux-design
+## Part 1: HUD Design with gamedev:ux-design
 
 ### Turn 1: User Starts HUD Design
 
 **User:**
-> /skill:gamedev-ux-design hud
+> gamedev:ux-design hud
 
 ### Turn 2: Agent Loads Context and Presents the Approach
 
-**Agent (ux-designer, via /skill:gamedev-ux-design):**
+**Agent (ux-designer, via gamedev:ux-design):**
 > Starting HUD design. Loading context...
 >
 > - `design/player-journey.md` read — key states: Calm Exploration, Tension (threat detected), Crisis (low HP/stamina),
@@ -88,12 +88,12 @@ design/ux/hud.md
 
 ---
 
-## Part 2: Inventory Screen with /skill:gamedev-ux-design
+## Part 2: Inventory Screen with gamedev:ux-design
 
 ### Turn 8: User Starts Inventory Screen
 
 **User:**
-> /skill:gamedev-ux-design screen inventory
+> gamedev:ux-design screen inventory
 
 ### Turn 9: Agent Scans GDD and Player Journey
 
@@ -129,16 +129,16 @@ Map, Data Requirements, Events Fired, Accessibility, Localization.)*
 
 ---
 
-## Part 3: /skill:gamedev-ux-review
+## Part 3: gamedev:ux-review
 
 ### Turn 13: User Runs Review
 
 **User:**
-> /skill:gamedev-ux-review design/ux/
+> gamedev:ux-review design/ux/
 
 ### Turn 14: Agent Reviews Both Documents
 
-**Agent (via /skill:gamedev-ux-review):**
+**Agent (via gamedev:ux-review):**
 > Reviewing all UX specs in `design/ux/`...
 >
 > ---
@@ -166,7 +166,7 @@ Map, Data Requirements, Events Fired, Accessibility, Localization.)*
 > ---
 > **Verdict: NEEDS REVISION**
 >
-> Two issues must be resolved before handoff to /skill:gamedev-team-ui:
+> Two issues must be resolved before handoff to gamedev:team-ui:
 >
 > 1. **BLOCKING (Accessibility):** Inventory screen has no keyboard alternative to drag-drop. Motor accessibility
 >    requires a non-drag interaction path. Add a "press X to pick up / press X again to place" toggle, or a details
@@ -198,19 +198,19 @@ Map, Data Requirements, Events Fired, Accessibility, Localization.)*
 
 ---
 
-## Part 4: Handoff to /skill:gamedev-team-ui
+## Part 4: Handoff to gamedev:team-ui
 
 ### Turn 16: User Kicks Off Team UI
 
 **User:**
-> /skill:gamedev-team-ui
+> gamedev:team-ui
 
-**Agent (via /skill:gamedev-team-ui):**
+**Agent (via gamedev:team-ui):**
 > Running UX pipeline context check...
 >
 > - `design/ux/hud.md` — reviewed ✅
 > - `design/ux/screens/inventory.md` — reviewed ✅
-> - `/skill:gamedev-ux-review` verdict: NEEDS REVISION was resolved — current state: APPROVED ✅
+> - `gamedev:ux-review` verdict: NEEDS REVISION was resolved — current state: APPROVED ✅
 >
 > Proceeding to **Phase 2: Visual Design**
 >
@@ -224,15 +224,15 @@ Map, Data Requirements, Events Fired, Accessibility, Localization.)*
 
 - **Context-driven design**: agent reads player-journey.md to ground HUD decisions in player emotional state, not just
   feature lists
-- **UX review is a hard gate**: `/skill:gamedev-team-ui` checks for a passing `/skill:gamedev-ux-review` before
+- **UX review is a hard gate**: `gamedev:team-ui` checks for a passing `gamedev:ux-review` before
   proceeding to visual design
 - **Accessibility caught early**: the missing keyboard alternative was flagged by review, not discovered by a QA tester
   in the final week
 - **Blocking vs. advisory**: the missing keyboard path was BLOCKING (stops handoff); the colorblind colors were ADVISORY
   (can be fixed in visual pass)
-- **Section-by-section UX authoring**: same incremental pattern as `/skill:gamedev-design-system` — each section written
+- **Section-by-section UX authoring**: same incremental pattern as `gamedev:design-system` — each section written
   to file before moving on
 - **Separate HUD and screen files**: `design/ux/hud.md` is the whole-game HUD; per-screen specs live in
   `design/ux/screens/`
-- **Pattern library enforced by /skill:gamedev-team-ui**: after this session, inventory drag-drop becomes a documented
+- **Pattern library enforced by gamedev:team-ui**: after this session, inventory drag-drop becomes a documented
   pattern in `design/ux/interaction-patterns.md` for all future screens to reference

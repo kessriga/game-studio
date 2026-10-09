@@ -29,7 +29,7 @@ Review intensity controls whether director gates run. It can be set globally (pe
 per skill run.
 
 **Global config**: `production/review-mode.txt` — one word: `full`, `lean`, or `solo`. Set once during
-`/skill:gamedev-start`. Edit the file directly to change it at any time.
+`gamedev:start`. Edit the file directly to change it at any time.
 
 **Per-run override**: any gate-using skill accepts `--review [full|lean|solo]` as an argument. This overrides the global
 config for that run only.
@@ -37,15 +37,15 @@ config for that run only.
 Examples:
 
 ```
-/skill:gamedev-brainstorm space horror           → uses global mode
-/skill:gamedev-brainstorm space horror --review full   → forces full mode this run
-/skill:gamedev-architecture-decision --review solo     → skips all gates this run
+gamedev:brainstorm space horror           → uses global mode
+gamedev:brainstorm space horror --review full   → forces full mode this run
+gamedev:architecture-decision --review solo     → skips all gates this run
 ```
 
 | Mode | What runs | Best for |
 | ------ | ----------- | ---------- |
 | `full` | All gates active — every workflow step reviewed | Teams, learning users, or when you want thorough director feedback at every step |
-| `lean` | PHASE-GATEs only (`/skill:gamedev-gate-check`) — per-skill gates skipped | Small teams that still want director review at milestones |
+| `lean` | PHASE-GATEs only (`gamedev:gate-check`) — per-skill gates skipped | Small teams that still want director review at milestones |
 | `solo` | No director gates anywhere | **Default** — solo dev; game jams, prototypes, maximum speed |
 
 **Check pattern — apply before every gate spawn:**
@@ -177,7 +177,7 @@ Agent: `gamedev:creative-director` | Domain: Vision, pillars, player experience
 
 ### CD-SYSTEMS — Systems Decomposition Vision Check
 
-**Trigger**: After the systems index is written by `/skill:gamedev-map-systems` — validates the complete system set
+**Trigger**: After the systems index is written by `gamedev:map-systems` — validates the complete system set
 before GDD authoring begins
 
 **Context to pass**:
@@ -223,7 +223,7 @@ before GDD authoring begins
 
 ### CD-PLAYTEST — Player Experience Validation
 
-**Trigger**: After playtest reports are generated (`/skill:gamedev-playtest-report`), or after any session that produces
+**Trigger**: After playtest reports are generated (`gamedev:playtest-report`), or after any session that produces
 player feedback
 
 **Context to pass**:
@@ -244,7 +244,7 @@ player feedback
 
 ### CD-PHASE-GATE — Creative Readiness at Phase Transition
 
-**Trigger**: Always at `/skill:gamedev-gate-check` — spawn in parallel with TD-PHASE-GATE and PR-PHASE-GATE
+**Trigger**: Always at `gamedev:gate-check` — spawn in parallel with TD-PHASE-GATE and PR-PHASE-GATE
 
 **Context to pass**:
 
@@ -270,7 +270,7 @@ Agent: `gamedev:technical-director` | Domain: Architecture, engine risk, perform
 
 ### TD-SYSTEM-BOUNDARY — System Boundary Architecture Review
 
-**Trigger**: After `/skill:gamedev-map-systems` Phase 3 dependency mapping is agreed but before GDD authoring begins —
+**Trigger**: After `gamedev:map-systems` Phase 3 dependency mapping is agreed but before GDD authoring begins —
 validates that the system structure is architecturally sound before teams invest in writing GDDs against it
 
 **Context to pass**:
@@ -320,7 +320,7 @@ any early-stage concept with technical unknowns)
 
 ### TD-ARCHITECTURE — Architecture Sign-Off
 
-**Trigger**: After the master architecture document is drafted (`/skill:gamedev-create-architecture` Phase 7), and after
+**Trigger**: After the master architecture document is drafted (`gamedev:create-architecture` Phase 7), and after
 any major architecture revision
 
 **Context to pass**:
@@ -343,7 +343,7 @@ any major architecture revision
 
 ### TD-ADR — Architecture Decision Review
 
-**Trigger**: After an individual ADR is authored (`/skill:gamedev-architecture-decision`), before it is marked Accepted
+**Trigger**: After an individual ADR is authored (`gamedev:architecture-decision`), before it is marked Accepted
 
 **Context to pass**:
 
@@ -384,7 +384,7 @@ engine-specific implementation approach
 
 ### TD-PHASE-GATE — Technical Readiness at Phase Transition
 
-**Trigger**: Always at `/skill:gamedev-gate-check` — spawn in parallel with CD-PHASE-GATE and PR-PHASE-GATE
+**Trigger**: Always at `gamedev:gate-check` — spawn in parallel with CD-PHASE-GATE and PR-PHASE-GATE
 
 **Context to pass**:
 
@@ -456,8 +456,8 @@ is on track (full mode only)
 
 ### PR-EPIC — Epic Structure Feasibility Review
 
-**Trigger**: After epics are defined by `/skill:gamedev-create-epics`, before stories are broken out — validates the
-epic structure is producible before `/skill:gamedev-create-stories` is invoked
+**Trigger**: After epics are defined by `gamedev:create-epics`, before stories are broken out — validates the
+epic structure is producible before `gamedev:create-stories` is invoked
 
 **Context to pass**:
 
@@ -482,7 +482,7 @@ epic structure is producible before `/skill:gamedev-create-stories` is invoked
 
 ### PR-PHASE-GATE — Production Readiness at Phase Transition
 
-**Trigger**: Always at `/skill:gamedev-gate-check` — spawn in parallel with CD-PHASE-GATE and TD-PHASE-GATE
+**Trigger**: Always at `gamedev:gate-check` — spawn in parallel with CD-PHASE-GATE and TD-PHASE-GATE
 
 **Context to pass**:
 
@@ -533,7 +533,7 @@ Agent: `gamedev:art-director` | Domain: Visual identity, art bible, visual produ
 
 ### AD-ART-BIBLE — Art Bible Sign-Off
 
-**Trigger**: After the art bible is drafted (`/skill:gamedev-art-bible`), before asset production begins
+**Trigger**: After the art bible is drafted (`gamedev:art-bible`), before asset production begins
 
 **Context to pass**:
 
@@ -556,7 +556,7 @@ Agent: `gamedev:art-director` | Domain: Visual identity, art bible, visual produ
 
 ### AD-PHASE-GATE — Visual Readiness at Phase Transition
 
-**Trigger**: Always at `/skill:gamedev-gate-check` — spawn in parallel with CD-PHASE-GATE, TD-PHASE-GATE, and
+**Trigger**: Always at `gamedev:gate-check` — spawn in parallel with CD-PHASE-GATE, TD-PHASE-GATE, and
 PR-PHASE-GATE
 
 **Context to pass**:
@@ -587,7 +587,7 @@ needed.
 
 ### LP-FEASIBILITY — Lead Programmer Implementation Feasibility
 
-**Trigger**: After the master architecture document is written (`/skill:gamedev-create-architecture` Phase 7b), or when
+**Trigger**: After the master architecture document is written (`gamedev:create-architecture` Phase 7b), or when
 a new architectural pattern is proposed
 
 **Context to pass**:
@@ -609,8 +609,8 @@ a new architectural pattern is proposed
 
 ### LP-CODE-REVIEW — Lead Programmer Code Review
 
-**Trigger**: After a dev story is implemented (`/skill:gamedev-dev-story`, `/skill:gamedev-story-done`), or as part of
-`/skill:gamedev-code-review`
+**Trigger**: After a dev story is implemented (`gamedev:dev-story`, `gamedev:story-done`), or as part of
+`gamedev:code-review`
 
 **Context to pass**:
 
@@ -631,8 +631,8 @@ a new architectural pattern is proposed
 
 ### QL-STORY-READY — QA Lead Story Readiness Check
 
-**Trigger**: Before a story is cleared for dev — invoked by `/skill:gamedev-create-stories` and
-`/skill:gamedev-story-readiness` during story selection
+**Trigger**: Before a story is cleared for dev — invoked by `gamedev:create-stories` and
+`gamedev:story-readiness` during story selection
 
 **Context to pass**:
 
@@ -655,7 +655,7 @@ a new architectural pattern is proposed
 
 ### QL-TEST-COVERAGE — QA Lead Test Coverage Review
 
-**Trigger**: After implementation stories are complete, before marking an epic done, or at `/skill:gamedev-gate-check`
+**Trigger**: After implementation stories are complete, before marking an epic done, or at `gamedev:gate-check`
 Production → Polish
 
 **Context to pass**:
@@ -720,7 +720,7 @@ affects visual style
 
 ## Parallel Gate Protocol
 
-When a workflow requires multiple directors at the same checkpoint (most common at `/skill:gamedev-gate-check`), spawn
+When a workflow requires multiple directors at the same checkpoint (most common at `gamedev:gate-check`), spawn
 all agents simultaneously:
 
 ```

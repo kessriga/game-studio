@@ -8,12 +8,12 @@ from any game project.
 | File | Purpose |
 | ------ | --------- |
 | `catalog.yaml` | Registry of 65 skill specs and 53 agent specs; run the coverage audit to find untracked skills. Contains category, spec path, and last-test tracking fields. Always read this first when running any test command. |
-| `quality-rubric.md` | Category-specific pass/fail metrics. Read the matching `###` section for the skill's category when running `/skill:gamedev-skill-test category`. |
+| `quality-rubric.md` | Category-specific pass/fail metrics. Read the matching `###` section for the skill's category when running the `gamedev:skill-test` skill with `category`. |
 | `skills/[category]/[name].md` | Behavioral spec for a skill — 5 test cases + protocol compliance assertions. |
 | `agents/[tier]/[name].md` | Behavioral spec for an agent — 5 test cases + protocol compliance assertions. |
 | `templates/skill-test-spec.md` | Template for writing new skill spec files. |
 | `templates/agent-test-spec.md` | Template for writing new agent spec files. |
-| `results/` | Written by `/skill:gamedev-skill-test spec` when results are saved. Gitignored. |
+| `results/` | Written by `gamedev:skill-test spec` when results are saved. Gitignored. |
 
 ## Path conventions
 
@@ -81,15 +81,15 @@ delegation boundaries.
 ## Runtime checks
 
 Read [the host guide](../docs/host-runtime.md) before interpreting capabilities in a spec. Logical identifiers use
-`gamedev:<name>`; Pi invocations use `/skill:gamedev-<name>`. Validate name/description frontmatter and body-level
+`gamedev:<name>`; each host renders its own invocation syntax. Validate name/description frontmatter and body-level
 routing, arguments, domain boundaries, and evidence. Do not infer model execution or tool availability from metadata. If
 required independent review cannot run, mark it blocked; sequential role passes do not count. Distinguish written-spec
 analysis from conversational execution and record the evidence actually observed.
 
 ## Workflow for improving a skill
 
-Use `/skill:gamedev-skill-improve [name]`. It handles the full loop: test → diagnose → propose fix → rewrite → retest →
-keep or revert.
+Use the `gamedev:skill-improve` skill with `[name]`. It handles the full loop: test → diagnose → propose fix → rewrite →
+retest → keep or revert.
 
 ## Spec validity note
 
@@ -99,5 +99,5 @@ behavior. Treat spec failures as "this needs investigation," not "the skill is d
 
 ## This folder is deletable
 
-Deleting this folder has no effect on the Game Studio skills or agents themselves. `/skill:gamedev-skill-test` and
-`/skill:gamedev-skill-improve` will report that `catalog.yaml` is missing and guide the user to initialize it.
+Deleting this folder has no effect on the Game Studio skills or agents themselves. `gamedev:skill-test` and
+`gamedev:skill-improve` will report that `catalog.yaml` is missing and guide the user to initialize it.

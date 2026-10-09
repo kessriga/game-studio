@@ -9,5 +9,5 @@
     "noUnusedLocals": true,
     "types": ["node"]
   },
-  "include": ["pi/*.ts"]
+  "include": ["pi/*.ts", "workflow/*.ts"]
 }

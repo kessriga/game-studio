@@ -13,10 +13,10 @@ When this skill is invoked:
 
 Two modes:
 
-- **No argument**: `/skill:gamedev-map-systems` — Run the full decomposition workflow (Phases 1-5) to create or update
-  the systems index.
-- **`next`**: `/skill:gamedev-map-systems next` — Pick the highest-priority undesigned system from the index and hand
-  off to `/skill:gamedev-design-system` (Phase 6).
+- **No argument**: `gamedev:map-systems` — Run the full decomposition workflow (Phases 1-5) to create or update the
+  systems index.
+- **`next`**: `gamedev:map-systems next` — Pick the highest-priority undesigned system from the index and hand off to
+  `gamedev:design-system` (Phase 6).
 
 Also resolve the review mode (once, store for all gate spawns this run):
 
@@ -35,7 +35,7 @@ Read the game concept and any existing design work. This provides the raw materi
 **Required:**
 
 - Read `design/gdd/game-concept.md` — **fail with a clear message if missing**:
-  > "No game concept found at `design/gdd/game-concept.md`. Run `/skill:gamedev-brainstorm` first to create one, then
+  > "No game concept found at `design/gdd/game-concept.md`. Run the `gamedev:brainstorm` skill first to create one, then
   > come back to decompose it into systems."
 
 **Optional (read if they exist):**
@@ -284,13 +284,13 @@ After writing, create `production/session-state/active.md` if it does not exist,
 
 ---
 
-## Phase 6: Design Individual Systems (Handoff to /skill:gamedev-design-system)
+## Phase 6: Design Individual Systems (Handoff to gamedev:design-system)
 
 This phase is entered when:
 
 - The user says "yes" to designing systems after creating the index
-- The user invokes `/skill:gamedev-map-systems [system-name]`
-- The user invokes `/skill:gamedev-map-systems next`
+- The user invokes the `gamedev:map-systems` skill with `[system-name]`
+- The user invokes the `gamedev:map-systems` skill with `next`
 
 ### Step 6a: Select the System
 
@@ -301,11 +301,11 @@ This phase is entered when:
 
 Use a user-input tool or chat for: "Start designing [system-name] now, pick a different system, or stop here?"
 
-### Step 6b: Hand Off to /skill:gamedev-design-system
+### Step 6b: Hand Off to gamedev:design-system
 
-Once a system is selected, invoke the `/skill:gamedev-design-system [system-name]` skill.
+Once a system is selected, invoke the `gamedev:design-system [system-name]` skill.
 
-The `/skill:gamedev-design-system` skill handles the full GDD authoring process:
+The `gamedev:design-system` skill handles the full GDD authoring process:
 
 - Gathers context from game concept, systems index, and dependency GDDs
 - Creates a file skeleton immediately
@@ -313,15 +313,15 @@ The `/skill:gamedev-design-system` skill handles the full GDD authoring process:
 - Cross-references existing docs to prevent contradictions
 - Routes to specialist agents for domain expertise
 - Writes each section to file as soon as it's approved
-- Runs `/skill:gamedev-design-review` when complete
+- Runs the `gamedev:design-review` skill when complete
 - Updates the systems index
 
-**Do not duplicate the /skill:gamedev-design-system workflow here.** This skill owns the systems *index*;
-`/skill:gamedev-design-system` owns individual system *GDDs*.
+**Do not duplicate the gamedev:design-system workflow here.** This skill owns the systems *index*;
+`gamedev:design-system` owns individual system *GDDs*.
 
 ### Step 6c: Loop or Stop
 
-After `/skill:gamedev-design-system` completes, use a user-input tool or chat:
+After `gamedev:design-system` completes, use a user-input tool or chat:
 
 - "Continue to the next system ([next system name])?"
 - "Pick a different system?"
@@ -337,19 +337,19 @@ After the systems index is created (or after designing some systems), present ne
 chat:
 
 - "Systems index is written. What would you like to do next?"
-  - [A] Start designing GDDs — run `/skill:gamedev-design-system [first-system-in-order]`
-  - [B] Run `/skill:gamedev-gate-check systems-design` — triggers the CD-SYSTEMS and TD-SYSTEM-BOUNDARY gates
+  - [A] Start designing GDDs — run the `gamedev:design-system` skill with `[first-system-in-order]`
+  - [B] Run the `gamedev:gate-check` skill with `systems-design` — triggers the CD-SYSTEMS and TD-SYSTEM-BOUNDARY gates
     automatically for a formal director sign-off on the system set
   - [C] Stop here for this session
 
-**The gate-check option ([B]) is worth highlighting**: running `/skill:gamedev-gate-check systems-design` triggers both
-the CD-SYSTEMS and TD-SYSTEM-BOUNDARY gates, catching scope issues, missing systems, and boundary problems before
-they're locked in across many documents. It is optional but recommended for new projects.
+**The gate-check option ([B]) is worth highlighting**: running the `gamedev:gate-check` skill with `systems-design`
+triggers both the CD-SYSTEMS and TD-SYSTEM-BOUNDARY gates, catching scope issues, missing systems, and boundary problems
+before they're locked in across many documents. It is optional but recommended for new projects.
 
 After any individual GDD is completed:
 
-- "Run `/skill:gamedev-design-review design/gdd/[system].md` in a fresh session to validate quality"
-- "Run `/skill:gamedev-gate-check systems-design` when all MVP GDDs are complete"
+- "Run the `gamedev:design-review` skill with `design/gdd/[system].md` in a fresh session to validate quality"
+- "Run the `gamedev:gate-check` skill with `systems-design` when all MVP GDDs are complete"
 
 ---
 
@@ -363,11 +363,11 @@ This skill follows the collaborative design principle at every phase:
    - Phase 3: "Dependency ordering correct?"
    - Phase 4: "Priority assignments match your vision?"
    - Phase 5: "May I write the systems index?"
-   - Phase 6: "Start designing, pick different, or stop?" then hand off to `/skill:gamedev-design-system`
+   - Phase 6: "Start designing, pick different, or stop?" then hand off to `gamedev:design-system`
 3. **"May I write to [filepath]?"** before every file write
 4. **Incremental writing**: Update the systems index after each system is designed
-5. **Handoff**: Individual GDD authoring is owned by `/skill:gamedev-design-system`, which handles incremental section
-   writing, cross-referencing, design review, and index updates
+5. **Handoff**: Individual GDD authoring is owned by `gamedev:design-system`, which handles incremental section writing,
+   cross-referencing, design review, and index updates
 6. **Session state updates**: Write to `production/session-state/active.md` after each milestone (index created, system
    designed, priorities changed)
 
@@ -379,13 +379,15 @@ user confirmation. **Always** show the enumeration, dependencies, and priorities
 If context reaches or exceeds 70% at any point, append this notice:
 
 > **Context is approaching the limit (≥70%).** The systems index is saved to `design/gdd/systems-index.md`. Open a fresh
-> session to continue designing individual GDDs — run `/skill:gamedev-map-systems next` to pick up where you left off.
+> session to continue designing individual GDDs — run the `gamedev:map-systems` skill with `next` to pick up where you
+> left off.
 
 ---
 
 ## Recommended Next Steps
 
-- Run `/skill:gamedev-design-system [first-system-in-order]` to author the first GDD (use design order from the index)
-- Run `/skill:gamedev-map-systems next` to always pick the highest-priority undesigned system automatically
-- Run `/skill:gamedev-design-review design/gdd/[system].md` in a fresh session after each GDD is authored
-- Run `/skill:gamedev-gate-check pre-production` when all MVP GDDs are authored and reviewed
+- Run the `gamedev:design-system` skill with `[first-system-in-order]` to author the first GDD (use design order from
+  the index)
+- Run the `gamedev:map-systems` skill with `next` to always pick the highest-priority undesigned system automatically
+- Run the `gamedev:design-review` skill with `design/gdd/[system].md` in a fresh session after each GDD is authored
+- Run the `gamedev:gate-check` skill with `pre-production` when all MVP GDDs are authored and reviewed

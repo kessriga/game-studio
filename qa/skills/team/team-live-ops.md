@@ -1,4 +1,4 @@
-# Skill Test Spec: /skill:gamedev-team-live-ops
+# Skill Test Spec: gamedev:team-live-ops
 
 ## Skill Summary
 
@@ -16,8 +16,8 @@ handoff to production.
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED
 - [ ] Contains "May I write" language in the File Write Protocol section (delegated to sub-agents)
 - [ ] Has a File Write Protocol section stating that the orchestrator does not write files directly
-- [ ] Has a next-step handoff at the end referencing `/skill:gamedev-design-review`, filing the season's work as Backlog
-      tasks under a milestone, and `/skill:gamedev-team-release`
+- [ ] Has a next-step handoff at the end referencing `gamedev:design-review`, filing the season's work as Backlog
+      tasks under a milestone, and `gamedev:team-release`
 - [ ] Uses a user-input tool or chat at phase transitions to capture user approval before proceeding
 - [ ] States explicitly that Phases 3 and 4 can run simultaneously (parallel spawning)
 - [ ] Error recovery section present (or implied through BLOCKED handling)
@@ -36,7 +36,7 @@ handoff to production.
 - Game concept document exists at its standard path
 - No existing season documents for the new season name being planned
 
-**Input:** `/skill:gamedev-team-live-ops "Season 2: The Frozen Wastes"`
+**Input:** `gamedev:team-live-ops "Season 2: The Frozen Wastes"`
 
 **Expected behavior:**
 
@@ -67,8 +67,8 @@ handoff to production.
 - [ ] Three output documents written to `design/live-ops/seasons/` with correct naming convention
 - [ ] File writes are delegated to sub-agents — orchestrator does not write directly
 - [ ] Verdict: COMPLETE appears in final output
-- [ ] Next steps reference `/skill:gamedev-design-review`, filing the season's work as Backlog tasks under a milestone,
-      and `/skill:gamedev-team-release`
+- [ ] Next steps reference `gamedev:design-review`, filing the season's work as Backlog tasks under a milestone,
+      and `gamedev:team-release`
 
 ---
 
@@ -80,7 +80,7 @@ handoff to production.
 - `design/live-ops/ethics-policy.md` explicitly prohibits loot boxes targeting players under 18
 - economy-designer (Phase 3) proposes a "Mystery Chest" mechanic with randomized premium rewards and no pity timer
 
-**Input:** `/skill:gamedev-team-live-ops "Season 3: Shadow Tournament"`
+**Input:** `gamedev:team-live-ops "Season 3: Shadow Tournament"`
 
 **Expected behavior:**
 
@@ -112,12 +112,12 @@ handoff to production.
 
 - Any project state
 
-**Input:** `/skill:gamedev-team-live-ops` (no argument)
+**Input:** `gamedev:team-live-ops` (no argument)
 
 **Expected behavior:**
 
 1. Phase 1: No argument detected
-2. Outputs: "Usage: `/skill:gamedev-team-live-ops [season name or event description]` — Provide the name or description
+2. Outputs: "Usage: `gamedev:team-live-ops [season name or event description]` — Provide the name or description
    of the season or live event to plan."
 3. Skill exits immediately without spawning any subagents
 
@@ -138,7 +138,7 @@ handoff to production.
 - Phase 1 (season brief) and Phase 2 (narrative framing) already approved
 - Phase 3 (economy-designer) and Phase 4 (analytics-engineer) inputs are independent of each other
 
-**Input:** `/skill:gamedev-team-live-ops "Season 1: The First Thaw"` (observed at Phase 3/4 transition)
+**Input:** `gamedev:team-live-ops "Season 1: The First Thaw"` (observed at Phase 3/4 transition)
 
 **Expected behavior:**
 
@@ -169,7 +169,7 @@ handoff to production.
 - `design/live-ops/ethics-policy.md` does NOT exist
 - All other fixtures are present
 
-**Input:** `/skill:gamedev-team-live-ops "Season 4: Desert Heat"`
+**Input:** `gamedev:team-live-ops "Season 4: Desert Heat"`
 
 **Expected behavior:**
 
@@ -204,8 +204,8 @@ handoff to production.
 - [ ] Partial reports are produced if any phase blocks — work is never discarded
 - [ ] Verdict: COMPLETE only after user approves the consolidated season plan; BLOCKED if any unresolved ethics
       violation exists
-- [ ] Next steps always include `/skill:gamedev-design-review`, filing the season's work as Backlog tasks under a
-      milestone, and `/skill:gamedev-team-release`
+- [ ] Next steps always include `gamedev:design-review`, filing the season's work as Backlog tasks under a
+      milestone, and `gamedev:team-release`
 
 ---
 

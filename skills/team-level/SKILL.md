@@ -112,7 +112,7 @@ Use a user-input tool or chat with options:
 
 - (a) Proceed with a placeholder reference — mark the connection as UNRESOLVED in the level doc and list it in the open
   cross-level dependencies section of the summary report
-- (b) Pause and run `/skill:gamedev-team-level [area-name]` first to establish that area
+- (b) Pause and run the `gamedev:team-level` skill with `[area-name]` first to establish that area
 
 Do NOT invent content for the missing adjacent area.
 
@@ -199,9 +199,9 @@ agents blocked; partial report produced with unresolved items listed.
 
 ## Next Steps
 
-- Run `/skill:gamedev-design-review design/levels/[level-name].md` to validate the completed level design doc.
-- Run `/skill:gamedev-dev-story` to implement level content once the design is approved.
-- Run `/skill:gamedev-qa-plan` to generate a QA test plan for this level.
+- Run the `gamedev:design-review` skill with `design/levels/[level-name].md` to validate the completed level design doc.
+- Run the `gamedev:dev-story` skill to implement level content once the design is approved.
+- Run the `gamedev:qa-plan` skill to generate a QA test plan for this level.
 
 ## Error Recovery Protocol
 
@@ -219,6 +219,6 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/skill:gamedev-architecture-decision` first
-- Scope too large → split into two stories via `/skill:gamedev-create-stories`
+- ADR status is Proposed → do not implement; run the `gamedev:architecture-decision` skill first
+- Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess

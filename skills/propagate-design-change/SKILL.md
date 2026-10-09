@@ -14,14 +14,14 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 When a GDD changes, architectural decisions written against it may no longer be valid. This skill finds every affected
 ADR, compares what the ADR assumed against what the GDD now says, and guides the user through resolution.
 
-**Usage:** `/skill:gamedev-propagate-design-change design/gdd/combat-system.md`
+**Usage:** `gamedev:propagate-design-change design/gdd/combat-system.md`
 
 ---
 
 ## 1. Validate Argument
 
 A GDD path argument is **required**. If missing, fail with:
-> "Usage: `/skill:gamedev-propagate-design-change design/gdd/[system].md` Provide the path to the GDD that was changed."
+> "Usage: `gamedev:propagate-design-change design/gdd/[system].md` Provide the path to the GDD that was changed."
 
 Verify the file exists. If not, fail with:
 > "[path] not found. Check the path and try again."
@@ -231,10 +231,10 @@ declined write.
 
 Based on the resolution decisions, suggest:
 
-- **ADRs marked Superseded**: "Run `/skill:gamedev-architecture-decision [title]` to write the replacement ADR. Then
-  re-run `/skill:gamedev-propagate-design-change` to verify coverage."
+- **ADRs marked Superseded**: "Run the `gamedev:architecture-decision` skill with `[title]` to write the replacement
+  ADR. Then re-run the `gamedev:propagate-design-change` skill to verify coverage."
 - **ADRs to update in place**: List the specific fields to update in each ADR
-- **If many ADRs affected**: "Run `/skill:gamedev-architecture-review` after all ADRs are updated to verify the full
+- **If many ADRs affected**: "Run the `gamedev:architecture-review` skill after all ADRs are updated to verify the full
   traceability matrix is still coherent."
 
 ---

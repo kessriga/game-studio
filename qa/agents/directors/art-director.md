@@ -98,7 +98,7 @@ provided rules. **Assertions:**
 
 ## Coverage Notes
 
-- AD-PHASE-GATE (full visual phase advancement) is not covered — deferred to integration with /skill:gamedev-gate-check
+- AD-PHASE-GATE (full visual phase advancement) is not covered — deferred to integration with gamedev:gate-check
   skill.
 - Asset pipeline standards (file format, resolution, naming conventions) compliance checks are not covered here.
 - Shader visual output review is not covered — that interaction with the engine specialist is deferred.

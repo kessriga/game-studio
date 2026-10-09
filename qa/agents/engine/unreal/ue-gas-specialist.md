@@ -100,4 +100,4 @@ Defense, AttackPower. **Input**: "Design a Berserker ability that increases Atta
 - Case 3 (tag hierarchy) is a frequent source of subtle bugs; test whenever tag naming conventions change
 - Case 4 requires knowledge of GAS stacking policies — verify this case if the GAS integration depth changes
 - Case 5 is the most important context-awareness test; failing it means the agent ignores project state
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

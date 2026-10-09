@@ -77,9 +77,9 @@ complete, not just those already recorded. Check the systems index or Backlog bo
 reopens that scope. Backlog remains the authority for story status; the progress file is not a second task board.
 
 `gate` records a phase decision and any unresolved required steps. It asks for an explicit override reason when needed
-and rejects requirements that change during confirmation. It does **not** change the stage. Use `gamedev:gate-check` for
-the full phase review and user-approved advancement. Gates remain advisory; no extension silently advances a phase or
-prevents an informed user override.
+and rejects requirements that change during confirmation. It does **not** change the stage. Use the `gamedev:gate-check`
+skill for the full phase review and user-approved advancement. Gates remain advisory; no extension silently advances a
+phase or prevents an informed user override.
 
 ### Evidence from a worktree
 
@@ -141,8 +141,9 @@ manifest cannot stand in for an unreviewed worktree manifest. See the
 
 ### Evidence and saved state
 
-Records live in `production/workflow-state.json`. Keep this project-owned file with the game's other production records
-if progress should be shared. It holds runs, file fingerprints, scope confirmations, revisions, and decision history.
+Records live in `production/workflow-state.json`. The Claude Code mod reads and writes the same file through the same
+core, so progress is shared between hosts. Keep this project-owned file with the game's other production records if
+progress should be shared. It holds runs, file fingerprints, scope confirmations, revisions, and decision history.
 
 File presence, submitted evidence, and user approval are different states. The extension checks catalog file patterns
 and records SHA-256 fingerprints; it does not judge document quality or execute the game's tests. The user must inspect

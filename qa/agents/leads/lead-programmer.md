@@ -101,6 +101,6 @@ those specific numbers cited. **Assertions:**
 ## Coverage Notes
 
 - Multi-file code review spanning several interdependent systems is not covered — deferred to integration tests.
-- Tech debt assessment and prioritization are not covered here — deferred to /skill:gamedev-tech-debt skill integration.
+- Tech debt assessment and prioritization are not covered here — deferred to gamedev:tech-debt skill integration.
 - Coding standards document updates (adding a new forbidden pattern) are not covered.
 - Interaction with qa-lead on what constitutes a testable unit (LP vs QL boundary) is not covered.

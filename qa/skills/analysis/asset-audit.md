@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-asset-audit
+# Skill Test Spec: gamedev:asset-audit
 
 ## Skill Summary
 
-`/skill:gamedev-asset-audit` audits the `assets/` directory for naming convention compliance, missing metadata, and
+`gamedev:asset-audit` audits the `assets/` directory for naming convention compliance, missing metadata, and
 format/size issues. It reads asset files against the conventions and budgets defined in `technical-preferences.md`. No
 director gates are invoked. The skill does not write without user approval. Verdicts: COMPLIANT, WARNINGS, or
 NON-COMPLIANT.
@@ -11,7 +11,7 @@ NON-COMPLIANT.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -38,7 +38,7 @@ None. Asset auditing is a read-only analysis skill; no gates are invoked.
 - `assets/audio/sfx/` contains: `sfx_jump_land.ogg`, `sfx_item_pickup.ogg`
 - All files are within size budget (textures ≤2MB, audio ≤500KB)
 
-**Input:** `/skill:gamedev-asset-audit`
+**Input:** `gamedev:asset-audit`
 
 **Expected behavior:**
 
@@ -66,7 +66,7 @@ None. Asset auditing is a read-only analysis skill; no gates are invoked.
 - 3 texture files are 4MB each (budget: ≤2MB)
 - 2 texture files are within budget
 
-**Input:** `/skill:gamedev-asset-audit`
+**Input:** `gamedev:asset-audit`
 
 **Expected behavior:**
 
@@ -93,7 +93,7 @@ None. Asset auditing is a read-only analysis skill; no gates are invoked.
 - `assets/audio/music/theme_main.wav` exists (WAV format)
 - `assets/audio/sfx/sfx_footstep.ogg` exists (correct OGG format)
 
-**Input:** `/skill:gamedev-asset-audit`
+**Input:** `gamedev:asset-audit`
 
 **Expected behavior:**
 
@@ -119,11 +119,11 @@ None. Asset auditing is a read-only analysis skill; no gates are invoked.
 - `design/gdd/enemies.md` references `enemy_boss_idle.png`
 - `assets/art/characters/boss/` directory is empty — file does not exist
 
-**Input:** `/skill:gamedev-asset-audit`
+**Input:** `gamedev:asset-audit`
 
 **Expected behavior:**
 
-1. Skill reads GDD references to find expected assets (cross-references with `/skill:gamedev-content-audit` scope)
+1. Skill reads GDD references to find expected assets (cross-references with `gamedev:content-audit` scope)
 2. Skill scans `assets/art/characters/boss/` — file not found
 3. Audit table flags `enemy_boss_idle.png` as MISSING ASSET
 4. Verdict is NON-COMPLIANT (missing critical art asset)
@@ -144,7 +144,7 @@ None. Asset auditing is a read-only analysis skill; no gates are invoked.
 - 2 files have naming convention violations (CamelCase instead of snake_case)
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-asset-audit`
+**Input:** `gamedev:asset-audit`
 
 **Expected behavior:**
 
@@ -179,6 +179,6 @@ None. Asset auditing is a read-only analysis skill; no gates are invoked.
 
 - Metadata checks (e.g., missing texture import settings in Godot `.import` files) are not explicitly tested here; they
   follow the same FORMAT ISSUE flagging pattern.
-- The interaction between `/skill:gamedev-asset-audit` and `/skill:gamedev-content-audit` (both check GDD references vs.
-  assets) is intentional overlap; `/skill:gamedev-asset-audit` focuses on compliance while
-  `/skill:gamedev-content-audit` focuses on completeness.
+- The interaction between `gamedev:asset-audit` and `gamedev:content-audit` (both check GDD references vs.
+  assets) is intentional overlap; `gamedev:asset-audit` focuses on compliance while
+  `gamedev:content-audit` focuses on completeness.

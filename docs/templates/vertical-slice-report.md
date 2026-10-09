@@ -116,15 +116,15 @@ within the target time, without developer guidance? Can the team build at this q
 
 **Performance targets:** [Confirmed / Revised — list changes if revised]
 
-**Playtest note:** Run `/skill:gamedev-playtest-report` to structure additional session data before running
-`/skill:gamedev-gate-check pre-production`.
+**Playtest note:** Run the `gamedev:playtest-report` skill to structure additional session data before running
+`gamedev:gate-check pre-production`.
 
 **Next steps:**
 
-1. `/skill:gamedev-gate-check pre-production` — formally advance to Production
-2. `/skill:gamedev-create-epics layer:foundation` — plan Foundation layer epics
-3. `/skill:gamedev-create-epics layer:core` — plan Core layer epics
-4. `/skill:gamedev-create-epics` → `/skill:gamedev-create-stories` — define the first epic and fill the Backlog board
+1. `gamedev:gate-check pre-production` — formally advance to Production
+2. `gamedev:create-epics layer:foundation` — plan Foundation layer epics
+3. `gamedev:create-epics layer:core` — plan Core layer epics
+4. `gamedev:create-epics` → `gamedev:create-stories` — define the first epic and fill the Backlog board
 
 ---
 
@@ -133,13 +133,13 @@ within the target time, without developer guidance? Can the team build at this q
 [Which GDDs need revision and why — be specific about the failure mode observed.]
 
 **Systems requiring GDD revision:** [List] **Architecture decisions to revisit:** [List — use
-`/skill:gamedev-architecture-decision` to update] **Core loop change needed:** [What specifically to change]
+`gamedev:architecture-decision` to update] **Core loop change needed:** [What specifically to change]
 
 **Next steps:**
 
-1. `/skill:gamedev-design-system [mechanic]` — revise affected GDDs
-2. `/skill:gamedev-architecture-decision [decision]` — address architecture issues
-3. `/skill:gamedev-vertical-slice` — re-validate after revisions
+1. `gamedev:design-system [mechanic]` — revise affected GDDs
+2. `gamedev:architecture-decision [decision]` — address architecture issues
+3. `gamedev:vertical-slice` — re-validate after revisions
 
 ---
 
@@ -148,8 +148,8 @@ within the target time, without developer guidance? Can the team build at this q
 [Why the full game loop does not work at this quality level. What specifically prevented the player from experiencing
 the core fantasy. What to do instead.]
 
-**Next step:** `/skill:gamedev-brainstorm` to explore a new direction, or `/skill:gamedev-prototype [new-concept]` to
-test a different concept cheaply before investing in another vertical slice.
+**Next step:** `gamedev:brainstorm` to explore a new direction, or `gamedev:prototype [new-concept]` to test a different
+concept cheaply before investing in another vertical slice.
 
 ---
 

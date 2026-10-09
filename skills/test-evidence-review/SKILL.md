@@ -9,7 +9,7 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 
 # Test Evidence Review
 
-`/skill:gamedev-smoke-check` verifies that test files **exist** and **pass**. This skill goes further — it reviews the
+`gamedev:smoke-check` verifies that test files **exist** and **pass**. This skill goes further — it reviews the
 **quality** of those tests and evidence documents. A test file that exists and passes may still leave critical behaviour
 uncovered. A manual evidence doc that exists may lack the sign-offs required for closure.
 
@@ -17,7 +17,7 @@ uncovered. A manual evidence doc that exists may lack the sign-offs required for
 
 **When to run:**
 
-- Before QA hand-off sign-off (`/skill:gamedev-team-qa` Phase 5)
+- Before QA hand-off sign-off (`gamedev:team-qa` Phase 5)
 - On any story where test quality is in question
 - As part of milestone review for Logic and Integration story quality audit
 
@@ -27,9 +27,9 @@ uncovered. A manual evidence doc that exists may lack the sign-offs required for
 
 **Modes:**
 
-- `/skill:gamedev-test-evidence-review [story-path]` — review a single story's evidence
-- `/skill:gamedev-test-evidence-review milestone` — review all stories (tasks) in the current milestone
-- `/skill:gamedev-test-evidence-review [system-name]` — review all stories in an epic/system
+- `gamedev:test-evidence-review [story-path]` — review a single story's evidence
+- `gamedev:test-evidence-review milestone` — review all stories (tasks) in the current milestone
+- `gamedev:test-evidence-review [system-name]` — review all stories in an epic/system
 - No argument — ask which scope: "Single story", "Current milestone", "A system"
 
 ---
@@ -221,10 +221,10 @@ This is optional — the report is useful standalone. Write only if the user wan
 
 After the report:
 
-- For BLOCKING items: "These must be resolved before `/skill:gamedev-story-done` can mark the story Complete. Would you
-  like to address any of them now?"
-- For thin assertions: "Consider running `/skill:gamedev-test-helpers [system]` to see scaffolded assertion patterns for
-  common cases."
+- For BLOCKING items: "These must be resolved before `gamedev:story-done` can mark the story Complete. Would you like to
+  address any of them now?"
+- For thin assertions: "Consider running the `gamedev:test-helpers` skill with `[system]` to see scaffolded assertion
+  patterns for common cases."
 - For missing sign-offs: "Manual sign-off is required from [role]. Share `[evidence-path]` with them to complete
   sign-off."
 

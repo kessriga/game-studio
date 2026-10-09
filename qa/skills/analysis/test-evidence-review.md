@@ -1,17 +1,17 @@
-# Skill Test Spec: /skill:gamedev-test-evidence-review
+# Skill Test Spec: gamedev:test-evidence-review
 
 ## Skill Summary
 
-`/skill:gamedev-test-evidence-review` performs a quality review of test files in `tests/`, checking test naming
-conventions, determinism, isolation, and absence of hardcoded magic numbers — all against the project's test standards
-defined in `coding-standards.md`. Findings may be flagged for qa-lead review. No director gates are invoked. The skill
-does not write without user approval. Verdicts: PASS, WARNINGS, or FAIL.
+`gamedev:test-evidence-review` performs a quality review of test files in `tests/`, checking test naming conventions,
+determinism, isolation, and absence of hardcoded magic numbers — all against the project's test standards defined in
+`coding-standards.md`. Findings may be flagged for qa-lead review. No director gates are invoked. The skill does not
+write without user approval. Verdicts: PASS, WARNINGS, or FAIL.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -41,7 +41,7 @@ triggered here.
   - No calls to external APIs or file I/O
   - No inline magic numbers (uses constants from `tests/unit/combat/fixtures/`)
 
-**Input:** `/skill:gamedev-test-evidence-review tests/unit/combat/`
+**Input:** `gamedev:test-evidence-review tests/unit/combat/`
 
 **Expected behavior:**
 
@@ -72,7 +72,7 @@ triggered here.
 
 - Real-time wait of 1 second used instead of mock or signal-based assertion
 
-**Input:** `/skill:gamedev-test-evidence-review tests/unit/ui/hud_update_test.gd`
+**Input:** `gamedev:test-evidence-review tests/unit/ui/hud_update_test.gd`
 
 **Expected behavior:**
 
@@ -104,7 +104,7 @@ triggered here.
 
 - Direct HTTP call to external API without a mock
 
-**Input:** `/skill:gamedev-test-evidence-review tests/unit/networking/auth_test.gd`
+**Input:** `gamedev:test-evidence-review tests/unit/networking/auth_test.gd`
 
 **Expected behavior:**
 
@@ -128,15 +128,15 @@ triggered here.
 
 **Fixture:**
 
-- User calls `/skill:gamedev-test-evidence-review tests/unit/audio/`
+- User calls the `gamedev:test-evidence-review` skill with `tests/unit/audio/`
 - `tests/unit/audio/` directory does not exist
 
-**Input:** `/skill:gamedev-test-evidence-review tests/unit/audio/`
+**Input:** `gamedev:test-evidence-review tests/unit/audio/`
 
 **Expected behavior:**
 
 1. Skill attempts to read files in `tests/unit/audio/` — not found
-2. Skill outputs: "No test files found at `tests/unit/audio/` — run `/skill:gamedev-test-setup` to scaffold test
+2. Skill outputs: "No test files found at `tests/unit/audio/` — run the `gamedev:test-setup` skill to scaffold test
    directories"
 3. No verdict is emitted
 
@@ -144,7 +144,7 @@ triggered here.
 
 - [ ] Skill does not crash when path does not exist
 - [ ] Output names the attempted path in the message
-- [ ] Output recommends `/skill:gamedev-test-setup` for scaffolding
+- [ ] Output recommends `gamedev:test-setup` for scaffolding
 - [ ] No verdict is emitted when there is nothing to review
 
 ---
@@ -156,14 +156,14 @@ triggered here.
 - Test file has 1 WARNINGS-level finding (magic number in a non-boundary test)
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-test-evidence-review tests/unit/combat/`
+**Input:** `gamedev:test-evidence-review tests/unit/combat/`
 
 **Expected behavior:**
 
 1. Skill reviews tests; finds 1 WARNINGS-level finding
 2. No director gate is invoked (QL-TEST-COVERAGE is invoked separately, not here)
 3. Verdict is WARNINGS
-4. Output notes: "For full test coverage gate, run `/skill:gamedev-gate-check` which invokes QL-TEST-COVERAGE"
+4. Output notes: "For full test coverage gate, run the `gamedev:gate-check` skill which invokes QL-TEST-COVERAGE"
 5. Skill offers optional report write; asks "May I write" if user opts in
 
 **Assertions:**

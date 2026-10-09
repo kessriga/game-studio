@@ -8,8 +8,8 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 **Arguments:** [feature or area to polish] [--review full|lean|solo]
 
 If no argument is provided, output usage guidance and exit without spawning any agents:
-> Usage: `/skill:gamedev-team-polish [feature or area]` — specify the feature or area to polish (e.g., `combat`,
-> `main menu`, `inventory system`, `level-1`). Output usage directly; do not ask a follow-up question.
+> Usage: `gamedev:team-polish [feature or area]` — specify the feature or area to polish (e.g., `combat`, `main menu`,
+> `inventory system`, `level-1`). Output usage directly; do not ask a follow-up question.
 
 When this skill is invoked with an argument, orchestrate the polish team through a structured pipeline.
 
@@ -66,7 +66,7 @@ independent agents in parallel where the pipeline allows it (e.g., Phases 3 and 
 
 Delegate to **performance-analyst**:
 
-- Profile the target feature/area using `/skill:gamedev-perf-profile`
+- Profile the target feature/area using the `gamedev:perf-profile` skill
 - Identify performance bottlenecks and frame budget violations
 - Measure memory usage and check for leaks
 - Benchmark against target hardware specs
@@ -143,8 +143,8 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/skill:gamedev-architecture-decision` first
-- Scope too large → split into two stories via `/skill:gamedev-create-stories`
+- ADR status is Proposed → do not implement; run the `gamedev:architecture-decision` skill first
+- Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## File Write Protocol
@@ -160,6 +160,6 @@ and release readiness assessment.
 
 ## Next Steps
 
-- If READY FOR RELEASE: run `/skill:gamedev-release-checklist` for the final pre-release validation.
-- If NEEDS MORE WORK: file the remaining issues as Backlog tasks and re-run `/skill:gamedev-team-polish` after fixes.
-- Run `/skill:gamedev-gate-check` for a formal phase gate verdict before handing off to release.
+- If READY FOR RELEASE: run the `gamedev:release-checklist` skill for the final pre-release validation.
+- If NEEDS MORE WORK: file the remaining issues as Backlog tasks and re-run the `gamedev:team-polish` skill after fixes.
+- Run the `gamedev:gate-check` skill for a formal phase gate verdict before handing off to release.

@@ -1,6 +1,6 @@
 ---
 name: team-ui
-description: "Orchestrate the UI team through the full UX pipeline: from UX spec authoring through visual design, implementation, review, and polish. Integrates with /skill:gamedev-ux-design, /skill:gamedev-ux-review, and studio UX templates."
+description: "Orchestrate the UI team through the full UX pipeline: from UX spec authoring through visual design, implementation, review, and polish. Integrates with gamedev:ux-design, gamedev:ux-review, and studio UX templates."
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
@@ -79,7 +79,7 @@ Before designing anything, read and synthesize:
 
 Then use a user-input tool or chat with options:
 
-- (a) Run `/skill:gamedev-ux-design patterns` first to establish the pattern library, then continue
+- (a) Run the `gamedev:ux-design` skill with `patterns` first to establish the pattern library, then continue
 - (b) Proceed without the pattern library — ui-programmer will treat all patterns created as new and add each to a new
   `design/ux/interaction-patterns.md` at completion
 
@@ -92,23 +92,23 @@ and which existing patterns are relevant.
 
 ### Phase 1b: UX Spec Authoring
 
-Invoke `/skill:gamedev-ux-design [feature name]` skill OR delegate directly to ux-designer to produce
+Invoke the `gamedev:ux-design` skill with `[feature name]` skill OR delegate directly to ux-designer to produce
 `design/ux/[feature-name].md` following the `ux-spec.md` template.
 
 If designing the HUD, use the `hud-design.md` template instead of `ux-spec.md`.
 
 > **Notes on special cases:**
 >
-> - For HUD design specifically, invoke `/skill:gamedev-ux-design` with `argument: hud` (e.g.,
->   `/skill:gamedev-ux-design hud`).
-> - For the interaction pattern library, run `/skill:gamedev-ux-design patterns` once at project start and update it
->   whenever new patterns are introduced during later phases.
+> - For HUD design specifically, invoke the `gamedev:ux-design` skill with `argument: hud` (e.g.,
+>   `gamedev:ux-design hud`).
+> - For the interaction pattern library, run the `gamedev:ux-design` skill with `patterns` once at project start and
+>   update it whenever new patterns are introduced during later phases.
 
 Output: `design/ux/[feature-name].md` with all required spec sections filled.
 
 ### Phase 1c: UX Review
 
-After the spec is complete, invoke `/skill:gamedev-ux-review design/ux/[feature-name].md`.
+After the spec is complete, invoke the `gamedev:ux-review` skill with `design/ux/[feature-name].md`.
 
 **Gate**: Do not proceed to Phase 2 until the verdict is APPROVED. If the verdict is NEEDS REVISION, the ux-designer
 must address the flagged issues and re-run the review. The user may explicitly accept a NEEDS REVISION risk and proceed,
@@ -180,11 +180,11 @@ All three review streams must report before proceeding to Phase 5.
 
 ## Quick Reference — When to Use Which Skill
 
-- `/skill:gamedev-ux-design` — Author a new UX spec for a screen, flow, or HUD from scratch
-- `/skill:gamedev-ux-review` — Validate a completed UX spec before implementation
-- `/skill:gamedev-team-ui [feature]` — Full pipeline from concept through polish (calls `/skill:gamedev-ux-design` and
-  `/skill:gamedev-ux-review` internally)
-- `/skill:gamedev-quick-design` — Small UI changes that don't need a full new UX spec
+- `gamedev:ux-design` — Author a new UX spec for a screen, flow, or HUD from scratch
+- `gamedev:ux-review` — Validate a completed UX spec before implementation
+- `gamedev:team-ui [feature]` — Full pipeline from concept through polish (calls the `gamedev:ux-design` skill and
+  `gamedev:ux-review` internally)
+- `gamedev:quick-design` — Small UI changes that don't need a full new UX spec
 
 ## Error Recovery Protocol
 
@@ -202,15 +202,15 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/skill:gamedev-architecture-decision` first
-- Scope too large → split into two stories via `/skill:gamedev-create-stories`
+- ADR status is Proposed → do not implement; run the `gamedev:architecture-decision` skill first
+- Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## File Write Protocol
 
 All file writes (UX specs, interaction pattern library updates, implementation files) are delegated to sub-agents and
-sub-skills (`/skill:gamedev-ux-design`, `gamedev:ui-programmer`). Each enforces the "May I write to [path]?" protocol.
-This orchestrator does not write files directly.
+sub-skills (`gamedev:ux-design`, `gamedev:ui-programmer`). Each enforces the "May I write to [path]?" protocol. This
+orchestrator does not write files directly.
 
 ## Output
 
@@ -222,6 +222,6 @@ polish). Verdict: **BLOCKED** — pipeline halted; surface the blocker and its p
 
 ## Next Steps
 
-- Run `/skill:gamedev-ux-review` on the final spec if not yet approved.
-- Run `/skill:gamedev-code-review` on the UI implementation before closing stories.
-- Run `/skill:gamedev-team-polish` if visual or audio polish pass is needed.
+- Run the `gamedev:ux-review` skill on the final spec if not yet approved.
+- Run the `gamedev:code-review` skill on the UI implementation before closing stories.
+- Run the `gamedev:team-polish` skill if visual or audio polish pass is needed.

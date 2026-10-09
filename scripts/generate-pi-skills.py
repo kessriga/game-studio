@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Pi entry points and the runtime catalog from shared sources."""
+"""Generate Pi entry points and the shared runtime catalog from shared sources."""
 
 import argparse
 import json
@@ -8,7 +8,6 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "pi"
 
 
 def entry_points():
@@ -17,7 +16,7 @@ def entry_points():
         name = source.parent.name
         description = json.dumps(metadata["description"], ensure_ascii=False)
         yield (
-            f"skills/gamedev-{name}.md",
+            f"pi/skills/gamedev-{name}.md",
             (
                 f"---\nname: gamedev-{name}\ndescription: {description}\n---\n\n"
                 f"# Game Studio: {name}\n\n"
@@ -39,14 +38,16 @@ def main():
     catalog = yaml.safe_load(
         (ROOT / "docs/workflow-catalog.yaml").read_text(encoding="utf-8")
     )
-    expected["workflow-catalog.json"] = (
+    expected["workflow/workflow-catalog.json"] = (
         json.dumps(catalog, ensure_ascii=False, indent=2) + "\n"
     )
     if args.check:
-        paths = [*OUTPUT.glob("skills/*.md"), *OUTPUT.glob("workflow-catalog.json")]
+        paths = [
+            *ROOT.glob("pi/skills/*.md"),
+            *ROOT.glob("workflow/workflow-catalog.json"),
+        ]
         actual = {
-            p.relative_to(OUTPUT).as_posix(): p.read_text(encoding="utf-8")
-            for p in paths
+            p.relative_to(ROOT).as_posix(): p.read_text(encoding="utf-8") for p in paths
         }
         changed = sorted(
             name
@@ -63,9 +64,8 @@ def main():
             f"Pi resources current: {len(expected) - 1} skill entry points and catalog"
         )
         return 0
-    OUTPUT.mkdir(parents=True, exist_ok=True)
     for name, content in expected.items():
-        path = OUTPUT / name
+        path = ROOT / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8", newline="\n")
     print(

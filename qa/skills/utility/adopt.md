@@ -1,14 +1,14 @@
-# Skill Test Spec: /skill:gamedev-adopt
+# Skill Test Spec: gamedev:adopt
 
 ## Skill Summary
 
-`/skill:gamedev-adopt` audits an existing project's artifacts — GDDs, ADRs, stories, infrastructure files, and
+`gamedev:adopt` audits an existing project's artifacts — GDDs, ADRs, stories, infrastructure files, and
 `technical-preferences.md` — for format compliance with the template's skill pipeline. It classifies every gap by
 severity (BLOCKING / HIGH / MEDIUM / LOW), composes a numbered, ordered migration plan, and writes it to
 `docs/adoption-plan-[date].md` after explicit user approval via a user-input tool or chat.
 
-This skill is distinct from `/skill:gamedev-project-stage-detect` (which checks what exists). `/skill:gamedev-adopt`
-checks whether what exists will actually work with the template's skills.
+This skill is distinct from `gamedev:project-stage-detect` (which checks what exists). `gamedev:adopt` checks whether
+what exists will actually work with the template's skills.
 
 No director gates apply. The skill does NOT invoke any director agents.
 
@@ -16,7 +16,7 @@ No director gates apply. The skill does NOT invoke any director agents.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -28,7 +28,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-adopt` is a brownfield audit utility. No director gates apply.
+None. `gamedev:adopt` is a brownfield audit utility. No director gates apply.
 
 ---
 
@@ -44,7 +44,7 @@ None. `/skill:gamedev-adopt` is a brownfield audit utility. No director gates ap
 - `docs/architecture/tr-registry.yaml` and `docs/architecture/control-manifest.md` exist
 - Engine configured in `technical-preferences.md`
 
-**Input:** `/skill:gamedev-adopt`
+**Input:** `gamedev:adopt`
 
 **Expected behavior:**
 
@@ -80,7 +80,7 @@ None. `/skill:gamedev-adopt` is a brownfield audit utility. No director gates ap
 - One ADR (`adr-0001.md`) is missing `## Status` section
 - `docs/architecture/tr-registry.yaml` does not exist
 
-**Input:** `/skill:gamedev-adopt`
+**Input:** `gamedev:adopt`
 
 **Expected behavior:**
 
@@ -94,9 +94,9 @@ None. `/skill:gamedev-adopt` is a brownfield audit utility. No director gates ap
    - HIGH: `tr-registry.yaml` missing; `combat.md` missing Acceptance Criteria (can't generate stories)
    - MEDIUM: `combat.md` missing Formulas
 4. Phase 4 builds ordered migration plan:
-   - Step 1 (BLOCKING): Add `## Status` to `adr-0001.md` — command: `/skill:gamedev-architecture-decision retrofit`
-   - Step 2 (HIGH): Run `/skill:gamedev-architecture-review` to bootstrap tr-registry.yaml
-   - Step 3 (HIGH): Add Acceptance Criteria to `combat.md` — command: `/skill:gamedev-design-system retrofit`
+   - Step 1 (BLOCKING): Add `## Status` to `adr-0001.md` — command: `gamedev:architecture-decision retrofit`
+   - Step 2 (HIGH): Run the `gamedev:architecture-review` skill to bootstrap tr-registry.yaml
+   - Step 3 (HIGH): Add Acceptance Criteria to `combat.md` — command: `gamedev:design-system retrofit`
    - Step 4 (MEDIUM): Add Formulas to `combat.md`
 5. Gap Preview shows BLOCKING items as bullets (actual file names), HIGH/MEDIUM as counts
 6. a user-input tool or chat asks to write the plan; writes after approval
@@ -122,7 +122,7 @@ None. `/skill:gamedev-adopt` is a brownfield audit utility. No director gates ap
 - Stories: 5 files — 3 have TR-ID references, 2 do not
 - Infrastructure: all critical files present; `technical-preferences.md` fully configured
 
-**Input:** `/skill:gamedev-adopt`
+**Input:** `gamedev:adopt`
 
 **Expected behavior:**
 
@@ -148,7 +148,7 @@ None. `/skill:gamedev-adopt` is a brownfield audit utility. No director gates ap
 
 ---
 
-### Case 4: No Artifacts Found — Fresh project, guidance to run /skill:gamedev-start
+### Case 4: No Artifacts Found — Fresh project, guidance to run gamedev:start
 
 **Fixture:**
 
@@ -157,22 +157,22 @@ None. `/skill:gamedev-adopt` is a brownfield audit utility. No director gates ap
 - `src/` directory does not exist or has fewer than 10 files
 - No game-concept.md, no systems-index.md
 
-**Input:** `/skill:gamedev-adopt`
+**Input:** `gamedev:adopt`
 
 **Expected behavior:**
 
 1. Phase 1 existence check finds no artifacts
 2. Skill infers "Fresh" — no brownfield work to migrate
 3. Uses a user-input tool or chat:
-   - "This looks like a fresh project — no existing artifacts found. `/skill:gamedev-adopt` is for projects with work to
+   - "This looks like a fresh project — no existing artifacts found. `gamedev:adopt` is for projects with work to
      migrate. What would you like to do?"
-   - Options: "Run `/skill:gamedev-start`", "My artifacts are in a non-standard location", "Cancel"
+   - Options: "Run the `gamedev:start` skill", "My artifacts are in a non-standard location", "Cancel"
 4. Skill stops — does not proceed to audit regardless of user selection
 
 **Assertions:**
 
 - [ ] a user-input tool or chat is used (not a plain text message) when no artifacts are found
-- [ ] `/skill:gamedev-start` is presented as a named option
+- [ ] `gamedev:start` is presented as a named option
 - [ ] Skill stops after the question — no audit phases run
 - [ ] No adoption plan file is written
 
@@ -184,14 +184,14 @@ None. `/skill:gamedev-adopt` is a brownfield audit utility. No director gates ap
 
 - Project with a mix of compliant and non-compliant GDDs
 
-**Input:** `/skill:gamedev-adopt`
+**Input:** `gamedev:adopt`
 
 **Expected behavior:**
 
 1. Skill completes full audit and produces migration plan
 2. No director agents are spawned at any point
 3. No gate IDs (CD-*, TD-*, AD-*, PR-*) appear in output
-4. No `/skill:gamedev-gate-check` is invoked during the skill run
+4. No `gamedev:gate-check` is invoked during the skill run
 
 **Assertions:**
 

@@ -1,35 +1,35 @@
-# Skill Test Spec: /skill:gamedev-launch-checklist
+# Skill Test Spec: gamedev:launch-checklist
 
 ## Skill Summary
 
-`/skill:gamedev-launch-checklist` generates and evaluates a complete launch readiness checklist covering: legal
+`gamedev:launch-checklist` generates and evaluates a complete launch readiness checklist covering: legal
 compliance (EULA, privacy policy, ESRB/PEGI ratings), platform certification status, store page completeness
 (screenshots, description, metadata), build validation (version tag, reproducible build), analytics and crash reporting
 configuration, and first-run experience verification.
 
 The skill produces a checklist report written to `production/launch/launch-checklist-[date].md` after a "May I write"
 ask. If a previous launch checklist exists, it compares the new results against the old to highlight newly resolved and
-newly blocked items. No director gates apply — `/skill:gamedev-team-release` orchestrates the full release pipeline.
+newly blocked items. No director gates apply — `gamedev:team-release` orchestrates the full release pipeline.
 Verdicts: LAUNCH READY, LAUNCH BLOCKED, or CONCERNS.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: LAUNCH READY, LAUNCH BLOCKED, CONCERNS
 - [ ] Contains "May I write" collaborative protocol language before writing the checklist
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-team-release` or `/skill:gamedev-gate-check`)
+- [ ] Has a next-step handoff (e.g., `gamedev:team-release` or `gamedev:gate-check`)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-launch-checklist` is a readiness audit utility. The full release pipeline is managed by
-`/skill:gamedev-team-release`.
+None. `gamedev:launch-checklist` is a readiness audit utility. The full release pipeline is managed by
+`gamedev:team-release`.
 
 ---
 
@@ -45,7 +45,7 @@ None. `/skill:gamedev-launch-checklist` is a readiness audit utility. The full r
 - Build: version tag `v1.0.0` exists, reproducible build confirmed
 - Crash reporting: configured in `technical-preferences.md`
 
-**Input:** `/skill:gamedev-launch-checklist`
+**Input:** `gamedev:launch-checklist`
 
 **Expected behavior:**
 
@@ -71,7 +71,7 @@ None. `/skill:gamedev-launch-checklist` is a readiness audit utility. The full r
 - All other checklist items pass
 - Platform certification section: "not submitted" (no submission record found)
 
-**Input:** `/skill:gamedev-launch-checklist`
+**Input:** `gamedev:launch-checklist`
 
 **Expected behavior:**
 
@@ -99,7 +99,7 @@ None. `/skill:gamedev-launch-checklist` is a readiness audit utility. The full r
   flow"
 - Store screenshots item: "MANUAL CHECK NEEDED — art team must verify screenshot quality matches current build"
 
-**Input:** `/skill:gamedev-launch-checklist`
+**Input:** `gamedev:launch-checklist`
 
 **Expected behavior:**
 
@@ -127,7 +127,7 @@ None. `/skill:gamedev-launch-checklist` is a readiness audit utility. The full r
 - New checklist: platform cert is now PASS, crash reporting is now PASS, manual check still open; 1 new item flagged
   (EULA last updated date)
 
-**Input:** `/skill:gamedev-launch-checklist`
+**Input:** `gamedev:launch-checklist`
 
 **Expected behavior:**
 
@@ -155,7 +155,7 @@ None. `/skill:gamedev-launch-checklist` is a readiness audit utility. The full r
 
 - All checklist dependencies present
 
-**Input:** `/skill:gamedev-launch-checklist`
+**Input:** `gamedev:launch-checklist`
 
 **Expected behavior:**
 

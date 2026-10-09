@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-create-architecture
+# Skill Test Spec: gamedev:create-architecture
 
 ## Skill Summary
 
-`/skill:gamedev-create-architecture` guides the user through section-by-section authoring of a technical architecture
+`gamedev:create-architecture` guides the user through section-by-section authoring of a technical architecture
 document. It uses a skeleton-first approach — the file is created with all required section headers before any content
 is filled. Each section is discussed, drafted, and written individually after user approval. If an architecture document
 already exists, the skill offers retrofit mode to update specific sections.
@@ -15,14 +15,14 @@ complete draft is finished. In `lean` or `solo` mode, both gates are skipped. Th
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: APPROVED, NEEDS REVISION, MAJOR REVISION NEEDED
 - [ ] Contains "May I write" collaborative protocol language (per-section approval)
-- [ ] Has a next-step handoff at the end (`/skill:gamedev-architecture-review` or
-      `/skill:gamedev-create-control-manifest`)
+- [ ] Has a next-step handoff at the end (`gamedev:architecture-review` or
+      `gamedev:create-control-manifest`)
 - [ ] Documents skeleton-first approach
 - [ ] Documents gate behavior: TD-ARCHITECTURE + LP-FEASIBILITY in full mode; skipped in lean/solo
 - [ ] Documents retrofit mode for existing architecture documents
@@ -51,7 +51,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - `docs/architecture/` contains Accepted ADRs for reference
 - `production/session-state/review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-create-architecture`
+**Input:** `gamedev:create-architecture`
 
 **Expected behavior:**
 
@@ -69,7 +69,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - [ ] TD-ARCHITECTURE and LP-FEASIBILITY spawn in parallel (not sequentially)
 - [ ] Both gates complete before the final completion confirmation
 - [ ] Verdict is APPROVED when both gates return APPROVED
-- [ ] Next-step handoff to `/skill:gamedev-architecture-review` or `/skill:gamedev-create-control-manifest` is present
+- [ ] Next-step handoff to `gamedev:architecture-review` or `gamedev:create-control-manifest` is present
 
 ---
 
@@ -81,7 +81,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - `production/session-state/review-mode.txt` contains `full`
 - TD-ARCHITECTURE gate returns MAJOR REVISION: "[specific structural issue]"
 
-**Input:** `/skill:gamedev-create-architecture`
+**Input:** `gamedev:create-architecture`
 
 **Expected behavior:**
 
@@ -107,7 +107,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - No existing architecture doc
 - `production/session-state/review-mode.txt` contains `lean`
 
-**Input:** `/skill:gamedev-create-architecture`
+**Input:** `gamedev:create-architecture`
 
 **Expected behavior:**
 
@@ -132,7 +132,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 
 - `docs/architecture/architecture.md` already exists with all sections populated
 
-**Input:** `/skill:gamedev-create-architecture`
+**Input:** `gamedev:create-architecture`
 
 **Expected behavior:**
 
@@ -159,7 +159,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - One section references or depends on an ADR that has `Status: Proposed`
 - `production/session-state/review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-create-architecture`
+**Input:** `gamedev:create-architecture`
 
 **Expected behavior:**
 
@@ -185,14 +185,14 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - [ ] TD-ARCHITECTURE and LP-FEASIBILITY spawn in parallel in full mode
 - [ ] Skipped gates noted by name and mode in lean/solo output
 - [ ] Proposed ADR references flagged as risks in the document
-- [ ] Ends with next-step handoff: `/skill:gamedev-architecture-review` or `/skill:gamedev-create-control-manifest`
+- [ ] Ends with next-step handoff: `gamedev:architecture-review` or `gamedev:create-control-manifest`
 
 ---
 
 ## Coverage Notes
 
 - The required section list for architecture documents is defined in the skill body and in the
-  `/skill:gamedev-architecture-review` skill — not re-enumerated here.
+  `gamedev:architecture-review` skill — not re-enumerated here.
 - Engine version stamping in the architecture doc (parallel to ADR stamping) is part of the authoring workflow — tested
   implicitly via Case 1.
 - The retrofit mode for updating multiple sections in one session follows the same per-section approval pattern — not

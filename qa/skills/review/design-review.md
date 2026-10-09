@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-design-review
+# Skill Test Spec: gamedev:design-review
 
 ## Skill Summary
 
-`/skill:gamedev-design-review` reads a game design document (GDD) and evaluates it against the project's 8-section
+`gamedev:design-review` reads a game design document (GDD) and evaluates it against the project's 8-section
 design standard (Overview, Player Fantasy, Detailed Rules, Formulas, Edge Cases, Dependencies, Tuning Knobs, Acceptance
 Criteria). It checks for internal consistency, implementability, and cross-system conflicts. It produces a verdict of
 APPROVED, NEEDS REVISION, or MAJOR REVISION NEEDED. It is a read-only skill (no file writes) and runs as a delegated
@@ -12,7 +12,7 @@ role when an authorized runner is available.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings or numbered steps
@@ -35,7 +35,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - Formulas section contains at least one formula with defined variables
 - Acceptance Criteria section contains at least 3 testable criteria
 
-**Input:** `/skill:gamedev-design-review design/gdd/light-manipulation.md`
+**Input:** `gamedev:design-review design/gdd/light-manipulation.md`
 
 **Expected behavior:**
 
@@ -65,7 +65,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - `design/gdd/light-manipulation.md` exists using content from `tests/skills/_fixtures/incomplete-gdd.md` (4 of 8
   sections populated; Formulas, Edge Cases, Tuning Knobs, Acceptance Criteria are missing)
 
-**Input:** `/skill:gamedev-design-review design/gdd/light-manipulation.md`
+**Input:** `gamedev:design-review design/gdd/light-manipulation.md`
 
 **Expected behavior:**
 
@@ -93,7 +93,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - The described behavior mentions numeric values but no formulas are defined
 - Acceptance Criteria exist but are vague ("feels good" rather than measurable)
 
-**Input:** `/skill:gamedev-design-review design/gdd/[document].md`
+**Input:** `gamedev:design-review design/gdd/[document].md`
 
 **Expected behavior:**
 
@@ -117,7 +117,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 
 - The path provided does not exist in the project
 
-**Input:** `/skill:gamedev-design-review design/gdd/nonexistent.md`
+**Input:** `gamedev:design-review design/gdd/nonexistent.md`
 
 **Expected behavior:**
 
@@ -144,7 +144,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - `design/gdd/light-manipulation.md` exists with all 8 sections
 - `production/session-state/review-mode.txt` exists with `full` (most permissive mode)
 
-**Input:** `/skill:gamedev-design-review design/gdd/light-manipulation.md` (with full review mode active)
+**Input:** `gamedev:design-review design/gdd/light-manipulation.md` (with full review mode active)
 
 **Expected behavior:**
 
@@ -169,14 +169,14 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - [ ] Does NOT use Write or Edit tools (read-only skill)
 - [ ] Presents complete findings before any verdict
 - [ ] Does not ask for approval before producing output (no writes to approve)
-- [ ] Ends with recommended next step (e.g., fix issues and re-run, or proceed to `/skill:gamedev-map-systems`)
+- [ ] Ends with recommended next step (e.g., fix issues and re-run, or proceed to `gamedev:map-systems`)
 
 ---
 
 ## Coverage Notes
 
 - Cross-system consistency checking (Case 3 in the skill's own phase list) is not directly tested here because it
-  requires multiple GDD files to compare; this is covered by the `/skill:gamedev-review-all-gdds` spec instead.
+  requires multiple GDD files to compare; this is covered by the `gamedev:review-all-gdds` spec instead.
 - Delegated execution through an available runner is not tested at the spec level — this is a runtime behavior verified
   manually.
 - Performance and edge cases involving very large GDD files are not in scope.

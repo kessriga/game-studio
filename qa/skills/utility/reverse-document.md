@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-reverse-document
+# Skill Test Spec: gamedev:reverse-document
 
 ## Skill Summary
 
-`/skill:gamedev-reverse-document` generates design or architecture documentation from existing source code. It reads the
+`gamedev:reverse-document` generates design or architecture documentation from existing source code. It reads the
 specified source file(s), infers design intent from class structure, method names, constants, and comments, and produces
 either a GDD skeleton (for gameplay systems) or an architecture overview (for technical systems). The output is a
 best-effort inference — magic numbers and undocumented logic may result in a PARTIAL verdict.
@@ -14,19 +14,19 @@ COMPLETE (clean inference), PARTIAL (some fields are ambiguous and need human re
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: COMPLETE, PARTIAL
 - [ ] Contains "May I write" collaborative protocol language before writing the doc
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-design-review` to validate the generated doc)
+- [ ] Has a next-step handoff (e.g., `gamedev:design-review` to validate the generated doc)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-reverse-document` is a documentation utility. No director gates apply.
+None. `gamedev:reverse-document` is a documentation utility. No director gates apply.
 
 ---
 
@@ -42,7 +42,7 @@ None. `/skill:gamedev-reverse-document` is a documentation utility. No director 
   - `signal health_changed(new_value: int)`
   - Docstrings on all public methods
 
-**Input:** `/skill:gamedev-reverse-document src/gameplay/health_system.gd`
+**Input:** `gamedev:reverse-document src/gameplay/health_system.gd`
 
 **Expected behavior:**
 
@@ -74,7 +74,7 @@ None. `/skill:gamedev-reverse-document` is a documentation utility. No director 
   - No comments or docstrings
   - Complex state machine logic that is not self-explanatory
 
-**Input:** `/skill:gamedev-reverse-document src/gameplay/enemy_ai.gd`
+**Input:** `gamedev:reverse-document src/gameplay/enemy_ai.gd`
 
 **Expected behavior:**
 
@@ -101,7 +101,7 @@ None. `/skill:gamedev-reverse-document` is a documentation utility. No director 
 - User provides 2 source files: `combat_system.gd` and `damage_resolver.gd`
 - The files reference each other (combat calls damage_resolver)
 
-**Input:** `/skill:gamedev-reverse-document src/gameplay/combat_system.gd src/gameplay/damage_resolver.gd`
+**Input:** `gamedev:reverse-document src/gameplay/combat_system.gd src/gameplay/damage_resolver.gd`
 
 **Expected behavior:**
 
@@ -126,19 +126,19 @@ None. `/skill:gamedev-reverse-document` is a documentation utility. No director 
 
 - `src/gameplay/inventory_system.gd` does not exist
 
-**Input:** `/skill:gamedev-reverse-document src/gameplay/inventory_system.gd`
+**Input:** `gamedev:reverse-document src/gameplay/inventory_system.gd`
 
 **Expected behavior:**
 
 1. Skill attempts to read the specified file — not found
 2. Skill outputs: "Source file not found: src/gameplay/inventory_system.gd"
-3. Skill suggests checking the path or running `/skill:gamedev-map-systems` to identify the correct source file
+3. Skill suggests checking the path or running the `gamedev:map-systems` skill to identify the correct source file
 4. No document is created
 
 **Assertions:**
 
 - [ ] Error message names the missing file with the full path
-- [ ] Alternative suggestion (check path or `/skill:gamedev-map-systems`) is provided
+- [ ] Alternative suggestion (check path or `gamedev:map-systems`) is provided
 - [ ] No write tool is called
 - [ ] No verdict is issued (error state)
 
@@ -150,7 +150,7 @@ None. `/skill:gamedev-reverse-document` is a documentation utility. No director 
 
 - Well-structured source file exists
 
-**Input:** `/skill:gamedev-reverse-document src/gameplay/health_system.gd`
+**Input:** `gamedev:reverse-document src/gameplay/health_system.gd`
 
 **Expected behavior:**
 

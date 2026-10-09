@@ -15,7 +15,7 @@ This skill produces `docs/architecture/architecture.md` — the master architect
 GDDs into a concrete technical blueprint. It sits between design and implementation, and must exist before sprint
 planning begins.
 
-**Distinct from `/skill:gamedev-architecture-decision`**: ADRs record individual point decisions. This skill creates the
+**Distinct from `gamedev:architecture-decision`**: ADRs record individual point decisions. This skill creates the
 whole-system blueprint that gives ADRs their context.
 
 Resolve the review mode (once, store for all gate spawns this run):
@@ -52,7 +52,7 @@ Read the engine reference library completely:
 5. All files in `docs/engine-reference/[engine]/modules/` → Extract: current API patterns per domain
 
 If no engine is configured, stop and prompt:
-> "No engine is configured. Run `/skill:gamedev-setup-engine` first. Architecture cannot be written without knowing
+> "No engine is configured. Run the `gamedev:setup-engine` skill first. Architecture cannot be written without knowing
 > which engine and version you are targeting."
 
 ### 0b. Design Context + Technical Requirements Extraction
@@ -261,11 +261,11 @@ uncovered Technical Requirements. Group by layer — Foundation first:
 
 **Foundation Layer (must create before any coding):**
 
-- `/skill:gamedev-architecture-decision [title]` → covers: TR-[id], TR-[id]
+- `gamedev:architecture-decision [title]` → covers: TR-[id], TR-[id]
 
 **Core Layer:**
 
-- `/skill:gamedev-architecture-decision [title]` → covers: TR-[id]
+- `gamedev:architecture-decision [title]` → covers: TR-[id]
 
 ---
 
@@ -405,12 +405,11 @@ what the architecture covers.]
 
 ## Run These ADRs Next
 
-**1. `/skill:gamedev-architecture-decision "[Title]"` → ADR-[XXXX]** [One sentence: what it defines and what it
-unblocks.]
+**1. `gamedev:architecture-decision "[Title]"` → ADR-[XXXX]** [One sentence: what it defines and what it unblocks.]
 
-**2. `/skill:gamedev-architecture-decision "[Title]"` → ADR-[XXXX]** [One sentence.]
+**2. `gamedev:architecture-decision "[Title]"` → ADR-[XXXX]** [One sentence.]
 
-**3. `/skill:gamedev-architecture-decision "[Title]"` → ADR-[XXXX]** [One sentence.]
+**3. `gamedev:architecture-decision "[Title]"` → ADR-[XXXX]** [One sentence.]
 
 List top 3 from Phase 6 in priority order. If fewer than 3 remain, list only what's outstanding.
 
@@ -418,19 +417,19 @@ List top 3 from Phase 6 in priority order. If fewer than 3 remain, list only wha
 
 ## Gate-Check Readiness
 
-> **Required before `/skill:gamedev-gate-check [stage]`:**
+> **Required before `gamedev:gate-check [stage]`:**
 >
 > - [ ] Accept ADRs: [list Proposed ADR IDs that must be Accepted]
 > - [ ] Write ADRs: [list ADR IDs that must still be written]
-> - [ ] Run `/skill:gamedev-test-setup` — scaffolds `tests/unit/`, `tests/integration/`, CI workflow, and an example
+> - [ ] Run the `gamedev:test-setup` skill — scaffolds `tests/unit/`, `tests/integration/`, CI workflow, and an example
 >       test file
-> - [ ] Run `/skill:gamedev-ux-design` — creates `design/ux/interaction-patterns.md` and
+> - [ ] Run the `gamedev:ux-design` skill — creates `design/ux/interaction-patterns.md` and
 >       `design/accessibility-requirements.md`
 >
-> Run `/skill:gamedev-gate-check [stage]` when all boxes are checked.
+> Run the `gamedev:gate-check` skill with `[stage]` when all boxes are checked.
 
 If nothing is blocking, write instead:
-> No blockers — run `/skill:gamedev-gate-check [stage]` now.
+> No blockers — run the `gamedev:gate-check` skill with `[stage]` now.
 
 ---
 
@@ -471,14 +470,14 @@ pros/cons before asking them to decide.
 
 ## Recommended Next Steps
 
-- Run `/skill:gamedev-architecture-decision [title]` for each required ADR listed in Phase 6 — Foundation layer ADRs
-  first
-- Run `/skill:gamedev-architecture-review` — bootstraps the Requirements Traceability Matrix and TR registry from the
+- Run the `gamedev:architecture-decision` skill with `[title]` for each required ADR listed in Phase 6 — Foundation
+  layer ADRs first
+- Run the `gamedev:architecture-review` skill — bootstraps the Requirements Traceability Matrix and TR registry from the
   ADRs just written. Required before the Pre-Production gate.
-- Run `/skill:gamedev-test-setup` to scaffold `tests/unit/`, `tests/integration/`, CI workflow, and an example test
+- Run the `gamedev:test-setup` skill to scaffold `tests/unit/`, `tests/integration/`, CI workflow, and an example test
   (required for gate-check)
-- Run `/skill:gamedev-ux-design` to initialize `design/ux/interaction-patterns.md` and
+- Run the `gamedev:ux-design` skill to initialize `design/ux/interaction-patterns.md` and
   `design/accessibility-requirements.md` (required for gate-check)
-- Run `/skill:gamedev-create-control-manifest` once the required ADRs are written to produce the layer rules manifest
-- Run `/skill:gamedev-gate-check pre-production` when all required ADRs, `/skill:gamedev-test-setup`, and
-  `/skill:gamedev-ux-design` are complete
+- Run the `gamedev:create-control-manifest` skill once the required ADRs are written to produce the layer rules manifest
+- Run the `gamedev:gate-check` skill with `pre-production` when all required ADRs, `gamedev:test-setup`, and
+  `gamedev:ux-design` are complete

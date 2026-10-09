@@ -16,10 +16,10 @@ runs entirely within the existing skill/role/template structure.
 
 | Mode | Command | Purpose | Token Cost |
 | ------ | --------- | --------- | ------------ |
-| `static` | `/skill:gamedev-skill-test static [name\|all]` | Structural linter — 7 compliance checks per skill | Low (~1k/skill) |
-| `spec` | `/skill:gamedev-skill-test spec [name]` | Behavioral verifier — evaluates assertions in test spec | Medium (~5k/skill) |
-| `category` | `/skill:gamedev-skill-test category [name\|all]` | Category rubric — checks skill against its category-specific metrics | Low (~2k/skill) |
-| `audit` | `/skill:gamedev-skill-test audit` | Coverage report — skills, agent specs, last test dates | Low (~3k total) |
+| `static` | `gamedev:skill-test static [name\|all]` | Structural linter — 7 compliance checks per skill | Low (~1k/skill) |
+| `spec` | `gamedev:skill-test spec [name]` | Behavioral verifier — evaluates assertions in test spec | Medium (~5k/skill) |
+| `category` | `gamedev:skill-test category [name\|all]` | Category rubric — checks skill against its category-specific metrics | Low (~2k/skill) |
+| `audit` | `gamedev:skill-test audit` | Coverage report — skills, agent specs, last test dates | Low (~3k total) |
 
 ---
 
@@ -82,7 +82,7 @@ same permission twice.
 
 The skill must end with a recommended next action or follow-up path. Look for:
 
-- A final section mentioning another skill (e.g., `/skill:gamedev-story-done`, `/skill:gamedev-gate-check`)
+- A final section mentioning another skill (e.g., `gamedev:story-done`, `gamedev:gate-check`)
 - "Recommended next" or "next step" phrasing
 - A "Follow-Up" or "After this" section
 
@@ -154,8 +154,8 @@ If either is missing:
 
 - Missing skill: "Skill '[name]' not found in `skills/`."
 - Missing spec path in catalog: "No spec path set for '[name]' in catalog.yaml."
-- Spec file not found at path: "Spec file missing at [path]. Run `/skill:gamedev-skill-test audit` to see coverage
-  gaps."
+- Spec file not found at path: "Spec file missing at [path]. Run the `gamedev:skill-test` skill with `audit` to see
+  coverage gaps."
 
 ### Step 2 — Read Both Files
 
@@ -340,9 +340,9 @@ Agent coverage:  49/49 specs (100%)
 
 No file writes in audit mode.
 
-Offer: "Would you like to run `/skill:gamedev-skill-test static all` to check structural compliance across all skills?
-`/skill:gamedev-skill-test category all` to run category rubric checks? Or `/skill:gamedev-skill-test spec [name]` to
-run a specific behavioral test?"
+Offer: "Would you like to run the `gamedev:skill-test` skill with `static all` to check structural compliance across all
+skills? `gamedev:skill-test category all` to run category rubric checks? Or `gamedev:skill-test spec [name]` to run a
+specific behavioral test?"
 
 ---
 
@@ -350,12 +350,12 @@ run a specific behavioral test?"
 
 After any mode completes, offer contextual follow-up:
 
-- After `static [name]`: "Run `/skill:gamedev-skill-test spec [name]` to validate behavioral correctness if a test spec
-  exists."
-- After `static all` with failures: "Address NON-COMPLIANT skills first. Run `/skill:gamedev-skill-test static [name]`
-  individually for detailed remediation guidance."
+- After `static [name]`: "Run the `gamedev:skill-test` skill with `spec [name]` to validate behavioral correctness if a
+  test spec exists."
+- After `static all` with failures: "Address NON-COMPLIANT skills first. Run the `gamedev:skill-test` skill with
+  `static [name]` individually for detailed remediation guidance."
 - After `spec [name]` PASS: "Update `qa/catalog.yaml` to record this pass date. Consider running
-  `/skill:gamedev-skill-test audit` to find the next spec gap."
+  `gamedev:skill-test audit` to find the next spec gap."
 - After `spec [name]` FAIL: "Review the failing assertions and update the skill or the test spec to resolve the
   mismatch."
 - After `audit`: "Start with the critical-priority gaps. Use the spec template at `qa/templates/skill-test-spec.md` to

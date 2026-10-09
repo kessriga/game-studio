@@ -8,8 +8,8 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 **Arguments:** [feature or area to design audio for] [--review full|lean|solo]
 
 If no argument is provided, output usage guidance and exit without spawning any agents:
-> Usage: `/skill:gamedev-team-audio [feature or area]` — specify the feature or area to design audio for (e.g.,
-> `combat`, `main menu`, `forest biome`, `boss encounter`). Output usage directly; do not ask a follow-up question.
+> Usage: `gamedev:team-audio [feature or area]` — specify the feature or area to design audio for (e.g., `combat`,
+> `main menu`, `forest biome`, `boss encounter`). Output usage directly; do not ask a follow-up question.
 
 When this skill is invoked with an argument, orchestrate the audio team through a structured pipeline.
 
@@ -141,8 +141,8 @@ files directly.
 ## Next Steps
 
 - Review the audio design doc with the audio-director before implementation begins.
-- Use `/skill:gamedev-dev-story` to implement the audio manager and event system once the design is approved.
-- Run `/skill:gamedev-asset-audit` after audio assets are created to verify naming and format compliance.
+- Use the `gamedev:dev-story` skill to implement the audio manager and event system once the design is approved.
+- Run the `gamedev:asset-audit` skill after audio assets are created to verify naming and format compliance.
 
 ## Error Recovery Protocol
 
@@ -160,6 +160,6 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/skill:gamedev-architecture-decision` first
-- Scope too large → split into two stories via `/skill:gamedev-create-stories`
+- ADR status is Proposed → do not implement; run the `gamedev:architecture-decision` skill first
+- Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess

@@ -1,17 +1,17 @@
-# Skill Test Spec: /skill:gamedev-patch-notes
+# Skill Test Spec: gamedev:patch-notes
 
 ## Skill Summary
 
-`/skill:gamedev-patch-notes` is a skill that generates player-facing patch notes from existing changelog content,
-stripping internal task IDs and technical jargon in favor of plain language. It filters entries to only those relevant
-to players (visible features and bug fixes; internal refactors are excluded). No director gates are used. The skill asks
-"May I write to `docs/patch-notes-vX.X.md`?" before persisting. Verdict is always COMPLETE.
+`gamedev:patch-notes` is a skill that generates player-facing patch notes from existing changelog content, stripping
+internal task IDs and technical jargon in favor of plain language. It filters entries to only those relevant to players
+(visible features and bug fixes; internal refactors are excluded). No director gates are used. The skill asks "May I
+write to `docs/patch-notes-vX.X.md`?" before persisting. Verdict is always COMPLETE.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -41,7 +41,7 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
   - "Update dependency: Godot 4.6" (internal only)
 - Version is `v0.4.0`
 
-**Input:** `/skill:gamedev-patch-notes v0.4.0`
+**Input:** `gamedev:patch-notes v0.4.0`
 
 **Expected behavior:**
 
@@ -62,24 +62,24 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
 
 ---
 
-### Case 2: No Changelog Found — Directed to run /skill:gamedev-changelog first
+### Case 2: No Changelog Found — Directed to run gamedev:changelog first
 
 **Fixture:**
 
 - `docs/CHANGELOG.md` does NOT exist
 
-**Input:** `/skill:gamedev-patch-notes v0.4.0`
+**Input:** `gamedev:patch-notes v0.4.0`
 
 **Expected behavior:**
 
 1. Skill attempts to read `docs/CHANGELOG.md` — not found
-2. Skill outputs: "No changelog found — run /skill:gamedev-changelog first to generate one"
+2. Skill outputs: "No changelog found — run gamedev:changelog first to generate one"
 3. No patch notes are generated; no file is written
 
 **Assertions:**
 
 - [ ] Skill does not crash when changelog is absent
-- [ ] Output explicitly directs user to run `/skill:gamedev-changelog`
+- [ ] Output explicitly directs user to run the `gamedev:changelog` skill
 - [ ] No "May I write" prompt appears (nothing to write)
 - [ ] Verdict is BLOCKED (dependency not met)
 
@@ -92,7 +92,7 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
 - `docs/CHANGELOG.md` exists with player-facing entries
 - `design/community/tone-guide.md` exists with guidance: "upbeat, encouraging tone; avoid passive voice"
 
-**Input:** `/skill:gamedev-patch-notes v0.4.0`
+**Input:** `gamedev:patch-notes v0.4.0`
 
 **Expected behavior:**
 
@@ -118,7 +118,7 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
 - `../../../docs/templates/patch-notes-template.md` exists with a structured header format
 - `docs/CHANGELOG.md` exists with player-facing entries
 
-**Input:** `/skill:gamedev-patch-notes v0.4.0`
+**Input:** `gamedev:patch-notes v0.4.0`
 
 **Expected behavior:**
 
@@ -143,7 +143,7 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
 - `docs/CHANGELOG.md` exists with player-facing entries
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-patch-notes v0.4.0`
+**Input:** `gamedev:patch-notes v0.4.0`
 
 **Expected behavior:**
 

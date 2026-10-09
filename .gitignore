@@ -158,3 +158,5 @@ templates/production/session-logs/
 # Python development environment
 .venv/
 .ruff_cache/
+.claude/types/
+.claude-plugin/types/

@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-art-bible
+# Skill Test Spec: gamedev:art-bible
 
 ## Skill Summary
 
-`/skill:gamedev-art-bible` is a guided, section-by-section art bible authoring skill. It produces a comprehensive visual
+`gamedev:art-bible` is a guided, section-by-section art bible authoring skill. It produces a comprehensive visual
 direction document covering: Visual Style overview, Color Palette, Typography, Character Design Rules, Environment
 Style, and UI Visual Language. The skill follows the skeleton-first pattern: creates the file with all section headers
 immediately, then fills each section through discussion and writes each to disk after user approval.
@@ -15,14 +15,14 @@ is COMPLETE when all sections are written.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keyword: COMPLETE
 - [ ] Contains "May I write" language per section
 - [ ] Documents the AD-ART-BIBLE director gate and its mode behavior
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-asset-spec` or `/skill:gamedev-design-system`)
+- [ ] Has a next-step handoff (e.g., `gamedev:asset-spec` or `gamedev:design-system`)
 
 ---
 
@@ -44,7 +44,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - `production/session-state/review-mode.txt` contains `full`
 - `design/gdd/game-concept.md` exists with visual tone described
 
-**Input:** `/skill:gamedev-art-bible`
+**Input:** `gamedev:art-bible`
 
 **Expected behavior:**
 
@@ -74,7 +74,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - AD-ART-BIBLE gate returns CONCERNS: "Color palette clashes with the dark atmospheric tone described in the game
   concept"
 
-**Input:** `/skill:gamedev-art-bible`
+**Input:** `gamedev:art-bible`
 
 **Expected behavior:**
 
@@ -101,7 +101,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - No existing art bible
 - `production/session-state/review-mode.txt` contains `lean`
 
-**Input:** `/skill:gamedev-art-bible`
+**Input:** `gamedev:art-bible`
 
 **Expected behavior:**
 
@@ -127,7 +127,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - `design/art-bible.md` already exists with all sections populated
 - User wants to update the Character Design Rules section
 
-**Input:** `/skill:gamedev-art-bible`
+**Input:** `gamedev:art-bible`
 
 **Expected behavior:**
 
@@ -155,7 +155,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - No existing art bible
 - `production/session-state/review-mode.txt` contains `solo`
 
-**Input:** `/skill:gamedev-art-bible`
+**Input:** `gamedev:art-bible`
 
 **Expected behavior:**
 
@@ -191,5 +191,5 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
   and ask the user how to proceed (revise or override).
 - The Typography section is listed as a required art bible section but its specific content requirements are not
   assertion-tested here.
-- The art bible feeds into `/skill:gamedev-asset-spec` — this relationship is noted in the handoff but not tested as
+- The art bible feeds into `gamedev:asset-spec` — this relationship is noted in the handoff but not tested as
   part of this skill's spec.

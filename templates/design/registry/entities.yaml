@@ -15,17 +15,17 @@
 #   - When a new GDD references an existing entry, append its path to
 #     referenced_by. Do not create a duplicate entry.
 #
-# WRITTEN BY: /skill:gamedev-design-system (Phase 5 — after GDD sections
+# WRITTEN BY: gamedev:design-system (Phase 5 — after GDD sections
 #   are approved)
-#             /skill:gamedev-consistency-check (when resolving conflicts)
-# READ BY:    /skill:gamedev-design-system (Phase 2 — before authoring
+#             gamedev:consistency-check (when resolving conflicts)
+# READ BY:    gamedev:design-system (Phase 2 — before authoring
 #   begins, and after
 #               Section C/D writes to conflict-check new entities/formulas)
-#             /skill:gamedev-consistency-check (primary input —
+#             gamedev:consistency-check (primary input —
 #   grep-first, GDD-second)
-#             /skill:gamedev-review-all-gdds (Phase 1 — baseline for
+#             gamedev:review-all-gdds (Phase 1 — baseline for
 #   Phase 2 checks)
-#             /skill:gamedev-architecture-review (data structure and
+#             gamedev:architecture-review (data structure and
 #   interface validation)
 #
 # SEARCH PATTERNS (for skills using Grep):

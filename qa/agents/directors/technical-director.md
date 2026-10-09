@@ -100,7 +100,7 @@ incompatible with the stated platform constraints, and returns a CONCERNS or REJ
 ## Coverage Notes
 
 - TD-ADR (Architecture Decision Record approval) is not covered — a dedicated case should be added when the
-  /skill:gamedev-architecture-decision skill produces ADR documents.
+  gamedev:architecture-decision skill produces ADR documents.
 - TD-ENGINE-RISK assessment for specific engine versions (e.g., Godot 4.6 post-cutoff APIs) is not covered — deferred to
   engine-specialist integration tests.
 - TD-PHASE-GATE (full technical phase advancement) involving synthesis of multiple sub-gate results is deferred.

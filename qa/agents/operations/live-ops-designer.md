@@ -104,4 +104,4 @@ finding no mid-term goal to pursue. **Input**: "Design a live ops feature to add
   independently
 - Case 5 is the most important context-awareness test; agent must target the specific drop-off point, not a generic
   solution
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

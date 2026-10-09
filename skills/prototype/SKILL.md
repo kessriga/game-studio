@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: "Concept prototype — validate the core idea is worth designing before writing GDDs. Run right after /skill:gamedev-brainstorm and /skill:gamedev-setup-engine. Routes to HTML, Engine, or Paper path based on game type. Produces a throwaway build and a PROCEED/PIVOT/KILL verdict."
+description: "Concept prototype — validate the core idea is worth designing before writing GDDs. Run right after gamedev:brainstorm and gamedev:setup-engine. Routes to HTML, Engine, or Paper path based on game type. Produces a throwaway build and a PROCEED/PIVOT/KILL verdict."
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
@@ -16,15 +16,15 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 This is the **concept prototype** — a fast, throwaway build that answers one question:
 *"Is this core idea actually fun to interact with?"*
 
-**Default use** — run right after `/skill:gamedev-brainstorm` and `/skill:gamedev-setup-engine`, before writing GDDs or
-architecture docs. Its verdict determines whether the concept is worth the investment of full design documentation.
+**Default use** — run right after `gamedev:brainstorm` and `gamedev:setup-engine`, before writing GDDs or architecture
+docs. Its verdict determines whether the concept is worth the investment of full design documentation.
 
 **Mid-production?** You can also run this at any stage to test a specific mechanic, design change, or technical
 question. Pass `--spike` to activate spike mode: a lightweight ~4-hour build with no GDD prerequisites and no phase gate
 implications.
 
 **Already have GDDs and architecture complete?** To validate the full game loop before committing to Production, run
-`/skill:gamedev-vertical-slice` instead.
+`gamedev:vertical-slice` instead.
 
 ---
 
@@ -49,7 +49,7 @@ Otherwise, use a user-input tool or chat to confirm intent before proceeding:
 
 **If "Skip — concept already proven":** Ask (plain text, not a widget): "What evidence do you have that the concept
 works?" Record the one-line answer, then stop. Note: "Concept prototype skipped — evidence: [answer]." Suggest next
-step: `/skill:gamedev-map-systems` or `/skill:gamedev-design-system [mechanic]`.
+step: `gamedev:map-systems` or `gamedev:design-system [mechanic]`.
 
 **If "Mid-production spike"**: skip to the **Spike Mode** section below.
 
@@ -411,14 +411,13 @@ learned.
 
 Recommended path (in order):
 
-1. `/skill:gamedev-design-review design/gdd/game-concept.md` — validate the concept doc against what the prototype
-   revealed
-2. `/skill:gamedev-gate-check` — confirm readiness to advance to Systems Design
-3. `/skill:gamedev-art-bible` — define visual identity (optional but worth doing before GDDs)
-4. `/skill:gamedev-map-systems` — decompose the concept into all game systems
-5. `/skill:gamedev-design-system [mechanic]` — GDD for each MVP system; use prototype learnings in the Tuning Knobs and
+1. `gamedev:design-review design/gdd/game-concept.md` — validate the concept doc against what the prototype revealed
+2. `gamedev:gate-check` — confirm readiness to advance to Systems Design
+3. `gamedev:art-bible` — define visual identity (optional but worth doing before GDDs)
+4. `gamedev:map-systems` — decompose the concept into all game systems
+5. `gamedev:design-system [mechanic]` — GDD for each MVP system; use prototype learnings in the Tuning Knobs and
    Formulas sections
-6. `/skill:gamedev-review-all-gdds` — cross-system consistency check
+6. `gamedev:review-all-gdds` — cross-system consistency check
 
 **Note:** If you used the HTML path and feel is still uncertain, consider running a quick engine path prototype
 targeting feel before writing GDDs.
@@ -434,11 +433,11 @@ time):
 Ask: "May I write this to `prototypes/[concept-name]-concept/PIVOT-NOTE.md`?"
 
 If yes, write the file with: original hypothesis, what to keep, what to change, and the revised hypothesis for the next
-prototype. When `/skill:gamedev-prototype` is next run, check `prototypes/` for any `PIVOT-NOTE.md` files — if found,
-read them and use the revised hypothesis as the starting point rather than forming one from scratch.
+prototype. When `gamedev:prototype` is next run, check `prototypes/` for any `PIVOT-NOTE.md` files — if found, read them
+and use the revised hypothesis as the starting point rather than forming one from scratch.
 
-- Run `/skill:gamedev-prototype [revised-concept]` to test the adjusted direction
-- Or `/skill:gamedev-brainstorm [hint]` if the concept needs more fundamental rethinking
+- Run the `gamedev:prototype` skill with `[revised-concept]` to test the adjusted direction
+- Or `gamedev:brainstorm [hint]` if the concept needs more fundamental rethinking
 
 **If KILL:**
 
@@ -465,7 +464,7 @@ If 2+ boxes apply → KILL verdict is sound. If 0–1 apply → consider one mor
 
 This file exists so the same mistake doesn't get made twice on the next concept.
 
-- Run `/skill:gamedev-brainstorm open` or `/skill:gamedev-brainstorm [new-hint]` to explore a different concept
+- Run the `gamedev:brainstorm` skill with `open` or `gamedev:brainstorm [new-hint]` to explore a different concept
 - The prototype report is the deliverable — no further action needed
 
 ---

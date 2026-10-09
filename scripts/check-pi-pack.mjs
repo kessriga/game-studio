@@ -34,7 +34,8 @@ try {
   const paths = new Set(packed.files.map((file) => file.path));
   for (const required of [
     "pi/extension.ts",
-    "pi/workflow-catalog.json",
+    "workflow/workflow-catalog.json",
+    "workflow/cli.ts",
     "pi/skills/gamedev-start.md",
     "skills/start/SKILL.md",
     "templates/AGENTS.md",

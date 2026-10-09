@@ -98,4 +98,4 @@ that works with CommonUI." **Expected behavior**:
   CommonUI
 - Case 4 (performance) is a high-impact failure mode — 300ms hitches are shipping-blocking; prioritize this test case
 - Case 5 is the most important context-awareness test for UI pipeline consistency
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

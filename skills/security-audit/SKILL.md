@@ -146,7 +146,7 @@ For each finding, assign:
 **Date**: [date]
 **Scope**: [full | network | save | input | quick]
 **Engine**: [engine + version]
-**Audited by**: security-engineer via /skill:gamedev-security-audit
+**Audited by**: security-engineer via gamedev:security-audit
 **Files scanned**: [N source files, N config files]
 
 ---
@@ -219,7 +219,7 @@ For each finding, assign:
 
 ## Re-Audit Trigger
 
-Run `/skill:gamedev-security-audit` again after remediating any CRITICAL or HIGH findings.
+Run `gamedev:security-audit` again after remediating any CRITICAL or HIGH findings.
 The Polish → Release gate requires this report with no open CRITICAL or HIGH items.
 ```
 
@@ -239,16 +239,16 @@ Write only after approval.
 
 This report is a required artifact for the **Polish → Release gate**.
 
-After remediating findings, re-run: `/skill:gamedev-security-audit quick` to confirm CRITICAL/HIGH items are resolved
-before running `/skill:gamedev-gate-check release`.
+After remediating findings, re-run: `gamedev:security-audit quick` to confirm CRITICAL/HIGH items are resolved before
+running the `gamedev:gate-check` skill with `release`.
 
 If CRITICAL findings exist:
 > "⛔ CRITICAL security findings must be resolved before any public release. Do not proceed to
-> `/skill:gamedev-launch-checklist` until these are addressed."
+> `gamedev:launch-checklist` until these are addressed."
 
 If no CRITICAL/HIGH findings:
 > "✅ No blocking security findings. Report written to `production/security/`. Include this path when running
-> `/skill:gamedev-gate-check release`."
+> `gamedev:gate-check release`."
 
 ---
 

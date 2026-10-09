@@ -1,9 +1,9 @@
-# Skill Test Spec: /skill:gamedev-code-review
+# Skill Test Spec: gamedev:code-review
 
 ## Skill Summary
 
-`/skill:gamedev-code-review` performs an architectural code review of source files in `src/`, checking coding standards
-from `AGENTS.md` (doc comments on public APIs, dependency injection over singletons, data-driven values, testability).
+`gamedev:code-review` performs an architectural code review of source files in `src/`, checking coding standards from
+`AGENTS.md` (doc comments on public APIs, dependency injection over singletons, data-driven values, testability).
 Findings are advisory. No director gates are invoked. No code edits are made. Verdicts: APPROVED, CONCERNS, or NEEDS
 CHANGES.
 
@@ -11,7 +11,7 @@ CHANGES.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -40,7 +40,7 @@ None. Code review is a read-only advisory skill; no gates are invoked.
   - ADR reference in file header: `# ADR: docs/architecture/adr-004-health.md`
   - Referenced ADR has `Status: Accepted`
 
-**Input:** `/skill:gamedev-code-review src/gameplay/health_component.gd`
+**Input:** `gamedev:code-review src/gameplay/health_component.gd`
 
 **Expected behavior:**
 
@@ -69,7 +69,7 @@ None. Code review is a read-only advisory skill; no gates are invoked.
   - Uses `GameManager.instance` (singleton pattern)
   - All other standards met
 
-**Input:** `/skill:gamedev-code-review src/ui/inventory_ui.gd`
+**Input:** `gamedev:code-review src/ui/inventory_ui.gd`
 
 **Expected behavior:**
 
@@ -97,7 +97,7 @@ None. Code review is a read-only advisory skill; no gates are invoked.
 - `adr-010-save.md` exists but has `Status: Proposed`
 - Code itself follows all other coding standards
 
-**Input:** `/skill:gamedev-code-review src/core/save_system.gd`
+**Input:** `gamedev:code-review src/core/save_system.gd`
 
 **Expected behavior:**
 
@@ -120,10 +120,10 @@ None. Code review is a read-only advisory skill; no gates are invoked.
 
 **Fixture:**
 
-- User calls `/skill:gamedev-code-review src/networking/`
+- User calls the `gamedev:code-review` skill with `src/networking/`
 - `src/networking/` directory does not exist
 
-**Input:** `/skill:gamedev-code-review src/networking/`
+**Input:** `gamedev:code-review src/networking/`
 
 **Expected behavior:**
 
@@ -149,7 +149,7 @@ None. Code review is a read-only advisory skill; no gates are invoked.
 - Source file follows most standards but has 1 CONCERNS-level finding (a magic number)
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-code-review src/gameplay/loot_system.gd`
+**Input:** `gamedev:code-review src/gameplay/loot_system.gd`
 
 **Expected behavior:**
 
@@ -183,4 +183,4 @@ None. Code review is a read-only advisory skill; no gates are invoked.
 - Batch review of all files in a directory is not explicitly tested; behavior is assumed to apply the same checks file
   by file and aggregate the verdict.
 - Test coverage checks (verifying corresponding test files exist) are a stretch goal not tested here; that is primarily
-  the domain of `/skill:gamedev-test-evidence-review`.
+  the domain of `gamedev:test-evidence-review`.

@@ -12,21 +12,21 @@ Requirements Addressed
 **Status lifecycle:** `Proposed` → `Accepted` → `Superseded`
 
 - Never skip `Accepted` — stories referencing a `Proposed` ADR are auto-blocked
-- Use `/skill:gamedev-architecture-decision` to create ADRs through the guided flow
+- Use the `gamedev:architecture-decision` skill to create ADRs through the guided flow
 
 **TR Registry:** `docs/architecture/tr-registry.yaml`
 
 - Stable requirement IDs (e.g. `TR-MOV-001`) that link GDD requirements to stories
 - Never renumber existing IDs — only append new ones
-- Updated by `/skill:gamedev-architecture-review` Phase 8
+- Updated by `gamedev:architecture-review` Phase 8
 
 **Control Manifest:** `docs/architecture/control-manifest.md`
 
 - Flat programmer rules sheet: Required / Forbidden / Guardrails per layer
 - Date-stamped `Manifest Version:` in header
-- Stories embed this version; `/skill:gamedev-story-done` checks for staleness
+- Stories embed this version; `gamedev:story-done` checks for staleness
 
-**Validation:** Run `/skill:gamedev-architecture-review` after completing a set of ADRs.
+**Validation:** Run the `gamedev:architecture-review` skill after completing a set of ADRs.
 
 ## Engine Reference (`docs/engine-reference/`)
 
@@ -34,4 +34,4 @@ Version-pinned engine API snapshots. **Always check here before using any engine
 predates the pinned engine version.
 
 Current engine: see the `VERSION.md` under `docs/engine-reference/<engine>/` for your configured engine
-(`/skill:gamedev-setup-engine` pins this and updates the engine reference in the root `AGENTS.md`).
+(`gamedev:setup-engine` pins this and updates the engine reference in the root `AGENTS.md`).

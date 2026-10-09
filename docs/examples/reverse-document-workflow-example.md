@@ -108,7 +108,7 @@ Yes, write it. But let's tune tier 5 to +30% and make respec cost scale.
 ✅ Added TODO: Implement scaling respec cost formula
 
 Next steps:
-- Run /skill:gamedev-balance-check to validate skill tree progression curve?
+- Run gamedev:balance-check to validate skill tree progression curve?
 - Create ADR documenting why 3 trees instead of 5?
 - Update tutorial to explain hybrid synergies?
 ```
