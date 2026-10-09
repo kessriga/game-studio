@@ -116,13 +116,26 @@ const view = {
   blockers: ["game-concept", "asset-spec"],
 };
 
-function boot(on: On, calls: Call[]) {
+function boot(on: On, calls: Call[], failingAction?: string) {
   on("fs.exists", (_, e) => ({
     value: e.path === "/game/production/stage.txt",
   }));
   on("process.run", (_, e) => {
     calls.push({ argv: e.argv, stdin: e.init?.stdin ?? "" });
     const action = e.argv[3];
+    if (action === failingAction)
+      return {
+        value: {
+          exitCode: 1,
+          stdout: JSON.stringify({
+            ok: false,
+            error: "Workflow state changed. Read status again before retrying.",
+          }),
+          stderr: "",
+          isStdoutTruncated: false,
+          isStderrTruncated: false,
+        },
+      };
     const body =
       action === "history"
         ? {
@@ -312,4 +325,47 @@ test("gate names the unresolved steps and finish names the sources", async ($, o
   expect(
     JSON.parse(calls.find((call) => call.argv[3] === "finish")?.stdin ?? "{}"),
   ).toEqual({ step: "asset-spec", note: "All twelve assets are specified" });
+});
+
+test("a state change during the dialog returns the core's error unchanged", async ($, on) => {
+  const calls: Call[] = [];
+  boot(on, calls, "approve");
+  on("tool.call", { tool: "AskUserQuestion" }, (_, e) =>
+    answerWith(e.questions, "Confirm"),
+  );
+  await $.session.start({
+    cwd: "/game",
+    surface: "terminal",
+    isInteractive: false,
+  });
+  const before = calls.length;
+  const { text } = await workflow($, "approve r1 Checked it");
+  expect(text).toBe(
+    "Workflow state changed. Read status again before retrying.",
+  );
+  expect(calls.length).toBeGreaterThan(before);
+});
+
+test("a model-run approval command is refused before any dialog", async ($, on) => {
+  const calls: Call[] = [];
+  boot(on, calls);
+  let asks = 0;
+  on("tool.call", { tool: "AskUserQuestion" }, (_, e) => {
+    asks += 1;
+    return answerWith(e.questions, "Confirm");
+  });
+  await $.session.start({
+    cwd: "/game",
+    surface: "terminal",
+    isInteractive: false,
+  });
+  const { text } = await $.command.run({
+    command: "gamedev-workflow",
+    args: "approve r1 Looks fine",
+    origin: { kind: "plugin", name: "other" },
+    presentation: { isFullscreen: false, columns: 120 },
+  });
+  expect(text).toContain("typed by the user");
+  expect(asks).toBe(0);
+  expect(calls.filter((call) => call.argv[3] === "approve").length).toBe(0);
 });

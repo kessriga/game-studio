@@ -106,7 +106,8 @@ function boot(
   });
   on("process.run", (_, e) => {
     const [bin, sub] = e.argv;
-    if (bin === "git" && sub === "diff") return ok(staged.join("\n"));
+    if (bin === "git" && sub === "diff")
+      return ok(staged.map((path) => `${path}\0`).join(""));
     if (bin === "git" && sub === "rev-parse") return ok(`${branch}\n`);
     return ok(JSON.stringify({ ok: true, snapshot: null }));
   });
@@ -206,4 +207,74 @@ test("writing a badly named asset leaves notes after the write", async ($, on) =
     content: "x",
   });
   expect(plain.context).toBe(undefined);
+});
+
+test("commit -a also reads unstaged tracked changes and git -C is recognised", async ($, on) => {
+  const files: Record<string, string> = {
+    "/game/assets/data/items.json": "{ nope",
+  };
+  mock.clock(on);
+  on("fs.exists", (_, e) => ({
+    value: e.path === "/game/production/stage.txt",
+  }));
+  on("fs.read", (_, e) => {
+    const text = files[e.path];
+    return text === undefined ? { deny: "ENOENT" } : { value: text };
+  });
+  const listings: string[] = [];
+  on("process.run", (_, e) => {
+    const [bin, sub, ...rest] = e.argv;
+    if (bin === "git" && sub === "diff") {
+      listings.push(e.argv.join(" "));
+      return ok(rest.includes("--cached") ? "" : "assets/data/items.json\0");
+    }
+    if (bin === "git" && sub === "rev-parse") return ok("feat/x\n");
+    return ok(JSON.stringify({ ok: true, snapshot: null }));
+  });
+  on("command.register", (_, e) => ({ value: { command: e.name } }));
+  on("tool.register", (_, e) => ({
+    value: { tool: `mcp__gamedev__${e.name}` },
+  }));
+  on("tool.check", () => ({ decision: "allow" as const }));
+  on("ui.status", () => ({ value: undefined }));
+  on("session.start", (_, e) => ({ cwd: e.cwd }));
+  on("tool.call", { tool: "Bash" }, () => bashRan);
+  await $.session.start({
+    cwd: "/game",
+    surface: "terminal",
+    isInteractive: false,
+  });
+  const plain = await $.tool.call({ tool: "Bash", command: "git commit -m x" });
+  expect(plain.deny).toBe(undefined);
+  const all = await $.tool.call({
+    tool: "Bash",
+    command: "git -C /game commit -am x",
+  });
+  expect(all.deny).toContain("assets/data/items.json");
+  expect(
+    listings.some(
+      (line) => line === "git diff --cached --name-only -z --relative",
+    ),
+  ).toBe(true);
+  expect(
+    listings.some((line) => line === "git diff --name-only -z --relative"),
+  ).toBe(true);
+});
+
+test("push destinations follow the refspec and Windows asset paths normalise", () => {
+  expect(protectedPushTarget("git push origin feature:feature", "main")).toBe(
+    undefined,
+  );
+  expect(protectedPushTarget("git push origin HEAD:main", "feat/x")).toBe(
+    "main",
+  );
+  expect(
+    protectedPushTarget("git push -u origin refs/heads/develop", "feat/x"),
+  ).toBe("develop");
+  expect(protectedPushTarget("git push --force-with-lease", "master")).toBe(
+    "master",
+  );
+  expect(
+    checkAsset("C:\\game\\assets\\sprites\\Hero.png", undefined).notes.length,
+  ).toBe(1);
 });

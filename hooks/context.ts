@@ -15,12 +15,14 @@ export function hasRootGuide(
   files: readonly InstructionFile[] | undefined,
   root: string,
 ): boolean {
-  const guide = `${normalize(root)}/${GUIDE}`;
-  return (files ?? []).some(
-    (file) =>
-      normalize(file.path) === guide ||
-      /(^|\s)@(\.\/)?AGENTS\.md(\s|$)/.test(file.content),
-  );
+  const base = normalize(root);
+  const guide = `${base}/${GUIDE}`;
+  return (files ?? []).some((file) => {
+    const path = normalize(file.path);
+    if (path === guide) return true;
+    const dir = path.slice(0, path.lastIndexOf("/"));
+    return dir === base && /(^|\s)@(\.\/)?AGENTS\.md(\s|$)/.test(file.content);
+  });
 }
 
 export function rootGuideFile(root: string, content: string): InstructionFile {

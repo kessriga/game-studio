@@ -131,3 +131,65 @@ test("gate and history record user decisions; unknown actions fail", async (t) =
   assert.equal(unknown.ok, false);
   assert.equal(unknown.status, 1);
 });
+
+test("a stale revision is refused and finish closes a repeatable step", async (t) => {
+  const root = await game(t, "Systems Design");
+  const started = run(
+    root,
+    "start",
+    { step: "design-system", subject: "combat", note: "Design combat." },
+    "agent:test",
+    0,
+  );
+  assert.equal(started.ok, true, started.error);
+  const stale = run(
+    root,
+    "submit",
+    { run: started.snapshot!.runs[0]!.id, note: "Done.", evidence: [] },
+    "agent:test",
+    0,
+  );
+  assert.equal(stale.ok, false);
+  assert.match(stale.error!, /revision|changed|status/i);
+  const run1 = started.snapshot!.runs[0]!.id;
+  const submitted = run(
+    root,
+    "submit",
+    { run: run1, note: "Manual check.", evidence: [] },
+    "agent:test",
+    started.snapshot!.revision,
+  );
+  assert.equal(submitted.ok, true, submitted.error);
+  const approved = run(
+    root,
+    "approve",
+    { run: run1, note: "Checked it." },
+    "user:test",
+    submitted.snapshot!.revision,
+  );
+  assert.equal(approved.ok, true, approved.error);
+  const finished = run(
+    root,
+    "finish",
+    { step: "design-system", note: "Combat is the only system." },
+    "user:test",
+    approved.snapshot!.revision,
+  );
+  assert.equal(finished.ok, true, finished.error);
+  const step = finished.snapshot!.runs && finished.snapshot;
+  assert.ok(step);
+  const row = (
+    finished.snapshot as unknown as {
+      steps: { id: string; complete: boolean }[];
+    }
+  ).steps.find((item) => item.id === "design-system");
+  assert.equal(row?.complete, true);
+  const unknownStep = run(
+    root,
+    "finish",
+    { step: "nope", note: "x" },
+    "user:test",
+    finished.snapshot!.revision,
+  );
+  assert.equal(unknownStep.ok, false);
+});

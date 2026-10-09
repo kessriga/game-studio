@@ -11,6 +11,7 @@
  * enforces it.
  */
 import { readFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 import {
   blockers,
   phases,
@@ -256,7 +257,7 @@ export async function main(argv: string[]): Promise<Reply> {
 
 if (
   process.argv[1] &&
-  import.meta.url === new URL(`file://${process.argv[1]}`).href
+  import.meta.url === pathToFileURL(process.argv[1]).href
 ) {
   const reply = await main(process.argv.slice(2));
   process.stdout.write(JSON.stringify(reply) + "\n");

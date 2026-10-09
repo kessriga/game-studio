@@ -60,10 +60,12 @@ Hooks inside the mod:
   plus a reminder to read `production/session-state/active.md` when present.
 - `prompt.context` adds the project's root `AGENTS.md` to the instruction files when no loaded file already imports it.
   `tool.call` on file tools adds nested `AGENTS.md` guides above the touched path, once each per session.
-- `classic.PreCompact` appends the current `active.md` to the conversation so the handoff survives summarization.
-- `tool.call` on `Bash` matching `git commit` checks staged files: required sections in `design/gdd/*.md`, JSON validity
-  under `assets/data/`, hardcoded tunables under `src/gameplay/`, and unowned TODO markers under `src/`. Invalid JSON
-  denies the call; everything else is a note the model reads.
+- `classic.PreCompact` appends the current `active.md` to the conversation so the summarizer sees it; the per-prompt
+  reminder to reread the file remains the safety net.
+- `tool.call` on `Bash` matching `git commit` checks the files the commit will record, including tracked changes when
+  `-a` stages them: required sections in `design/gdd/*.md`, JSON validity under `assets/data/`, hardcoded tunables under
+  `src/gameplay/`, and unowned TODO markers under `src/`. Invalid JSON denies the call; everything else is a note the
+  model reads.
 - `tool.call` on `Bash` matching `git push` to `main`, `master`, or `develop` adds a reminder note. It never denies; the
   user's own branch policy decides.
 - `tool.call` on `Write` and `Edit` under `assets/` checks lowercase underscore names and JSON validity after the write
@@ -83,8 +85,9 @@ with a visible error line.
 - Python: manifests agree with `package.json`; shared files contain no host syntax; no shell hooks or `CLAUDE.md`
   templates exist.
 - npm: core and CLI tests move with the code; Pi checks are unchanged.
-- Claude: `claude plugin validate --strict .` and `claude plugin test hooks` run in `just gate` when the CLI is on PATH
-  and in CI after installing `@anthropic-ai/claude-code`.
+- Claude: `claude plugin validate --strict` on both manifests and `claude plugin test` on an isolated copy of the plugin
+  files (the runner picks up every test below a directory, including Pi's Node tests) run in `just gate` when the CLI is
+  on PATH and in CI after installing `@anthropic-ai/claude-code`.
 - Release: bump to 0.5.0 in `package.json`, `package-lock.json`, and both manifests. Tag with `claude plugin tag`.
 
 ## Out of scope

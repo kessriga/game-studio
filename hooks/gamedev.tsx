@@ -29,6 +29,7 @@ import {
   checkAsset,
   checksNote,
   checkStagedFiles,
+  commitStagesAll,
   isAssetPath,
   isGitCommit,
   isGitPush,
@@ -63,6 +64,8 @@ const NOT_A_PROJECT =
 /** The game repository this session tracks; undefined outside a game project. A reload re-detects it. */
 let root: string | undefined;
 let pending: Timer | undefined;
+/** The newest refresh issued; an older in-flight result is dropped. */
+let refreshSequence = 0;
 /** Directories whose nested AGENTS.md this session has already shown. */
 const shownGuides = new Set<string>();
 
@@ -95,6 +98,7 @@ async function runWorkflow(
 
 async function refresh($: EngineInterface): Promise<Tracking> {
   if (!root) return { kind: "none" };
+  const sequence = ++refreshSequence;
   const reply = await runWorkflow($, {
     root,
     action: "status",
@@ -105,6 +109,7 @@ async function refresh($: EngineInterface): Promise<Tracking> {
     : reply.snapshot
       ? { kind: "view", view: reply.snapshot }
       : { kind: "none" };
+  if (sequence !== refreshSequence) return next;
   await update($, tracking, () => next);
   $.ui.status((await read($, isHidden)) ? undefined : statusText(next));
   return next;
@@ -209,20 +214,30 @@ async function readOptional(
   }
 }
 
-async function stagedFinding($: EngineInterface): Promise<Finding> {
-  const staged = await $.process.run(
-    ["git", "diff", "--cached", "--name-only"],
-    {
-      cwd: root,
-    },
-  );
-  if (staged.exitCode !== 0) return { notes: [] };
-  const paths = pathsToRead(
-    staged.stdout
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean),
-  );
+/** Files a commit will record: the index, plus tracked changes when -a stages them. */
+async function changedPaths(
+  $: EngineInterface,
+  command: string,
+): Promise<string[]> {
+  const listings = [
+    ["git", "diff", "--cached", "--name-only", "-z", "--relative"],
+  ];
+  if (commitStagesAll(command))
+    listings.push(["git", "diff", "--name-only", "-z", "--relative"]);
+  const paths = new Set<string>();
+  for (const argv of listings) {
+    const listed = await $.process.run(argv, { cwd: root });
+    if (listed.exitCode !== 0) continue;
+    for (const path of listed.stdout.split("\0")) if (path) paths.add(path);
+  }
+  return [...paths];
+}
+
+async function stagedFinding(
+  $: EngineInterface,
+  command: string,
+): Promise<Finding> {
+  const paths = pathsToRead(await changedPaths($, command));
   const files: StagedFile[] = [];
   for (const path of paths)
     files.push({ path, content: await readOptional($, `${root}/${path}`) });
@@ -265,16 +280,31 @@ async function nestedGuideNotes(
   return newNestedGuides(found, root, shownGuides).map(nestedGuideNote);
 }
 
+function reportRefreshFailure($: EngineInterface, error: unknown): void {
+  $.ui.status(`Game Studio: refresh failed: ${String(error)}`);
+}
+
 function refreshSoon($: EngineInterface): void {
   pending?.cancel();
   pending = $.clock.after(250, () => {
     pending = undefined;
-    void refresh($);
+    refresh($).catch((error) => reportRefreshFailure($, error));
   });
+}
+
+/** Approvals come from the person's own prompt, never from a model-run command. */
+function isPersonsCommand(origin: { kind: string }): boolean {
+  return (
+    origin.kind === "composer" ||
+    origin.kind === "bridge" ||
+    origin.kind === "sdk"
+  );
 }
 
 export const register: Register = (on) => {
   on("session.start", async ($, e, next) => {
+    pending?.cancel();
+    pending = undefined;
     shownGuides.clear();
     root = (await isGameProject($, e.cwd)) ? e.cwd : undefined;
     if (!root) {
@@ -293,7 +323,12 @@ export const register: Register = (on) => {
       argumentHint: "[action] [id] [note]",
     });
     await refresh($);
-    if (e.isInteractive) void $.ui.open({ id: PANE, title: "Game Studio" });
+    if (e.isInteractive)
+      $.ui.open({ id: PANE, title: "Game Studio" }).catch((error) =>
+        $.ui.log(`Game Studio pane did not open: ${String(error)}`, {
+          to: "debug",
+        }),
+      );
     return next(e);
   });
 
@@ -358,6 +393,10 @@ export const register: Register = (on) => {
       case "status":
         return { text: summaryText(await refresh($)) };
       default:
+        if (!isPersonsCommand(e.origin))
+          return {
+            text: "Approvals are typed by the user; the model records evidence with the workflow tool.",
+          };
         return { text: await approveFromUser($, command) };
     }
   });
@@ -366,7 +405,7 @@ export const register: Register = (on) => {
     if (!root) return next(e);
     const notes: string[] = [];
     if (isGitCommit(e.command)) {
-      const finding = await stagedFinding($);
+      const finding = await stagedFinding($, e.command);
       if (finding.deny) return { deny: finding.deny };
       if (finding.notes.length)
         notes.push(checksNote("commit checks", finding.notes));

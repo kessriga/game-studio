@@ -159,3 +159,4 @@ templates/production/session-logs/
 .venv/
 .ruff_cache/
 .claude/types/
+.claude-plugin/types/

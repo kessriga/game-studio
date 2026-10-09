@@ -217,3 +217,46 @@ test("a nested AGENTS.md is shown once after a file beneath it is touched", asyn
   });
   expect(outside.context).toBe(undefined);
 });
+
+test("Windows paths are normalised for guide detection", () => {
+  expect(
+    hasRootGuide(
+      [{ path: "C:\\game\\AGENTS.md", kind: "project", content: "# G" }],
+      "C:\\game",
+    ),
+  ).toBe(true);
+  expect(
+    hasRootGuide(
+      [
+        {
+          path: "C:\\game\\src\\CLAUDE.md",
+          kind: "project",
+          content: "@AGENTS.md",
+        },
+      ],
+      "C:\\game",
+    ),
+  ).toBe(false);
+  const seen = new Set<string>();
+  expect(
+    newNestedGuides(
+      [{ dir: "C:\\game\\src", content: "src" }],
+      "C:\\game",
+      seen,
+    ),
+  ).toEqual([{ dir: "C:/game/src", content: "src" }]);
+});
+
+test("prompt context without instruction files is left untouched", async ($, on) => {
+  boot(on, { "/game/AGENTS.md": "# Game" });
+  on("prompt.context", (_, e) => ({ blocks: e.blocks }));
+  await $.session.start({
+    cwd: "/game",
+    surface: "terminal",
+    isInteractive: false,
+  });
+  const result = await $.prompt.context({
+    blocks: [{ name: "currentDate", text: "today" }],
+  });
+  expect(result).toEqual({ blocks: [{ name: "currentDate", text: "today" }] });
+});

@@ -8,9 +8,10 @@
   the two host guides. The workflow catalog stores the identifier and each host renders its own command.
 - The progress core lives in `workflow/` with a JSON CLI. Pi imports it; the Claude Code mod runs it through Node and
   provides the status line, the `Game Studio` pane, the `mcp__gamedev__workflow` tool, and `/gamedev-workflow`.
-- The mod's hooks run only in recognized game projects: per-prompt workflow context, `AGENTS.md` loading, pre-compaction
-  handoff, commit checks (invalid staged JSON denies; other findings are notes), protected-push reminders, and asset
-  naming and format notes. No shell hooks, notifications, session logs, or `CLAUDE.md` shims ship.
+- The mod's hooks run only in recognized game projects: per-prompt workflow context, `AGENTS.md` loading, the handoff
+  kept for the pre-compaction summary, commit checks (invalid staged JSON denies; other findings are notes),
+  protected-push reminders, and asset naming and format notes. No shell hooks, notifications, session logs, or
+  `CLAUDE.md` shims ship.
 - Always-on prompt cost measured with `claude plugin details`: about 10,800 tokens per session for 125 descriptions.
 
 ## Claude Code host validation
@@ -19,9 +20,9 @@ Local macOS checks on 2026-10-09 against the uncommitted 0.5.0 worktree with Cla
 
 - `just --set python .venv/bin/python gate` passed: namespacing, Ruff, shell syntax, the shell helper tests, 20 Python
   tests (scaffolding, shared contract including manifest agreement and host-syntax rejection, Pi package), both
-  `claude plugin validate --strict` runs, and 34 mod tests across 5 files through `claude plugin test` from an isolated
+  `claude plugin validate --strict` runs, and 40 mod tests across 5 files through `claude plugin test` from an isolated
   copy of the plugin files.
-- `npm run check` passed: formatting, types, 66 tests (Pi extension and renderers, core, and the new CLI), native Pi
+- `npm run check` passed: formatting, types, 67 tests (Pi extension and renderers, core, and the new CLI), native Pi
   discovery of 72 skills, 53 role guides and one extension, and relocated discovery from a 488-file tarball.
 - `npx tsc -p tsconfig.hooks.json` reported no errors against this build's mod declarations.
 - Headless smoke in a temporary game repository with `claude -p --plugin-dir`: `/gamedev-workflow` printed the Concept
@@ -29,8 +30,11 @@ Local macOS checks on 2026-10-09 against the uncommitted 0.5.0 worktree with Cla
   `AGENTS.md` and the tool name `mcp__gamedev__workflow`. This proves loading, detection, the CLI bridge, instruction
   loading, and tool registration; it does not prove the pane layout, approvals in the dialog, compaction, or commit
   checks in a live session, which the mod tests cover with mocked engine calls.
-- Not run: interactive pane and status line smoke, a conversational game workflow, a marketplace install from GitHub,
-  hosted CI with the Claude CLI installed, Windows, and a Pi session. No release was made.
+- Independent review of the branch found two confirmed bugs (commit `-a` bypassed the staged-file checks; a `#` or `%`
+  in the plugin path broke the CLI's entry guard) and eight lower findings; all code findings were fixed with regression
+  tests before the PR. CI with the Claude CLI installed runs on the PR.
+- Not run: interactive pane and status line smoke, a live `/compact`, a conversational game workflow, a marketplace
+  install from GitHub, hosted CI with the Claude CLI installed, Windows, and a Pi session. No release was made.
 
 ## Implementation 0.4.1
 

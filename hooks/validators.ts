@@ -4,7 +4,7 @@
  */
 export type Finding = { deny?: string; notes: string[] };
 
-const COMMAND_START = /(^|&&|\|\||;|\n)\s*git\s+/;
+const COMMAND_START = /(^|&&|\|\||;|\n)\s*git\s+(?:-C\s+\S+\s+|--no-pager\s+)*/;
 
 export function isGitCommit(command: string): boolean {
   return new RegExp(`${COMMAND_START.source}commit\\b`).test(command);
@@ -16,16 +16,39 @@ export function isGitPush(command: string): boolean {
 
 export const PROTECTED_BRANCHES = ["main", "master", "develop"] as const;
 
+/** True when the commit stages tracked changes itself (-a, --all, --include). */
+export function commitStagesAll(command: string): boolean {
+  return /(^|\s)(-[a-zA-Z]*a[a-zA-Z]*|--all|--include)(\s|$)/.test(command);
+}
+
+/** The branch a push updates: an explicit refspec's destination, else the current branch. */
+function pushDestination(
+  command: string,
+  currentBranch: string | undefined,
+): string | undefined {
+  const match = new RegExp(`${COMMAND_START.source}push\\b([^&|;\\n]*)`).exec(
+    command,
+  );
+  const words = (match?.[2] ?? "")
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word && !word.startsWith("-"));
+  const refspec = words[1];
+  if (refspec)
+    return refspec.includes(":") ? refspec.split(":").at(-1) : refspec;
+  return currentBranch;
+}
+
 /** The protected branch a push targets, by name in the command or by the current branch. */
 export function protectedPushTarget(
   command: string,
   currentBranch: string | undefined,
 ): string | undefined {
-  for (const branch of PROTECTED_BRANCHES) {
-    if (currentBranch === branch) return branch;
-    if (new RegExp(`[\\s:]${branch}(\\s|$|:)`).test(command)) return branch;
-  }
-  return undefined;
+  const destination = pushDestination(command, currentBranch)?.replace(
+    /^refs\/heads\//,
+    "",
+  );
+  return PROTECTED_BRANCHES.find((branch) => branch === destination);
 }
 
 export const GDD_SECTIONS = [

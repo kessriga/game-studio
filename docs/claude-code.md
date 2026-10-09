@@ -53,7 +53,8 @@ The model records progress with the tool `mcp__gamedev__workflow`, which the sha
 3. `block` records a missing requirement.
 4. `submit` records evidence paths and a note. A `worktree` source works as in [Pi](pi.md#evidence-from-a-worktree).
 
-Every update needs the revision from the last status. The tool cannot approve work. You approve with the command:
+Every update needs the revision from the last status. The tool cannot approve work. You approve with the command, typed
+at the prompt; a model-run approval is refused before any dialog:
 
 ```text
 /gamedev-workflow
@@ -84,11 +85,12 @@ The mod's hooks run only in a recognized game project. None of them writes proje
 - The project's root `AGENTS.md` joins the instruction files when no loaded `CLAUDE.md` imports it, so scaffolds stay
   host-neutral. A nested `AGENTS.md` is shown once when a file under it is read or edited. A `CLAUDE.md` containing
   `@AGENTS.md` still works and is left alone.
-- Before compaction, `production/session-state/active.md` is appended to the conversation so the handoff survives the
-  summary. Save the handoff explicitly; the mod does not write it.
-- A `git commit` checks the staged files: required sections in `design/gdd/*.md`, JSON validity under `assets/data/`,
-  hardcoded tunables under `src/gameplay/`, and `TODO` markers without an owner under `src/`. Invalid JSON denies the
-  commit. Everything else reaches the model as a note on the command's result.
+- Before compaction, `production/session-state/active.md` is appended to the conversation so the summarizer sees it, and
+  the next prompt reminds the model to read the file again. Save the handoff explicitly; the mod does not write it.
+- A `git commit` checks the files it will record, including tracked changes when `-a` stages them: required sections in
+  `design/gdd/*.md`, JSON validity under `assets/data/`, hardcoded tunables under `src/gameplay/`, and `TODO` markers
+  without an owner under `src/`. Invalid JSON denies the commit. Everything else reaches the model as a note on the
+  command's result. A commit that names paths directly is checked by its index only.
 - A `git push` to `main`, `master`, or `develop` adds a reminder to run the checks. It never denies; your branch policy
   decides.
 - A write or edit under `assets/` checks the name (lowercase and underscores) and, under `assets/data/`, JSON validity.
