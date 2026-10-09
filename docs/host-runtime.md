@@ -1,16 +1,16 @@
 # Running Game Studio workflows
 
 Read this guide before following a skill or specialist role. Host and user instructions take precedence, including
-authorization already given. The shared files describe work, not runtime configuration. Pi is the supported packaged
-integration; see [Pi setup](pi.md). Other runtimes can read the Markdown, but must supply their own authorized tools. No
-other host integration is shipped or verified.
+authorization already given. The shared files describe work, not runtime configuration. Pi and Claude Code are the
+supported packaged hosts; see [Pi setup](pi.md) and [Claude Code setup](claude-code.md). Other runtimes can read the
+Markdown, but must supply their own authorized tools.
 
 ## Paths and project instructions
 
 Resolve framework docs, templates, scripts, and roles from the installed package, never a guessed cache path. From
 `skills/<name>/SKILL.md`, the package root is `../..`; from `agents/<name>.md`, it is `..`. Pi entry points link to
-shared workflows: resolve their paths from the shared file, not the entry point. Run game commands in the game
-repository. Do not configure games by editing the installed package.
+shared workflows and Claude Code loads the shared files directly: resolve paths from the shared file, not an entry
+point. Run game commands in the game repository. Do not configure games by editing the installed package.
 
 `AGENTS.md` is canonical. Read applicable nested guides before editing their directories; loading an ancestor guide does
 not imply loading every descendant. Project settings live in `docs/technical-preferences.md`; explicitly read applicable
@@ -31,16 +31,20 @@ instructions describe capabilities, not literal API names. Adapt examples to the
 questions, preserve the questions and choices, using separate chat prompts when forms are unavailable. Wait for
 dependent decisions; an already authorized concrete edit does not need repeated permission. A progress checklist does
 not authorize new tracker issues. Session reset and compaction use the host's controls; Pi provides `/new` and
-`/compact`. Never claim access to a terminal context meter. Use runtime usage data when exposed, otherwise say it is
-unavailable and save a checkpoint before long work continues.
+`/compact`, Claude Code `/clear` and `/compact`. Never claim access to a terminal context meter. Use runtime usage data
+when exposed, otherwise say it is unavailable and save a checkpoint before long work continues.
 
 ## Delegation
 
-The 53 files in `agents/` are role guides, not registered agent types. Pi core has no subagent runner. When available
-and authorized, use the installed runner: pass the role body, relevant project guidance, task, input files, edit scope,
-and required evidence through its actual schema. Role labels in shared examples are routing descriptions, not tool
-parameters. Do not assume this package registers names, selects models, creates worktrees, persists agent memory, or
-grants tool access.
+The 53 files in `agents/` are role guides. Claude Code registers them as `gamedev:<role>` subagent types; Pi core has no
+subagent runner. When available and authorized, use the installed runner: pass the role body, relevant project guidance,
+task, input files, edit scope, and required evidence through its actual schema. Role labels in shared examples are
+routing descriptions, not tool parameters. The package never selects models, creates worktrees, persists agent memory,
+or grants tool access; outside Claude Code it registers no names either.
+
+In Claude Code, delegate with the Agent tool and the `gamedev:<role>` subagent type. Still pass the task, inputs, edit
+scope, and required evidence in the prompt; role frontmatter grants no tools or models. See
+[Claude Code roles](claude-code.md#skills-and-roles).
 
 In Pi, inspect the `subagent` schema. If configless `task` and `cwd` calls are supported, include the role text in
 `task` and set `cwd` to the game repository. Omit `agent` unless discovery confirms that exact registered name. Use
@@ -52,29 +56,31 @@ independence or fresh context is required, report it unavailable until a separat
 and `full` requirements; do not silently weaken gates. Role prompts are not security sandboxes. Arrange required
 worktree isolation under the project's Git policy before editing; never assume the runtime created it.
 
-## Pi workflow progress
+## Workflow progress
 
-When `gamedev_workflow` is available, read status and start the matching catalog step before work. Supply the current
-revision, a short note, and a subject for repeatable steps. Submit evidence files and a verification summary afterwards;
-block the run when required work cannot proceed. Warn about earlier incomplete required steps rather than silently
-skipping them.
+When the host's workflow tool is available, `gamedev_workflow` in Pi or `mcp__gamedev__workflow` in Claude Code, read
+status and start the matching catalog step before work. Supply the current revision, a short note, and a subject for
+repeatable steps. Submit evidence files and a verification summary afterwards; block the run when required work cannot
+proceed. Warn about earlier incomplete required steps rather than silently skipping them.
 
 Only the coordinator records progress. Subagents return evidence and must not edit `production/workflow-state.json`.
 Completion prose is not approval. The user approves submitted runs and confirms repeatable scope through
 `/gamedev-workflow`; never issue approvals on their behalf or write the state file directly. Missing tracking tools
-require an explicit checklist, not fabricated saved state. See [Pi tracking and UI](pi.md#workflow-tracking).
+require an explicit checklist, not fabricated saved state. See [Pi tracking and UI](pi.md#workflow-tracking) and
+[Claude Code tracking](claude-code.md#workflow-tracking).
 
 ## Explicit checks
 
-There are no bundled validation, notification, compaction, or audit hooks. The Pi extension tracks progress, not
-automatic validation. These responsibilities remain explicit:
+No shell hooks, notifications, or audit logs ship. The Pi extension tracks progress only. The Claude Code mod adds
+commit, push, and asset notes, keeps the handoff before compaction, and loads `AGENTS.md`; see
+[its hooks](claude-code.md#hooks). These responsibilities remain explicit in every host:
 
 - At task start and after compaction, read `production/session-state/active.md` when present, relevant design,
   architecture, preferences, engine references, rules, and nested guides. Check branch and recent changes before
   editing; identify missing design prerequisites when code already exists.
 - For a stage snapshot, run `bash "<resolved-package-root>/bin/gamedev-stage"` in the game repository. It uses the
-  current directory, not inherited host variables or PATH injection. Refresh after stage changes. The Pi widget is
-  separate from this shared reporter.
+  current directory, not inherited host variables or PATH injection. Refresh after stage changes. The Pi widget and the
+  Claude Code pane are separate from this shared reporter.
 - Before committing or pushing, obtain authorization, inspect the branch and protected-branch policy, and run the game's
   documented format, lint, build, and test commands. Check design traceability, hardcoded tunables, unfinished-work
   conventions, and document completeness. Validate changed assets for naming, schemas, JSON validity, budgets, and
@@ -86,11 +92,11 @@ automatic validation. These responsibilities remain explicit:
 
 ## Optional integrations
 
-Pi core has no MCP client, Backlog integration, web tools, or OpenSpec runner. Discover installed tools and CLI commands
-before using them. A named Backlog operation requires an available integration; a configured CLI may be used according
-to its own help. Never fabricate tracker updates, external reviews, engine checks, or saved evidence. If a required
-integration is missing, name it and complete only independent work. Do not install packages, credentials, or global
-configuration without consent.
+Pi core has no MCP client, Backlog integration, web tools, or OpenSpec runner; Claude Code supplies its own MCP and web
+tools. Discover installed tools and CLI commands before using them. A named Backlog operation requires an available
+integration; a configured CLI may be used according to its own help. Never fabricate tracker updates, external reviews,
+engine checks, or saved evidence. If a required integration is missing, name it and complete only independent work. Do
+not install packages, credentials, or global configuration without consent.
 
 ## Framework maintenance skills
 

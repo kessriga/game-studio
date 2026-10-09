@@ -1,6 +1,7 @@
 # Host-neutral layout and retired integrations
 
-Status: accepted for unreleased 0.4.0. Supersedes [Codex compatibility](codex-compatibility.md).
+Status: accepted for 0.4.0. Supersedes [Codex compatibility](codex-compatibility.md). The Claude Code removal is
+superseded by [Claude Code as a second packaged host](claude-code-host.md) in 0.5.0; Codex stays retired.
 
 The user chose to remove Claude Code and Codex integrations rather than maintain their runtime contracts. Shared
 workflows and roles remain plain Markdown; Pi is the sole packaged integration. Project guidance is canonical in

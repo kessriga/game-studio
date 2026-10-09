@@ -1,12 +1,13 @@
 # Setup requirements
 
-Keep the game in its own repository. Follow [Pi setup](pi.md) and [the host guide](host-runtime.md). Shared Markdown
-workflows do not grant tools or configure other runtimes.
+Keep the game in its own repository. Follow [Pi setup](pi.md) or [Claude Code setup](claude-code.md), and
+[the host guide](host-runtime.md). Shared Markdown workflows do not grant tools or configure other runtimes.
 
 | Tool | Purpose | Setup |
 | --- | --- | --- |
 | Pi | Supported integration for skills and progress | [Pi guide](pi.md) |
-| Node 22.17+ | Pi extension runtime | [nodejs.org](https://nodejs.org/) |
+| Claude Code | Supported integration for skills, roles, and progress | [Claude Code guide](claude-code.md) |
+| Node 22.17+ | Pi extension and Claude Code tracking runtime | [nodejs.org](https://nodejs.org/) |
 | Git | Version control and authorized worktrees | [git-scm.com](https://git-scm.com/) |
 | Python 3 | Preserve-and-add project scaffolding | [python.org](https://www.python.org/) |
 | Bash | Stage reporting and shell helpers | Git Bash on Windows; system Bash on macOS/Linux |

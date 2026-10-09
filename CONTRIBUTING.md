@@ -1,8 +1,8 @@
 # Contributing to Game Studio
 
-Game Studio is a coordination framework for indie game development with shared workflows and Pi. Contributions are
-welcome — bug fixes, new skills that fill a real gap, role improvements, and integration fixes. PRs that don't fit the
-framework's direction will be closed without lengthy explanation.
+Game Studio is a coordination framework for indie game development with shared workflows, Pi, and Claude Code.
+Contributions are welcome — bug fixes, new skills that fill a real gap, role improvements, and integration fixes. PRs
+that don't fit the framework's direction will be closed without lengthy explanation.
 
 ## What Makes a Good PR
 
@@ -24,7 +24,7 @@ These are the things that will get your PR rejected if you miss them.
 **Skill files**
 
 - Skills live in `skills/<name>/SKILL.md`; the subdirectory format is required for shared workflow discovery. Pi loads
-  generated entry points in `pi/skills/`.
+  generated entry points in `pi/skills/`; Claude Code loads `skills/` directly.
 - SKILL.md frontmatter contains only `name` and `description`. Put argument guidance and role routing in the body.
 - Write host-neutral workflow instructions. Use AGENTS.md for project guidance and explain required work and evidence.
   Map capabilities through the host guide; do not invent tool schemas, permissions, or model configuration.
@@ -53,8 +53,9 @@ user authorized.
 ## Developing the package
 
 Shared workflows live in `skills/`, role guides in `agents/`, framework docs in `docs/`, and game scaffold sources in
-`templates/`. Use [Pi local installation](docs/pi.md), then open a new session in a separate game repository. Never edit
-installed package files to configure a game.
+`templates/`. Use [Pi local installation](docs/pi.md) or `claude --plugin-dir`
+([Claude Code setup](docs/claude-code.md)), then open a new session in a separate game repository. Never edit installed
+package files to configure a game.
 
 Two conventions the gate checks:
 
@@ -68,7 +69,12 @@ Every skill and role links to [the host guide](docs/host-runtime.md). Shared pro
 Read applicable nested guides and path-scoped rules explicitly.
 
 After changing skill names, descriptions, or `docs/workflow-catalog.yaml`, run `python3 scripts/generate-pi-skills.py`.
-Pi entry points and its catalog JSON are generated resources. Do not edit them by hand.
+Pi entry points and the shared catalog JSON in `workflow/` are generated resources. Do not edit them by hand.
+
+The progress core in `workflow/` serves both hosts: the Pi extension imports it and the Claude Code mod runs
+`workflow/cli.ts` through Node. In `hooks/`, only `gamedev.tsx` may use `$`, and helpers that take `$` must be top-level
+function declarations there; `claude plugin validate` follows `$` only within that file. The other `hooks/` files stay
+pure and testable.
 
 The start skill preserves existing files and blocks legacy preferences/rules before writing defaults. Follow
 [the migration guide](docs/migration-0.4.md). Use `gamedev:status` for current-directory stage reporting and the host
@@ -96,11 +102,22 @@ tests; the older namespacing script remains checked through its own output.
 The npm gate requires Node 22.17 or newer and `tar` on PATH. It checks TypeScript formatting and types, workflow
 behavior, both Pi renderers, native skill/extension discovery, and the relocated packed distribution. It uses Pi 0.85.1
 without a model or user settings changes. TypeScript is loaded directly by Pi; there is no separate compiled extension
-artifact. Run `npx prettier --write "pi/*.ts" "scripts/check-pi*.mjs" package.json tsconfig.json` to format maintained
-JavaScript and TypeScript; format changed Markdown with the project's Markdown formatter.
+artifact. Format maintained JavaScript and TypeScript with Prettier, and changed Markdown with the project's Markdown
+formatter:
 
-Also exercise changed workflows conversationally in Pi when available. Record what actually ran; native resource
-discovery does not prove model execution, independent review, or an engine build.
+```sh
+npx prettier --write "pi/*.ts" "workflow/*.ts" "hooks/*.ts" "hooks/*.tsx" "types/*.d.ts" \
+  "scripts/check-pi*.mjs" package.json tsconfig.json
+```
+
+`just gate` also runs `scripts/claude-check.sh`: `claude plugin validate --strict` on both manifests and
+`claude plugin test` on an isolated copy of the plugin files. Both are skipped when the `claude` CLI is absent; CI
+installs it. For a type check of the mod, run `/plugin-types .claude/types` in a Claude Code session in the checkout,
+then `npx tsc -p tsconfig.hooks.json`. The declarations are specific to the installed Claude Code version and stay
+untracked.
+
+Also exercise changed workflows conversationally in Pi or Claude Code when available. Record what actually ran; native
+resource discovery does not prove model execution, independent review, or an engine build.
 
 GitHub Actions is configured to run `just gate` and `npm run check` on Linux, macOS, and Windows. Include actual local
 and hosted results separately in the PR description. Local success is not evidence that the changed CI workflow passed.
@@ -109,10 +126,12 @@ and hosted results separately in the PR description. Local success is not eviden
 
 Every user-visible release needs a version bump in the same PR as its changes:
 
-1. Bump `version` in `package.json` and both root package entries in `package-lock.json` together.
+1. Bump `version` in `package.json`, both root package entries in `package-lock.json`, `.claude-plugin/plugin.json`, and
+   `.claude-plugin/marketplace.json` together; the contract test checks that they agree.
 2. Patch for a fix, minor for new workflows or changed behavior.
 3. Run both full gates and record exact results in STATUS.md and the PR, separating local and hosted evidence.
-4. After merging, follow [Pi updates](docs/pi.md). Publish only with maintainer authorization.
+4. After merging, follow [Pi updates](docs/pi.md) and [Claude Code updates](docs/claude-code.md#updates-and-releases),
+   including `claude plugin tag`. Publish only with maintainer authorization.
 
 ## Commit Format
 

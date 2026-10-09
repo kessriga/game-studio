@@ -141,8 +141,9 @@ manifest cannot stand in for an unreviewed worktree manifest. See the
 
 ### Evidence and saved state
 
-Records live in `production/workflow-state.json`. Keep this project-owned file with the game's other production records
-if progress should be shared. It holds runs, file fingerprints, scope confirmations, revisions, and decision history.
+Records live in `production/workflow-state.json`. The Claude Code mod reads and writes the same file through the same
+core, so progress is shared between hosts. Keep this project-owned file with the game's other production records if
+progress should be shared. It holds runs, file fingerprints, scope confirmations, revisions, and decision history.
 
 File presence, submitted evidence, and user approval are different states. The extension checks catalog file patterns
 and records SHA-256 fingerprints; it does not judge document quality or execute the game's tests. The user must inspect

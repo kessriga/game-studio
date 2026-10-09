@@ -9,16 +9,16 @@
 
 ---
 
-## Shared workflows, Pi integration
+## Shared workflows, Pi and Claude Code integrations
 
-Game Studio ships 72 shared skills, 53 specialist role guides, and the Pi package `@kessriga/gamedev`. See
-[Getting Started](#getting-started), [verified capabilities](STATUS.md), and the [host guide](docs/host-runtime.md).
-Other runtimes may read the workflows but have no shipped integration.
+Game Studio ships 72 shared skills, 53 specialist role guides, the Pi package `@kessriga/gamedev`, and the Claude Code
+plugin `gamedev`. See [Getting Started](#getting-started), [verified capabilities](STATUS.md), and the
+[host guide](docs/host-runtime.md). Other runtimes may read the workflows but have no shipped integration.
 
-Logical identifiers such as `gamedev:brainstorm` name shared workflows. In Pi use `gamedev:start` or
-`gamedev:brainstorm cozy farming`. The [Pi guide](docs/pi.md) covers installation, available-runner delegation,
-progress tracking, and user approvals. The package supplies role instructions, not a subagent runner. Sequential role
-passes are not independent review.
+Logical identifiers such as `gamedev:brainstorm` name shared workflows. In Pi type `/skill:gamedev-start`; in Claude
+Code type `/gamedev:start`. The [Pi guide](docs/pi.md) and the [Claude Code guide](docs/claude-code.md) cover
+installation, delegation, progress tracking, and user approvals. The package supplies role instructions, not a subagent
+runner. Sequential role passes are not independent review.
 
 Upgrading an existing project? Follow the [reviewed 0.4 migration](docs/migration-0.4.md) before scaffolding.
 
@@ -312,7 +312,8 @@ optional, `<angle brackets>` required. Most authoring, team, and gate skills als
 ## Getting Started
 
 Install `gamedev`, then use it in a separate repository for your game. An empty game directory is fine. You need Git,
-Python 3, Bash (Git Bash on Windows), and Pi. See [setup requirements](docs/setup-requirements.md) for optional tools.
+Python 3, Bash (Git Bash on Windows), and Pi or Claude Code. See [setup requirements](docs/setup-requirements.md) for
+optional tools.
 
 ### Install in Pi
 
@@ -325,6 +326,18 @@ pi install git:github.com/kessriga/game-studio
 Before release, use `pi install /absolute/path/to/game-studio` with a contributor checkout. Open Pi in your game
 repository and run `/skill:gamedev-start`. See [Pi setup](docs/pi.md) for local testing, subagent integration, and
 progress tracking.
+
+### Install in Claude Code
+
+Inside Claude Code:
+
+```text
+/plugin marketplace add kessriga/game-studio
+/plugin install gamedev@game-studio
+```
+
+Open a new session in your game repository and run `/gamedev:start`. See [Claude Code setup](docs/claude-code.md) for
+the workflow tool, the pane, the hooks, and the measured prompt cost.
 
 ### Start building your game
 
@@ -400,8 +413,10 @@ in scope still needs your input.
 
 Run the game's format, lint, build, and test checks before declaring work complete. Validate changed assets, check
 branch policy before authorized commits or pushes, and save session handoffs explicitly. See
-[explicit checks](docs/host-runtime.md#explicit-checks). No automatic validation hooks or audit logs are bundled.
-Permissions come from the runtime and project configuration, not role prose.
+[explicit checks](docs/host-runtime.md#explicit-checks). Pi bundles no validation hooks. In Claude Code, the mod adds
+commit, push, and asset notes and keeps the session handoff before compaction; see
+[Claude Code hooks](docs/claude-code.md#hooks). No audit logs are bundled. Permissions come from the runtime and project
+configuration, not role prose.
 
 ### Path-Scoped Rules
 

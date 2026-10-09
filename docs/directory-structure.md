@@ -1,8 +1,9 @@
 # Directory structure
 
-The installed Game Studio package provides `skills/`, specialist `agents/`, framework `docs/`, Pi integration, and
-scaffold `templates/`. See [AGENTS.md](../AGENTS.md) and [Pi setup](pi.md). Project paths are separate from package
-paths; configure games only in their own repositories.
+The installed Game Studio package provides `skills/`, specialist `agents/`, framework `docs/`, the Pi and Claude Code
+integrations, and scaffold `templates/`. See [AGENTS.md](../AGENTS.md), [Pi setup](pi.md), and
+[Claude Code setup](claude-code.md). Project paths are separate from package paths; configure games only in their own
+repositories.
 
 `gamedev:start` adds missing project files without replacing existing data:
 
