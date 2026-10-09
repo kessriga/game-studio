@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-test-flakiness
+# Skill Test Spec: gamedev:test-flakiness
 
 ## Skill Summary
 
-`/skill:gamedev-test-flakiness` detects non-deterministic tests by analyzing test history logs (if available) or
+`gamedev:test-flakiness` detects non-deterministic tests by analyzing test history logs (if available) or
 scanning test source code for common flakiness patterns (random numbers without seeds, real-time waits, external I/O).
 No director gates are invoked. The skill does not write without user approval. Verdicts: NO FLAKINESS, SUSPECT TESTS
 FOUND, or CONFIRMED FLAKY.
@@ -11,7 +11,7 @@ FOUND, or CONFIRMED FLAKY.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -37,7 +37,7 @@ None. Flakiness detection is an advisory quality skill for the QA lead; no gates
 - All tests pass consistently across all 10 runs (100% pass rate per test)
 - No test has a failure pattern
 
-**Input:** `/skill:gamedev-test-flakiness`
+**Input:** `gamedev:test-flakiness`
 
 **Expected behavior:**
 
@@ -63,7 +63,7 @@ None. Flakiness detection is an advisory quality skill for the QA lead; no gates
 - `test_combat_damage_applies_crit_multiplier` passes 7 times, fails 3 times
 - Failure messages differ (sometimes timeout, sometimes wrong value)
 
-**Input:** `/skill:gamedev-test-flakiness`
+**Input:** `gamedev:test-flakiness`
 
 **Expected behavior:**
 
@@ -95,7 +95,7 @@ None. Flakiness detection is an advisory quality skill for the QA lead; no gates
   assert_gt(roll, 0.5, "Loot should drop above 50%")
   ```
 
-**Input:** `/skill:gamedev-test-flakiness`
+**Input:** `gamedev:test-flakiness`
 
 **Expected behavior:**
 
@@ -124,7 +124,7 @@ None. Flakiness detection is an advisory quality skill for the QA lead; no gates
 - Scan finds 2 tests using `OS.get_ticks_msec()` for timing assertions
 - No other flakiness patterns found
 
-**Input:** `/skill:gamedev-test-flakiness`
+**Input:** `gamedev:test-flakiness`
 
 **Expected behavior:**
 
@@ -150,7 +150,7 @@ None. Flakiness detection is an advisory quality skill for the QA lead; no gates
 - Test history shows 1 CONFIRMED FLAKY test (fails 6 out of 10 runs)
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-test-flakiness`
+**Input:** `gamedev:test-flakiness`
 
 **Expected behavior:**
 

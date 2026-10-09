@@ -109,4 +109,4 @@ plural forms (1 item, 2-4 items, 5+ items use different forms)." **Expected beha
 - Case 4 (key naming conflict) is a pipeline hygiene test — duplicate keys cause ongoing translator confusion and cost
 - Case 5 requires the target locale list to be in context; if not provided, agent should ask before designing the
   pipeline
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

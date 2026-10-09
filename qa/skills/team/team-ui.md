@@ -1,4 +1,4 @@
-# Skill Test Spec: /skill:gamedev-team-ui
+# Skill Test Spec: gamedev:team-ui
 
 ## Skill Summary
 
@@ -6,9 +6,9 @@ Orchestrates the UI team through the full UX pipeline for a single UI feature. C
 art-director, the engine UI specialist, and accessibility-specialist through five structured phases: Context Gathering +
 UX Spec (Phase 1a/1b) → UX Review Gate (Phase 1c) → Visual Design (Phase 2) → Implementation (Phase 3) → Review in
 parallel (Phase 4) → Polish (Phase 5). Uses a user-input tool or chat at each phase transition. Delegates all file
-writes to sub-agents and sub-skills (`/skill:gamedev-ux-design`, `gamedev:ui-programmer`). Produces a summary report
-with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-ux-review`, `/skill:gamedev-code-review`,
-`/skill:gamedev-team-polish`.
+writes to sub-agents and sub-skills (`gamedev:ux-design`, `gamedev:ui-programmer`). Produces a summary report
+with verdict COMPLETE / BLOCKED and handoffs to `gamedev:ux-review`, `gamedev:code-review`,
+`gamedev:team-polish`.
 
 ---
 
@@ -19,8 +19,8 @@ with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-ux-review`, `/sk
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED
 - [ ] Contains "May I write" or "File Write Protocol" — writes delegated to sub-agents and sub-skills, orchestrator does
       not write files directly
-- [ ] Has a next-step handoff at the end (references `/skill:gamedev-ux-review`, `/skill:gamedev-code-review`,
-      `/skill:gamedev-team-polish`)
+- [ ] Has a next-step handoff at the end (references `gamedev:ux-review`, `gamedev:code-review`,
+      `gamedev:team-polish`)
 - [ ] Error Recovery Protocol section is present with all four recovery steps
 - [ ] Uses a user-input tool or chat at phase transitions for user approval before proceeding
 - [ ] Phase 4 is explicitly marked as parallel (ux-designer, art-director, accessibility-specialist)
@@ -46,15 +46,15 @@ with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-ux-review`, `/sk
 - `design/accessibility-requirements.md` exists with committed tier (e.g., Enhanced)
 - Engine UI specialist configured in `docs/technical-preferences.md`
 
-**Input:** `/skill:gamedev-team-ui inventory screen`
+**Input:** `gamedev:team-ui inventory screen`
 
 **Expected behavior:**
 
 1. Phase 1a — orchestrator reads game-concept.md, player-journey.md, relevant GDD UI sections, interaction-patterns.md,
    accessibility-requirements.md; summarizes a brief for the ux-designer
-2. Phase 1b — `/skill:gamedev-ux-design inventory-screen` invoked (or ux-designer spawned directly); produces
+2. Phase 1b — `gamedev:ux-design inventory-screen` invoked (or ux-designer spawned directly); produces
    `design/ux/inventory-screen.md` using `ux-spec.md` template; a user-input tool or chat confirms spec before review
-3. Phase 1c — `/skill:gamedev-ux-review design/ux/inventory-screen.md` invoked; returns APPROVED; gate passed, proceed
+3. Phase 1c — `gamedev:ux-review design/ux/inventory-screen.md` invoked; returns APPROVED; gate passed, proceed
    to Phase 2
 4. Phase 2 — art-director spawned; reviews full UX spec (not only wireframes); applies visual treatment; verifies color
    contrast; produces visual design spec with asset manifest; a user-input tool or chat confirms before Phase 3
@@ -77,7 +77,7 @@ with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-ux-review`, `/sk
 - [ ] Phase 4 agents launched simultaneously (ux-designer, art-director, accessibility-specialist)
 - [ ] All file writes delegated to sub-agents and sub-skills
 - [ ] Verdict COMPLETE in final summary report
-- [ ] Next steps include `/skill:gamedev-ux-review`, `/skill:gamedev-code-review`, `/skill:gamedev-team-polish`
+- [ ] Next steps include `gamedev:ux-review`, `gamedev:code-review`, `gamedev:team-polish`
 
 ---
 
@@ -86,20 +86,20 @@ with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-ux-review`, `/sk
 **Fixture:**
 
 - `design/ux/inventory-screen.md` produced by Phase 1b
-- `/skill:gamedev-ux-review` returns verdict NEEDS REVISION with specific concerns flagged (e.g., gamepad navigation
+- `gamedev:ux-review` returns verdict NEEDS REVISION with specific concerns flagged (e.g., gamepad navigation
   flow incomplete, contrast ratio below minimum)
 
-**Input:** `/skill:gamedev-team-ui inventory screen`
+**Input:** `gamedev:team-ui inventory screen`
 
 **Expected behavior:**
 
 1. Phase 1a + 1b complete — UX spec produced
-2. Phase 1c — `/skill:gamedev-ux-review design/ux/inventory-screen.md` returns NEEDS REVISION
+2. Phase 1c — `gamedev:ux-review design/ux/inventory-screen.md` returns NEEDS REVISION
 3. Skill does NOT advance to Phase 2
 4. a user-input tool or chat presented with the specific flagged concerns and options:
    - (a) Return to ux-designer to address the issues and re-review
    - (b) Accept the risk and proceed to Phase 2 anyway (conscious decision)
-5. If user chooses (a): ux-designer revises spec, `/skill:gamedev-ux-review` re-run; loop continues until APPROVED or
+5. If user chooses (a): ux-designer revises spec, `gamedev:ux-review` re-run; loop continues until APPROVED or
    user overrides
 6. If user chooses (b): skill proceeds with an explicit NEEDS REVISION note in the final report
 7. Skill does NOT silently proceed past the gate
@@ -121,13 +121,13 @@ with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-ux-review`, `/sk
 
 - Any project state
 
-**Input:** `/skill:gamedev-team-ui` (no argument)
+**Input:** `gamedev:team-ui` (no argument)
 
 **Expected behavior:**
 
 1. Skill detects no argument provided
 2. Outputs usage message explaining the required argument (UI feature description)
-3. Provides an example invocation: `/skill:gamedev-team-ui [UI feature description]`
+3. Provides an example invocation: `gamedev:team-ui [UI feature description]`
 4. Skill exits without spawning any subagents or reading any project files
 
 **Assertions:**
@@ -149,7 +149,7 @@ with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-ux-review`, `/sk
 - Implementation complete
 - `design/accessibility-requirements.md` committed tier: Enhanced
 
-**Input:** `/skill:gamedev-team-ui inventory screen` (resuming from Phase 3 complete)
+**Input:** `gamedev:team-ui inventory screen` (resuming from Phase 3 complete)
 
 **Expected behavior:**
 
@@ -182,14 +182,14 @@ with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-ux-review`, `/sk
 - `design/ux/interaction-patterns.md` does NOT exist
 - All other required files present
 
-**Input:** `/skill:gamedev-team-ui settings menu`
+**Input:** `gamedev:team-ui settings menu`
 
 **Expected behavior:**
 
 1. Phase 1a — orchestrator attempts to read `design/ux/interaction-patterns.md`; file not found
 2. Skill surfaces the gap: "interaction-patterns.md does not exist — no existing patterns to reuse"
 3. a user-input tool or chat presented with options:
-   - (a) Run `/skill:gamedev-ux-design patterns` first to establish the pattern library, then continue
+   - (a) Run `gamedev:ux-design patterns` first to establish the pattern library, then continue
    - (b) Proceed without the pattern library — ux-designer will document new patterns as they are created
 4. Skill does NOT invent or assume patterns from other sources
 5. If user chooses (b): ui-programmer is explicitly instructed to treat all patterns created as new and to add each to a
@@ -201,7 +201,7 @@ with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-ux-review`, `/sk
 - [ ] Skill does NOT silently ignore the missing pattern library
 - [ ] Skill does NOT invent patterns by guessing from the feature name or GDD alone
 - [ ] a user-input tool or chat offers a "create pattern library first" option (referencing
-      `/skill:gamedev-ux-design patterns`)
+      `gamedev:ux-design patterns`)
 - [ ] If user proceeds without the library, ui-programmer is told to treat all patterns as new
 - [ ] Final report documents pattern library status (created / absent / updated)
 - [ ] Skill does NOT fail entirely — the gap is noted and user is given a choice
@@ -217,13 +217,13 @@ with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-ux-review`, `/sk
 - [ ] Error Recovery Protocol followed: surface → assess → offer options → partial report
 - [ ] Partial report always produced even when agents are BLOCKED
 - [ ] Verdict is one of COMPLETE / BLOCKED
-- [ ] Next steps present at end: `/skill:gamedev-ux-review`, `/skill:gamedev-code-review`, `/skill:gamedev-team-polish`
+- [ ] Next steps present at end: `gamedev:ux-review`, `gamedev:code-review`, `gamedev:team-polish`
 
 ---
 
 ## Coverage Notes
 
-- The HUD-specific path (`/skill:gamedev-ux-design hud` + `hud-design.md` template + visual budget check in Phase 5) is
+- The HUD-specific path (`gamedev:ux-design hud` + `hud-design.md` template + visual budget check in Phase 5) is
   not separately tested here; it shares the same phase structure but uses different templates.
 - The "Update in place" path for interaction-patterns.md (new pattern added during implementation) is exercised
   implicitly in Case 1 Step 5 — a dedicated fixture with a known new pattern would strengthen coverage.

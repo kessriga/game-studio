@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-brainstorm
+# Skill Test Spec: gamedev:brainstorm
 
 ## Skill Summary
 
-`/skill:gamedev-brainstorm` facilitates guided game concept ideation. It presents 2-4 concept options with pros/cons,
+`gamedev:brainstorm` facilitates guided game concept ideation. It presents 2-4 concept options with pros/cons,
 lets the user choose and refine a concept, and produces a structured `design/gdd/game-concept.md` document. The skill is
 collaborative — it asks questions before proposing options and iterates until the user approves a concept direction.
 
@@ -15,13 +15,13 @@ all gates are skipped. The skill asks "May I write" before writing `design/gdd/g
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: APPROVED, REJECTED, CONCERNS
 - [ ] Contains "May I write" collaborative protocol language (for game-concept.md)
-- [ ] Has a next-step handoff at the end (`/skill:gamedev-map-systems`)
+- [ ] Has a next-step handoff at the end (`gamedev:map-systems`)
 - [ ] Documents 4 director gates in full mode: CD-PILLARS, AD-CONCEPT-VISUAL, TD-FEASIBILITY, PR-SCOPE
 - [ ] Documents that all 4 gates are skipped in lean and solo modes
 
@@ -48,7 +48,7 @@ In `solo` mode: all 4 gates are skipped. Output notes all 4 as: "[GATE-ID] skipp
 - No existing `design/gdd/game-concept.md`
 - `production/session-state/review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-brainstorm`
+**Input:** `gamedev:brainstorm`
 
 **Expected behavior:**
 
@@ -68,7 +68,7 @@ In `solo` mode: all 4 gates are skipped. Output notes all 4 as: "[GATE-ID] skipp
 - [ ] All 4 gates complete before the "May I write" ask
 - [ ] "May I write `design/gdd/game-concept.md`?" is asked before writing
 - [ ] Concept file is NOT written without user approval
-- [ ] Next-step handoff to `/skill:gamedev-map-systems` is present
+- [ ] Next-step handoff to `gamedev:map-systems` is present
 
 ---
 
@@ -80,7 +80,7 @@ In `solo` mode: all 4 gates are skipped. Output notes all 4 as: "[GATE-ID] skipp
 - `production/session-state/review-mode.txt` contains `full`
 - CD-PILLARS gate returns REJECT: "The concept has no identifiable creative pillar"
 
-**Input:** `/skill:gamedev-brainstorm`
+**Input:** `gamedev:brainstorm`
 
 **Expected behavior:**
 
@@ -106,7 +106,7 @@ In `solo` mode: all 4 gates are skipped. Output notes all 4 as: "[GATE-ID] skipp
 - No existing game concept
 - `production/session-state/review-mode.txt` contains `lean`
 
-**Input:** `/skill:gamedev-brainstorm`
+**Input:** `gamedev:brainstorm`
 
 **Expected behavior:**
 
@@ -133,7 +133,7 @@ In `solo` mode: all 4 gates are skipped. Output notes all 4 as: "[GATE-ID] skipp
 - No existing game concept
 - `production/session-state/review-mode.txt` contains `solo`
 
-**Input:** `/skill:gamedev-brainstorm`
+**Input:** `gamedev:brainstorm`
 
 **Expected behavior:**
 
@@ -160,7 +160,7 @@ In `solo` mode: all 4 gates are skipped. Output notes all 4 as: "[GATE-ID] skipp
 - `production/session-state/review-mode.txt` contains `full`
 - PR-SCOPE gate returns CONCERNS: "The concept scope would require 18+ months for a solo developer"
 
-**Input:** `/skill:gamedev-brainstorm`
+**Input:** `gamedev:brainstorm`
 
 **Expected behavior:**
 
@@ -186,7 +186,7 @@ In `solo` mode: all 4 gates are skipped. Output notes all 4 as: "[GATE-ID] skipp
 - [ ] All 4 director gates spawn in parallel in full mode
 - [ ] All 4 gates skipped in lean AND solo mode — each noted by name
 - [ ] "May I write `design/gdd/game-concept.md`?" asked before writing
-- [ ] Ends with next-step handoff: `/skill:gamedev-map-systems`
+- [ ] Ends with next-step handoff: `gamedev:map-systems`
 
 ---
 

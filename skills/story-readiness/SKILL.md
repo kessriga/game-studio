@@ -35,7 +35,7 @@ See `../../docs/director-gates.md` for the full check pattern and mode definitio
 
 **Scope:** the first invocation argument (blank = ask user via a user-input tool or chat)
 
-- **Specific path** (e.g., `/skill:gamedev-story-readiness production/epics/combat/story-001-basic-attack.md`): validate
+- **Specific path** (e.g., `gamedev:story-readiness production/epics/combat/story-001-basic-attack.md`): validate
   that single story file.
 - **`milestone [name]`**: `task_list` for that Backlog milestone, follow each task's `Spec:` reference to its story
   `.md`, validate each one.
@@ -111,7 +111,7 @@ with a stated reason.
   - If the ID exists and `status: deprecated` or `status: superseded-by: ...` → NEEDS WORK: the requirement was removed
     or replaced. Fix: update the story to reference the current requirement ID or remove if no longer applicable.
   - If the ID does not exist in the registry → NEEDS WORK: ID was not registered (story may predate registry, or
-    registry needs an `/skill:gamedev-architecture-review` run).
+    registry needs an `gamedev:architecture-review` run).
   - Auto-pass if the story has no TR-ID reference OR if the registry does not exist.
 - [ ] **Manifest version is current**: If the story has a `Manifest Version:` date in its header AND
       `docs/architecture/control-manifest.md` exists:
@@ -256,14 +256,14 @@ After reporting findings, offer:
 "Would you like help filling in the gaps for any of these stories? I can draft the missing sections for your approval."
 
 If the user says yes for a specific story, draft only the missing sections in conversation. Do not use Write or Edit
-tools — the user (or `/skill:gamedev-create-stories`) handles writing.
+tools — the user (or `gamedev:create-stories`) handles writing.
 
 **Redirect rules:**
 
-- If a story file does not exist at all: "This story file is missing entirely. Run `/skill:gamedev-create-epics [layer]`
-  then `/skill:gamedev-create-stories [epic-slug]` to generate stories from the GDD and ADR."
+- If a story file does not exist at all: "This story file is missing entirely. Run `gamedev:create-epics [layer]`
+  then `gamedev:create-stories [epic-slug]` to generate stories from the GDD and ADR."
 - If a story has no GDD reference and the work appears small: "This story has no GDD reference. If the change is small
-  (under ~4 hours), run `/skill:gamedev-quick-design [description]` to create a Quick Design Spec, then reference that
+  (under ~4 hours), run `gamedev:quick-design [description]` to create a Quick Design Spec, then reference that
   spec in the story."
 - If a story's scope has grown beyond its original sizing: "This story appears to have expanded in scope. Consider
   splitting it or escalating to the producer before implementation begins."
@@ -288,7 +288,7 @@ If any are found, surface up to 3:
 1. [Story name] — [1-line description] — [priority]
 2. [Story name] — [1-line description] — [priority]
 
-Run `/skill:gamedev-story-readiness [path]` to validate before starting.
+Run `gamedev:story-readiness [path]` to validate before starting.
 ```
 
 If no other ready tasks are found, skip this section silently.
@@ -323,6 +323,6 @@ Handle the verdict per standard rules in `director-gates.md`:
 
 ## Recommended Next Steps
 
-- Run `/skill:gamedev-dev-story [story-path]` to begin implementation once the story is READY
-- Run `/skill:gamedev-story-readiness milestone [name]` to check all stories in a milestone at once
-- Run `/skill:gamedev-create-stories [epic-slug]` if a story file is missing entirely
+- Run `gamedev:dev-story [story-path]` to begin implementation once the story is READY
+- Run `gamedev:story-readiness milestone [name]` to check all stories in a milestone at once
+- Run `gamedev:create-stories [epic-slug]` if a story file is missing entirely

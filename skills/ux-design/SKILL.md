@@ -40,7 +40,7 @@ Read all relevant context **before** asking the user anything. The skill's value
 ### 2a: Required Reads
 
 - **Game concept**: Read `design/gdd/game-concept.md` — if missing, warn:
-  > "No game concept found. Run `/skill:gamedev-brainstorm` first to establish the game's foundation before designing
+  > "No game concept found. Run `gamedev:brainstorm` first to establish the game's foundation before designing
   > UX." Continue anyway if the user asks.
 
 ### 2b: Player Journey
@@ -58,7 +58,7 @@ If the player journey file does not exist, note the gap and proceed:
 
 Also add to the UX spec's Open Questions section:
 > "Player journey map not yet created. Template available at `../../docs/templates/player-journey.md`. Run
-> `/skill:gamedev-ux-design` Phase 2b or create it manually to establish player context for this screen."
+> `gamedev:ux-design` Phase 2b or create it manually to establish player context for this screen."
 
 ### 2c: GDD UI Requirements
 
@@ -106,7 +106,7 @@ If the section is unconfigured (`[TO BE CONFIGURED]`), ask once:
 > "Input methods aren't configured yet. What does this game target?" Options: "Keyboard/Mouse only", "Gamepad only",
 > "Both (PC + Console)", "Touch (mobile)", "All of the above"
 >
-> (Run `/skill:gamedev-setup-engine` to save this permanently so you won't be asked again.)
+> (Run `gamedev:setup-engine` to save this permanently so you won't be asked again.)
 
 Store the answer for the rest of this session. Do **not** ask again per section or per screen.
 
@@ -652,7 +652,7 @@ Walk through the ux-designer agent's standard checklist for this screen:
 - Any motion or animation that needs a reduced-motion alternative
 
 If no accessibility tier has been defined for this project, note the gap in the UX spec's Open Questions section:
-> "Accessibility tier not yet defined — consider WCAG-AA as a baseline. Run `/skill:gamedev-gate-check` to see whether
+> "Accessibility tier not yet defined — consider WCAG-AA as a baseline. Run `gamedev:gate-check` to see whether
 this blocks any phase gates." Then continue to the next section without stopping.
 
 ---
@@ -675,7 +675,7 @@ break the layout. Mark those as HIGH PRIORITY for the localization engineer.
 #### Section I: Acceptance Criteria
 
 Write at least 5 specific, testable criteria that a QA tester can verify without reading any other design document.
-These become the pass/fail conditions for `/skill:gamedev-story-done`.
+These become the pass/fail conditions for `gamedev:story-done`.
 
 **Format**: Use checkboxes. Each criterion must be verifiable by a human tester:
 
@@ -905,20 +905,20 @@ Update `production/session-state/active.md` with:
 
 Before presenting options, state clearly:
 
-> "This spec should be validated with `/skill:gamedev-ux-review` before it enters the implementation pipeline. The
+> "This spec should be validated with `gamedev:ux-review` before it enters the implementation pipeline. The
 > Pre-Production gate requires all key screen specs to have a review verdict."
 
 Then use a user-input tool or chat:
 
-- "Run `/skill:gamedev-ux-review [filename]` now, or do something else first?"
+- "Run `gamedev:ux-review [filename]` now, or do something else first?"
   - Options:
-    - "Run `/skill:gamedev-ux-review` now — validate this spec"
+    - "Run `gamedev:ux-review` now — validate this spec"
     - "Design another screen first, then review all specs together"
     - "Update the interaction pattern library with new patterns from this spec"
     - "Stop here for this session"
 
-If the user picks "Design another screen first", add a note: "Reminder: run `/skill:gamedev-ux-review` on all completed
-specs before running `/skill:gamedev-gate-check pre-production`."
+If the user picks "Design another screen first", add a note: "Reminder: run `gamedev:ux-review` on all completed
+specs before running `gamedev:gate-check pre-production`."
 
 ### 6c: Cross-Link Related Specs
 
@@ -993,6 +993,6 @@ Verdict: **COMPLETE** — UX spec written and approved section by section.
 
 ## Recommended Next Steps
 
-- Run `/skill:gamedev-ux-review [filename]` to validate this spec before it enters the implementation pipeline
-- Run `/skill:gamedev-ux-design [next-screen]` to continue designing remaining screens or flows
-- Run `/skill:gamedev-gate-check pre-production` once all key screens have approved UX specs
+- Run `gamedev:ux-review [filename]` to validate this spec before it enters the implementation pipeline
+- Run `gamedev:ux-design [next-screen]` to continue designing remaining screens or flows
+- Run `gamedev:gate-check pre-production` once all key screens have approved UX specs

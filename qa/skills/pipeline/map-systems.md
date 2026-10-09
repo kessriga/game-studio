@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-map-systems
+# Skill Test Spec: gamedev:map-systems
 
 ## Skill Summary
 
-`/skill:gamedev-map-systems` decomposes a game concept into a systems index. It reads the approved game concept and
+`gamedev:map-systems` decomposes a game concept into a systems index. It reads the approved game concept and
 pillars, enumerates both explicit and implicit systems, maps dependencies between systems, assigns priority tiers (MVP /
 Vertical Slice / Alpha / Full Vision), and organizes systems into a layered design order (Foundation → Core → Feature →
 Presentation). The output is written to `design/systems-index.md` after user approval.
@@ -16,13 +16,13 @@ parallel after the decomposition is drafted. In `lean` or `solo` mode, both gate
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED
 - [ ] Contains "May I write" collaborative protocol language (for systems-index.md)
-- [ ] Has a next-step handoff at the end (`/skill:gamedev-design-system`)
+- [ ] Has a next-step handoff at the end (`gamedev:design-system`)
 - [ ] Documents gate behavior: CD-SYSTEMS + TD-SYSTEM-BOUNDARY in parallel in full mode
 
 ---
@@ -50,7 +50,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - No `design/systems-index.md` exists yet
 - `production/session-state/review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-map-systems`
+**Input:** `gamedev:map-systems`
 
 **Expected behavior:**
 
@@ -81,20 +81,20 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - `design/gdd/game-concept.md` does NOT exist
 - `design/gdd/` directory may be empty or absent
 
-**Input:** `/skill:gamedev-map-systems`
+**Input:** `gamedev:map-systems`
 
 **Expected behavior:**
 
 1. Skill attempts to read `design/gdd/game-concept.md`
 2. File not found
-3. Skill outputs: "No game concept found. Run `/skill:gamedev-brainstorm` to create one, then return to
-   `/skill:gamedev-map-systems`."
+3. Skill outputs: "No game concept found. Run `gamedev:brainstorm` to create one, then return to
+   `gamedev:map-systems`."
 4. Skill exits without creating systems-index.md
 
 **Assertions:**
 
 - [ ] Skill outputs a clear error naming the missing file path
-- [ ] Skill recommends `/skill:gamedev-brainstorm` as the next action
+- [ ] Skill recommends `gamedev:brainstorm` as the next action
 - [ ] No systems-index.md is created
 - [ ] Verdict is BLOCKED
 
@@ -108,7 +108,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - `production/session-state/review-mode.txt` contains `full`
 - CD-SYSTEMS gate returns CONCERNS: "The [core-system] is implied by the concept but not identified"
 
-**Input:** `/skill:gamedev-map-systems`
+**Input:** `gamedev:map-systems`
 
 **Expected behavior:**
 
@@ -135,7 +135,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - `design/gdd/game-concept.md` exists
 - `design/systems-index.md` already exists with N systems
 
-**Input:** `/skill:gamedev-map-systems`
+**Input:** `gamedev:map-systems`
 
 **Expected behavior:**
 
@@ -198,7 +198,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - [ ] systems-index.md is NOT written without user approval
 - [ ] CD-SYSTEMS and TD-SYSTEM-BOUNDARY spawn in parallel in full mode
 - [ ] Skipped gates noted by name and mode in lean/solo output
-- [ ] Ends with next-step handoff: `/skill:gamedev-design-system [next-system]`
+- [ ] Ends with next-step handoff: `gamedev:design-system [next-system]`
 
 ---
 
@@ -208,5 +208,5 @@ In `solo` mode: both gates are skipped with equivalent notes.
   phase — not independently fixture-tested here.
 - Priority tier assignment (MVP heuristics) is evaluated as part of the Case 1 collaborative workflow rather than
   independently.
-- The `next` argument mode (handing off the highest-priority undesigned system to `/skill:gamedev-design-system`) is not
+- The `next` argument mode (handing off the highest-priority undesigned system to `gamedev:design-system`) is not
   tested here — it is a post-index-creation convenience.

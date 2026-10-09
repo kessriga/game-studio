@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-propagate-design-change
+# Skill Test Spec: gamedev:propagate-design-change
 
 ## Skill Summary
 
-`/skill:gamedev-propagate-design-change` handles GDD revision cascades. When a GDD is updated, the skill traces all
+`gamedev:propagate-design-change` handles GDD revision cascades. When a GDD is updated, the skill traces all
 downstream artifacts that reference it: ADRs, TR-registry entries, stories, and epics. It produces a structured impact
 report showing what needs to change and why. The skill does NOT automatically apply changes — it proposes edits for each
 affected artifact and asks "May I write" per artifact before making any modification.
@@ -14,7 +14,7 @@ the analysis itself is mechanical tracing, not a creative review.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -43,7 +43,7 @@ operation; no creative or technical director review is required at the analysis 
 - 2 story files reference TR-IDs from this GDD
 - The changed GDD section affects the acceptance criteria of both stories
 
-**Input:** `/skill:gamedev-propagate-design-change design/gdd/[system].md`
+**Input:** `gamedev:propagate-design-change design/gdd/[system].md`
 
 **Expected behavior:**
 
@@ -71,7 +71,7 @@ operation; no creative or technical director review is required at the analysis 
 - `design/gdd/[system].md` exists and has been revised
 - No ADRs, stories, or epics reference this GDD's TR-IDs or GDD path
 
-**Input:** `/skill:gamedev-propagate-design-change design/gdd/[system].md`
+**Input:** `gamedev:propagate-design-change design/gdd/[system].md`
 
 **Expected behavior:**
 
@@ -97,7 +97,7 @@ operation; no creative or technical director review is required at the analysis 
 - A story referencing this GDD has `Status: In Progress`
 - The developer has already started implementing this story
 
-**Input:** `/skill:gamedev-propagate-design-change design/gdd/[system].md`
+**Input:** `gamedev:propagate-design-change design/gdd/[system].md`
 
 **Expected behavior:**
 
@@ -122,12 +122,12 @@ operation; no creative or technical director review is required at the analysis 
 
 - Multiple GDDs exist in `design/gdd/`
 
-**Input:** `/skill:gamedev-propagate-design-change` (no argument)
+**Input:** `gamedev:propagate-design-change` (no argument)
 
 **Expected behavior:**
 
 1. Skill detects no argument is provided
-2. Skill outputs a usage error: "No GDD specified. Usage: /skill:gamedev-propagate-design-change design/gdd/[system].md"
+2. Skill outputs a usage error: "No GDD specified. Usage: gamedev:propagate-design-change design/gdd/[system].md"
 3. Skill lists recently modified GDDs as suggestions (git log)
 4. No analysis is performed
 
@@ -147,7 +147,7 @@ operation; no creative or technical director review is required at the analysis 
 - A GDD has been revised with downstream references
 - `production/session-state/review-mode.txt` exists with `full`
 
-**Input:** `/skill:gamedev-propagate-design-change design/gdd/[system].md`
+**Input:** `gamedev:propagate-design-change design/gdd/[system].md`
 
 **Expected behavior:**
 

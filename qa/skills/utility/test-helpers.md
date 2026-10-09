@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-test-helpers
+# Skill Test Spec: gamedev:test-helpers
 
 ## Skill Summary
 
-`/skill:gamedev-test-helpers` generates engine-specific test helper utilities for the project's test suite. Helpers
+`gamedev:test-helpers` generates engine-specific test helper utilities for the project's test suite. Helpers
 include factory functions (for creating test entities with known state), fixture loaders, assertion helpers, and mock
 stubs for external dependencies. Generated helpers follow the naming and structure conventions in `coding-standards.md`
 and are written to `tests/helpers/`.
@@ -14,7 +14,7 @@ rather than replace. No director gates apply. The verdict is COMPLETE when helpe
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -26,7 +26,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-test-helpers` is a scaffolding utility. No director gates apply.
+None. `gamedev:test-helpers` is a scaffolding utility. No director gates apply.
 
 ---
 
@@ -41,7 +41,7 @@ None. `/skill:gamedev-test-helpers` is a scaffolding utility. No director gates 
 - `design/gdd/player.md` exists with defined player properties
 - No existing helpers in `tests/helpers/`
 
-**Input:** `/skill:gamedev-test-helpers player-factory`
+**Input:** `gamedev:test-helpers player-factory`
 
 **Expected behavior:**
 
@@ -63,25 +63,25 @@ None. `/skill:gamedev-test-helpers` is a scaffolding utility. No director gates 
 
 ---
 
-### Case 2: No Test Setup Exists — Redirects to /skill:gamedev-test-setup
+### Case 2: No Test Setup Exists — Redirects to gamedev:test-setup
 
 **Fixture:**
 
 - `tests/` directory does not exist
 
-**Input:** `/skill:gamedev-test-helpers player-factory`
+**Input:** `gamedev:test-helpers player-factory`
 
 **Expected behavior:**
 
 1. Skill checks for `tests/` directory — not found
 2. Skill reports: "Test directory not found — test framework must be set up first"
-3. Skill suggests running `/skill:gamedev-test-setup` before generating helpers
+3. Skill suggests running `gamedev:test-setup` before generating helpers
 4. No helper file is created
 
 **Assertions:**
 
 - [ ] Error message identifies the missing tests/ directory
-- [ ] `/skill:gamedev-test-setup` is suggested as the prerequisite step
+- [ ] `gamedev:test-setup` is suggested as the prerequisite step
 - [ ] No write tool is called
 - [ ] Verdict is not COMPLETE (blocked state)
 
@@ -94,7 +94,7 @@ None. `/skill:gamedev-test-helpers` is a scaffolding utility. No director gates 
 - `tests/helpers/player_factory.gd` already exists with a `create_player()` function
 - User requests a new `create_enemy()` function be added to the factory
 
-**Input:** `/skill:gamedev-test-helpers enemy-factory`
+**Input:** `gamedev:test-helpers enemy-factory`
 
 **Expected behavior:**
 
@@ -123,7 +123,7 @@ None. `/skill:gamedev-test-helpers` is a scaffolding utility. No director gates 
 - `tests/` exists
 - User requests a helper for the "inventory system" but no `design/gdd/inventory.md` exists
 
-**Input:** `/skill:gamedev-test-helpers inventory-factory`
+**Input:** `gamedev:test-helpers inventory-factory`
 
 **Expected behavior:**
 
@@ -149,7 +149,7 @@ None. `/skill:gamedev-test-helpers` is a scaffolding utility. No director gates 
 
 - Engine configured, tests/ exists
 
-**Input:** `/skill:gamedev-test-helpers player-factory`
+**Input:** `gamedev:test-helpers player-factory`
 
 **Expected behavior:**
 

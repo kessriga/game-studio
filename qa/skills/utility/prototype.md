@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-prototype
+# Skill Test Spec: gamedev:prototype
 
 ## Skill Summary
 
-`/skill:gamedev-prototype` manages a rapid prototyping workflow for validating a game mechanic before committing to full
+`gamedev:prototype` manages a rapid prototyping workflow for validating a game mechanic before committing to full
 production implementation. Prototypes are created in `prototypes/[mechanic-name]/` and are intentionally disposable —
 coding standards are relaxed (no ADR required, AC can be minimal, hardcoded values acceptable). After implementation,
 the skill produces a findings document summarizing what was learned and recommending next steps.
@@ -15,13 +15,13 @@ findings documented) or PROTOTYPE ABANDONED (mechanic found to be unworkable).
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: PROTOTYPE COMPLETE, PROTOTYPE ABANDONED
 - [ ] Contains "May I write" language before creating prototype files
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-design-system` to formalize, or archive)
+- [ ] Has a next-step handoff (e.g., `gamedev:design-system` to formalize, or archive)
 
 ---
 
@@ -40,7 +40,7 @@ None. Prototypes are throwaway validation artifacts. No director gates apply.
 - `prototypes/` directory exists
 - No existing prototype for "grapple-hook"
 
-**Input:** `/skill:gamedev-prototype grapple-hook`
+**Input:** `gamedev:prototype grapple-hook`
 
 **Expected behavior:**
 
@@ -71,7 +71,7 @@ None. Prototypes are throwaway validation artifacts. No director gates apply.
 - `prototypes/grapple-hook/` already exists from a previous prototype session
 - It contains a basic implementation and a findings.md
 
-**Input:** `/skill:gamedev-prototype grapple-hook`
+**Input:** `gamedev:prototype grapple-hook`
 
 **Expected behavior:**
 
@@ -99,20 +99,20 @@ None. Prototypes are throwaway validation artifacts. No director gates apply.
 - Prototype implementation complete
 - Findings: grapple hook mechanic is fun and technically feasible
 
-**Input:** `/skill:gamedev-prototype grapple-hook` (prototype session complete)
+**Input:** `gamedev:prototype grapple-hook` (prototype session complete)
 
 **Expected behavior:**
 
 1. After prototype is built and tested, findings are summarized
-2. Recommendation in findings.md: "Mechanic validated — recommend proceeding to `/skill:gamedev-design-system` for full
+2. Recommendation in findings.md: "Mechanic validated — recommend proceeding to `gamedev:design-system` for full
    specification"
-3. Skill handoff message explicitly suggests `/skill:gamedev-design-system grapple-hook`
+3. Skill handoff message explicitly suggests `gamedev:design-system grapple-hook`
 4. Verdict is PROTOTYPE COMPLETE
 
 **Assertions:**
 
 - [ ] `findings.md` contains an explicit recommendation
-- [ ] Recommendation references `/skill:gamedev-design-system` when mechanic is validated
+- [ ] Recommendation references `gamedev:design-system` when mechanic is validated
 - [ ] Handoff message echoes the recommendation
 - [ ] Verdict is PROTOTYPE COMPLETE (not PROTOTYPE ABANDONED)
 
@@ -125,7 +125,7 @@ None. Prototypes are throwaway validation artifacts. No director gates apply.
 - Prototype implemented for "procedural-dialogue"
 - After testing: the mechanic creates incoherent dialogue trees and is frustrating to play
 
-**Input:** `/skill:gamedev-prototype procedural-dialogue`
+**Input:** `gamedev:prototype procedural-dialogue`
 
 **Expected behavior:**
 
@@ -151,7 +151,7 @@ None. Prototypes are throwaway validation artifacts. No director gates apply.
 
 - Mechanic concept provided
 
-**Input:** `/skill:gamedev-prototype wall-jump`
+**Input:** `gamedev:prototype wall-jump`
 
 **Expected behavior:**
 

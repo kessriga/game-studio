@@ -8,7 +8,7 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 **Arguments:** [platform: pc|console|mobile|all]
 
 > **Explicit invocation only**: This skill should only run when the user explicitly requests it with
-> `/skill:gamedev-release-checklist`. Do not auto-invoke based on context matching.
+> `gamedev:release-checklist`. Do not auto-invoke based on context matching.
 
 ## Phase 1: Parse Arguments
 
@@ -185,5 +185,5 @@ If yes, write the file, creating the directory if needed.
 
 ## Phase 6: Next Steps
 
-- Run `/skill:gamedev-gate-check` for a formal phase gate verdict before proceeding to release.
-- Coordinate final sign-offs via `/skill:gamedev-team-release`.
+- Run `gamedev:gate-check` for a formal phase gate verdict before proceeding to release.
+- Coordinate final sign-offs via `gamedev:team-release`.

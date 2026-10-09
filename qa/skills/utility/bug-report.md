@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-bug-report
+# Skill Test Spec: gamedev:bug-report
 
 ## Skill Summary
 
-`/skill:gamedev-bug-report` files a structured bug as a **Backlog task with the `bug` label** — the board is the bug
+`gamedev:bug-report` files a structured bug as a **Backlog task with the `bug` label** — the board is the bug
 list; there is no `production/qa/bugs/` (or `production/bugs/`) markdown store. It has four modes selected by the
 argument:
 
@@ -21,7 +21,7 @@ filed or closed) or BLOCKED (user declined the file ask).
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Workflow requires available Backlog operations (Backlog `task_create`, `task_view`, `task_edit`, `task_list`)
@@ -29,14 +29,14 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED
 - [ ] Contains "May I file this as a Backlog task with the `bug` label" collaborative protocol language before creating
       the task
-- [ ] Has a next-step handoff (e.g., review the board filtered by the `bug` label to triage, `/skill:gamedev-hotfix` for
+- [ ] Has a next-step handoff (e.g., review the board filtered by the `bug` label to triage, `gamedev:hotfix` for
       critical)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-bug-report` is an operational documentation skill. No director gates apply.
+None. `gamedev:bug-report` is an operational documentation skill. No director gates apply.
 
 ---
 
@@ -49,7 +49,7 @@ None. `/skill:gamedev-bug-report` is an operational documentation skill. No dire
 - No argument keyword (Description Mode)
 - User describes: "Game crashes when player enters the boss arena"
 
-**Input:** `/skill:gamedev-bug-report` (with the crash description)
+**Input:** `gamedev:bug-report` (with the crash description)
 
 **Expected behavior:**
 
@@ -81,7 +81,7 @@ None. `/skill:gamedev-bug-report` is an operational documentation skill. No dire
 - User provides: "Sometimes the audio cuts out"
 - Description Mode (no keyword)
 
-**Input:** `/skill:gamedev-bug-report`
+**Input:** `gamedev:bug-report`
 
 **Expected behavior:**
 
@@ -107,7 +107,7 @@ None. `/skill:gamedev-bug-report` is an operational documentation skill. No dire
 - An existing bug task `TASK-42` (`bug` label) with reproduction steps and an expected result in its description
 - The developer reports the fix is in
 
-**Input:** `/skill:gamedev-bug-report verify TASK-42`
+**Input:** `gamedev:bug-report verify TASK-42`
 
 **Expected behavior:**
 
@@ -117,14 +117,14 @@ None. `/skill:gamedev-bug-report` is an operational documentation skill. No dire
 3. Skill greps for regressions of the original pattern
 4. Skill produces a verification verdict: VERIFIED FIXED / STILL PRESENT / CANNOT VERIFY
 5. If STILL PRESENT: `task_edit` moves TASK-42 back to `In Progress` (or `To Do`), appends evidence, and suggests
-   `/skill:gamedev-hotfix TASK-42`
+   `gamedev:hotfix TASK-42`
 6. If VERIFIED FIXED: skill proceeds to (or recommends) Close Mode
 
 **Assertions:**
 
 - [ ] Skill reads the task via `task_view` (does not require a file in `production/qa/bugs/`)
 - [ ] Verification verdict is one of VERIFIED FIXED / STILL PRESENT / CANNOT VERIFY
-- [ ] STILL PRESENT moves the task status backward via `task_edit` and suggests `/skill:gamedev-hotfix`
+- [ ] STILL PRESENT moves the task status backward via `task_edit` and suggests `gamedev:hotfix`
 - [ ] VERIFIED FIXED does not itself close the task — it hands off to Close Mode
 
 ---
@@ -135,7 +135,7 @@ None. `/skill:gamedev-bug-report` is an operational documentation skill. No dire
 
 - A target source file with plausible defects (e.g., an unchecked null reference and an off-by-one)
 
-**Input:** `/skill:gamedev-bug-report analyze src/combat/hitbox.gd`
+**Input:** `gamedev:bug-report analyze src/combat/hitbox.gd`
 
 **Expected behavior:**
 
@@ -160,13 +160,13 @@ None. `/skill:gamedev-bug-report` is an operational documentation skill. No dire
 
 - A bug task `TASK-42` (`bug` label) that has NOT been verified fixed
 
-**Input:** `/skill:gamedev-bug-report close TASK-42`
+**Input:** `gamedev:bug-report close TASK-42`
 
 **Expected behavior:**
 
 1. Skill `task_view`s TASK-42 and checks whether verification passed
 2. Verification has not passed → skill stops: "Bug TASK-42 must be verified fixed before closing. Run
-   `/skill:gamedev-bug-report verify TASK-42` first."
+   `gamedev:bug-report verify TASK-42` first."
 3. Skill does NOT set the task to Done
 4. If instead verification had passed: skill asks "May I set TASK-42 to Done with a closure note?", then `task_edit`
    sets `status: Done` and appends a closure record (resolution one-liner, fix commit/PR, regression test path,

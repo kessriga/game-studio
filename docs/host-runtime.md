@@ -20,10 +20,11 @@ neutral preferences or infer approval from preserved guides.
 
 ## Invocation and tools
 
-Shared identifiers are `gamedev:<name>`. Pi invokes skills with `/skill:gamedev-<name>`. Without an invocation facility,
-read the named `skills/<name>/SKILL.md` and follow its workflow. Skill and role frontmatter contains only `name` and
-`description`; arguments and role routing are in the body. Invocation arguments mean the user's supplied text. Parse
-positional arguments and flags explicitly; Pi appends arguments to the prompt rather than interpolating placeholders.
+Shared identifiers are `gamedev:<name>`. Each host guide shows its invocation syntax: [Pi](pi.md) and
+[Claude Code](claude-code.md). Without an invocation facility, read the named `skills/<name>/SKILL.md` and follow its
+workflow. Skill and role frontmatter contains only `name` and `description`; arguments and role routing are in the body.
+Invocation arguments mean the user's supplied text. Parse positional arguments and flags explicitly; Pi appends
+arguments to the prompt rather than interpolating placeholders.
 
 Use only available tools and authorized permissions. File-reading, search, editing, shell, web, user-input, and progress
 instructions describe capabilities, not literal API names. Adapt examples to the actual schema. If a workflow groups

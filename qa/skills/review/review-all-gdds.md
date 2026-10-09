@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-review-all-gdds
+# Skill Test Spec: gamedev:review-all-gdds
 
 ## Skill Summary
 
-`/skill:gamedev-review-all-gdds` is a skill that performs a holistic cross-GDD review across all files in `design/gdd/`.
+`gamedev:review-all-gdds` is a skill that performs a holistic cross-GDD review across all files in `design/gdd/`.
 It runs two complementary review phases in parallel: Phase 1 checks for consistency (contradictions, formula mismatches,
 stale references, competing ownership), and Phase 2 checks design theory (dominant strategies, pillar drift, cognitive
 overload, economic imbalance). Because the two phases are independent, they are spawned simultaneously to save time. The
@@ -16,7 +16,7 @@ before architecture work begins. It does NOT spawn any director gate agents (it 
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥5 phase headings (complex multi-phase skill)
@@ -44,7 +44,7 @@ would create a circular dependency.
 - All GDDs are internally consistent: no formula contradictions, no competing ownership, no stale references
 - All GDDs align with the pillars defined in `design/gdd/game-pillars.md`
 
-**Input:** `/skill:gamedev-review-all-gdds`
+**Input:** `gamedev:review-all-gdds`
 
 **Expected behavior:**
 
@@ -61,7 +61,7 @@ would create a circular dependency.
 - [ ] Output includes a findings table (even if empty — shows "No issues found")
 - [ ] Verdict is CONSISTENT when no conflicts are found
 - [ ] Skill does NOT write any files without user approval
-- [ ] Next-step handoff to `/skill:gamedev-architecture-review` or `/skill:gamedev-create-architecture` is present
+- [ ] Next-step handoff to `gamedev:architecture-review` or `gamedev:create-architecture` is present
 
 ---
 
@@ -73,7 +73,7 @@ would create a circular dependency.
 - GDD-B states a mechanic that bypasses that floor (e.g. "[mechanic] can reduce [output] to 0")
 - The two GDDs are otherwise complete and valid
 
-**Input:** `/skill:gamedev-review-all-gdds`
+**Input:** `gamedev:review-all-gdds`
 
 **Expected behavior:**
 
@@ -100,7 +100,7 @@ would create a circular dependency.
 - No GDD for system-B exists in `design/gdd/`
 - All other GDDs are consistent
 
-**Input:** `/skill:gamedev-review-all-gdds`
+**Input:** `gamedev:review-all-gdds`
 
 **Expected behavior:**
 
@@ -113,7 +113,7 @@ would create a circular dependency.
 
 - [ ] Verdict is MINOR ISSUES (not MAJOR ISSUES for a single orphaned reference)
 - [ ] The specific GDD filename and the missing dependency name are reported
-- [ ] Skill suggests running `/skill:gamedev-design-system system-B` to resolve the gap
+- [ ] Skill suggests running `gamedev:design-system system-B` to resolve the gap
 - [ ] Skill does NOT skip or silently ignore the missing dependency
 
 ---
@@ -125,20 +125,20 @@ would create a circular dependency.
 - `design/gdd/` directory is empty or does not exist
 - No GDD files are present
 
-**Input:** `/skill:gamedev-review-all-gdds`
+**Input:** `gamedev:review-all-gdds`
 
 **Expected behavior:**
 
 1. Skill attempts to read files in `design/gdd/`
 2. No files found — skill outputs an error with guidance
-3. Skill recommends running `/skill:gamedev-brainstorm` and `/skill:gamedev-design-system` before re-running
+3. Skill recommends running `gamedev:brainstorm` and `gamedev:design-system` before re-running
 4. Skill does NOT produce a verdict (CONSISTENT / MINOR ISSUES / MAJOR ISSUES)
 
 **Assertions:**
 
 - [ ] Skill outputs a clear error message when no GDDs are found
 - [ ] No verdict is produced when the directory is empty
-- [ ] Skill recommends the correct next action (`/skill:gamedev-brainstorm` or `/skill:gamedev-design-system`)
+- [ ] Skill recommends the correct next action (`gamedev:brainstorm` or `gamedev:design-system`)
 - [ ] Skill does NOT crash or produce a partial report
 
 ---
@@ -150,7 +150,7 @@ would create a circular dependency.
 - `design/gdd/` contains ≥2 consistent system GDDs
 - `production/session-state/review-mode.txt` exists with content `full`
 
-**Input:** `/skill:gamedev-review-all-gdds`
+**Input:** `gamedev:review-all-gdds`
 
 **Expected behavior:**
 
@@ -177,7 +177,7 @@ would create a circular dependency.
 - [ ] Findings table shown before any write ask
 - [ ] Verdict is one of exactly: CONSISTENT, MINOR ISSUES, MAJOR ISSUES
 - [ ] Ends with appropriate handoff: MAJOR ISSUES → fix and re-run; MINOR ISSUES → may proceed with awareness;
-      CONSISTENT → `/skill:gamedev-create-architecture`
+      CONSISTENT → `gamedev:create-architecture`
 
 ---
 

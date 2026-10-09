@@ -1,9 +1,9 @@
-# Skill Test Spec: /skill:gamedev-hotfix
+# Skill Test Spec: gamedev:hotfix
 
 ## Skill Summary
 
-`/skill:gamedev-hotfix` manages an emergency fix workflow: it creates a hotfix branch from main, applies a targeted fix
-to the identified file(s), runs `/skill:gamedev-smoke-check` to validate the fix doesn't introduce regressions, and
+`gamedev:hotfix` manages an emergency fix workflow: it creates a hotfix branch from main, applies a targeted fix
+to the identified file(s), runs `gamedev:smoke-check` to validate the fix doesn't introduce regressions, and
 prompts the user to confirm merge back to main. Each code change requires a "May I write to [filepath]?" ask. Git
 operations (branch creation, merge) are presented as Bash commands for user confirmation before execution.
 
@@ -14,13 +14,13 @@ applied, smoke check passed, merged) or HOTFIX BLOCKED (fix introduced regressio
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: HOTFIX COMPLETE, HOTFIX BLOCKED
 - [ ] Contains "May I write" language for code changes
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-bug-report` to document the issue, or version bump)
+- [ ] Has a next-step handoff (e.g., `gamedev:bug-report` to document the issue, or version bump)
 
 ---
 
@@ -41,7 +41,7 @@ this skill.
 - Bug is identified in `src/gameplay/arena.gd` (crash on boss arena entry)
 - Repro steps are provided by user
 
-**Input:** `/skill:gamedev-hotfix` (user describes the crash and affected file)
+**Input:** `gamedev:hotfix` (user describes the crash and affected file)
 
 **Expected behavior:**
 
@@ -49,7 +49,7 @@ this skill.
 2. User confirms; Bash command for branch creation is shown and confirmed
 3. Skill identifies the fix location in `arena.gd` and drafts the change
 4. Skill asks "May I write to `src/gameplay/arena.gd`?" and applies fix on approval
-5. Skill runs `/skill:gamedev-smoke-check` — PASS
+5. Skill runs `gamedev:smoke-check` — PASS
 6. Skill presents the merge command and asks user to confirm merge to `main`
 7. User confirms; merge executes; verdict is HOTFIX COMPLETE
 
@@ -57,7 +57,7 @@ this skill.
 
 - [ ] Hotfix branch is created before any code changes
 - [ ] "May I write" is asked before modifying any source file
-- [ ] `/skill:gamedev-smoke-check` runs after the fix is applied
+- [ ] `gamedev:smoke-check` runs after the fix is applied
 - [ ] Merge requires explicit user confirmation (not automatic)
 - [ ] Verdict is HOTFIX COMPLETE after successful merge
 
@@ -68,13 +68,13 @@ this skill.
 **Fixture:**
 
 - Fix has been applied to `src/gameplay/arena.gd`
-- `/skill:gamedev-smoke-check` returns FAIL: "Player health clamping regression detected"
+- `gamedev:smoke-check` returns FAIL: "Player health clamping regression detected"
 
-**Input:** `/skill:gamedev-hotfix`
+**Input:** `gamedev:hotfix`
 
 **Expected behavior:**
 
-1. Skill applies the fix and runs `/skill:gamedev-smoke-check`
+1. Skill applies the fix and runs `gamedev:smoke-check`
 2. Smoke check returns FAIL with specific regression identified
 3. Skill reports: "HOTFIX BLOCKED — smoke check failed: [regression detail]"
 4. Skill presents options: attempt revised fix, revert changes, or merge with known regression (user acknowledges risk)
@@ -96,7 +96,7 @@ this skill.
 - Latest git tag is `v1.2.0`
 - Hotfix targets a bug in the v1.2.0 release
 
-**Input:** `/skill:gamedev-hotfix`
+**Input:** `gamedev:hotfix`
 
 **Expected behavior:**
 
@@ -119,10 +119,10 @@ this skill.
 
 **Fixture:**
 
-- User invokes `/skill:gamedev-hotfix` with a vague description: "something is broken on level 3"
+- User invokes `gamedev:hotfix` with a vague description: "something is broken on level 3"
 - No repro steps provided
 
-**Input:** `/skill:gamedev-hotfix` (vague description)
+**Input:** `gamedev:hotfix` (vague description)
 
 **Expected behavior:**
 
@@ -146,7 +146,7 @@ this skill.
 
 - Critical bug with repro steps identified
 
-**Input:** `/skill:gamedev-hotfix`
+**Input:** `gamedev:hotfix`
 
 **Expected behavior:**
 
@@ -167,7 +167,7 @@ this skill.
 
 - [ ] Creates hotfix branch before making any code changes
 - [ ] Asks "May I write" before modifying any source files
-- [ ] Runs `/skill:gamedev-smoke-check` after applying the fix
+- [ ] Runs `gamedev:smoke-check` after applying the fix
 - [ ] Requires explicit user confirmation before merging
 - [ ] HOTFIX BLOCKED when smoke check fails — no automatic merge
 - [ ] Verdict is HOTFIX COMPLETE or HOTFIX BLOCKED

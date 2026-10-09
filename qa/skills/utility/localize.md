@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-localize
+# Skill Test Spec: gamedev:localize
 
 ## Skill Summary
 
-`/skill:gamedev-localize` manages the full localization pipeline: it extracts all player-facing strings from source
+`gamedev:localize` manages the full localization pipeline: it extracts all player-facing strings from source
 files, manages translation files in `assets/localization/`, and validates completeness across all locale files. For new
 languages, it creates a locale file skeleton with all current strings as keys and empty values. For existing locale
 files, it produces a diff showing additions, removals, and changed keys.
@@ -15,7 +15,7 @@ one locale is missing string keys).
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -27,7 +27,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-localize` is a pipeline utility. No director gates apply. Localization lead agent may review
+None. `gamedev:localize` is a pipeline utility. No director gates apply. Localization lead agent may review
 separately but is not invoked within this skill.
 
 ---
@@ -42,7 +42,7 @@ separately but is not invoked within this skill.
 - Existing locale: `assets/localization/en.csv`
 - No French locale exists
 
-**Input:** `/skill:gamedev-localize fr`
+**Input:** `gamedev:localize fr`
 
 **Expected behavior:**
 
@@ -69,7 +69,7 @@ separately but is not invoked within this skill.
 - `assets/localization/fr.csv` exists with 20 string keys translated
 - Source code has changed: 3 new strings added, 1 string removed, 2 strings with changed English source text
 
-**Input:** `/skill:gamedev-localize fr`
+**Input:** `gamedev:localize fr`
 
 **Expected behavior:**
 
@@ -98,7 +98,7 @@ separately but is not invoked within this skill.
 - 3 locale files exist: `en.csv`, `fr.csv`, `de.csv`
 - `de.csv` is missing 4 keys that exist in both `en.csv` and `fr.csv`
 
-**Input:** `/skill:gamedev-localize`
+**Input:** `gamedev:localize`
 
 **Expected behavior:**
 
@@ -124,7 +124,7 @@ separately but is not invoked within this skill.
 
 - `assets/localization/fr.csv` has a malformed line at line 47 (missing quote closure)
 
-**Input:** `/skill:gamedev-localize fr`
+**Input:** `gamedev:localize fr`
 
 **Expected behavior:**
 
@@ -132,7 +132,7 @@ separately but is not invoked within this skill.
 2. Skill outputs: "Parse error in fr.csv at line 47: [error detail]"
 3. Skill cannot diff or validate the file until the error is fixed
 4. Skill does NOT attempt to overwrite or auto-fix the malformed file
-5. Skill suggests fixing the file manually and re-running `/skill:gamedev-localize`
+5. Skill suggests fixing the file manually and re-running `gamedev:localize`
 
 **Assertions:**
 
@@ -149,7 +149,7 @@ separately but is not invoked within this skill.
 
 - Source code with player-facing strings
 
-**Input:** `/skill:gamedev-localize fr`
+**Input:** `gamedev:localize fr`
 
 **Expected behavior:**
 

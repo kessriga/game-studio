@@ -12,11 +12,11 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 ## Overview
 
 Validates UX design documents before they enter the implementation pipeline. Acts as the quality gate between UX Design
-and Visual Design/Implementation in the `/skill:gamedev-team-ui` pipeline.
+and Visual Design/Implementation in the `gamedev:team-ui` pipeline.
 
 **Run this skill:**
 
-- After completing a UX spec with `/skill:gamedev-ux-design`
+- After completing a UX spec with `gamedev:ux-design`
 - Before handing off to `gamedev:ui-programmer` or `gamedev:art-director`
 - Before the Pre-Production to Production gate check (which requires key screens to have reviewed UX specs)
 - After major revisions to a UX spec
@@ -31,7 +31,7 @@ and Visual Design/Implementation in the `/skill:gamedev-team-ui` pipeline.
 
 ## Phase 1: Parse Arguments
 
-- **Specific file path** (e.g., `/skill:gamedev-ux-review design/ux/inventory.md`): validate that one document
+- **Specific file path** (e.g., `gamedev:ux-review design/ux/inventory.md`): validate that one document
 - **`all`**: find all files in `design/ux/` and validate each
 - **`hud`**: validate `design/ux/hud.md` specifically
 - **`patterns`**: validate `design/ux/interaction-patterns.md` specifically
@@ -216,14 +216,14 @@ Run all checks against a `hud-design.md`-based document.
 **Blocking issues**: [N] — must be resolved before implementation
 **Advisory issues**: [N] — recommended but not blocking
 
-[For APPROVED]: This spec is ready for handoff to `/skill:gamedev-team-ui` Phase 2
+[For APPROVED]: This spec is ready for handoff to `gamedev:team-ui` Phase 2
 (Visual Design).
 
 [For NEEDS REVISION]: Address the [N] blocking issues above, then re-run
-`/skill:gamedev-ux-review`.
+`gamedev:ux-review`.
 
 [For MAJOR REVISION NEEDED]: The spec has fundamental gaps in [areas].
-Recommend returning to `/skill:gamedev-ux-design` to rework [sections].
+Recommend returning to `gamedev:ux-design` to rework [sections].
 ```
 
 ---
@@ -234,10 +234,10 @@ This skill is READ-ONLY — it never edits or writes files. It reports findings 
 
 After delivering the verdict:
 
-- For **APPROVED**: suggest running `/skill:gamedev-team-ui` to begin implementation coordination
+- For **APPROVED**: suggest running `gamedev:team-ui` to begin implementation coordination
 - For **NEEDS REVISION**: offer to help fix specific gaps ("Would you like me to help draft the missing error state?") —
   but do not auto-fix; wait for user instruction
-- For **MAJOR REVISION NEEDED**: suggest returning to `/skill:gamedev-ux-design` with the specific sections to rework
+- For **MAJOR REVISION NEEDED**: suggest returning to `gamedev:ux-design` with the specific sections to rework
 
 Never block the user from proceeding — the verdict is advisory. Document risks, present findings, let the user decide
 whether to proceed despite concerns. A user who chooses to proceed with a NEEDS REVISION spec takes on the documented

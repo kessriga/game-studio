@@ -107,4 +107,4 @@ for our new crafting system: players gather materials, open the crafting menu, a
 - Case 3 (A/B test design completeness) is a quality gate — an incomplete test design wastes experiment budget
 - Case 4 (mutual exclusion) is a data integrity test — overlapping tests produce unusable results; this must be caught
 - Case 5 is the most important context-awareness test; naming convention drift across schemas causes dashboard breakage
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

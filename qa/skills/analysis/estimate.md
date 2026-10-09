@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-estimate
+# Skill Test Spec: gamedev:estimate
 
 ## Skill Summary
 
-`/skill:gamedev-estimate` estimates task or story effort using a relative-size scale (S / M / L / XL) based on story
+`gamedev:estimate` estimates task or story effort using a relative-size scale (S / M / L / XL) based on story
 complexity, acceptance criteria count, and historical sprint velocity from past sprint files. Estimates are advisory and
 are never written automatically. No director gates are invoked. Verdicts are effort ranges, not pass/fail — every run
 produces an estimate.
@@ -11,7 +11,7 @@ produces an estimate.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -40,7 +40,7 @@ None. Estimation is an advisory informational skill; no gates are invoked.
 - `production/sprints/sprint-003.md` through `sprint-005.md` exist with velocity data
 - Tech stack is GDScript (well-understood by team per sprint history)
 
-**Input:** `/skill:gamedev-estimate production/epics/combat/story-hitbox-detection.md`
+**Input:** `gamedev:estimate production/epics/combat/story-hitbox-detection.md`
 
 **Expected behavior:**
 
@@ -67,7 +67,7 @@ None. Estimation is an advisory informational skill; no gates are invoked.
   - No ADR reference — matchmaking architecture not yet decided
   - References new subsystem ("online/matchmaking") with no existing source files
 
-**Input:** `/skill:gamedev-estimate production/epics/online/story-lobby-matchmaking.md`
+**Input:** `gamedev:estimate production/epics/online/story-lobby-matchmaking.md`
 
 **Expected behavior:**
 
@@ -92,7 +92,7 @@ None. Estimation is an advisory informational skill; no gates are invoked.
 - Story file exists and is well-defined
 - `production/sprints/` is empty — no historical sprints
 
-**Input:** `/skill:gamedev-estimate production/epics/core/story-save-load.md`
+**Input:** `gamedev:estimate production/epics/core/story-save-load.md`
 
 **Expected behavior:**
 
@@ -118,7 +118,7 @@ None. Estimation is an advisory informational skill; no gates are invoked.
 - User provides a sprint file: `production/sprints/sprint-007.md` with 4 stories
 - Sprint history exists (3 previous sprints)
 
-**Input:** `/skill:gamedev-estimate production/sprints/sprint-007.md`
+**Input:** `gamedev:estimate production/sprints/sprint-007.md`
 
 **Expected behavior:**
 
@@ -144,7 +144,7 @@ None. Estimation is an advisory informational skill; no gates are invoked.
 - Story file exists with medium complexity
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-estimate production/epics/core/story-item-pickup.md`
+**Input:** `gamedev:estimate production/epics/core/story-item-pickup.md`
 
 **Expected behavior:**
 

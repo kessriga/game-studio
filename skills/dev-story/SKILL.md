@@ -1,6 +1,6 @@
 ---
 name: dev-story
-description: "Read a story file and implement it. Loads the full context (story, GDD requirement, ADR guidelines, control manifest), routes to the right programmer agent for the system and engine, implements the code and test, and confirms each acceptance criterion. The core implementation skill — run after /skill:gamedev-story-readiness, before /skill:gamedev-code-review and /skill:gamedev-story-done."
+description: "Read a story file and implement it. Loads the full context (story, GDD requirement, ADR guidelines, control manifest), routes to the right programmer agent for the system and engine, implements the code and test, and confirms each acceptance criterion. The core implementation skill — run after gamedev:story-readiness, before gamedev:code-review and gamedev:story-done."
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
@@ -15,14 +15,14 @@ routes to the correct specialist agent, and drives implementation to completion 
 **The loop for every story:**
 
 ```
-/skill:gamedev-qa-plan [epic]           ← define test requirements for the epic's stories
-/skill:gamedev-story-readiness [path]   ← validate before starting
-/skill:gamedev-dev-story [path]         ← implement it  (this skill)
-/skill:gamedev-code-review [files]      ← review it
-/skill:gamedev-story-done [path]        ← verify and close it (sets the Backlog task to Done)
+gamedev:qa-plan [epic]           ← define test requirements for the epic's stories
+gamedev:story-readiness [path]   ← validate before starting
+gamedev:dev-story [path]         ← implement it  (this skill)
+gamedev:code-review [files]      ← review it
+gamedev:story-done [path]        ← verify and close it (sets the Backlog task to Done)
 ```
 
-**After a milestone's stories are done:** run `/skill:gamedev-team-qa [milestone]` to execute the full QA cycle and get
+**After a milestone's stories are done:** run `gamedev:team-qa [milestone]` to execute the full QA cycle and get
 a sign-off verdict before advancing the project stage.
 
 **Output:** Source code + test file in the project's `src/` and `tests/` directories.
@@ -34,7 +34,7 @@ a sign-off verdict before advancing the project stage.
 **If a path is provided**: read that story `.md` directly, and note its `Tracked in: TASK-N` header so Phase 2 can
 update the Backlog task.
 
-**If a Backlog task ID is provided** (e.g. `/skill:gamedev-dev-story TASK-42`): `task_view` it, read its `Spec:`
+**If a Backlog task ID is provided** (e.g. `gamedev:dev-story TASK-42`): `task_view` it, read its `Spec:`
 reference, and open that story `.md`.
 
 **If no argument**: check `production/session-state/active.md` for the active story. If found, confirm: "Continuing work
@@ -51,9 +51,9 @@ chosen task's `Spec:` story `.md`.
 
 | File | Path | If missing |
 | ------ | ------ | ------------ |
-| TR registry | `docs/architecture/tr-registry.yaml` | **STOP** — "TR registry not found at `docs/architecture/tr-registry.yaml`. Run `/skill:gamedev-architecture-review` to bootstrap the registry from your GDDs and ADRs." |
-| Governing ADR | path from story's ADR field | **STOP** — "ADR file [path] not found. Run `/skill:gamedev-architecture-decision` to create it, or correct the filename in the story's ADR field." |
-| Control manifest | `docs/architecture/control-manifest.md` | **WARN and continue** — "Control manifest not found — layer rules cannot be checked. Run `/skill:gamedev-create-control-manifest`." |
+| TR registry | `docs/architecture/tr-registry.yaml` | **STOP** — "TR registry not found at `docs/architecture/tr-registry.yaml`. Run `gamedev:architecture-review` to bootstrap the registry from your GDDs and ADRs." |
+| Governing ADR | path from story's ADR field | **STOP** — "ADR file [path] not found. Run `gamedev:architecture-decision` to create it, or correct the filename in the story's ADR field." |
+| Control manifest | `docs/architecture/control-manifest.md` | **WARN and continue** — "Control manifest not found — layer rules cannot be checked. Run `gamedev:create-control-manifest`." |
 
 If the TR registry or governing ADR is missing, set the story status to **BLOCKED** in the session state and do not
 spawn any programmer agent.
@@ -111,8 +111,8 @@ If [A]: edit the story file's `Manifest Version:` field to the current manifest 
 Then read the manifest carefully for new rules. If [B]: edit the story file's `Manifest Version:` field to the current
 manifest date AND add a `Manifest-Note: Proceeded with old manifest rules on [date] — non-compliance risk accepted.`
 line to the story header. Read the manifest for new rules anyway. Note the decision in the Phase 6 summary under
-"Deviations". `/skill:gamedev-story-done` will include the Manifest-Note in its deviations section without re-checking
-staleness. If [C]: stop. Do not spawn any agent. Let the user review and re-run `/skill:gamedev-dev-story`.
+"Deviations". `gamedev:story-done` will include the Manifest-Note in its deviations section without re-checking
+staleness. If [C]: stop. Do not spawn any agent. Let the user review and re-run `gamedev:dev-story`.
 
 ### Dependency validation
 
@@ -213,7 +213,7 @@ prompt. The agent reads what it needs directly:
 6. **Test file path**: `[path from story's Test Evidence section]` — this file must be created as part of implementation
 7. **Test requirement** (Logic and Integration stories only): The test file MUST be created at
    `[path from the story's Test Evidence section]`. Write the test alongside the implementation — do not defer it. The
-   story cannot be closed via `/skill:gamedev-story-done` without this file present. Each acceptance criterion must have
+   story cannot be closed via `gamedev:story-done` without this file present. Each acceptance criterion must have
    at least one test function covering it. Test file naming: `[system]_[feature]_test.[ext]`. Function naming:
    `test_[scenario]_[expected_outcome]`. No random seeds, no time-dependent assertions, no external I/O.
 8. **Explicit instruction**: implement this story following the ADR guidelines, respect the manifest rules, stay within
@@ -235,7 +235,7 @@ what they changed from/to.
 ### Visual/Feel stories
 
 Spawn `gamedev:gameplay-programmer` to implement the code/animation calls. Note that Visual/Feel acceptance criteria
-cannot be auto-verified — the "does it feel right?" check happens in `/skill:gamedev-story-done` via manual
+cannot be auto-verified — the "does it feel right?" check happens in `gamedev:story-done` via manual
 confirmation.
 
 ---
@@ -286,9 +286,9 @@ Present a concise implementation summary:
 **Engine risks flagged**: [None] or [specialist finding]
 **Blockers**: [None] or [describe]
 
-**Before running `/skill:gamedev-story-done`:** run your test suite locally and confirm the tests you wrote pass. `/skill:gamedev-story-done` will re-run them automatically, but a failing test discovered there means returning to implementation context.
+**Before running `gamedev:story-done`:** run your test suite locally and confirm the tests you wrote pass. `gamedev:story-done` will re-run them automatically, but a failing test discovered there means returning to implementation context.
 
-Ready for: `/skill:gamedev-code-review [file1] [file2]` then `/skill:gamedev-story-done [story-path]`
+Ready for: `gamedev:code-review [file1] [file2]` then `gamedev:story-done [story-path]`
 ```
 
 ---
@@ -298,12 +298,12 @@ Ready for: `/skill:gamedev-code-review [file1] [file2]` then `/skill:gamedev-sto
 Silently append to `production/session-state/active.md`:
 
 ```
-## Session Extract — /skill:gamedev-dev-story [date]
+## Session Extract — gamedev:dev-story [date]
 - Story: [story-path] — [story title]
 - Files changed: [comma-separated list]
 - Test written: [path, or "None — Visual/Feel/Config story"]
 - Blockers: [None, or description]
-- Next: /skill:gamedev-code-review [files] then /skill:gamedev-story-done [story-path]
+- Next: gamedev:code-review [files] then gamedev:story-done [story-path]
 ```
 
 Create `active.md` if it does not exist. Confirm: "Session state updated."
@@ -326,8 +326,8 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/skill:gamedev-architecture-decision` first
-- Scope too large → split into two stories via `/skill:gamedev-create-stories`
+- ADR status is Proposed → do not implement; run `gamedev:architecture-decision` first
+- Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 - Manifest version mismatch → show diff to user, ask whether to proceed with old rules or update story first
 
@@ -345,7 +345,7 @@ Common blockers:
   Shall I proceed or create a separate story?"
 - **Test is not optional for Logic/Integration** — do not mark implementation complete without the test file existing
 - **Visual/Feel criteria are deferred, not skipped** — mark them as DEFERRED in the summary; they will be manually
-  verified in `/skill:gamedev-story-done`
+  verified in `gamedev:story-done`
 - **Ask before large structural decisions** — if the story requires an architectural pattern not covered by the ADR,
   surface it before implementing: "The ADR doesn't specify how to handle [case]. My plan is [X]. Proceed?"
 
@@ -353,7 +353,7 @@ Common blockers:
 
 ## Recommended Next Steps
 
-- Run `/skill:gamedev-code-review [file1] [file2]` to review the implementation before closing the story
-- Run `/skill:gamedev-story-done [story-path]` to verify acceptance criteria and mark the story complete
-- After a milestone's stories are done: run `/skill:gamedev-team-qa [milestone]` for the full QA cycle before advancing
+- Run `gamedev:code-review [file1] [file2]` to review the implementation before closing the story
+- Run `gamedev:story-done [story-path]` to verify acceptance criteria and mark the story complete
+- After a milestone's stories are done: run `gamedev:team-qa [milestone]` for the full QA cycle before advancing
   the project stage

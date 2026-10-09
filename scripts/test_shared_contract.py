@@ -49,6 +49,33 @@ class SharedContractTests(unittest.TestCase):
                 for target in re.findall(r"\*\*Primary role:\*\* Read `([^`]+)`", text):
                     self.assertTrue((path.parent / target).is_file(), target)
 
+    def test_shared_files_use_neutral_skill_identifiers(self):
+        host_syntax = re.compile(r"/skill:gamedev-|/gamedev:")
+        exempt = {ROOT / "docs/pi.md", ROOT / "docs/claude-code.md"}
+        for base in ("skills", "agents", "docs", "qa", "templates"):
+            for path in sorted((ROOT / base).rglob("*")):
+                if path.suffix not in {".md", ".yaml", ".yml", ".txt"}:
+                    continue
+                if path in exempt or "decisions" in path.parts:
+                    continue
+                with self.subTest(path=path.relative_to(ROOT)):
+                    self.assertIsNone(
+                        host_syntax.search(path.read_text(encoding="utf-8")),
+                        "Use gamedev:<name>; hosts render their own syntax",
+                    )
+
+    def test_root_guides_limit_host_syntax_to_install_examples(self):
+        allowed = {"/skill:gamedev-start", "/gamedev:start"}
+        host_syntax = re.compile(r"/skill:gamedev-[a-z0-9-]+|/gamedev:[a-z0-9-]+")
+        for name in ("README.md", "CONTRIBUTING.md"):
+            text = (ROOT / name).read_text(encoding="utf-8")
+            with self.subTest(path=name):
+                self.assertEqual(
+                    set(host_syntax.findall(text)) - allowed,
+                    set(),
+                    "Only the start example may show host syntax",
+                )
+
     def test_retired_distribution_resources_are_absent(self):
         for name in (
             ".claude-plugin",

@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-design-system
+# Skill Test Spec: gamedev:design-system
 
 ## Skill Summary
 
-`/skill:gamedev-design-system` guides the user through section-by-section authoring of a Game Design Document (GDD) for
+`gamedev:design-system` guides the user through section-by-section authoring of a Game Design Document (GDD) for
 a single game system. All 8 required sections must be authored: Overview, Player Fantasy, Detailed Rules, Formulas, Edge
 Cases, Dependencies, Tuning Knobs, and Acceptance Criteria. The skill uses a skeleton-first approach — it creates the
 GDD file with all 8 section headers before filling any content — and writes each section individually after approval.
@@ -15,7 +15,7 @@ document.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -50,7 +50,7 @@ only user approval.
 - No existing GDD for the target system in `design/gdd/`
 - `production/session-state/review-mode.txt` contains `lean`
 
-**Input:** `/skill:gamedev-design-system [system-name]`
+**Input:** `gamedev:design-system [system-name]`
 
 **Expected behavior:**
 
@@ -78,7 +78,7 @@ only user approval.
 
 - `design/gdd/[system-name].md` already exists with all 8 sections populated
 
-**Input:** `/skill:gamedev-design-system [system-name]`
+**Input:** `gamedev:design-system [system-name]`
 
 **Expected behavior:**
 
@@ -106,7 +106,7 @@ only user approval.
 - `production/session-state/review-mode.txt` contains `lean`
 - CD-GDD-ALIGN gate returns MAJOR REVISION on the Player Fantasy section
 
-**Input:** `/skill:gamedev-design-system [system-name]`
+**Input:** `gamedev:design-system [system-name]`
 
 **Expected behavior:**
 
@@ -134,7 +134,7 @@ only user approval.
 - New GDD being authored
 - `production/session-state/review-mode.txt` contains `solo`
 
-**Input:** `/skill:gamedev-design-system [system-name]`
+**Input:** `gamedev:design-system [system-name]`
 
 **Expected behavior:**
 
@@ -162,7 +162,7 @@ only user approval.
 - User and skill discuss one section but do not produce any approved content (e.g., discussion ends without a decision,
   or user says "skip for now")
 
-**Input:** `/skill:gamedev-design-system [system-name]`
+**Input:** `gamedev:design-system [system-name]`
 
 **Expected behavior:**
 
@@ -189,7 +189,7 @@ only user approval.
 - [ ] "May I write [section]?" asked per section (not once for the whole document)
 - [ ] MAJOR REVISION from CD-GDD-ALIGN blocks section write until resolved
 - [ ] Only approved, non-empty sections are written to the file
-- [ ] Ends with next-step handoff: `/skill:gamedev-review-all-gdds` or `/skill:gamedev-map-systems next`
+- [ ] Ends with next-step handoff: `gamedev:review-all-gdds` or `gamedev:map-systems next`
 
 ---
 

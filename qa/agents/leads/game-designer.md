@@ -106,5 +106,5 @@ respond to a player's death? Uses the pillar vocabulary directly in the rational
   added.
 - Progression system review (XP curves, unlock gates, player power trajectory) is not covered.
 - Core loop validation across multiple interconnected systems (not just a single mechanic) is not covered — deferred to
-  /skill:gamedev-review-all-gdds integration.
+  gamedev:review-all-gdds integration.
 - Coordination protocol with systems-designer on formula ownership boundary could benefit from additional cases.

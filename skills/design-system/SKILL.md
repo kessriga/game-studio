@@ -28,9 +28,9 @@ A system name or retrofit path is **required**. If missing:
    - Options: `[A] Yes — design [system-name]` / `[B] Pick a different system` / `[C] Stop here`
    - If [A]: proceed with that system name. If [B]: ask which system to design (plain text). If [C]: exit.
 3. If no systems index exists, fail with:
-   > "Usage: `/skill:gamedev-design-system <system-name>` — e.g., `/skill:gamedev-design-system movement` Or to fill
-   > gaps in an existing GDD: `/skill:gamedev-design-system retrofit design/gdd/[system-name].md` No systems index
-   > found. Run `/skill:gamedev-map-systems` first to map your systems and get the design order."
+   > "Usage: `gamedev:design-system <system-name>` — e.g., `gamedev:design-system movement` Or to fill
+   > gaps in an existing GDD: `gamedev:design-system retrofit design/gdd/[system-name].md` No systems index
+   > found. Run `gamedev:map-systems` first to map your systems and get the design order."
 
 **Detect retrofit mode:** If the argument starts with `retrofit` or the argument is a file path to an existing `.md`
 file in `design/gdd/`, enter **retrofit mode**:
@@ -75,9 +75,9 @@ Read all relevant context **before** asking the user anything. This is the skill
 ### 2a: Required Reads
 
 - **Game concept**: Read `design/gdd/game-concept.md` — fail if missing:
-  > "No game concept found. Run `/skill:gamedev-brainstorm` first."
+  > "No game concept found. Run `gamedev:brainstorm` first."
 - **Systems index**: Read `design/gdd/systems-index.md` — fail if missing:
-  > "No systems index found. Run `/skill:gamedev-map-systems` first to map your systems."
+  > "No systems index found. Run `gamedev:map-systems` first to map your systems."
 - **Target system**: Find the system in the index. If not listed, warn:
   > "[system-name] is not in the systems index. Would you like to add it, or design it as an off-index system?"
 - **Entity registry**: Read `design/registry/entities.yaml` if it exists. Extract all entries referenced by or relevant
@@ -189,7 +189,7 @@ Domain: [domain]
 ```
 
 If no engine reference docs exist (engine not yet configured), show a short note:
-> "No engine configured yet — skipping technical feasibility check. Run `/skill:gamedev-setup-engine` before moving to
+> "No engine configured yet — skipping technical feasibility check. Run `gamedev:setup-engine` before moving to
 > architecture if you haven't already."
 
 **Step 4 — Ask before proceeding:**
@@ -282,7 +282,7 @@ Ask: "May I create the skeleton file at `design/gdd/[system-name].md`?"
 
 If the user declines: Stop with the following message:
 > "Verdict: **BLOCKED** — skeleton creation declined. The design session cannot proceed without the skeleton file, as
-all subsequent phases use it as the base. Re-run `/skill:gamedev-design-system [system]` when ready to create the
+all subsequent phases use it as the base. Re-run `gamedev:design-system [system]` when ready to create the
 file." Do not proceed to Section A.
 
 After writing, update `production/session-state/active.md`:
@@ -392,7 +392,7 @@ Use the user's answers to shape the draft. Do NOT answer these questions yoursel
 **Design vs. implementation boundary**: Overview questions must stay at the behavior level — what the system *does*, not
 *how it is built*. If implementation questions arise during the Overview (e.g., "Should this use an Autoload singleton
 or a signal bus?"), note them as "→ becomes an ADR" and move on. Implementation patterns belong in
-`/skill:gamedev-architecture-decision`, not the GDD. The GDD describes behavior; the ADR describes the technical
+`gamedev:architecture-decision`, not the GDD. The GDD describes behavior; the ADR describes the technical
 approach used to achieve it.
 
 ---
@@ -703,7 +703,7 @@ detail is needed. Often a brief note suffices at the GDD stage.
 
 > **Asset Spec Flag**: After the Visual/Audio section is written with real content, output this notice: "📌
 > **Asset Spec** — Visual/Audio requirements are defined. After the art bible is approved, run
-> `/skill:gamedev-asset-spec system:[system-name]` to produce per-asset visual descriptions, dimensions, and generation
+> `gamedev:asset-spec system:[system-name]` to produce per-asset visual descriptions, dimensions, and generation
 > prompts from this section."
 
 For **UI Requirements**: Coordinate with `gamedev:ux-designer` for complex UI systems. After writing this section, check
@@ -711,7 +711,7 @@ whether it contains real content (not just `[To be designed]` or a note that thi
 real UI requirements, output this flag immediately:
 
 > **📌 UX Flag — [System Name]**: This system has UI requirements. In Phase 4 (Pre-Production), run
-> `/skill:gamedev-ux-design` to create a UX spec for each screen or HUD element this system contributes to **before**
+> `gamedev:ux-design` to create a UX spec for each screen or HUD element this system contributes to **before**
 > writing epics. Stories that reference UI should cite `design/ux/[screen].md`, not the GDD directly.
 >
 > Note this in the systems index for this system if you update it.
@@ -799,13 +799,13 @@ Present a completion summary:
 > - Provisional assumptions: [list any assumptions about undesigned dependencies]
 > - Cross-system conflicts found: [list or "none"]
 
-> **To validate this GDD, open a fresh session and run:** `/skill:gamedev-design-review design/gdd/[system-name].md`
+> **To validate this GDD, open a fresh session and run:** `gamedev:design-review design/gdd/[system-name].md`
 >
-> **Never run `/skill:gamedev-design-review` in the same session as `/skill:gamedev-design-system`.** The reviewing
+> **Never run `gamedev:design-review` in the same session as `gamedev:design-system`.** The reviewing
 > agent must be independent of the authoring context. Running it here would inherit the full design history, making
 > independent critique impossible.
 
-**NEVER offer to run `/skill:gamedev-design-review` inline.** Always direct the user to a fresh window.
+**NEVER offer to run `gamedev:design-review` inline.** Always direct the user to a fresh window.
 
 ### 5d: Update Systems Index
 
@@ -838,12 +838,12 @@ Use a user-input tool or chat:
 
 - "What's next?"
   - Options:
-    - "Run `/skill:gamedev-consistency-check` — verify this GDD's values don't conflict with existing GDDs (recommended
+    - "Run `gamedev:consistency-check` — verify this GDD's values don't conflict with existing GDDs (recommended
       before designing the next system)"
     - "Design next system ([next-in-order])" — if undesigned systems remain
     - "Fix review findings" — if design-review flagged issues
     - "Stop here for this session"
-    - "Run `/skill:gamedev-gate-check`" — if enough MVP systems are designed
+    - "Run `gamedev:gate-check`" — if enough MVP systems are designed
 
 ---
 
@@ -920,15 +920,15 @@ to read the terminal's status line. If reported usage reaches 70%, append this n
 
 > **Context is approaching the limit (≥70%).** Your progress is saved — all approved sections are written to
 > `design/gdd/[system-name].md`. When you're ready to continue, open a fresh session and run
-> `/skill:gamedev-design-system [system-name]` — it will detect which sections are complete and resume from the next
+> `gamedev:design-system [system-name]` — it will detect which sections are complete and resume from the next
 > one.
 
 ---
 
 ## Recommended Next Steps
 
-- Run `/skill:gamedev-design-review design/gdd/[system-name].md` in a **fresh session** to validate the completed GDD
+- Run `gamedev:design-review design/gdd/[system-name].md` in a **fresh session** to validate the completed GDD
   independently
-- Run `/skill:gamedev-consistency-check` to verify this GDD's values don't conflict with other GDDs
-- Run `/skill:gamedev-map-systems next` to move to the next highest-priority undesigned system
-- Run `/skill:gamedev-gate-check pre-production` when all MVP GDDs are authored and reviewed
+- Run `gamedev:consistency-check` to verify this GDD's values don't conflict with other GDDs
+- Run `gamedev:map-systems next` to move to the next highest-priority undesigned system
+- Run `gamedev:gate-check pre-production` when all MVP GDDs are authored and reviewed

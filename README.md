@@ -15,8 +15,8 @@ Game Studio ships 72 shared skills, 53 specialist role guides, and the Pi packag
 [Getting Started](#getting-started), [verified capabilities](STATUS.md), and the [host guide](docs/host-runtime.md).
 Other runtimes may read the workflows but have no shipped integration.
 
-Logical identifiers such as `gamedev:brainstorm` name shared workflows. In Pi use `/skill:gamedev-start` or
-`/skill:gamedev-brainstorm cozy farming`. The [Pi guide](docs/pi.md) covers installation, available-runner delegation,
+Logical identifiers such as `gamedev:brainstorm` name shared workflows. In Pi use `gamedev:start` or
+`gamedev:brainstorm cozy farming`. The [Pi guide](docs/pi.md) covers installation, available-runner delegation,
 progress tracking, and user approvals. The package supplies role instructions, not a subagent runner. Sequential role
 passes are not independent review.
 
@@ -367,7 +367,7 @@ production/                      # Stage, QA evidence, workflow progress, handof
 prototypes/                      # Throwaway prototypes
 ```
 
-See [directory structure](docs/directory-structure.md). Use `/skill:gamedev-status` for a snapshot.
+See [directory structure](docs/directory-structure.md). Use `gamedev:status` for a snapshot.
 
 ## How It Works
 

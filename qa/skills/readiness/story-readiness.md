@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-story-readiness
+# Skill Test Spec: gamedev:story-readiness
 
 ## Skill Summary
 
-`/skill:gamedev-story-readiness` validates that a story file is ready for a developer to pick up and implement. It
+`gamedev:story-readiness` validates that a story file is ready for a developer to pick up and implement. It
 checks four dimensions: Design (embedded GDD requirements), Architecture (ADR references and status), Scope (clear
 boundaries and DoD), and Definition of Done (testable criteria). It produces a READY / NEEDS WORK / BLOCKED verdict. It
 is a read-only skill and runs before any developer picks up a story.
@@ -11,7 +11,7 @@ is a read-only skill and runs before any developer picks up a story.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings or numbered check sections
@@ -38,7 +38,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
   - Story has `Status: Ready for Dev`
   - Manifest version in story header matches current `docs/architecture/control-manifest.md`
 
-**Input:** `/skill:gamedev-story-readiness production/epics/core/story-light-pickup.md`
+**Input:** `gamedev:story-readiness production/epics/core/story-light-pickup.md`
 
 **Expected behavior:**
 
@@ -68,7 +68,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - `adr-005-light-system.md` exists but has `Status: Proposed`
 - All other story content is otherwise complete
 
-**Input:** `/skill:gamedev-story-readiness production/epics/core/story-light-system.md`
+**Input:** `gamedev:story-readiness production/epics/core/story-light-system.md`
 
 **Expected behavior:**
 
@@ -96,7 +96,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - TR-ID exists in registry
 - Manifest version matches
 
-**Input:** `/skill:gamedev-story-readiness production/epics/core/story-oxygen-drain.md`
+**Input:** `gamedev:story-readiness production/epics/core/story-oxygen-drain.md`
 
 **Expected behavior:**
 
@@ -123,7 +123,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - `docs/architecture/control-manifest.md` has `Manifest Version: 2026-03-10`
 - Versions do not match (story was created before manifest was updated)
 
-**Input:** `/skill:gamedev-story-readiness production/epics/core/story-mirror-rotation.md`
+**Input:** `gamedev:story-readiness production/epics/core/story-mirror-rotation.md`
 
 **Expected behavior:**
 
@@ -155,7 +155,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-story-readiness production/epics/core/story-light-pickup.md` (full mode)
+**Input:** `gamedev:story-readiness production/epics/core/story-light-pickup.md` (full mode)
 
 **Expected behavior:**
 

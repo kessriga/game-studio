@@ -54,7 +54,7 @@ can still use design and navigation skills. Never claim a tracker update without
 
 ## Getting started
 
-In Pi run `/skill:gamedev-start`. These project files are yours to edit. Running start again adds missing files and
+In Pi run `gamedev:start`. These project files are yours to edit. Running start again adds missing files and
 preserves existing ones. Use the host's status skill for a stage snapshot. Pi also has a progress widget and
 `/gamedev-workflow panel` overlay; neither replaces the editor or footer. Its coordinating agent records catalog work
 with `gamedev_workflow`, while subagents return evidence without changing progress. Use `/gamedev-workflow` to inspect

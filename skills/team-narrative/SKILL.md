@@ -8,7 +8,7 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 **Arguments:** [narrative content description] [--review full|lean|solo]
 
 If no argument is provided, output usage guidance and exit without spawning any agents:
-> Usage: `/skill:gamedev-team-narrative [narrative content description]` — describe the story content, scene, or
+> Usage: `gamedev:team-narrative [narrative content description]` — describe the story content, scene, or
 > narrative area to work on (e.g., `boss encounter cutscene`, `faction intro dialogue`, `tutorial narrative`). Output
 > usage directly; do not ask a follow-up question.
 
@@ -127,8 +127,8 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/skill:gamedev-architecture-decision` first
-- Scope too large → split into two stories via `/skill:gamedev-create-stories`
+- ADR status is Proposed → do not implement; run `gamedev:architecture-decision` first
+- Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## File Write Protocol
@@ -151,6 +151,6 @@ Verdict: **BLOCKED** — [reason]
 
 ## Next Steps
 
-- Run `/skill:gamedev-design-review` on the narrative documents for consistency validation.
-- Run `/skill:gamedev-localize extract` to extract new strings for translation after dialogue is finalized.
-- Run `/skill:gamedev-dev-story` to implement dialogue triggers and narrative events in-engine.
+- Run `gamedev:design-review` on the narrative documents for consistency validation.
+- Run `gamedev:localize extract` to extract new strings for translation after dialogue is finalized.
+- Run `gamedev:dev-story` to implement dialogue triggers and narrative events in-engine.

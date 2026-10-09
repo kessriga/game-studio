@@ -12,20 +12,20 @@
 #   - Never delete entries — set status: superseded_by: ADR-NNNN instead.
 #   - When a stance changes: update the entry, set revised: to today's date,
 #     add a comment with the old value, and run
-#   /skill:gamedev-architecture-review to check
+#   gamedev:architecture-review to check
 #     what ADRs are now invalidated.
 #   - adr: is the authoritative source. All other ADRs that depend on this
 #     stance list themselves in referenced_by.
 #
-# WRITTEN BY: /skill:gamedev-architecture-decision (Phase 5 — after ADR
+# WRITTEN BY: gamedev:architecture-decision (Phase 5 — after ADR
 #   is approved)
-# READ BY:    /skill:gamedev-architecture-decision (Step 2 — before
+# READ BY:    gamedev:architecture-decision (Step 2 — before
 #   authoring begins)
-#             /skill:gamedev-architecture-review (Phase 4 — cross-ADR
+#             gamedev:architecture-review (Phase 4 — cross-ADR
 #   conflict baseline)
-#             /skill:gamedev-create-stories (to embed architectural
+#             gamedev:create-stories (to embed architectural
 #   constraints in stories)
-#             /skill:gamedev-dev-story (to check implementation against
+#             gamedev:dev-story (to check implementation against
 #   accepted stances)
 #
 # SEARCH PATTERNS (for skills using Grep):
@@ -119,7 +119,7 @@ interfaces: []
 # Conflicts: allocations that sum to more than the total budget = unshippable.
 #
 # Register a budget when an ADR explicitly claims a frame time allocation.
-# The registry lets /skill:gamedev-architecture-review verify the total
+# The registry lets gamedev:architecture-review verify the total
 #   doesn't exceed the target.
 
 performance_budgets: []

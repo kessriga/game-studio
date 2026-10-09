@@ -99,4 +99,4 @@ build matrix so we get a build artifact for each target platform on every releas
 - Case 4 (branching strategy) is a convention-enforcement test — agent must know the project convention, not just give
   neutral advice
 - Case 5 requires that project's target platforms are documented (in `technical-preferences.md` or equivalent)
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

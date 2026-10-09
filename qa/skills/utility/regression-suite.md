@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-regression-suite
+# Skill Test Spec: gamedev:regression-suite
 
 ## Skill Summary
 
-`/skill:gamedev-regression-suite` maps test coverage to GDD requirements: it reads the acceptance criteria from story
+`gamedev:regression-suite` maps test coverage to GDD requirements: it reads the acceptance criteria from story
 files in the current sprint (or a specified epic), then scans `tests/` for corresponding test files and checks whether
 each AC has a matching assertion. It produces a coverage report identifying which ACs are fully covered, partially
 covered, or untested, and which test files have no matching AC (orphan tests).
@@ -15,20 +15,20 @@ test).
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: FULL COVERAGE, GAPS FOUND, CRITICAL GAPS
 - [ ] Contains "May I write" language (skill may write coverage report)
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-test-setup` if framework missing, `/skill:gamedev-qa-plan` if plan
+- [ ] Has a next-step handoff (e.g., `gamedev:test-setup` if framework missing, `gamedev:qa-plan` if plan
       missing)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-regression-suite` is a QA analysis utility. No director gates apply.
+None. `gamedev:regression-suite` is a QA analysis utility. No director gates apply.
 
 ---
 
@@ -42,7 +42,7 @@ None. `/skill:gamedev-regression-suite` is a QA analysis utility. No director ga
 - `tests/unit/` and `tests/integration/` contain test files that match all 6 ACs (by system name and scenario
   description)
 
-**Input:** `/skill:gamedev-regression-suite sprint-004`
+**Input:** `gamedev:regression-suite sprint-004`
 
 **Expected behavior:**
 
@@ -69,7 +69,7 @@ None. `/skill:gamedev-regression-suite` is a QA analysis utility. No director ga
 - Sprint has 5 stories with 8 total ACs
 - Tests exist for 5 of the 8 ACs; 3 ACs have no corresponding test file or assertion
 
-**Input:** `/skill:gamedev-regression-suite`
+**Input:** `gamedev:regression-suite`
 
 **Expected behavior:**
 
@@ -95,7 +95,7 @@ None. `/skill:gamedev-regression-suite` is a QA analysis utility. No director ga
 - Sprint has 4 stories; one story is Priority: Critical with 2 ACs
 - One of the critical-priority ACs has no test
 
-**Input:** `/skill:gamedev-regression-suite`
+**Input:** `gamedev:regression-suite`
 
 **Expected behavior:**
 
@@ -121,7 +121,7 @@ None. `/skill:gamedev-regression-suite` is a QA analysis utility. No director ga
 - `tests/unit/save_system_test.gd` exists with assertions for scenarios not present in any current story's AC list
 - Current sprint stories do not reference save system
 
-**Input:** `/skill:gamedev-regression-suite`
+**Input:** `gamedev:regression-suite`
 
 **Expected behavior:**
 
@@ -147,7 +147,7 @@ None. `/skill:gamedev-regression-suite` is a QA analysis utility. No director ga
 
 - Sprint with stories and test files
 
-**Input:** `/skill:gamedev-regression-suite`
+**Input:** `gamedev:regression-suite`
 
 **Expected behavior:**
 

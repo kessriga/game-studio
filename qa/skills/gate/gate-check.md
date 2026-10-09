@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-gate-check
+# Skill Test Spec: gamedev:gate-check
 
 ## Skill Summary
 
-`/skill:gamedev-gate-check` validates whether the project is ready to advance to the next development phase. It checks
+`gamedev:gate-check` validates whether the project is ready to advance to the next development phase. It checks
 for required artifacts, runs quality checks, asks the user about unverifiable items, and produces a PASS/CONCERNS/FAIL
 verdict. On PASS with user confirmation, it writes the new stage name to `production/stage.txt`. It governs all 6 phase
 transitions and is the most critical gate-keeping skill in the pipeline.
@@ -11,7 +11,7 @@ transitions and is the most critical gate-keeping skill in the pipeline.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings (numbered Phase N or ## sections)
@@ -31,7 +31,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - `design/gdd/game-pillars.md` exists (or pillars defined within concept doc)
 - No systems index yet (which is correct for this stage)
 
-**Input:** `/skill:gamedev-gate-check systems-design`
+**Input:** `gamedev:gate-check systems-design`
 
 **Expected behavior:**
 
@@ -62,7 +62,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - No game pillars document exists
 - `design/gdd/` directory is empty or absent
 
-**Input:** `/skill:gamedev-gate-check systems-design`
+**Input:** `gamedev:gate-check systems-design`
 
 **Expected behavior:**
 
@@ -70,14 +70,14 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 2. Skill marks required artifact as missing (not present)
 3. Skill outputs FAIL verdict
 4. Skill lists blocker: "No game concept document found"
-5. Skill suggests remediation: run `/skill:gamedev-brainstorm` to create one
+5. Skill suggests remediation: run `gamedev:brainstorm` to create one
 
 **Assertions:**
 
 - [ ] Verdict is FAIL (not PASS or CONCERNS) when required artifacts are missing
 - [ ] Output explicitly names `design/gdd/game-concept.md` as missing
 - [ ] Output includes a "Blockers" section with at least 1 item
-- [ ] Output recommends `/skill:gamedev-brainstorm` as the remediation action
+- [ ] Output recommends `gamedev:brainstorm` as the remediation action
 - [ ] Skill does NOT write `production/stage.txt` when verdict is FAIL
 
 ---
@@ -90,7 +90,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - `design/gdd/game-concept.md` exists with content
 - No systems index yet
 
-**Input:** `/skill:gamedev-gate-check` (no argument)
+**Input:** `gamedev:gate-check` (no argument)
 
 **Expected behavior:**
 
@@ -114,7 +114,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - All required artifacts for Concept → Systems Design are present
 - No playtest or review record exists (can't auto-verify quality checks)
 
-**Input:** `/skill:gamedev-gate-check systems-design`
+**Input:** `gamedev:gate-check systems-design`
 
 **Expected behavior:**
 
@@ -146,7 +146,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-gate-check systems-design` (with full mode active)
+**Input:** `gamedev:gate-check systems-design` (with full mode active)
 
 **Expected behavior:**
 
@@ -171,7 +171,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 
 - `review-mode.txt` contains `solo`
 
-**Input:** `/skill:gamedev-gate-check systems-design` (with solo mode active)
+**Input:** `gamedev:gate-check systems-design` (with solo mode active)
 
 **Expected behavior:**
 

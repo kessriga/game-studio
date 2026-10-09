@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-create-epics
+# Skill Test Spec: gamedev:create-epics
 
 ## Skill Summary
 
-`/skill:gamedev-create-epics` reads all approved GDDs and translates them into EPIC.md files, one per system. Epics are
+`gamedev:create-epics` reads all approved GDDs and translates them into EPIC.md files, one per system. Epics are
 organized by layer (Foundation → Core → Feature → Presentation) and processed in priority order within each layer. Each
 EPIC.md includes scope, governing ADRs, GDD requirements, engine risk level, and a Definition of Done. The skill asks
 "May I write" before creating each EPIC file.
@@ -14,13 +14,13 @@ In `full` review mode, a PR-EPIC gate (producer) runs after drafting epics and b
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: CREATED, BLOCKED
 - [ ] Contains "May I write" collaborative protocol language (per-epic approval)
-- [ ] Has a next-step handoff at the end (`/skill:gamedev-create-stories`)
+- [ ] Has a next-step handoff at the end (`gamedev:create-stories`)
 - [ ] Documents PR-EPIC gate behavior: runs in full mode; skipped in lean/solo
 
 ---
@@ -48,7 +48,7 @@ In `solo` mode: PR-EPIC is skipped. Output notes: "PR-EPIC skipped — solo mode
 - At least one Accepted ADR exists for each system
 - `production/session-state/review-mode.txt` contains `lean`
 
-**Input:** `/skill:gamedev-create-epics`
+**Input:** `gamedev:create-epics`
 
 **Expected behavior:**
 
@@ -77,14 +77,14 @@ In `solo` mode: PR-EPIC is skipped. Output notes: "PR-EPIC skipped — solo mode
 - `design/gdd/systems-index.md` exists
 - No GDDs in `design/gdd/` have approved status (all are Draft or In Progress)
 
-**Input:** `/skill:gamedev-create-epics`
+**Input:** `gamedev:create-epics`
 
 **Expected behavior:**
 
 1. Skill reads systems index and attempts to find approved GDDs
 2. No approved GDDs found
 3. Skill outputs: "No approved GDDs to convert. GDDs must be Approved before creating epics."
-4. Skill suggests running `/skill:gamedev-design-system` and completing GDD approval first
+4. Skill suggests running `gamedev:design-system` and completing GDD approval first
 5. Skill exits without creating any EPIC files
 
 **Assertions:**
@@ -141,7 +141,7 @@ In `solo` mode: PR-EPIC is skipped. Output notes: "PR-EPIC skipped — solo mode
 - `production/epics/[layer]/EPIC-[name].md` already exists for one of the approved GDDs
 - The other GDD has no existing EPIC file
 
-**Input:** `/skill:gamedev-create-epics`
+**Input:** `gamedev:create-epics`
 
 **Expected behavior:**
 
@@ -165,7 +165,7 @@ In `solo` mode: PR-EPIC is skipped. Output notes: "PR-EPIC skipped — solo mode
 - `production/session-state/review-mode.txt` contains `full`
 - PR-EPIC gate returns CONCERNS (e.g., scope of one epic is too large)
 
-**Input:** `/skill:gamedev-create-epics`
+**Input:** `gamedev:create-epics`
 
 **Expected behavior:**
 
@@ -191,7 +191,7 @@ In `solo` mode: PR-EPIC is skipped. Output notes: "PR-EPIC skipped — solo mode
 - [ ] PR-EPIC gate (if active) runs before write asks — not after
 - [ ] Skipped gates noted by name and mode in output
 - [ ] EPIC.md content sourced only from GDDs, ADRs, and architecture docs — nothing invented
-- [ ] Ends with next-step handoff: `/skill:gamedev-create-stories [epic-slug]` per created epic
+- [ ] Ends with next-step handoff: `gamedev:create-stories [epic-slug]` per created epic
 
 ---
 

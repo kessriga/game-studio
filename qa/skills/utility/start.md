@@ -101,7 +101,8 @@ the current host's syntax.
 - [ ] `production/review-mode.txt` records `lean`
 - [ ] An existing review mode is read without asking the user to choose again
 - [ ] No director gate is invoked by the start skill
-- [ ] Pi receives `/skill:gamedev-<skill>`; role labels are not assumed registered agent types
+- [ ] Each host receives its own invocation syntax for `gamedev:<skill>`; role labels are not assumed registered agent
+      types
 - [ ] The next skill is recommended, not automatically run
 
 ## Coverage Notes

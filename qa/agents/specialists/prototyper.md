@@ -109,4 +109,4 @@ a basic grid movement system — player clicks a tile and the character moves to
   configured
 - The intentional relaxation of coding standards is a feature, not a gap — do not flag missing tests or doc comments as
   failures in prototype output
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

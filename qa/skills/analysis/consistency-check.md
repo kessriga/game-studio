@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-consistency-check
+# Skill Test Spec: gamedev:consistency-check
 
 ## Skill Summary
 
-`/skill:gamedev-consistency-check` scans all GDDs in `design/gdd/` and checks for internal conflicts across documents.
+`gamedev:consistency-check` scans all GDDs in `design/gdd/` and checks for internal conflicts across documents.
 It produces a structured findings table with columns: System A vs System B, Conflict Type, Severity (HIGH / MEDIUM /
 LOW). Conflict types include: formula mismatch, competing ownership, stale reference, and dependency gap.
 
@@ -13,7 +13,7 @@ The skill is read-only during analysis. It has no director gates. An optional co
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -42,7 +42,7 @@ technical director review is required as part of the scan itself.
 - No two GDDs claim ownership of the same game entity or mechanic
 - All dependency references point to GDDs that exist
 
-**Input:** `/skill:gamedev-consistency-check`
+**Input:** `gamedev:consistency-check`
 
 **Expected behavior:**
 
@@ -70,7 +70,7 @@ technical director review is required as part of the scan itself.
 - GDD-B defines damage formula: `damage = attack * 2.0` for the same entity type
 - Both GDDs refer to the same "attack" variable
 
-**Input:** `/skill:gamedev-consistency-check`
+**Input:** `gamedev:consistency-check`
 
 **Expected behavior:**
 
@@ -98,7 +98,7 @@ technical director review is required as part of the scan itself.
 - No GDD for system-B exists in `design/gdd/`
 - All other GDDs are consistent
 
-**Input:** `/skill:gamedev-consistency-check`
+**Input:** `gamedev:consistency-check`
 
 **Expected behavior:**
 
@@ -112,7 +112,7 @@ technical director review is required as part of the scan itself.
 - [ ] Verdict is DEPENDENCY GAP (distinct from CONSISTENT and CONFLICTS FOUND)
 - [ ] Findings entry names GDD-A and the missing system-B
 - [ ] Severity is MEDIUM for an unresolved dependency reference
-- [ ] Skill suggests running `/skill:gamedev-design-system system-B` to create the missing GDD
+- [ ] Skill suggests running `gamedev:design-system system-B` to create the missing GDD
 
 ---
 
@@ -122,13 +122,13 @@ technical director review is required as part of the scan itself.
 
 - `design/gdd/` directory is empty or does not exist
 
-**Input:** `/skill:gamedev-consistency-check`
+**Input:** `gamedev:consistency-check`
 
 **Expected behavior:**
 
 1. Skill attempts to read files in `design/gdd/`
 2. No GDD files found
-3. Skill outputs an error: "No GDDs found in `design/gdd/`. Run `/skill:gamedev-design-system` to create GDDs first."
+3. Skill outputs an error: "No GDDs found in `design/gdd/`. Run `gamedev:design-system` to create GDDs first."
 4. No findings table is produced
 5. No verdict is issued
 
@@ -136,7 +136,7 @@ technical director review is required as part of the scan itself.
 
 - [ ] Skill outputs a clear error message when no GDDs are found
 - [ ] No verdict is produced (CONSISTENT / CONFLICTS FOUND / DEPENDENCY GAP)
-- [ ] Skill recommends the correct next action (`/skill:gamedev-design-system`)
+- [ ] Skill recommends the correct next action (`gamedev:design-system`)
 - [ ] Skill does NOT crash or produce a partial report
 
 ---
@@ -148,7 +148,7 @@ technical director review is required as part of the scan itself.
 - `design/gdd/` contains ≥2 GDDs
 - `production/session-state/review-mode.txt` exists with `full`
 
-**Input:** `/skill:gamedev-consistency-check`
+**Input:** `gamedev:consistency-check`
 
 **Expected behavior:**
 
@@ -180,7 +180,7 @@ technical director review is required as part of the scan itself.
 ## Coverage Notes
 
 - This skill checks for structural consistency between GDDs. Deep design theory analysis (pillar drift, dominant
-  strategies) is handled by `/skill:gamedev-review-all-gdds`.
+  strategies) is handled by `gamedev:review-all-gdds`.
 - Formula conflict detection relies on consistent formula notation across GDDs — informal descriptions of the same
   mechanic may not be detected.
 - The conflict severity rubric (HIGH / MEDIUM / LOW) is defined in the skill body and not re-enumerated here.

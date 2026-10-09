@@ -58,8 +58,8 @@ installed package files to configure a game.
 
 Two conventions the gate checks:
 
-- **Namespacing.** Identify skills and roles as `gamedev:<name>`; frontmatter `name:` fields stay bare. Pi examples use
-  `/skill:gamedev-<skill>`. Run `python3 scripts/check-namespacing.py` before committing — it fails on any bare
+- **Namespacing.** Identify skills and roles as `gamedev:<name>`; frontmatter `name:` fields stay bare. Host guides show
+  each host's invocation syntax. Run `python3 scripts/check-namespacing.py` before committing — it fails on any bare
   framework reference.
 - **Paths.** Skills reference framework docs relative to their own `SKILL.md` (`../../docs/<file>.md`); project-side
   files (`docs/rules/`, `docs/technical-preferences.md`) keep their project paths.
@@ -119,9 +119,9 @@ Every user-visible release needs a version bump in the same PR as its changes:
 Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-feat: add /skill:gamedev-playtest-report skill for structured playtest capture
+feat: add gamedev:playtest-report skill for structured playtest capture
 fix: preserve custom preferences during scaffolding
-docs: update skills-reference with new /skill:gamedev-qa-plan entry
+docs: update skills-reference with new gamedev:qa-plan entry
 ```
 
 Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`

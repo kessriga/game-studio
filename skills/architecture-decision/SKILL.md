@@ -20,13 +20,13 @@ Resolve the review mode (once, store for all gate spawns this run):
 See `../../docs/director-gates.md` for the full check pattern.
 
 **If the argument starts with `retrofit` followed by a file path** (e.g.,
-`/skill:gamedev-architecture-decision retrofit docs/architecture/adr-0001-event-system.md`):
+`gamedev:architecture-decision retrofit docs/architecture/adr-0001-event-system.md`):
 
 Enter **retrofit mode**:
 
 1. Read the existing ADR file completely.
 2. Identify which template sections are present by scanning headings:
-   - `## Status` — **BLOCKING if missing**: `/skill:gamedev-story-readiness` cannot check ADR acceptance
+   - `## Status` — **BLOCKING if missing**: `gamedev:story-readiness` cannot check ADR acceptance
    - `## ADR Dependencies` — HIGH if missing: dependency ordering breaks
    - `## Engine Compatibility` — HIGH if missing: post-cutoff risk unknown
    - `## GDD Requirements Addressed` — MEDIUM if missing: traceability lost
@@ -59,7 +59,7 @@ Enter **retrofit mode**:
    - Append each missing section to the ADR file using the Edit tool.
    - **Never modify any existing section.** Only append or fill absent sections.
 6. After adding all missing sections, update the ADR's `## Date` field if it is absent.
-7. Suggest: "Run `/skill:gamedev-architecture-review` to re-validate coverage now that this ADR has its Status and
+7. Suggest: "Run `gamedev:architecture-review` to re-validate coverage now that this ADR has its Status and
    Dependencies fields."
 
 If NOT in retrofit mode, proceed to Step 1 below (normal ADR authoring).
@@ -109,7 +109,7 @@ Before doing anything else, establish the engine environment:
    Proceed with verified information only — do NOT rely solely on training data.
    ```
 
-   If no engine has been configured yet, prompt: "No engine is configured. Run `/skill:gamedev-setup-engine` first, or
+   If no engine has been configured yet, prompt: "No engine is configured. Run `gamedev:setup-engine` first, or
    tell me which engine you are using."
 
 ---
@@ -459,18 +459,18 @@ Widget format:
 ADR-[NNNN] written and registry updated. What would you like to do next?
 [1] Write [next-priority-adr-name] — [brief description from prerequisites list]
 [2] Write [another-priority-adr] — [brief description]  (include ALL remaining ones)
-[N] Start writing GDDs — run `/skill:gamedev-design-system [first-undesigned-system]` (only show if all prerequisite ADRs are written)
+[N] Start writing GDDs — run `gamedev:design-system [first-undesigned-system]` (only show if all prerequisite ADRs are written)
 [N+1] Stop here for this session
 ```
 
 If there are no remaining priority ADRs and no undesigned GDD systems, offer only "Stop here" and suggest running
-`/skill:gamedev-architecture-review` in a fresh session.
+`gamedev:architecture-review` in a fresh session.
 
 **Always include this fixed notice in the closing output (do NOT omit it):**
 
-> To validate ADR coverage against your GDDs, open a **fresh session** and run `/skill:gamedev-architecture-review`.
+> To validate ADR coverage against your GDDs, open a **fresh session** and run `gamedev:architecture-review`.
 >
-> **Never run `/skill:gamedev-architecture-review` in the same session as `/skill:gamedev-architecture-decision`.** The
+> **Never run `gamedev:architecture-review` in the same session as `gamedev:architecture-decision`.** The
 > reviewing agent must be independent of the authoring context to give an unbiased assessment. Running it here would
 > invalidate the review.
 

@@ -1,6 +1,6 @@
 ---
 name: art-bible
-description: "Guided, section-by-section Art Bible authoring. Creates the visual identity specification that gates all asset production. Run after /skill:gamedev-brainstorm is approved and before /skill:gamedev-map-systems or any GDD authoring begins."
+description: "Guided, section-by-section Art Bible authoring. Creates the visual identity specification that gates all asset production. Run after gamedev:brainstorm is approved and before gamedev:map-systems or any GDD authoring begins."
 ---
 
 Before following this workflow, read [the host guide](../../docs/host-runtime.md) for tool and delegation rules.
@@ -18,7 +18,7 @@ Resolve the review mode (once, store for all gate spawns this run):
 See `../../docs/director-gates.md` for the full check pattern.
 
 Read `design/gdd/game-concept.md`. If it does not exist, fail with:
-> "No game concept found. Run `/skill:gamedev-brainstorm` first — the art bible is authored after the game concept is
+> "No game concept found. Run `gamedev:brainstorm` first — the art bible is authored after the game concept is
 > approved."
 
 Extract from game-concept.md:
@@ -268,31 +268,31 @@ Before presenting next steps, check project state:
   skip that option
 - Does `design/gdd/` contain any `*.md` files? → design-system has been run, skip that option
 - Does `design/gdd/gdd-cross-review-*.md` exist? → review-all-gdds is done
-- Do GDDs exist (check above)? → include /skill:gamedev-consistency-check option
+- Do GDDs exist (check above)? → include gamedev:consistency-check option
 
 Use a user-input tool or chat for next steps. Only include options that are genuinely next based on the state check
 above:
 
 **Option pool — include only if not already done:**
 
-- `[_] Run /skill:gamedev-map-systems — decompose the concept into systems before writing GDDs` (skip if
+- `[_] Run gamedev:map-systems — decompose the concept into systems before writing GDDs` (skip if
   systems-index.md exists)
-- `[_] Run /skill:gamedev-setup-engine — configure the engine (asset standards may need revisiting after engine is set)`
+- `[_] Run gamedev:setup-engine — configure the engine (asset standards may need revisiting after engine is set)`
   (skip if engine configured)
-- `[_] Run /skill:gamedev-design-system — start the first GDD` (skip if any GDDs exist)
-- `[_] Run /skill:gamedev-review-all-gdds — cross-GDD consistency check (required before Technical Setup gate)` (skip if
+- `[_] Run gamedev:design-system — start the first GDD` (skip if any GDDs exist)
+- `[_] Run gamedev:review-all-gdds — cross-GDD consistency check (required before Technical Setup gate)` (skip if
   gdd-cross-review-*.md exists)
-- `[_] Run /skill:gamedev-asset-spec — generate per-asset visual specs and AI generation prompts from approved GDDs`
+- `[_] Run gamedev:asset-spec — generate per-asset visual specs and AI generation prompts from approved GDDs`
   (include if GDDs exist)
-- `[_] Run /skill:gamedev-consistency-check — scan existing GDDs against the art bible for visual direction conflicts`
+- `[_] Run gamedev:consistency-check — scan existing GDDs against the art bible for visual direction conflicts`
   (include if GDDs exist)
-- `[_] Run /skill:gamedev-create-architecture — author the master architecture document (next Technical Setup step)`
+- `[_] Run gamedev:create-architecture — author the master architecture document (next Technical Setup step)`
 - `[_] Stop here`
 
 Assign letters A, B, C… only to the options actually included. Mark the most logical pipeline-advancing option as
 `(recommended)`.
 
-> **Always include** `/skill:gamedev-create-architecture` and Stop here as options — these are always valid next steps
+> **Always include** `gamedev:create-architecture` and Stop here as options — these are always valid next steps
 > once the art bible is complete.
 
 ---
@@ -314,9 +314,9 @@ Every section follows: **Question → Options → Decision → Draft (from art-d
 
 After the art bible is approved:
 
-- Run `/skill:gamedev-map-systems` to decompose the concept into game systems before authoring GDDs
-- Run `/skill:gamedev-setup-engine` if the engine is not yet configured (asset standards may need revisiting after
+- Run `gamedev:map-systems` to decompose the concept into game systems before authoring GDDs
+- Run `gamedev:setup-engine` if the engine is not yet configured (asset standards may need revisiting after
   engine selection)
-- Run `/skill:gamedev-design-system [first-system]` to start authoring per-system GDDs
-- Run `/skill:gamedev-consistency-check` once GDDs exist to validate them against the art bible's visual rules
-- Run `/skill:gamedev-create-architecture` to produce the master architecture document
+- Run `gamedev:design-system [first-system]` to start authoring per-system GDDs
+- Run `gamedev:consistency-check` once GDDs exist to validate them against the art bible's visual rules
+- Run `gamedev:create-architecture` to produce the master architecture document

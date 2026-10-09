@@ -24,8 +24,8 @@ start costs 30 minutes. A test framework installed at sprint four costs 3 sprint
 
 1. **Read engine config**:
    - Read `docs/technical-preferences.md` and extract the `Engine:` value.
-   - If engine is not configured (`[TO BE CONFIGURED]`), stop: "Engine not configured. Run `/skill:gamedev-setup-engine`
-     first, then re-run `/skill:gamedev-test-setup`."
+   - If engine is not configured (`[TO BE CONFIGURED]`), stop: "Engine not configured. Run `gamedev:setup-engine`
+     first, then re-run `gamedev:test-setup`."
 
 2. **Check for existing test infrastructure**:
    - Glob `tests/` — does the directory exist?
@@ -37,7 +37,7 @@ start costs 30 minutes. A test framework installed at sprint four costs 3 sprint
 3. **Report findings**:
    - "Engine: [engine]. Test directory: [found / not found]. CI workflow: [found / not found]."
    - If everything already exists AND `force` argument was not passed: "Test infrastructure appears to be in place.
-     Re-run with `/skill:gamedev-test-setup force` to regenerate. Proceeding will not overwrite existing test files."
+     Re-run with `gamedev:test-setup force` to regenerate. Proceeding will not overwrite existing test files."
 
 If the `force` argument is passed, skip the "already exists" early-exit and proceed — but still do not overwrite files
 that already exist at a given path. Only create files that are missing.
@@ -92,7 +92,7 @@ After approval, create the following files:
 ```
 
 tests/ unit/ # Isolated unit tests (formulas, state machines, logic) integration/ # Cross-system and save/load tests
-smoke/ # Critical path test list for /skill:gamedev-smoke-check gate evidence/ # Screenshot logs and manual test
+smoke/ # Critical path test list for gamedev:smoke-check gate evidence/ # Screenshot logs and manual test
 sign-off records
 
 ```
@@ -132,7 +132,7 @@ A failed test suite blocks merging.
 Create `tests/gdunit4_runner.gd`:
 
 ```gdscript
-# GdUnit4 test runner — invoked by CI and /skill:gamedev-smoke-check
+# GdUnit4 test runner — invoked by CI and gamedev:smoke-check
 # Usage: godot --headless --script tests/gdunit4_runner.gd
 extends SceneTree
 
@@ -442,7 +442,7 @@ Create `tests/smoke/critical-paths.md`:
 # Smoke Test: Critical Paths
 
 **Purpose**: Run these 10-15 checks in under 15 minutes before any QA hand-off.
-**Run via**: `/skill:gamedev-smoke-check` (which reads this file)
+**Run via**: `gamedev:smoke-check` (which reads this file)
 **Update**: Add new entries when new core systems are implemented.
 
 ## Core Stability (always run)
@@ -489,15 +489,15 @@ Files created:
 Next steps:
 1. [Engine-specific install step, e.g., "Install GdUnit4 via AssetLib"]
 2. Write your first test: create tests/unit/[first-system]/[system]_test.[ext]
-3. Run `/skill:gamedev-qa-plan sprint` before your first sprint to classify stories and set
+3. Run `gamedev:qa-plan sprint` before your first sprint to classify stories and set
    test evidence requirements
-4. `/skill:gamedev-smoke-check` before every QA hand-off
+4. `gamedev:smoke-check` before every QA hand-off
 
-Gate note: /skill:gamedev-gate-check Technical Setup → Pre-Production now requires:
+Gate note: gamedev:gate-check Technical Setup → Pre-Production now requires:
 - tests/ directory with unit/ and integration/ subdirectories
 - .github/workflows/tests.yml
 - At least one example test file
-Run /skill:gamedev-test-setup and write one example test before advancing.
+Run gamedev:test-setup and write one example test before advancing.
 
 Verdict: **COMPLETE** — test framework scaffolded and CI/CD wired up.
 ```
@@ -510,7 +510,7 @@ Verdict: **COMPLETE** — test framework scaffolded and CI/CD wired up.
   as-is.
 - **Always ask before creating files** — Phase 2 requires explicit approval.
 - **Engine detection is non-negotiable** — if the engine is not configured, stop and redirect to
-  `/skill:gamedev-setup-engine`. Do not guess.
+  `gamedev:setup-engine`. Do not guess.
 - **`force` flag skips the "already exists" early-exit but never overwrites.** It means "create any missing files even
   if the directory already exists."
 - For Unity CI, note that the `UNITY_LICENSE` secret must be configured manually. Do not attempt to automate license

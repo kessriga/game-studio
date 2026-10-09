@@ -1,6 +1,6 @@
 # Architecture Traceability Index
 
-<!-- Living document — updated by /skill:gamedev-architecture-review after each review run.
+<!-- Living document — updated by gamedev:architecture-review after each review run.
      Do not edit manually unless correcting an error. -->
 
 ## Document Status
@@ -32,7 +32,7 @@
 | Req ID | GDD | System | Requirement Summary | ADR(s) | Status | Notes |
 |--------|-----|--------|---------------------|--------|--------|-------|
 | TR-[gdd]-001 | [filename] | [system name] | [one-line summary] | [ADR-NNNN] | ✅ | |
-| TR-[gdd]-002 | [filename] | [system name] | [one-line summary] | — | ❌ GAP | Needs `/skill:gamedev-architecture-decision [title]` |
+| TR-[gdd]-002 | [filename] | [system name] | [one-line summary] | — | ❌ GAP | Needs `gamedev:architecture-decision [title]` |
 
 ---
 
@@ -97,7 +97,7 @@ matrix.
 **When approving a GDD change**: Scan the matrix for requirements from that GDD and check whether the change invalidates
 any existing ADR. Add to "Superseded Requirements" if so.
 
-**When running `/skill:gamedev-architecture-review`**: The skill will update this document automatically with the
+**When running `gamedev:architecture-review`**: The skill will update this document automatically with the
 current state.
 
 **Gate check**: The Pre-Production gate requires this document to exist and to have zero Foundation Layer Gaps.

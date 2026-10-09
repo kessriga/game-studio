@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-dev-story
+# Skill Test Spec: gamedev:dev-story
 
 ## Skill Summary
 
-`/skill:gamedev-dev-story` reads a story file, loads all required context (referenced ADR, TR-ID from the registry,
+`gamedev:dev-story` reads a story file, loads all required context (referenced ADR, TR-ID from the registry,
 control manifest, engine preferences), implements the story, verifies that all acceptance criteria are met, and marks
 the story Complete. The skill routes implementation to the correct specialist agent based on the engine and file type —
 it does not write source code directly.
@@ -15,13 +15,13 @@ LP-CODE-REVIEW is skipped and the story is marked Complete after the user confir
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED, IN PROGRESS, NEEDS CHANGES
 - [ ] Contains "May I write" collaborative protocol language (story status + code files)
-- [ ] Has a next-step handoff at the end (`/skill:gamedev-story-done`)
+- [ ] Has a next-step handoff at the end (`gamedev:story-done`)
 - [ ] Documents LP-CODE-REVIEW gate: active in full mode, skipped in lean/solo
 - [ ] Notes that implementation is delegated to specialist agents (not done directly)
 
@@ -55,7 +55,7 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 - `docs/technical-preferences.md` has engine and language configured
 - `production/session-state/review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-dev-story production/epics/[layer]/story-[name].md`
+**Input:** `gamedev:dev-story production/epics/[layer]/story-[name].md`
 
 **Expected behavior:**
 
@@ -86,7 +86,7 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 - A story file exists with `Status: Ready`
 - The story's TR-ID points to a requirement covered by an ADR with `Status: Proposed`
 
-**Input:** `/skill:gamedev-dev-story production/epics/[layer]/story-[name].md`
+**Input:** `gamedev:dev-story production/epics/[layer]/story-[name].md`
 
 **Expected behavior:**
 
@@ -94,14 +94,14 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 2. Skill resolves the TR-ID and reads the governing ADR
 3. ADR status is Proposed — skill outputs a BLOCKED message
 4. Skill names the specific ADR blocking the story
-5. Skill recommends running `/skill:gamedev-architecture-decision` to advance the ADR
+5. Skill recommends running `gamedev:architecture-decision` to advance the ADR
 6. Implementation does NOT begin
 
 **Assertions:**
 
 - [ ] Skill does NOT begin implementation with a Proposed ADR
 - [ ] BLOCKED message names the specific ADR number and title
-- [ ] Skill recommends `/skill:gamedev-architecture-decision` as the next action
+- [ ] Skill recommends `gamedev:architecture-decision` as the next action
 - [ ] Story status remains unchanged (not set to In Progress or Complete)
 
 ---
@@ -114,7 +114,7 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 - Referenced ADR is Accepted
 - One acceptance criterion is ambiguous (not Given-When-Then; uses subjective language like "feels responsive")
 
-**Input:** `/skill:gamedev-dev-story production/epics/[layer]/story-[name].md`
+**Input:** `gamedev:dev-story production/epics/[layer]/story-[name].md`
 
 **Expected behavior:**
 
@@ -141,7 +141,7 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 - `production/session-state/active.md` references an active story file
 - That story file exists with `Status: In Progress`
 
-**Input:** `/skill:gamedev-dev-story` (no argument)
+**Input:** `gamedev:dev-story` (no argument)
 
 **Expected behavior:**
 
@@ -207,7 +207,7 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 - [ ] "May I write" asked before updating story status and before writing code files
 - [ ] Skipped gates noted by name and mode in output
 - [ ] Updates `production/session-state/active.md` after story completion
-- [ ] Ends with next-step handoff: `/skill:gamedev-story-done`
+- [ ] Ends with next-step handoff: `gamedev:story-done`
 
 ---
 

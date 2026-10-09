@@ -105,4 +105,4 @@ manual walkthrough), and returns INADEQUATE with the specific requirement cited.
 - Bug severity triage (P0/P1/P2 classification) is not covered here — deferred to triage via the Backlog board filtered
   by the `bug` label.
 - Release quality gate behavior (PASS / FAIL vocabulary variant) is not covered.
-- Interaction between QL-STORY-READY and story Done criteria (/skill:gamedev-story-done skill) is not covered.
+- Interaction between QL-STORY-READY and story Done criteria (gamedev:story-done skill) is not covered.

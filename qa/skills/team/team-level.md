@@ -1,4 +1,4 @@
-# Skill Test Spec: /skill:gamedev-team-level
+# Skill Test Spec: gamedev:team-level
 
 ## Skill Summary
 
@@ -6,8 +6,8 @@ Orchestrates the full level design team for a single level or area. Coordinates 
 level-designer, systems-designer, art-director, accessibility-specialist, and qa-tester through five sequential steps
 with one parallel phase (Step 4). Compiles all team outputs into a single level design document saved to
 `design/levels/[level-name].md`. Uses a user-input tool or chat at each step transition. Delegates all file writes to
-sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handoffs to `/skill:gamedev-design-review`,
-`/skill:gamedev-dev-story`, `/skill:gamedev-qa-plan`.
+sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handoffs to `gamedev:design-review`,
+`gamedev:dev-story`, `gamedev:qa-plan`.
 
 ---
 
@@ -18,8 +18,8 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED
 - [ ] Contains "May I write" or "File Write Protocol" — writes delegated to sub-agents, orchestrator does not write
       files directly
-- [ ] Has a next-step handoff at the end (references `/skill:gamedev-design-review`, `/skill:gamedev-dev-story`,
-      `/skill:gamedev-qa-plan`)
+- [ ] Has a next-step handoff at the end (references `gamedev:design-review`, `gamedev:dev-story`,
+      `gamedev:qa-plan`)
 - [ ] Error Recovery Protocol section is present with all four recovery steps
 - [ ] Uses a user-input tool or chat at step transitions for user approval before proceeding
 - [ ] Step 4 is explicitly marked as parallel (art-director and accessibility-specialist run simultaneously)
@@ -43,7 +43,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
 - `design/levels/` directory exists (may contain other level docs)
 - `design/narrative/` directory exists with relevant narrative docs
 
-**Input:** `/skill:gamedev-team-level forest dungeon`
+**Input:** `gamedev:team-level forest dungeon`
 
 **Expected behavior:**
 
@@ -67,8 +67,8 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
    `design/levels/forest-dungeon.md`?"; file saved
 8. Summary report: area overview, encounter count, estimated asset list, narrative beats, cross-team dependencies,
    verdict: COMPLETE
-9. Next steps listed: `/skill:gamedev-design-review design/levels/forest-dungeon.md`, `/skill:gamedev-dev-story`,
-   `/skill:gamedev-qa-plan`
+9. Next steps listed: `gamedev:design-review design/levels/forest-dungeon.md`, `gamedev:dev-story`,
+   `gamedev:qa-plan`
 
 **Assertions:**
 
@@ -80,7 +80,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
 - [ ] All file writes delegated to sub-agents — orchestrator does not write directly
 - [ ] Level doc saved to `design/levels/forest-dungeon.md` (slugified from argument)
 - [ ] Verdict COMPLETE in final summary report
-- [ ] Next steps include `/skill:gamedev-design-review`, `/skill:gamedev-dev-story`, `/skill:gamedev-qa-plan`
+- [ ] Next steps include `gamedev:design-review`, `gamedev:dev-story`, `gamedev:qa-plan`
 - [ ] Summary report includes: area overview, encounter count, estimated asset list, narrative beats
 
 ---
@@ -94,7 +94,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
 - world-builder agent returns BLOCKED: "No world-building docs found for the forest region — cannot provide lore
   context"
 
-**Input:** `/skill:gamedev-team-level forest dungeon`
+**Input:** `gamedev:team-level forest dungeon`
 
 **Expected behavior:**
 
@@ -126,14 +126,14 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
 
 - Any project state
 
-**Input:** `/skill:gamedev-team-level` (no argument)
+**Input:** `gamedev:team-level` (no argument)
 
 **Expected behavior:**
 
 1. Skill detects no argument provided
 2. Outputs usage message explaining the required argument (level name or area to design)
-3. Provides example invocations: `/skill:gamedev-team-level tutorial`, `/skill:gamedev-team-level forest dungeon`,
-   `/skill:gamedev-team-level final boss arena`
+3. Provides example invocations: `gamedev:team-level tutorial`, `gamedev:team-level forest dungeon`,
+   `gamedev:team-level final boss arena`
 4. Skill exits without reading any project files or spawning any subagents
 
 **Assertions:**
@@ -156,7 +156,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
   requires players to distinguish between two environmental hazards (toxic pools vs. shallow water) using color alone —
   no shape, icon, or audio cue differentiates them
 
-**Input:** `/skill:gamedev-team-level forest dungeon`
+**Input:** `gamedev:team-level forest dungeon`
 
 **Expected behavior:**
 
@@ -192,7 +192,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
   adjacent area)
 - `design/levels/crystal-caves.md` does NOT exist — the crystal caves area has not been designed yet
 
-**Input:** `/skill:gamedev-team-level forest dungeon`
+**Input:** `gamedev:team-level forest dungeon`
 
 **Expected behavior:**
 
@@ -202,7 +202,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
    does not exist"
 4. a user-input tool or chat presented with options:
    - (a) Proceed with a placeholder reference — note the dependency in the level doc as UNRESOLVED
-   - (b) Pause and run `/skill:gamedev-team-level crystal caves` first to establish that area
+   - (b) Pause and run `gamedev:team-level crystal caves` first to establish that area
 5. Skill does NOT invent crystal caves content to satisfy the reference
 6. If user chooses (a): level doc compiled with the west exit marked "→ crystal-caves (UNRESOLVED — area not yet
    designed)"; flagged in the open dependencies section of the summary report
@@ -212,7 +212,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
 
 - [ ] Skill detects the missing adjacent area by checking `design/levels/` — does not assume it will be created later
 - [ ] Skill does NOT fabricate crystal caves content (lore, layout, connections) to resolve the reference
-- [ ] a user-input tool or chat offers a "design crystal caves first" option referencing `/skill:gamedev-team-level`
+- [ ] a user-input tool or chat offers a "design crystal caves first" option referencing `gamedev:team-level`
 - [ ] If user proceeds with placeholder, level doc explicitly marks the west exit as UNRESOLVED
 - [ ] Summary report includes an open cross-level dependencies section listing unresolved references
 - [ ] Circular or forward references do not cause the skill to loop or crash
@@ -229,7 +229,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
 - [ ] Partial report always produced even when agents are BLOCKED
 - [ ] Accessibility BLOCKING concerns surface before sign-off and require explicit user acknowledgment
 - [ ] Verdict is one of COMPLETE / BLOCKED
-- [ ] Next steps present at end: `/skill:gamedev-design-review`, `/skill:gamedev-dev-story`, `/skill:gamedev-qa-plan`
+- [ ] Next steps present at end: `gamedev:design-review`, `gamedev:dev-story`, `gamedev:qa-plan`
 
 ---
 

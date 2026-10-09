@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-story-done
+# Skill Test Spec: gamedev:story-done
 
 ## Skill Summary
 
-`/skill:gamedev-story-done` closes the loop between design and implementation. Run at the end of implementing a story,
+`gamedev:story-done` closes the loop between design and implementation. Run at the end of implementing a story,
 it reads the story file and verifies each acceptance criterion against the implementation. It checks for GDD and ADR
 deviations, prompts a code review, sets the Backlog task to `Done` (status lives in Backlog, not a `Status:` field in
 the `.md`), logs any tech debt, and surfaces the next ready task from the Backlog board. It produces a COMPLETE /
@@ -13,7 +13,7 @@ COMPLETE WITH NOTES / BLOCKED verdict, appends `## Completion Notes` to the stor
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥5 phase headings (complex multi-phase workflow)
@@ -39,7 +39,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - GDD requirement text at TR-light-001 matches how the feature was implemented
 - ADR guidance was followed (no deviations)
 
-**Input:** `/skill:gamedev-story-done production/epics/core/story-light-pickup.md`
+**Input:** `gamedev:story-done production/epics/core/story-light-pickup.md`
 
 **Expected behavior:**
 
@@ -77,7 +77,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - Manual verification has not been performed
 - All other criteria are met
 
-**Input:** `/skill:gamedev-story-done production/epics/core/story-light-pickup.md`
+**Input:** `gamedev:story-done production/epics/core/story-light-pickup.md`
 
 **Expected behavior:**
 
@@ -106,7 +106,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - Implementation in `src/` uses a variable `MAX_CARRIED_LIGHTS = 5`
 - This is a deliberate deviation from the GDD
 
-**Input:** `/skill:gamedev-story-done production/epics/core/story-light-pickup.md`
+**Input:** `gamedev:story-done production/epics/core/story-light-pickup.md`
 
 **Expected behavior:**
 
@@ -137,7 +137,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
   active story
 - That story file exists and is tracked by a Backlog task with status `In Progress`
 
-**Input:** `/skill:gamedev-story-done` (no argument)
+**Input:** `gamedev:story-done` (no argument)
 
 **Expected behavior:**
 
@@ -168,7 +168,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-story-done production/epics/core/story-light-pickup.md` (full mode)
+**Input:** `gamedev:story-done production/epics/core/story-light-pickup.md` (full mode)
 
 **Expected behavior:**
 
@@ -211,7 +211,7 @@ Verified automatically by `/skill:gamedev-skill-test static` — no fixture need
 - [ ] Uses "May I write" before adding entries to `docs/tech-debt-register.md`
 - [ ] Presents complete findings (criteria check, deviation check) before asking approval
 - [ ] Ends by surfacing the next ready task from the Backlog board (the milestone), or the milestone close-out sequence
-      (`/skill:gamedev-smoke-check` → `/skill:gamedev-team-qa [milestone]` → `/skill:gamedev-gate-check`) when no
+      (`gamedev:smoke-check` → `gamedev:team-qa [milestone]` → `gamedev:gate-check`) when no
       `To Do` tasks remain
 - [ ] Does not mark a story Complete if any criteria are in ERROR state
 - [ ] Does not skip the code review prompt

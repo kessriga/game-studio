@@ -8,7 +8,7 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 **Arguments:** [combat feature description] [--review full|lean|solo]
 
 **Argument check:** If no combat feature description is provided, output:
-> "Usage: `/skill:gamedev-team-combat [combat feature description]` — Provide a description of the combat feature to
+> "Usage: `gamedev:team-combat [combat feature description]` — Provide a description of the combat feature to
 design and implement (e.g., `melee parry system`, `ranged weapon spread`)." Then stop immediately without spawning any
 subagents or reading any files.
 
@@ -142,8 +142,8 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/skill:gamedev-architecture-decision` first
-- Scope too large → split into two stories via `/skill:gamedev-create-stories`
+- ADR status is Proposed → do not implement; run `gamedev:architecture-decision` first
+- Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## File Write Protocol
@@ -162,6 +162,6 @@ could not complete; partial report produced with unresolved items listed.
 
 ## Next Steps
 
-- Run `/skill:gamedev-code-review` on the implemented combat code before closing stories.
-- Run `/skill:gamedev-balance-check` to validate combat formulas and tuning values.
-- Run `/skill:gamedev-team-polish` if VFX, audio, or performance polish is needed.
+- Run `gamedev:code-review` on the implemented combat code before closing stories.
+- Run `gamedev:balance-check` to validate combat formulas and tuning values.
+- Run `gamedev:team-polish` if VFX, audio, or performance polish is needed.

@@ -222,7 +222,7 @@
 > - With 100% defense → Damage: 1 (clamped) ✓
 >
 > **Next Steps - Your Choice:** A) I can write formal unit tests now (recommended - verification-driven development) B)
-> You can review the code first via `/skill:gamedev-code-review src/gameplay/combat/damage_calculator.gd` C) Skip tests
+> You can review the code first via `gamedev:code-review src/gameplay/combat/damage_calculator.gd` C) Skip tests
 > for now and integrate into actual combat
 >
 > What would you like?

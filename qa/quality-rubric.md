@@ -1,6 +1,6 @@
 # Skill Quality Rubric
 
-Used by `/skill:gamedev-skill-test category [name|all]` to evaluate skills beyond structural compliance. Each category
+Used by `gamedev:skill-test category [name|all]` to evaluate skills beyond structural compliance. Each category
 defines 4–5 binary PASS/FAIL metrics specific to the skill's job.
 
 A metric is PASS when the skill's written instructions clearly satisfy the criterion. A metric is FAIL when the
@@ -170,7 +170,7 @@ be correct.
 
 | Metric | PASS criteria |
 | --- | --- |
-| **U1 — Passes all 7 static checks** | `/skill:gamedev-skill-test static [name]` returns COMPLIANT with 0 FAILs |
+| **U1 — Passes all 7 static checks** | `gamedev:skill-test static [name]` returns COMPLIANT with 0 FAILs |
 | **U2 — Gate mode correct (if applicable)** | If the skill spawns any director gate, it reads review-mode and applies full/lean/solo logic correctly |
 
 ---

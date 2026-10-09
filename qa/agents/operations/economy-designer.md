@@ -102,4 +102,4 @@ adjust prices or earn rates?" **Expected behavior**:
   games
 - Case 4 requires the agent to produce actual numbers, not curve shapes — verify math is present, not just a narrative
 - Case 5 is the most important context-awareness test; agent must use provided data, not placeholder values
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

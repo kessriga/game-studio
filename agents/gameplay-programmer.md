@@ -47,7 +47,7 @@ Before writing any code:
 
 6. **Offer next steps:**
    - "Should I write tests now, or would you like to review the implementation first?"
-   - "This is ready for /skill:gamedev-code-review if you'd like validation"
+   - "This is ready for gamedev:code-review if you'd like validation"
    - "I notice [potential improvement]. Should I refactor, or is this good for now?"
 
 #### Collaborative Mindset
@@ -89,7 +89,7 @@ this system:
 - If the ADR's guidelines conflict with what seems better, flag the discrepancy rather than silently deviating: "The ADR
   says X, but I think Y would be better — proceed with ADR or flag for architecture review?"
 - If no ADR exists for a new system, surface this: "No ADR found for [system]. Consider running
-  /skill:gamedev-architecture-decision first."
+  gamedev:architecture-decision first."
 
 ### Code Standards
 

@@ -78,7 +78,7 @@ Prompt the qa-lead to:
 - **Before assessing smoke status, check for an existing smoke check report**: Glob `production/qa/smoke-*.md` and read
   the most recently modified file (if found). If a report exists, use its verdict and findings directly — do not
   re-interview the user. If no report exists, note: "No prior smoke check report found — run
-  `/skill:gamedev-smoke-check` before proceeding." and set smoke check status to UNKNOWN (treat as PASS WITH WARNINGS
+  `gamedev:smoke-check` before proceeding." and set smoke check status to UNKNOWN (treat as PASS WITH WARNINGS
   for the purpose of continuing). Produce a smoke check verdict: **PASS** / **PASS WITH WARNINGS [list]** /
   **FAIL [list of failures]** / **UNKNOWN (no report found)**
 - Produce a strategy summary table and smoke check result:
@@ -100,13 +100,13 @@ options:
   - "Looks good — proceed to test plan"
   - "Adjust story types before proceeding"
   - "Skip blocked stories and proceed with the rest"
-  - "Smoke check failed — fix issues and re-run /skill:gamedev-team-qa"
+  - "Smoke check failed — fix issues and re-run gamedev:team-qa"
   - "Cancel — resolve blockers first"
 ```
 
 If smoke check **FAIL**: do not proceed to Phase 3. Surface the failures from the smoke check report and stop. The user
-must fix them, re-run `/skill:gamedev-smoke-check`, and then re-run `/skill:gamedev-team-qa`. If smoke check
-**UNKNOWN**: surface a warning — "No smoke check report found. Recommend running `/skill:gamedev-smoke-check` before QA.
+must fix them, re-run `gamedev:smoke-check`, and then re-run `gamedev:team-qa`. If smoke check
+**UNKNOWN**: surface a warning — "No smoke check report found. Recommend running `gamedev:smoke-check` before QA.
 Proceeding with caution." If smoke check **PASS WITH WARNINGS**: note the warnings for the sign-off report and continue.
 If blockers are present: list them explicitly. The user may choose to skip blocked stories or cancel the cycle.
 
@@ -181,7 +181,7 @@ options:
 ```
 
 After each FAIL result: use a user-input tool or chat to collect the failure description, then file a bug via
-`/skill:gamedev-bug-report` — a Backlog task with the `bug` label (repro/severity/context in the task description). The
+`gamedev:bug-report` — a Backlog task with the `bug` label (repro/severity/context in the task description). The
 board is the bug list; there is no `production/qa/bugs/` markdown store.
 
 After collecting all results, summarize:
@@ -228,9 +228,9 @@ Verdict rules:
 
 Next step guidance by verdict:
 
-- APPROVED: "Build is ready for the next phase. Run `/skill:gamedev-gate-check` to validate advancement."
+- APPROVED: "Build is ready for the next phase. Run `gamedev:gate-check` to validate advancement."
 - APPROVED WITH CONDITIONS: "Resolve conditions before advancing. S3/S4 bugs may be deferred to polish."
-- NOT APPROVED: "Resolve S1/S2 bugs and re-run `/skill:gamedev-team-qa` or targeted manual QA before advancing."
+- NOT APPROVED: "Resolve S1/S2 bugs and re-run `gamedev:team-qa` or targeted manual QA before advancing."
 
 Ask: "May I write this QA sign-off report to `production/qa/qa-signoff-[milestone]-[date].md`?"
 
@@ -252,8 +252,8 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `/skill:gamedev-architecture-decision` first
-- Scope too large → split into two stories via `/skill:gamedev-create-stories`
+- ADR status is Proposed → do not implement; run `gamedev:architecture-decision` first
+- Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
 ## Output

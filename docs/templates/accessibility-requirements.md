@@ -19,7 +19,7 @@
 > audits are completed. If a feature conflicts with a commitment made here, this document wins — change the feature, not
 > the commitment, unless the producer approves a formal revision.
 >
-> **When to update**: After each `/skill:gamedev-gate-check` pass, after any accessibility audit, and whenever a new
+> **When to update**: After each `gamedev:gate-check` pass, after any accessibility audit, and whenever a new
 > game system is added to `systems-index.md`.
 
 ---

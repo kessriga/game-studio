@@ -99,63 +99,63 @@ Wait for the user's selection. Do not proceed until they respond.
 The user needs creative exploration before anything else.
 
 1. Acknowledge that starting from zero is completely fine
-2. Briefly explain what `/skill:gamedev-brainstorm` does (guided ideation using professional frameworks — MDA, player
-   psychology, verb-first design). Mention that it has two modes: `/skill:gamedev-brainstorm open` for fully open
-   exploration, or `/skill:gamedev-brainstorm [hint]` if they have even a vague theme (e.g., "space", "cozy", "horror").
-3. Recommend running `/skill:gamedev-brainstorm open` as the next step, but invite them to use a hint if something comes
+2. Briefly explain what `gamedev:brainstorm` does (guided ideation using professional frameworks — MDA, player
+   psychology, verb-first design). Mention that it has two modes: `gamedev:brainstorm open` for fully open
+   exploration, or `gamedev:brainstorm [hint]` if they have even a vague theme (e.g., "space", "cozy", "horror").
+3. Recommend running `gamedev:brainstorm open` as the next step, but invite them to use a hint if something comes
    to mind
 4. Show the recommended path: **Concept phase:**
-   - `/skill:gamedev-brainstorm open` — discover your game concept
-   - `/skill:gamedev-setup-engine` — configure the engine (brainstorm will recommend one)
-   - `/skill:gamedev-prototype` — throwaway concept build: validate the core idea is fun before designing (1–3 days)
-   - `/skill:gamedev-art-bible` — define visual identity (uses the Visual Identity Anchor brainstorm produces)
-   - `/skill:gamedev-map-systems` — decompose the concept into systems
-   - `/skill:gamedev-design-system` — author a GDD for each MVP system
-   - `/skill:gamedev-review-all-gdds` — cross-system consistency check
-   - `/skill:gamedev-gate-check` — validate readiness before architecture work
+   - `gamedev:brainstorm open` — discover your game concept
+   - `gamedev:setup-engine` — configure the engine (brainstorm will recommend one)
+   - `gamedev:prototype` — throwaway concept build: validate the core idea is fun before designing (1–3 days)
+   - `gamedev:art-bible` — define visual identity (uses the Visual Identity Anchor brainstorm produces)
+   - `gamedev:map-systems` — decompose the concept into systems
+   - `gamedev:design-system` — author a GDD for each MVP system
+   - `gamedev:review-all-gdds` — cross-system consistency check
+   - `gamedev:gate-check` — validate readiness before architecture work
    **Architecture phase:**
-   - `/skill:gamedev-create-architecture` — produce the master architecture blueprint and Required ADR list
-   - `/skill:gamedev-architecture-decision (×N)` — record key technical decisions, following the Required ADR list
-   - `/skill:gamedev-create-control-manifest` — compile decisions into an actionable rules sheet
-   - `/skill:gamedev-architecture-review` — validate architecture coverage
+   - `gamedev:create-architecture` — produce the master architecture blueprint and Required ADR list
+   - `gamedev:architecture-decision (×N)` — record key technical decisions, following the Required ADR list
+   - `gamedev:create-control-manifest` — compile decisions into an actionable rules sheet
+   - `gamedev:architecture-review` — validate architecture coverage
    **Pre-Production phase:**
-   - `/skill:gamedev-ux-design` — author UX specs for key screens (main menu, HUD, core interactions)
-   - `/skill:gamedev-vertical-slice` — production-quality end-to-end build to validate the full game loop
-   - `/skill:gamedev-playtest-report (×1+)` — document each vertical slice playtest session
-   - `/skill:gamedev-create-epics` — map systems to epics
-   - `/skill:gamedev-create-stories` — break epics into implementable stories
-   - `/skill:gamedev-create-epics` — define the first epic (Backlog milestone), then `/skill:gamedev-create-stories` to
+   - `gamedev:ux-design` — author UX specs for key screens (main menu, HUD, core interactions)
+   - `gamedev:vertical-slice` — production-quality end-to-end build to validate the full game loop
+   - `gamedev:playtest-report (×1+)` — document each vertical slice playtest session
+   - `gamedev:create-epics` — map systems to epics
+   - `gamedev:create-stories` — break epics into implementable stories
+   - `gamedev:create-epics` — define the first epic (Backlog milestone), then `gamedev:create-stories` to
      fill the board
-   **Production phase:** → pick up stories with `/skill:gamedev-dev-story`
+   **Production phase:** → pick up stories with `gamedev:dev-story`
 
 #### If B: Vague idea
 
 1. Ask them to share their vague idea — even a few words is enough
 2. Validate the idea as a starting point (don't judge or redirect)
-3. Recommend running `/skill:gamedev-brainstorm [their hint]` to develop it
+3. Recommend running `gamedev:brainstorm [their hint]` to develop it
 4. Show the recommended path: **Concept phase:**
-   - `/skill:gamedev-brainstorm [hint]` — develop the idea into a full concept
-   - `/skill:gamedev-setup-engine` — configure the engine
-   - `/skill:gamedev-prototype` — throwaway concept build: validate the core idea is fun before designing (1–3 days)
-   - `/skill:gamedev-art-bible` — define visual identity (uses the Visual Identity Anchor brainstorm produces)
-   - `/skill:gamedev-map-systems` — decompose the concept into systems
-   - `/skill:gamedev-design-system` — author a GDD for each MVP system
-   - `/skill:gamedev-review-all-gdds` — cross-system consistency check
-   - `/skill:gamedev-gate-check` — validate readiness before architecture work
+   - `gamedev:brainstorm [hint]` — develop the idea into a full concept
+   - `gamedev:setup-engine` — configure the engine
+   - `gamedev:prototype` — throwaway concept build: validate the core idea is fun before designing (1–3 days)
+   - `gamedev:art-bible` — define visual identity (uses the Visual Identity Anchor brainstorm produces)
+   - `gamedev:map-systems` — decompose the concept into systems
+   - `gamedev:design-system` — author a GDD for each MVP system
+   - `gamedev:review-all-gdds` — cross-system consistency check
+   - `gamedev:gate-check` — validate readiness before architecture work
    **Architecture phase:**
-   - `/skill:gamedev-create-architecture` — produce the master architecture blueprint and Required ADR list
-   - `/skill:gamedev-architecture-decision (×N)` — record key technical decisions, following the Required ADR list
-   - `/skill:gamedev-create-control-manifest` — compile decisions into an actionable rules sheet
-   - `/skill:gamedev-architecture-review` — validate architecture coverage
+   - `gamedev:create-architecture` — produce the master architecture blueprint and Required ADR list
+   - `gamedev:architecture-decision (×N)` — record key technical decisions, following the Required ADR list
+   - `gamedev:create-control-manifest` — compile decisions into an actionable rules sheet
+   - `gamedev:architecture-review` — validate architecture coverage
    **Pre-Production phase:**
-   - `/skill:gamedev-ux-design` — author UX specs for key screens (main menu, HUD, core interactions)
-   - `/skill:gamedev-vertical-slice` — production-quality end-to-end build to validate the full game loop
-   - `/skill:gamedev-playtest-report (×1+)` — document each vertical slice playtest session
-   - `/skill:gamedev-create-epics` — map systems to epics
-   - `/skill:gamedev-create-stories` — break epics into implementable stories
-   - `/skill:gamedev-create-epics` — define the first epic (Backlog milestone), then `/skill:gamedev-create-stories` to
+   - `gamedev:ux-design` — author UX specs for key screens (main menu, HUD, core interactions)
+   - `gamedev:vertical-slice` — production-quality end-to-end build to validate the full game loop
+   - `gamedev:playtest-report (×1+)` — document each vertical slice playtest session
+   - `gamedev:create-epics` — map systems to epics
+   - `gamedev:create-stories` — break epics into implementable stories
+   - `gamedev:create-epics` — define the first epic (Backlog milestone), then `gamedev:create-stories` to
      fill the board
-   **Production phase:** → pick up stories with `/skill:gamedev-dev-story`
+   **Production phase:** → pick up stories with `gamedev:dev-story`
 
 #### If C: Clear concept
 
@@ -164,32 +164,32 @@ The user needs creative exploration before anything else.
 2. Acknowledge the concept, then use a user-input tool or chat to offer two paths:
    - **Prompt**: "How would you like to proceed?"
    - **Options**:
-     - `Formalize it first` — Run `/skill:gamedev-brainstorm [concept]` to structure it into a proper game concept
+     - `Formalize it first` — Run `gamedev:brainstorm [concept]` to structure it into a proper game concept
        document
-     - `Jump straight in` — Go to `/skill:gamedev-setup-engine` now and write the GDD manually afterward
+     - `Jump straight in` — Go to `gamedev:setup-engine` now and write the GDD manually afterward
 3. Show the recommended path: **Concept phase:**
-   - `/skill:gamedev-brainstorm` or `/skill:gamedev-setup-engine` — (their pick from step 2)
-   - `/skill:gamedev-prototype` — throwaway concept build: validate the core idea is fun before designing (1–3 days)
-   - `/skill:gamedev-art-bible` — define visual identity (after brainstorm if run, or after concept doc exists)
-   - `/skill:gamedev-design-review` — validate the concept doc
-   - `/skill:gamedev-map-systems` — decompose the concept into individual systems
-   - `/skill:gamedev-design-system` — author a GDD for each MVP system
-   - `/skill:gamedev-review-all-gdds` — cross-system consistency check
-   - `/skill:gamedev-gate-check` — validate readiness before architecture work
+   - `gamedev:brainstorm` or `gamedev:setup-engine` — (their pick from step 2)
+   - `gamedev:prototype` — throwaway concept build: validate the core idea is fun before designing (1–3 days)
+   - `gamedev:art-bible` — define visual identity (after brainstorm if run, or after concept doc exists)
+   - `gamedev:design-review` — validate the concept doc
+   - `gamedev:map-systems` — decompose the concept into individual systems
+   - `gamedev:design-system` — author a GDD for each MVP system
+   - `gamedev:review-all-gdds` — cross-system consistency check
+   - `gamedev:gate-check` — validate readiness before architecture work
    **Architecture phase:**
-   - `/skill:gamedev-create-architecture` — produce the master architecture blueprint and Required ADR list
-   - `/skill:gamedev-architecture-decision (×N)` — record key technical decisions, following the Required ADR list
-   - `/skill:gamedev-create-control-manifest` — compile decisions into an actionable rules sheet
-   - `/skill:gamedev-architecture-review` — validate architecture coverage
+   - `gamedev:create-architecture` — produce the master architecture blueprint and Required ADR list
+   - `gamedev:architecture-decision (×N)` — record key technical decisions, following the Required ADR list
+   - `gamedev:create-control-manifest` — compile decisions into an actionable rules sheet
+   - `gamedev:architecture-review` — validate architecture coverage
    **Pre-Production phase:**
-   - `/skill:gamedev-ux-design` — author UX specs for key screens (main menu, HUD, core interactions)
-   - `/skill:gamedev-vertical-slice` — production-quality end-to-end build to validate the full game loop
-   - `/skill:gamedev-playtest-report (×1+)` — document each vertical slice playtest session
-   - `/skill:gamedev-create-epics` — map systems to epics
-   - `/skill:gamedev-create-stories` — break epics into implementable stories
-   - `/skill:gamedev-create-epics` — define the first epic (Backlog milestone), then `/skill:gamedev-create-stories` to
+   - `gamedev:ux-design` — author UX specs for key screens (main menu, HUD, core interactions)
+   - `gamedev:vertical-slice` — production-quality end-to-end build to validate the full game loop
+   - `gamedev:playtest-report (×1+)` — document each vertical slice playtest session
+   - `gamedev:create-epics` — map systems to epics
+   - `gamedev:create-stories` — break epics into implementable stories
+   - `gamedev:create-epics` — define the first epic (Backlog milestone), then `gamedev:create-stories` to
      fill the board
-   **Production phase:** → pick up stories with `/skill:gamedev-dev-story`
+   **Production phase:** → pick up stories with `gamedev:dev-story`
 
 #### If D: Existing work
 
@@ -198,24 +198,24 @@ The user needs creative exploration before anything else.
    - "Your engine is [configured as X / not yet configured]..."
 
 2. **Sub-case D1 — Early stage** (engine not configured or only a game concept exists):
-   - Recommend `/skill:gamedev-setup-engine` first if engine not configured
-   - Then `/skill:gamedev-project-stage-detect` for a gap inventory
+   - Recommend `gamedev:setup-engine` first if engine not configured
+   - Then `gamedev:project-stage-detect` for a gap inventory
 
    **Sub-case D2 — GDDs, ADRs, or stories already exist:**
    - Explain: "Having files isn't the same as the template's skills being able to use them. GDDs might be missing
-     required sections. `/skill:gamedev-adopt` checks this specifically."
+     required sections. `gamedev:adopt` checks this specifically."
    - Recommend:
-     1. `/skill:gamedev-project-stage-detect` — understand what phase and what's missing entirely
-     2. `/skill:gamedev-adopt` — audit whether existing artifacts are in the right internal format
+     1. `gamedev:project-stage-detect` — understand what phase and what's missing entirely
+     2. `gamedev:adopt` — audit whether existing artifacts are in the right internal format
 
 3. Show the recommended path for D2:
-   - `/skill:gamedev-project-stage-detect` — phase detection + existence gaps
-   - `/skill:gamedev-adopt` — format compliance audit + migration plan
-   - `/skill:gamedev-setup-engine` — if engine not configured
-   - `/skill:gamedev-design-system retrofit [path]` — fill missing GDD sections
-   - `/skill:gamedev-architecture-decision retrofit [path]` — add missing ADR sections
-   - `/skill:gamedev-architecture-review` — bootstrap the TR requirement registry
-   - `/skill:gamedev-gate-check` — validate readiness for next phase
+   - `gamedev:project-stage-detect` — phase detection + existence gaps
+   - `gamedev:adopt` — format compliance audit + migration plan
+   - `gamedev:setup-engine` — if engine not configured
+   - `gamedev:design-system retrofit [path]` — fill missing GDD sections
+   - `gamedev:architecture-decision retrofit [path]` — add missing ADR sections
+   - `gamedev:architecture-review` — bootstrap the TR requirement registry
+   - `gamedev:gate-check` — validate readiness for next phase
 
 ---
 
@@ -250,7 +250,7 @@ not ask again.
 - **Options**:
   - `Solo (recommended)` — No director reviews at all. Maximum speed. Best for solo devs, game jams, and prototypes.
     This is the default if you skip this choice.
-  - `Lean` — Directors only at phase gate transitions (/skill:gamedev-gate-check). Skips per-skill reviews. For small
+  - `Lean` — Directors only at phase gate transitions (gamedev:gate-check). Skips per-skill reviews. For small
     teams that still want milestone review.
   - `Full` — Director specialists review at each key workflow step. Best for teams, learning the workflow, or when you
     want thorough feedback on every decision.
@@ -282,7 +282,7 @@ first. Never auto-run the next skill.
 ## Phase 5: Hand Off
 
 When the user confirms their next step, respond with a single short line: "Type `[skill command]` to begin." Nothing
-else. Do not re-explain the skill or add encouragement. The `/skill:gamedev-start` skill's job is done.
+else. Do not re-explain the skill or add encouragement. The `gamedev:start` skill's job is done.
 
 Verdict: **COMPLETE** — user oriented and handed off to next step.
 

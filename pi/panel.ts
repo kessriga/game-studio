@@ -23,8 +23,14 @@ export function boundedLines(lines: string[], width: number): string[] {
   );
 }
 
+/** Render the catalog's neutral `gamedev:<skill>` identifier as Pi's command. */
+export function hostCommand(step: Step): string | undefined {
+  return step.command?.replace(/^gamedev:/, "/skill:gamedev-");
+}
+
 function stepLabel(step: Step): string {
-  return step.command ? `${step.command} · ${step.name}` : step.name;
+  const command = hostCommand(step);
+  return command ? `${command} · ${step.name}` : step.name;
 }
 
 export function compactLines(view: Snapshot): string[] {
@@ -77,7 +83,8 @@ export function panelLines(view: Snapshot): string[] {
       `${marker} ${row.step.name}${row.step.required ? "" : " (optional)"}`,
     );
     lines.push(`  ${row.status}`);
-    if (row.step.command) lines.push(`  ${row.step.command}`);
+    const command = hostCommand(row.step);
+    if (command) lines.push(`  ${command}`);
   }
   lines.push(
     "",

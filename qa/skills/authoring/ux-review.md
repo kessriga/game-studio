@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-ux-review
+# Skill Test Spec: gamedev:ux-review
 
 ## Skill Summary
 
-`/skill:gamedev-ux-review` validates an existing UX spec or HUD design document against accessibility and interaction
+`gamedev:ux-review` validates an existing UX spec or HUD design document against accessibility and interaction
 standards. It checks for required sections (User Flows, Interaction States, Wireframe Description, Accessibility Notes),
 completeness of interaction state definitions (hover, focus, disabled, error), accessibility compliance (keyboard
 navigation, color contrast notes, screen reader considerations), and consistency with the art bible or design system if
@@ -10,25 +10,25 @@ those documents exist.
 
 The skill is read-only — it produces no file writes. Verdicts: APPROVED (all checks pass), NEEDS REVISION (fixable
 issues found), or MAJOR REVISION NEEDED (structural or accessibility failures). No director gates apply —
-`/skill:gamedev-ux-review` IS the review gate for UX specs.
+`gamedev:ux-review` IS the review gate for UX specs.
 
 ---
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: APPROVED, NEEDS REVISION, MAJOR REVISION NEEDED
 - [ ] Does NOT contain "May I write" language (skill is read-only)
-- [ ] Has a next-step handoff (e.g., back to `/skill:gamedev-ux-design` for revision, or proceed to implementation)
+- [ ] Has a next-step handoff (e.g., back to `gamedev:ux-design` for revision, or proceed to implementation)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-ux-review` is itself the review gate for UX specs. No additional director gates are invoked within
+None. `gamedev:ux-review` is itself the review gate for UX specs. No additional director gates are invoked within
 this skill.
 
 ---
@@ -45,7 +45,7 @@ this skill.
   - Wireframe Description: layout described
   - Accessibility Notes: keyboard nav, contrast ratios, screen reader notes
 
-**Input:** `/skill:gamedev-ux-review hud`
+**Input:** `gamedev:ux-review hud`
 
 **Expected behavior:**
 
@@ -72,7 +72,7 @@ this skill.
 - `design/ux/hud.md` exists but the Accessibility Notes section is empty
 - All other sections are fully populated
 
-**Input:** `/skill:gamedev-ux-review hud`
+**Input:** `gamedev:ux-review hud`
 
 **Expected behavior:**
 
@@ -81,13 +81,13 @@ this skill.
 3. Skill outputs: "NEEDS REVISION — Accessibility Notes section is empty"
 4. Skill lists specific items to add: keyboard navigation, color contrast ratios, screen reader labels
 5. Verdict is NEEDS REVISION
-6. Handoff suggests returning to `/skill:gamedev-ux-design hud` to fill in the section
+6. Handoff suggests returning to `gamedev:ux-design hud` to fill in the section
 
 **Assertions:**
 
 - [ ] NEEDS REVISION verdict is returned (not APPROVED or MAJOR REVISION NEEDED)
 - [ ] Specific missing content items are listed
-- [ ] Handoff points back to `/skill:gamedev-ux-design hud` for revision
+- [ ] Handoff points back to `gamedev:ux-design hud` for revision
 - [ ] No files are written
 
 ---
@@ -100,7 +100,7 @@ this skill.
 - Interaction States section only defines: normal and hover
 - Missing: focus, disabled, error states
 
-**Input:** `/skill:gamedev-ux-review settings-menu`
+**Input:** `gamedev:ux-review settings-menu`
 
 **Expected behavior:**
 
@@ -114,7 +114,7 @@ this skill.
 - [ ] NEEDS REVISION verdict returned
 - [ ] All 3 missing states are named explicitly in the output
 - [ ] Skill does not return MAJOR REVISION NEEDED for a fixable gap
-- [ ] Handoff suggests returning to `/skill:gamedev-ux-design settings-menu`
+- [ ] Handoff suggests returning to `gamedev:ux-design settings-menu`
 
 ---
 
@@ -124,19 +124,19 @@ this skill.
 
 - `design/ux/inventory-screen.md` does not exist
 
-**Input:** `/skill:gamedev-ux-review inventory-screen`
+**Input:** `gamedev:ux-review inventory-screen`
 
 **Expected behavior:**
 
 1. Skill attempts to read `design/ux/inventory-screen.md` — file not found
 2. Skill outputs: "UX spec not found: design/ux/inventory-screen.md"
-3. Skill suggests running `/skill:gamedev-ux-design inventory-screen` to create the spec first
+3. Skill suggests running `gamedev:ux-design inventory-screen` to create the spec first
 4. No review is performed; no verdict is issued
 
 **Assertions:**
 
 - [ ] Error message names the missing file with full path
-- [ ] `/skill:gamedev-ux-design inventory-screen` is suggested as the remediation
+- [ ] `gamedev:ux-design inventory-screen` is suggested as the remediation
 - [ ] No review checklist is produced
 - [ ] No verdict is issued (error state, not APPROVED/NEEDS REVISION)
 
@@ -148,7 +148,7 @@ this skill.
 
 - Valid UX spec file
 
-**Input:** `/skill:gamedev-ux-review hud`
+**Input:** `gamedev:ux-review hud`
 
 **Expected behavior:**
 
@@ -171,7 +171,7 @@ this skill.
 - [ ] Checks accessibility coverage (keyboard nav, contrast, screen reader)
 - [ ] Does not write any files
 - [ ] Issues specific, actionable feedback when verdict is not APPROVED
-- [ ] Ends with next-step handoff to `/skill:gamedev-ux-design` for revision or implementation
+- [ ] Ends with next-step handoff to `gamedev:ux-design` for revision or implementation
 
 ---
 

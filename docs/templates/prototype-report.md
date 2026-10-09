@@ -69,10 +69,10 @@
 
 **Next steps:**
 
-1. `/skill:gamedev-design-review design/gdd/game-concept.md`
-2. `/skill:gamedev-gate-check`
-3. `/skill:gamedev-map-systems`
-4. `/skill:gamedev-design-system [mechanic]` (use learnings in Tuning Knobs and Formulas sections)
+1. `gamedev:design-review design/gdd/game-concept.md`
+2. `gamedev:gate-check`
+3. `gamedev:map-systems`
+4. `gamedev:design-system [mechanic]` (use learnings in Tuning Knobs and Formulas sections)
 
 ---
 
@@ -82,7 +82,7 @@
 change, not just that something needs changing.]
 
 **Pivot direction:** [What to try differently] **What to keep:** [What worked and should be preserved] **Next step:**
-`/skill:gamedev-prototype [revised-concept]`
+`gamedev:prototype [revised-concept]`
 
 ---
 
@@ -91,7 +91,7 @@ change, not just that something needs changing.]
 [Why this concept does not work — what specific signal led to this verdict. This report is the deliverable; no further
 action needed on this concept.]
 
-**Next step:** `/skill:gamedev-brainstorm [new-direction]`
+**Next step:** `gamedev:brainstorm [new-direction]`
 
 ---
 

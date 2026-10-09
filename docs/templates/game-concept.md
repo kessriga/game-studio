@@ -322,14 +322,14 @@ minute sessions"]
 ## Next Steps
 
 - [ ] Get concept approval from creative-director
-- [ ] Fill in AGENTS.md technology stack based on engine choice (`/skill:gamedev-setup-engine`)
-- [ ] Create game pillars document (`/skill:gamedev-design-review` to validate)
-- [ ] **Prototype core idea** (`/skill:gamedev-prototype [core-mechanic]`) — before writing GDDs, validate the concept
+- [ ] Fill in AGENTS.md technology stack based on engine choice (`gamedev:setup-engine`)
+- [ ] Create game pillars document (`gamedev:design-review` to validate)
+- [ ] **Prototype core idea** (`gamedev:prototype [core-mechanic]`) — before writing GDDs, validate the concept
       is worth designing
-- [ ] If prototype PROCEEDS: Decompose concept into systems (`/skill:gamedev-map-systems`)
-- [ ] Design each system (`/skill:gamedev-design-system [system-name]`) — use prototype learnings in Tuning Knobs and
+- [ ] If prototype PROCEEDS: Decompose concept into systems (`gamedev:map-systems`)
+- [ ] Design each system (`gamedev:design-system [system-name]`) — use prototype learnings in Tuning Knobs and
       Formulas sections
-- [ ] Build vertical slice in Pre-Production (`/skill:gamedev-vertical-slice`) — validate full game loop before
+- [ ] Build vertical slice in Pre-Production (`gamedev:vertical-slice`) — validate full game loop before
       committing to Production
-- [ ] Validate core loop with playtest (`/skill:gamedev-playtest-report`)
-- [ ] Define first epic / milestone (`/skill:gamedev-create-epics`)
+- [ ] Validate core loop with playtest (`gamedev:playtest-report`)
+- [ ] Define first epic / milestone (`gamedev:create-epics`)

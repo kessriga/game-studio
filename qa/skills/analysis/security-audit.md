@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-security-audit
+# Skill Test Spec: gamedev:security-audit
 
 ## Skill Summary
 
-`/skill:gamedev-security-audit` audits the game for security risks including save data integrity, network communication,
+`gamedev:security-audit` audits the game for security risks including save data integrity, network communication,
 anti-cheat exposure, and data privacy. It reads source files in `src/` for security patterns and checks whether
 sensitive data is handled correctly. No director gates are invoked. The skill does not write files (findings report
 only). Verdicts: SECURE, CONCERNS, or VULNERABILITIES FOUND.
@@ -11,7 +11,7 @@ only). Verdicts: SECURE, CONCERNS, or VULNERABILITIES FOUND.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -37,7 +37,7 @@ None. Security audit is a read-only advisory skill; no gates are invoked.
 - No hardcoded API keys, passwords, or credentials in any `src/` file
 - No version numbers or internal build IDs exposed in client-facing output
 
-**Input:** `/skill:gamedev-security-audit`
+**Input:** `gamedev:security-audit`
 
 **Expected behavior:**
 
@@ -64,7 +64,7 @@ None. Security audit is a read-only advisory skill; no gates are invoked.
 - `src/ui/debug_overlay.gd` contains: `label.text = "Build: " + ProjectSettings.get("application/config/version")`
   (exposes internal build version to player)
 
-**Input:** `/skill:gamedev-security-audit`
+**Input:** `gamedev:security-audit`
 
 **Expected behavior:**
 
@@ -92,7 +92,7 @@ None. Security audit is a read-only advisory skill; no gates are invoked.
 - No authentication check is found before `send_chat()` — players can call it without being verified
 - Game has online multiplayer features (inferred from file presence)
 
-**Input:** `/skill:gamedev-security-audit`
+**Input:** `gamedev:security-audit`
 
 **Expected behavior:**
 
@@ -116,7 +116,7 @@ None. Security audit is a read-only advisory skill; no gates are invoked.
 
 - `src/` directory does not exist or is completely empty
 
-**Input:** `/skill:gamedev-security-audit`
+**Input:** `gamedev:security-audit`
 
 **Expected behavior:**
 
@@ -141,7 +141,7 @@ None. Security audit is a read-only advisory skill; no gates are invoked.
 - Source files exist; 1 CONCERNS-level finding detected (debug logging enabled in release build)
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-security-audit`
+**Input:** `gamedev:security-audit`
 
 **Expected behavior:**
 

@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-content-audit
+# Skill Test Spec: gamedev:content-audit
 
 ## Skill Summary
 
-`/skill:gamedev-content-audit` reads GDDs in `design/gdd/` and checks whether all content items specified there
+`gamedev:content-audit` reads GDDs in `design/gdd/` and checks whether all content items specified there
 (enemies, items, levels, etc.) are accounted for in `assets/`. It produces a gap table: Content Type → Specified Count →
 Found Count → Missing Items. No director gates are invoked. The skill does not write without user approval. Verdicts:
 COMPLETE, GAPS FOUND, or MISSING CRITICAL CONTENT.
@@ -11,7 +11,7 @@ COMPLETE, GAPS FOUND, or MISSING CRITICAL CONTENT.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -37,7 +37,7 @@ None. Content audit is a read-only analysis skill; no gates are invoked.
 - `assets/art/characters/` contains folders: `grunt/`, `sniper/`, `tank/`, `boss/`
 - `design/gdd/items.md` specifies 3 item types; all 3 found in `assets/data/items/`
 
-**Input:** `/skill:gamedev-content-audit`
+**Input:** `gamedev:content-audit`
 
 **Expected behavior:**
 
@@ -64,7 +64,7 @@ None. Content audit is a read-only analysis skill; no gates are invoked.
 - `design/gdd/enemies.md` specifies 3 enemy types: Grunt, Sniper, Boss
 - `assets/art/characters/` contains: `grunt/`, `sniper/` only (Boss folder missing)
 
-**Input:** `/skill:gamedev-content-audit`
+**Input:** `gamedev:content-audit`
 
 **Expected behavior:**
 
@@ -89,12 +89,12 @@ None. Content audit is a read-only analysis skill; no gates are invoked.
 - `design/gdd/` contains only `core-loop.md` which has no content inventory section
 - No other GDDs exist with content specifications
 
-**Input:** `/skill:gamedev-content-audit`
+**Input:** `gamedev:content-audit`
 
 **Expected behavior:**
 
 1. Skill reads all GDDs — finds no content inventory sections
-2. Skill outputs: "No content specifications found in GDDs — run /skill:gamedev-design-system first to define content
+2. Skill outputs: "No content specifications found in GDDs — run gamedev:design-system first to define content
    lists"
 3. No gap table is produced
 4. Verdict is GAPS FOUND (cannot confirm completeness without specs)
@@ -102,7 +102,7 @@ None. Content audit is a read-only analysis skill; no gates are invoked.
 **Assertions:**
 
 - [ ] Skill does not produce a gap table when no GDD content specs exist
-- [ ] Output recommends running `/skill:gamedev-design-system`
+- [ ] Output recommends running `gamedev:design-system`
 - [ ] Verdict reflects inability to confirm completeness
 
 ---
@@ -116,7 +116,7 @@ None. Content audit is a read-only analysis skill; no gates are invoked.
 - `assets/audio/sfx/land.ogg` exists (correct format)
 - `technical-preferences.md` specifies audio format: OGG
 
-**Input:** `/skill:gamedev-content-audit`
+**Input:** `gamedev:content-audit`
 
 **Expected behavior:**
 
@@ -141,7 +141,7 @@ None. Content audit is a read-only analysis skill; no gates are invoked.
 - GDDs specify 10 content items; 9 are found in assets; 1 is missing
 - `review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-content-audit`
+**Input:** `gamedev:content-audit`
 
 **Expected behavior:**
 

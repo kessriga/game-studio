@@ -31,7 +31,7 @@ It validates:
 4. **Velocity** (how long did this take? That's your real production rate estimate.)
 
 **Earlier in the project?** If you haven't written GDDs yet and want to validate whether the core idea is worth
-designing, run `/skill:gamedev-prototype` (concept prototype) instead.
+designing, run `gamedev:prototype` (concept prototype) instead.
 
 ---
 
@@ -274,13 +274,13 @@ Your vertical slice validated the full game loop. The project is ready for
 Production.
 
 Recommended next steps:
-- `/skill:gamedev-create-epics layer:foundation` — plan Foundation layer epics
-- `/skill:gamedev-create-epics layer:core` — plan Core layer epics
-- `/skill:gamedev-create-stories [epic-slug]` — break each epic into implementable stories
-- `/skill:gamedev-create-epics` — define the first epic (Backlog milestone), then `/skill:gamedev-create-stories` to fill the board
-- `/skill:gamedev-gate-check pre-production` — formally advance the stage to Production
+- `gamedev:create-epics layer:foundation` — plan Foundation layer epics
+- `gamedev:create-epics layer:core` — plan Core layer epics
+- `gamedev:create-stories [epic-slug]` — break each epic into implementable stories
+- `gamedev:create-epics` — define the first epic (Backlog milestone), then `gamedev:create-stories` to fill the board
+- `gamedev:gate-check pre-production` — formally advance the stage to Production
 
-**Playtest note:** `/skill:gamedev-gate-check` will look for documented playtest evidence.
+**Playtest note:** `gamedev:gate-check` will look for documented playtest evidence.
 At minimum, 1 documented session with a REPORT.md showing PROCEED is required
 to pass the gate. More sessions give more reliable signal — 3+ is recommended
 before committing the full team to Production, but is not a hard gate.
@@ -297,13 +297,13 @@ Ask: "May I write this to `prototypes/[concept-name]-vertical-slice/PIVOT-NOTE.m
 
 If yes, write the file with: what worked, what failed, the specific systems or
 architecture decisions that need revision, and what the next slice should prove
-differently. When `/skill:gamedev-vertical-slice` is next run after a PIVOT, check the
+differently. When `gamedev:vertical-slice` is next run after a PIVOT, check the
 `prototypes/` directory for a `PIVOT-NOTE.md` — use it to frame the new validation
 question and inform scope decisions.
 
-- Revise affected GDDs with `/skill:gamedev-design-system [mechanic]`
-- Address architecture issues via `/skill:gamedev-architecture-decision`
-- Then re-run `/skill:gamedev-vertical-slice` to validate the revised direction
+- Revise affected GDDs with `gamedev:design-system [mechanic]`
+- Address architecture issues via `gamedev:architecture-decision`
+- Then re-run `gamedev:vertical-slice` to validate the revised direction
 
 **If KILL:**
 
@@ -331,8 +331,8 @@ Ask: "May I append this to `prototypes/GRAVEYARD.md`?" If yes, add one entry:
 
 ```
 
-- Return to `/skill:gamedev-brainstorm` with what you learned
-- Or run `/skill:gamedev-prototype [new-concept]` to test a new direction cheaply first
+- Return to `gamedev:brainstorm` with what you learned
+- Or run `gamedev:prototype [new-concept]` to test a new direction cheaply first
 
 ---
 

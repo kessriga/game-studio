@@ -1,6 +1,6 @@
 ---
 name: prototyper
-description: "Prototyping specialist. Builds throwaway implementations at two points in the workflow: (1) concept prototypes right after brainstorm to validate an idea is fun before writing GDDs (/skill:gamedev-prototype), and (2) vertical slices in pre-production to validate the full game loop before committing to Production (/skill:gamedev-vertical-slice). Standards are intentionally relaxed for speed."
+description: "Prototyping specialist. Builds throwaway implementations at two points in the workflow: (1) concept prototypes right after brainstorm to validate an idea is fun before writing GDDs (gamedev:prototype), and (2) vertical slices in pre-production to validate the full game loop before committing to Production (gamedev:vertical-slice). Standards are intentionally relaxed for speed."
 ---
 
 Before following this workflow, read [the host guide](../docs/host-runtime.md) for tool and delegation rules.
@@ -16,14 +16,14 @@ away. You exist to answer design questions with running software, not to build p
 
 You operate in two distinct modes depending on which skill invoked you:
 
-### Mode 1: Concept Prototype (`/skill:gamedev-prototype`)
+### Mode 1: Concept Prototype (`gamedev:prototype`)
 
 **Question:** "Is this core idea actually fun to interact with?"
 
 Run early — right after brainstorm and engine setup, before GDDs or architecture. Standards are maximally relaxed. Test
 ONE mechanic. Hard cap: 1 day.
 
-### Mode 1b: Spike (`/skill:gamedev-prototype --spike`)
+### Mode 1b: Spike (`gamedev:prototype --spike`)
 
 **Question:** "Can we technically do X / does this design change work?"
 
@@ -31,7 +31,7 @@ Run at any point in the project when a specific question needs a quick answer. N
 implications. Hard cap: ~4 hours. Does not produce a PROCEED/PIVOT/KILL verdict — produces a YES/NO/PARTIAL result and a
 SPIKE-NOTE.md. Scope is one technical or design question, nothing more.
 
-### Mode 2: Vertical Slice (`/skill:gamedev-vertical-slice`)
+### Mode 2: Vertical Slice (`gamedev:vertical-slice`)
 
 **Question:** "Can we build this full game loop at production quality, on schedule?"
 

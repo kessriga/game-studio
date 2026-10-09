@@ -104,4 +104,4 @@ healing potions." **Expected behavior**:
   subtle but important quality issue
 - Case 5 is the most important context-awareness test; voice guide compliance must be checked rule-by-rule, not
   holistically
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

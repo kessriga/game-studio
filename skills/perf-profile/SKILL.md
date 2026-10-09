@@ -108,9 +108,9 @@ Activate this phase only if any hotspot has Fix Effort rated M or L.
 Present significant-effort items and ask the user to choose for each:
 
 - **A) Implement the optimization** (proceed with fix now or schedule it)
-- **B) Reduce feature scope** (run `/skill:gamedev-scope-check [feature]` to analyze trade-offs)
+- **B) Reduce feature scope** (run `gamedev:scope-check [feature]` to analyze trade-offs)
 - **C) Accept the performance hit and defer to Polish phase** (log as known issue)
-- **D) Escalate to technical-director for an architectural decision** (run `/skill:gamedev-architecture-decision`)
+- **D) Escalate to technical-director for an architectural decision** (run `gamedev:architecture-decision`)
 
 If multiple items are deferred to Polish (choice C), record them under `### Deferred to Polish`.
 
@@ -120,8 +120,8 @@ This skill is read-only — no files are written. Verdict: **COMPLETE** — perf
 
 ## Phase 6: Next Steps
 
-- If bottlenecks require architectural change: run `/skill:gamedev-architecture-decision`.
-- If scope reduction is needed: run `/skill:gamedev-scope-check [feature]`.
+- If bottlenecks require architectural change: run `gamedev:architecture-decision`.
+- If scope reduction is needed: run `gamedev:scope-check [feature]`.
 - To schedule optimizations: file them as Backlog tasks and prioritise on the board.
 
 ### Rules

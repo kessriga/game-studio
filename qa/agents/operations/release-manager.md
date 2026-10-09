@@ -7,7 +7,7 @@
   management
 - **Does NOT own**: Game design decisions, QA test strategy or test case design (qa-lead), QA test execution
   (qa-tester), build infrastructure (devops-engineer)
-- **Gate IDs**: May be invoked by `/skill:gamedev-gate-check` during Release phase; LAUNCH BLOCKED verdict is
+- **Gate IDs**: May be invoked by `gamedev:gate-check` during Release phase; LAUNCH BLOCKED verdict is
   release-manager's primary escalation output
 
 ---
@@ -99,4 +99,4 @@ weeks. **Input**: "What should we prioritize on the certification checklist give
   launches
 - Case 5 requires current date and release date context; verify the agent uses actual dates, not placeholder estimates
 - Certification requirements change over time — flag if the agent produces specific requirement IDs that may be outdated
-- No automated runner; review manually or via `/skill:gamedev-skill-test`
+- No automated runner; review manually or via `gamedev:skill-test`

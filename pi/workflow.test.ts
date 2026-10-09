@@ -79,7 +79,8 @@ test("catalog commands resolve to real shared workflows and phase links are vali
     );
     for (const step of phase.steps) {
       if (step.command) {
-        const name = step.command.replace("/skill:gamedev-", "");
+        assert.match(step.command, /^gamedev:[a-z0-9-]+$/);
+        const name = step.command.slice("gamedev:".length);
         assert.ok(
           (
             await readFile(

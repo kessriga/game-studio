@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-architecture-review
+# Skill Test Spec: gamedev:architecture-review
 
 ## Skill Summary
 
-`/skill:gamedev-architecture-review` is a skill that validates a technical architecture document against the project's 8
+`gamedev:architecture-review` is a skill that validates a technical architecture document against the project's 8
 required architecture sections and checks that it is internally consistent, non-contradictory with existing ADRs, and
 correctly targeting the pinned engine version. It produces a verdict of APPROVED / NEEDS REVISION / MAJOR REVISION
 NEEDED.
@@ -15,7 +15,7 @@ no files are written.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
@@ -49,7 +49,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - No contradictions with existing Accepted ADRs in `docs/architecture/`
 - `production/session-state/review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-architecture-review docs/architecture/architecture.md`
+**Input:** `gamedev:architecture-review docs/architecture/architecture.md`
 
 **Expected behavior:**
 
@@ -67,7 +67,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - [ ] TD-ARCHITECTURE and LP-FEASIBILITY spawn in parallel (not sequentially)
 - [ ] Verdict is APPROVED when all sections are present and no conflicts exist
 - [ ] Skill does NOT write any files
-- [ ] Next-step handoff to `/skill:gamedev-create-control-manifest` or `/skill:gamedev-create-epics` is present
+- [ ] Next-step handoff to `gamedev:create-control-manifest` or `gamedev:create-epics` is present
 
 ---
 
@@ -79,7 +79,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
   no error handling section)
 - `production/session-state/review-mode.txt` contains `full`
 
-**Input:** `/skill:gamedev-architecture-review docs/architecture/architecture.md`
+**Input:** `gamedev:architecture-review docs/architecture/architecture.md`
 
 **Expected behavior:**
 
@@ -105,7 +105,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 - One Accepted ADR in `docs/architecture/` establishes a constraint that the architecture doc contradicts (e.g., ADR-001
   mandates ECS pattern; architecture.md describes a different pattern for the same system)
 
-**Input:** `/skill:gamedev-architecture-review docs/architecture/architecture.md`
+**Input:** `gamedev:architecture-review docs/architecture/architecture.md`
 
 **Expected behavior:**
 
@@ -129,14 +129,14 @@ In `solo` mode: both gates are skipped with equivalent notes.
 
 - The path provided does not exist in the project
 
-**Input:** `/skill:gamedev-architecture-review docs/architecture/nonexistent.md`
+**Input:** `gamedev:architecture-review docs/architecture/nonexistent.md`
 
 **Expected behavior:**
 
 1. Skill attempts to read the file
 2. File not found
 3. Skill outputs a clear error naming the missing file
-4. Skill suggests checking `docs/architecture/` or running `/skill:gamedev-create-architecture`
+4. Skill suggests checking `docs/architecture/` or running `gamedev:create-architecture`
 5. Skill does NOT produce a verdict
 
 **Assertions:**
@@ -204,5 +204,5 @@ In `solo` mode: both gates are skipped with equivalent notes.
   re-enumerated here.
 - Engine version compatibility checking (cross-referencing `docs/engine-reference/`) is part of Case 1's happy path but
   not independently fixture-tested.
-- RTM (requirement traceability matrix) mode is a separate concern covered by the `/skill:gamedev-architecture-review`
+- RTM (requirement traceability matrix) mode is a separate concern covered by the `gamedev:architecture-review`
   skill's own `rtm` argument mode, not tested here.

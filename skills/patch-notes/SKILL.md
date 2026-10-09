@@ -21,18 +21,18 @@ If no version is provided, ask the user before proceeding.
 
 ## Phase 2: Gather Change Data
 
-- Read the internal changelog at `production/releases/[version]/skill:gamedev-changelog.md` if it exists
+- Read the internal changelog at `production/releases/[version]gamedev:changelog.md` if it exists
 - Also check `docs/CHANGELOG.md` for the relevant version entry
 - Run `git log` between the previous release tag and current tag/HEAD as a fallback
 - Review the relevant completed Backlog tasks (`backlog/tasks/`) for context
 - Read any balance change documents in `design/balance/`
 - Read bug fix records from QA if available
 
-**If no changelog data is available** (neither `production/releases/[version]/skill:gamedev-changelog.md` nor a
+**If no changelog data is available** (neither `production/releases/[version]gamedev:changelog.md` nor a
 `docs/CHANGELOG.md` entry for this version exists, and git log is empty or unavailable):
 
-> "No changelog data found for [version]. Run `/skill:gamedev-changelog [version]` first to generate the internal
-> changelog, then re-run `/skill:gamedev-patch-notes [version]`."
+> "No changelog data found for [version]. Run `gamedev:changelog [version]` first to generate the internal
+> changelog, then re-run `gamedev:patch-notes [version]`."
 
 Verdict: **BLOCKED** — stop here without generating notes.
 
@@ -177,7 +177,7 @@ were excluded (for review).
 Ask: "May I write these patch notes to `docs/patch-notes/[version].md`?"
 
 If yes, write the file to `docs/patch-notes/[version].md`, creating the directory if needed. Also write to
-`production/releases/[version]/skill:gamedev-patch-notes.md` as the internal archive copy.
+`production/releases/[version]gamedev:patch-notes.md` as the internal archive copy.
 
 ---
 
@@ -185,5 +185,5 @@ If yes, write the file to `docs/patch-notes/[version].md`, creating the director
 
 Verdict: **COMPLETE** — patch notes generated and saved.
 
-- Run `/skill:gamedev-release-checklist` to verify all other release gates are met before publishing.
+- Run `gamedev:release-checklist` to verify all other release gates are met before publishing.
 - Share the patch notes draft with the community-manager for tone review before posting publicly.

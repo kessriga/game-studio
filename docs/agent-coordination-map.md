@@ -132,7 +132,7 @@ art-dir = art-director
 ### Pattern 2: Bug Fix
 
 ```
-1. qa-tester          -- Files bug report with /skill:gamedev-bug-report
+1. qa-tester          -- Files bug report with gamedev:bug-report
 2. qa-lead            -- Triages severity and priority
 3. producer           -- Assigns to sprint (if not S1)
 4. lead-programmer    -- Identifies root cause, assigns to programmer
@@ -195,12 +195,12 @@ art-dir = art-director
 
 ```text
 1. producer             -- Declares release candidate, confirms milestone criteria met
-2. release-manager      -- Cuts release branch, generates /skill:gamedev-release-checklist
+2. release-manager      -- Cuts release branch, generates gamedev:release-checklist
 3. qa-lead              -- Runs full regression, signs off on quality
 4. localization-lead    -- Verifies all strings translated, text fitting passes
 5. performance-analyst  -- Confirms performance benchmarks within targets
 6. devops-engineer      -- Builds release artifacts, runs deployment pipeline
-7. release-manager      -- Generates /skill:gamedev-changelog, tags release, creates release notes
+7. release-manager      -- Generates gamedev:changelog, tags release, creates release notes
 8. technical-director   -- Final sign-off on major releases
 9. release-manager      -- Deploys and monitors for 48 hours
 10. producer            -- Marks release complete
@@ -210,7 +210,7 @@ art-dir = art-director
 
 ```text
 1. game-designer        -- Defines the hypothesis and success criteria
-2. prototyper           -- Scaffolds concept prototype with /skill:gamedev-prototype
+2. prototyper           -- Scaffolds concept prototype with gamedev:prototype
 3. prototyper           -- Builds minimal implementation (1-3 days)
 4. game-designer        -- Evaluates prototype against criteria
 5. prototyper           -- Documents findings in REPORT.md
@@ -222,7 +222,7 @@ art-dir = art-director
 
 ```text
 1. game-designer        -- Confirms slice scope against GDDs
-2. prototyper           -- Builds production-quality end-to-end build with /skill:gamedev-vertical-slice
+2. prototyper           -- Builds production-quality end-to-end build with gamedev:vertical-slice
 3. prototyper           -- Conducts internal playtest sessions (minimum 1)
 4. prototyper           -- Documents findings in REPORT.md
 5. creative-director    -- Go/no-go decision on proceeding to Production (full mode)

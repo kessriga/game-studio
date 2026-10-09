@@ -1,10 +1,10 @@
-# Skill Test Spec: /skill:gamedev-setup-engine
+# Skill Test Spec: gamedev:setup-engine
 
 ## Skill Summary
 
-`/skill:gamedev-setup-engine` configures the project's engine, language, rendering backend, physics engine, specialist
+`gamedev:setup-engine` configures the project's engine, language, rendering backend, physics engine, specialist
 agent assignments, and naming conventions by populating `technical-preferences.md`. It accepts an optional engine
-argument (e.g., `/skill:gamedev-setup-engine godot`) to skip the engine-selection step. For each section of
+argument (e.g., `gamedev:setup-engine godot`) to skip the engine-selection step. For each section of
 `technical-preferences.md`, the skill presents a draft and asks "May I write to `technical-preferences.md`?" before
 updating.
 
@@ -16,19 +16,19 @@ written.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keyword: COMPLETE
 - [ ] Contains "May I write" collaborative protocol language before updating technical-preferences.md
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-brainstorm` or `/skill:gamedev-start` depending on flow)
+- [ ] Has a next-step handoff (e.g., `gamedev:brainstorm` or `gamedev:start` depending on flow)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-setup-engine` is a technical configuration skill. No director gates apply.
+None. `gamedev:setup-engine` is a technical configuration skill. No director gates apply.
 
 ---
 
@@ -41,7 +41,7 @@ None. `/skill:gamedev-setup-engine` is a technical configuration skill. No direc
 - `technical-preferences.md` contains only placeholders
 - Engine argument provided: `godot`
 
-**Input:** `/skill:gamedev-setup-engine godot`
+**Input:** `gamedev:setup-engine godot`
 
 **Expected behavior:**
 
@@ -74,7 +74,7 @@ None. `/skill:gamedev-setup-engine` is a technical configuration skill. No direc
 - `technical-preferences.md` contains only placeholders
 - Engine argument provided: `unity`
 
-**Input:** `/skill:gamedev-setup-engine unity`
+**Input:** `gamedev:setup-engine unity`
 
 **Expected behavior:**
 
@@ -101,7 +101,7 @@ None. `/skill:gamedev-setup-engine` is a technical configuration skill. No direc
 - `technical-preferences.md` contains only placeholders
 - Engine argument provided: `unreal`
 
-**Input:** `/skill:gamedev-setup-engine unreal`
+**Input:** `gamedev:setup-engine unreal`
 
 **Expected behavior:**
 
@@ -127,7 +127,7 @@ None. `/skill:gamedev-setup-engine` is a technical configuration skill. No direc
 - `technical-preferences.md` has engine set to Godot 4 with all fields populated
 - No engine argument provided
 
-**Input:** `/skill:gamedev-setup-engine`
+**Input:** `gamedev:setup-engine`
 
 **Expected behavior:**
 
@@ -154,7 +154,7 @@ None. `/skill:gamedev-setup-engine` is a technical configuration skill. No direc
 
 - Fresh project with no engine configured
 
-**Input:** `/skill:gamedev-setup-engine godot`
+**Input:** `gamedev:setup-engine godot`
 
 **Expected behavior:**
 

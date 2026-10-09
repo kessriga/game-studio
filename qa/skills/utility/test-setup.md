@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-test-setup
+# Skill Test Spec: gamedev:test-setup
 
 ## Skill Summary
 
-`/skill:gamedev-test-setup` scaffolds the test framework for the project based on the configured engine. It creates the
+`gamedev:test-setup` scaffolds the test framework for the project based on the configured engine. It creates the
 `tests/` directory structure defined in `coding-standards.md` (unit/, integration/, performance/, playtest/) and
 generates the appropriate test runner configuration for the detected engine: GdUnit4 config for Godot, Unity Test Runner
 asmdef for Unity, or Unreal headless runner for Unreal Engine.
@@ -15,19 +15,19 @@ scaffold is in place.
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keyword: COMPLETE
 - [ ] Contains "May I write" collaborative protocol language before creating files
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-test-helpers` to generate helper utilities)
+- [ ] Has a next-step handoff (e.g., `gamedev:test-helpers` to generate helper utilities)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-test-setup` is a scaffolding utility. No director gates apply.
+None. `gamedev:test-setup` is a scaffolding utility. No director gates apply.
 
 ---
 
@@ -40,7 +40,7 @@ None. `/skill:gamedev-test-setup` is a scaffolding utility. No director gates ap
 - `technical-preferences.md` has engine set to Godot 4, language GDScript
 - `tests/` directory does not exist yet
 
-**Input:** `/skill:gamedev-test-setup`
+**Input:** `gamedev:test-setup`
 
 **Expected behavior:**
 
@@ -70,7 +70,7 @@ None. `/skill:gamedev-test-setup` is a scaffolding utility. No director gates ap
 - `technical-preferences.md` has engine set to Unity, language C#
 - `tests/` directory does not exist
 
-**Input:** `/skill:gamedev-test-setup`
+**Input:** `gamedev:test-setup`
 
 **Expected behavior:**
 
@@ -97,7 +97,7 @@ None. `/skill:gamedev-test-setup` is a scaffolding utility. No director gates ap
 - `tests/unit/`, `tests/integration/` exist
 - GdUnit4 runner script exists (Godot project)
 
-**Input:** `/skill:gamedev-test-setup`
+**Input:** `gamedev:test-setup`
 
 **Expected behavior:**
 
@@ -116,25 +116,25 @@ None. `/skill:gamedev-test-setup` is a scaffolding utility. No director gates ap
 
 ---
 
-### Case 4: No Engine Configured — Redirects to /skill:gamedev-setup-engine
+### Case 4: No Engine Configured — Redirects to gamedev:setup-engine
 
 **Fixture:**
 
 - `technical-preferences.md` contains only placeholders (engine not set)
 
-**Input:** `/skill:gamedev-test-setup`
+**Input:** `gamedev:test-setup`
 
 **Expected behavior:**
 
 1. Skill reads `technical-preferences.md` and finds engine placeholder
 2. Skill reports: "Engine not configured — cannot scaffold engine-specific test framework"
-3. Skill suggests running `/skill:gamedev-setup-engine` first
+3. Skill suggests running `gamedev:setup-engine` first
 4. No directories or files are created
 
 **Assertions:**
 
 - [ ] Error message explicitly states engine is not configured
-- [ ] `/skill:gamedev-setup-engine` is suggested as the next step
+- [ ] `gamedev:setup-engine` is suggested as the next step
 - [ ] No write tool is called
 - [ ] Verdict is not COMPLETE (blocked state)
 
@@ -146,7 +146,7 @@ None. `/skill:gamedev-test-setup` is a scaffolding utility. No director gates ap
 
 - Engine configured, tests/ does not exist
 
-**Input:** `/skill:gamedev-test-setup`
+**Input:** `gamedev:test-setup`
 
 **Expected behavior:**
 

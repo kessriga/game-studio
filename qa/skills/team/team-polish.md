@@ -1,4 +1,4 @@
-# Skill Test Spec: /skill:gamedev-team-polish
+# Skill Test Spec: gamedev:team-polish
 
 ## Skill Summary
 
@@ -19,8 +19,8 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 - [ ] Contains "File Write Protocol" section
 - [ ] File writes are delegated to sub-agents — orchestrator does not write files directly
 - [ ] Sub-agents enforce "May I write to [path]?" before any write
-- [ ] Has a next-step handoff at the end (references `/skill:gamedev-release-checklist`, filing remaining issues as
-      Backlog tasks, `/skill:gamedev-gate-check`)
+- [ ] Has a next-step handoff at the end (references `gamedev:release-checklist`, filing remaining issues as
+      Backlog tasks, `gamedev:gate-check`)
 - [ ] Error Recovery Protocol section is present
 - [ ] a user-input tool or chat is used at phase transitions before proceeding
 - [ ] Phase 3 (visual polish) and Phase 4 (audio polish) are explicitly run in parallel with Phase 2
@@ -41,7 +41,7 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 - No audio events are missing; VFX assets are complete
 - No regressions are introduced by polish changes
 
-**Input:** `/skill:gamedev-team-polish combat`
+**Input:** `gamedev:team-polish combat`
 
 **Expected behavior:**
 
@@ -86,7 +86,7 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 - Phase 2 performance-analyst applies optimizations reducing cost to 9ms — still over the 6ms budget
 - Phase 2 cannot fully resolve the violation without a fundamental design change
 
-**Input:** `/skill:gamedev-team-polish particle-storm`
+**Input:** `gamedev:team-polish particle-storm`
 
 **Expected behavior:**
 
@@ -101,7 +101,7 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 7. Verdict: NEEDS MORE WORK
 8. Report lists the specific unresolved issue: "particle-storm frame cost (9ms) exceeds budget (6ms) by 3ms — requires
    design scope reduction or budget renegotiation"
-9. Next Steps: file the remaining issue as a Backlog task; re-run `/skill:gamedev-team-polish` after fix
+9. Next Steps: file the remaining issue as a Backlog task; re-run `gamedev:team-polish` after fix
 
 **Assertions:**
 
@@ -121,12 +121,12 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 
 - Any project state
 
-**Input:** `/skill:gamedev-team-polish` (no argument)
+**Input:** `gamedev:team-polish` (no argument)
 
 **Expected behavior:**
 
 1. Skill detects no argument is provided
-2. Outputs usage guidance: e.g., "Usage: `/skill:gamedev-team-polish [feature or area]` — specify the feature or area to
+2. Outputs usage guidance: e.g., "Usage: `gamedev:team-polish [feature or area]` — specify the feature or area to
    polish (e.g., `combat`, `main menu`, `inventory system`, `level-1`)"
 3. Skill exits without spawning any agents
 
@@ -148,7 +148,7 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
   by the engine's scene tree traversal in the spatial indexer — this is an engine-level issue, not a game code issue"
 - Performance budgets are defined; the rendering overhead exceeds target frame budget
 
-**Input:** `/skill:gamedev-team-polish open-world`
+**Input:** `gamedev:team-polish open-world`
 
 **Expected behavior:**
 
@@ -187,7 +187,7 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 - Phase 5: qa-tester runs regression tests and finds that a shader optimization applied in Phase 3 broke the item
   highlight glow effect on hover — an existing feature that was working before the polish pass
 
-**Input:** `/skill:gamedev-team-polish inventory-ui` (Phase 5 scenario)
+**Input:** `gamedev:team-polish inventory-ui` (Phase 5 scenario)
 
 **Expected behavior:**
 
@@ -233,8 +233,8 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 - [ ] A partial report is always produced when some agents complete and others block
 - [ ] Verdict is exactly READY FOR RELEASE or NEEDS MORE WORK — no other verdict values used
 - [ ] NEEDS MORE WORK verdict always lists specific remaining issues with severity
-- [ ] Next Steps handoff references `/skill:gamedev-release-checklist` (on success) and filing remaining issues as
-      Backlog tasks + `/skill:gamedev-gate-check` (on failure)
+- [ ] Next Steps handoff references `gamedev:release-checklist` (on success) and filing remaining issues as
+      Backlog tasks + `gamedev:gate-check` (on failure)
 
 ---
 

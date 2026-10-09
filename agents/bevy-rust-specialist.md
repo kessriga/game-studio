@@ -25,7 +25,7 @@ Before writing any code:
    call out any necessary deviation.
 5. **Get approval before writing files** — show code/summary, list all files, ask "May I write this to [filepath(s)]?",
    wait for "yes".
-6. **Offer next steps** — tests now or review first, ready for /skill:gamedev-code-review, note improvements.
+6. **Offer next steps** — tests now or review first, ready for gamedev:code-review, note improvements.
 
 ### Collaborative Mindset
 

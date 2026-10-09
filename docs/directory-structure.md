@@ -4,7 +4,7 @@ The installed Game Studio package provides `skills/`, specialist `agents/`, fram
 scaffold `templates/`. See [AGENTS.md](../AGENTS.md) and [Pi setup](pi.md). Project paths are separate from package
 paths; configure games only in their own repositories.
 
-`/skill:gamedev-start` adds missing project files without replacing existing data:
+`gamedev:start` adds missing project files without replacing existing data:
 
 ```text
 AGENTS.md                         # Canonical instructions and explicit sources to read

@@ -1,8 +1,8 @@
-# Skill Test Spec: /skill:gamedev-playtest-report
+# Skill Test Spec: gamedev:playtest-report
 
 ## Skill Summary
 
-`/skill:gamedev-playtest-report` generates a structured playtest report from session notes or user input. The report is
+`gamedev:playtest-report` generates a structured playtest report from session notes or user input. The report is
 organized into four sections: Feel/Accessibility, Bugs Observed, Design Feedback, and Next Steps. When multiple testers
 participated, the skill aggregates feedback and distinguishes majority opinions from minority ones. The skill links to
 existing bug reports when a reported bug matches a file in `production/bugs/`.
@@ -14,20 +14,20 @@ CD-PLAYTEST director gate (if needed) is a separate invocation. The verdict is C
 
 ## Static Assertions (Structural)
 
-Verified automatically by `/skill:gamedev-skill-test static` — no fixture needed.
+Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 - [ ] Has required frontmatter fields: `name`, `description` only; arguments and role routing are documented in the body
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keyword: COMPLETE
 - [ ] Contains "May I write" collaborative protocol language before writing the report
-- [ ] Has a next-step handoff (e.g., `/skill:gamedev-bug-report` for new issues found, `/skill:gamedev-design-review`
+- [ ] Has a next-step handoff (e.g., `gamedev:bug-report` for new issues found, `gamedev:design-review`
       for feedback)
 
 ---
 
 ## Director Gate Checks
 
-None. `/skill:gamedev-playtest-report` is a documentation utility. The CD-PLAYTEST gate is a separate invocation and not
+None. `gamedev:playtest-report` is a documentation utility. The CD-PLAYTEST gate is a separate invocation and not
 part of this skill.
 
 ---
@@ -42,7 +42,7 @@ part of this skill.
 - Notes cover: game feel, one bug (framerate drop), and a design concern (tutorial too long)
 - `production/bugs/` exists but is empty (bug not yet reported)
 
-**Input:** `/skill:gamedev-playtest-report` (user pastes session notes)
+**Input:** `gamedev:playtest-report` (user pastes session notes)
 
 **Expected behavior:**
 
@@ -50,7 +50,7 @@ part of this skill.
 2. Feel/Accessibility: extracts feel observations
 3. Bugs: notes the framerate drop with available repro details
 4. Design Feedback: notes the tutorial length concern
-5. Next Steps: suggests `/skill:gamedev-bug-report` for the framerate issue and `/skill:gamedev-design-review` for the
+5. Next Steps: suggests `gamedev:bug-report` for the framerate issue and `gamedev:design-review` for the
    tutorial feedback
 6. Skill asks "May I write to `production/qa/playtest-2026-04-06.md`?"
 7. Report is written on approval; verdict is COMPLETE
@@ -71,7 +71,7 @@ part of this skill.
 
 - No notes provided by user at invocation
 
-**Input:** `/skill:gamedev-playtest-report`
+**Input:** `gamedev:playtest-report`
 
 **Expected behavior:**
 
@@ -99,7 +99,7 @@ part of this skill.
 - 1/3 tester found the UI font too small
 - All 3 noted the same bug (player stuck on ledge)
 
-**Input:** `/skill:gamedev-playtest-report` (3-tester session)
+**Input:** `gamedev:playtest-report` (3-tester session)
 
 **Expected behavior:**
 
@@ -126,7 +126,7 @@ part of this skill.
 - `production/bugs/bug-2026-03-30-player-stuck-ledge.md` exists
 - User's playtest notes describe "player gets stuck on ledges near walls"
 
-**Input:** `/skill:gamedev-playtest-report`
+**Input:** `gamedev:playtest-report`
 
 **Expected behavior:**
 
@@ -139,7 +139,7 @@ part of this skill.
 **Assertions:**
 
 - [ ] Existing bug report is found and linked in the playtest report
-- [ ] `/skill:gamedev-bug-report` is NOT suggested for the already-reported issue
+- [ ] `gamedev:bug-report` is NOT suggested for the already-reported issue
 - [ ] Cross-reference to existing file appears in the Bugs section
 - [ ] Verdict is COMPLETE
 
@@ -151,7 +151,7 @@ part of this skill.
 
 - Playtest notes provided
 
-**Input:** `/skill:gamedev-playtest-report`
+**Input:** `gamedev:playtest-report`
 
 **Expected behavior:**
 

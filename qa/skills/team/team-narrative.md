@@ -1,4 +1,4 @@
-# Skill Test Spec: /skill:gamedev-team-narrative
+# Skill Test Spec: gamedev:team-narrative
 
 ## Skill Summary
 
@@ -19,8 +19,8 @@ protocol. Verdict is COMPLETE when all phases succeed, or BLOCKED when a depende
 - [ ] Contains "File Write Protocol" section
 - [ ] File writes are delegated to sub-agents — orchestrator does not write files directly
 - [ ] Sub-agents enforce "May I write to [path]?" before any write
-- [ ] Has a next-step handoff at the end (references `/skill:gamedev-design-review`, `/skill:gamedev-localize extract`,
-      `/skill:gamedev-dev-story`)
+- [ ] Has a next-step handoff at the end (references `gamedev:design-review`, `gamedev:localize extract`,
+      `gamedev:dev-story`)
 - [ ] Error Recovery Protocol section is present
 - [ ] a user-input tool or chat is used at phase transitions before proceeding
 - [ ] Phase 2 explicitly spawns world-builder and writer in parallel
@@ -39,7 +39,7 @@ protocol. Verdict is COMPLETE when all phases succeed, or BLOCKED when a depende
 - Existing lore entries exist for cross-reference (e.g., `design/narrative/lore/`)
 - No lore contradictions exist between existing entries and the new content
 
-**Input:** `/skill:gamedev-team-narrative faction introduction cutscene for the Ironveil faction`
+**Input:** `gamedev:team-narrative faction introduction cutscene for the Ironveil faction`
 
 **Expected behavior:**
 
@@ -83,7 +83,7 @@ protocol. Verdict is COMPLETE when all phases succeed, or BLOCKED when a depende
 - The new narrative brief (from Phase 1) states the Ironveil were founded 50 years ago
 - The writer has been spawned in parallel with the world-builder in Phase 2
 
-**Input:** `/skill:gamedev-team-narrative ironveil faction introduction cutscene`
+**Input:** `gamedev:team-narrative ironveil faction introduction cutscene`
 
 **Expected behavior:**
 
@@ -120,12 +120,12 @@ protocol. Verdict is COMPLETE when all phases succeed, or BLOCKED when a depende
 
 - Any project state
 
-**Input:** `/skill:gamedev-team-narrative` (no argument)
+**Input:** `gamedev:team-narrative` (no argument)
 
 **Expected behavior:**
 
 1. Skill detects no argument is provided
-2. Outputs usage guidance: e.g., "Usage: `/skill:gamedev-team-narrative [narrative content description]` — describe the
+2. Outputs usage guidance: e.g., "Usage: `gamedev:team-narrative [narrative content description]` — describe the
    story content, scene, or narrative area to work on (e.g., `boss encounter cutscene`, `faction intro dialogue`,
    `tutorial narrative`)"
 3. Skill exits without spawning any agents
@@ -148,7 +148,7 @@ protocol. Verdict is COMPLETE when all phases succeed, or BLOCKED when a depende
 - localization-lead finds a dialogue line that uses a hardcoded formatted date string (e.g., `"On March 12th, Year 3"`)
   that cannot survive locale-specific translation without a locale-aware formatter
 
-**Input:** `/skill:gamedev-team-narrative ironveil faction introduction cutscene` (Phase 5 scenario)
+**Input:** `gamedev:team-narrative ironveil faction introduction cutscene` (Phase 5 scenario)
 
 **Expected behavior:**
 
@@ -183,7 +183,7 @@ protocol. Verdict is COMPLETE when all phases succeed, or BLOCKED when a depende
 - No character voice profiles exist in `design/narrative/characters/` for either character
 - Phase 2 begins; world-builder proceeds normally
 
-**Input:** `/skill:gamedev-team-narrative ironveil surrender negotiation scene`
+**Input:** `gamedev:team-narrative ironveil surrender negotiation scene`
 
 **Expected behavior:**
 
@@ -221,8 +221,8 @@ protocol. Verdict is COMPLETE when all phases succeed, or BLOCKED when a depende
 - [ ] BLOCKED status from any agent is surfaced immediately — not silently skipped
 - [ ] A partial report is always produced when some agents complete and others block
 - [ ] Verdict is exactly COMPLETE or BLOCKED — no other verdict values used
-- [ ] Next Steps handoff references `/skill:gamedev-design-review`, `/skill:gamedev-localize extract`, and
-      `/skill:gamedev-dev-story`
+- [ ] Next Steps handoff references `gamedev:design-review`, `gamedev:localize extract`, and
+      `gamedev:dev-story`
 
 ---
 

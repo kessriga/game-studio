@@ -21,7 +21,7 @@ cover the game's critical paths and known failure points. This skill maintains t
 **When to run:**
 
 - After fixing a bug (confirm a regression test was written or identify gap)
-- Before a release gate (`/skill:gamedev-gate-check polish` requires regression suite exists)
+- Before a release gate (`gamedev:gate-check polish` requires regression suite exists)
 - As part of sprint close to detect coverage drift
 
 ---
@@ -30,11 +30,11 @@ cover the game's critical paths and known failure points. This skill maintains t
 
 **Modes:**
 
-- `/skill:gamedev-regression-suite update` — scan new bug fixes this sprint and check for regression test presence; add
+- `gamedev:regression-suite update` — scan new bug fixes this sprint and check for regression test presence; add
   new tests to the suite manifest
-- `/skill:gamedev-regression-suite audit` — full audit of all GDD critical paths vs. existing test coverage; flag paths
+- `gamedev:regression-suite audit` — full audit of all GDD critical paths vs. existing test coverage; flag paths
   with no regression test
-- `/skill:gamedev-regression-suite report` — read-only status report (no writes); suitable for sprint reviews
+- `gamedev:regression-suite report` — read-only status report (no writes); suitable for sprint reviews
 - No argument — if a sprint is clearly active (sprint plan exists with in-progress stories), run `update`. If ambiguous
   or no active sprint is detected, use a user-input tool or chat:
   - Prompt: "No subcommand specified. Which mode do you want to run?"
@@ -234,11 +234,11 @@ For `update` mode: append new entries; never remove existing entries (use target
 After writing (if approved):
 
 - For each HIGH priority gap: "Consider creating the missing regression test before the next sprint. Run
-  `/skill:gamedev-test-helpers` to scaffold the test file."
+  `gamedev:test-helpers` to scaffold the test file."
 - If bug regression gaps > 0: "These bugs can silently return without regression tests. The next sprint should include a
   story to write the missing tests."
 - If coverage drift detected: "Regression suite may be drifting. Consider running
-  `/skill:gamedev-regression-suite audit` at the next sprint boundary."
+  `gamedev:regression-suite audit` at the next sprint boundary."
 
 Verdict: **COMPLETE** — regression suite updated. (If user declined write: Verdict: **BLOCKED**.)
 
@@ -251,5 +251,5 @@ Verdict: **COMPLETE** — regression suite updated. (If user declined write: Ver
 - **Gaps are advisory, not blocking** — surface them clearly but do not prevent other work from proceeding (except at
   release gate where regression suite is required)
 - **Quarantine is not deletion** — tests with intermittent failures should be quarantined (noted in manifest) but not
-  removed; they should be fixed by `/skill:gamedev-test-flakiness`
+  removed; they should be fixed by `gamedev:test-flakiness`
 - **Ask before writing** — always confirm before creating or updating the manifest
