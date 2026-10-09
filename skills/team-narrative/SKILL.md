@@ -8,9 +8,9 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 **Arguments:** [narrative content description] [--review full|lean|solo]
 
 If no argument is provided, output usage guidance and exit without spawning any agents:
-> Usage: `gamedev:team-narrative [narrative content description]` — describe the story content, scene, or
-> narrative area to work on (e.g., `boss encounter cutscene`, `faction intro dialogue`, `tutorial narrative`). Output
-> usage directly; do not ask a follow-up question.
+> Usage: `gamedev:team-narrative [narrative content description]` — describe the story content, scene, or narrative area
+> to work on (e.g., `boss encounter cutscene`, `faction intro dialogue`, `tutorial narrative`). Output usage directly;
+> do not ask a follow-up question.
 
 When this skill is invoked with an argument, orchestrate the narrative team through a structured pipeline.
 
@@ -127,7 +127,7 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `gamedev:architecture-decision` first
+- ADR status is Proposed → do not implement; run the `gamedev:architecture-decision` skill first
 - Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 
@@ -151,6 +151,6 @@ Verdict: **BLOCKED** — [reason]
 
 ## Next Steps
 
-- Run `gamedev:design-review` on the narrative documents for consistency validation.
-- Run `gamedev:localize extract` to extract new strings for translation after dialogue is finalized.
-- Run `gamedev:dev-story` to implement dialogue triggers and narrative events in-engine.
+- Run the `gamedev:design-review` skill on the narrative documents for consistency validation.
+- Run the `gamedev:localize` skill with `extract` to extract new strings for translation after dialogue is finalized.
+- Run the `gamedev:dev-story` skill to implement dialogue triggers and narrative events in-engine.

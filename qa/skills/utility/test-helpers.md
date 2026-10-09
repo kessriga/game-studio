@@ -2,10 +2,10 @@
 
 ## Skill Summary
 
-`gamedev:test-helpers` generates engine-specific test helper utilities for the project's test suite. Helpers
-include factory functions (for creating test entities with known state), fixture loaders, assertion helpers, and mock
-stubs for external dependencies. Generated helpers follow the naming and structure conventions in `coding-standards.md`
-and are written to `tests/helpers/`.
+`gamedev:test-helpers` generates engine-specific test helper utilities for the project's test suite. Helpers include
+factory functions (for creating test entities with known state), fixture loaders, assertion helpers, and mock stubs for
+external dependencies. Generated helpers follow the naming and structure conventions in `coding-standards.md` and are
+written to `tests/helpers/`.
 
 Each helper file is gated behind a "May I write" ask. If a helper file already exists, the skill offers to extend it
 rather than replace. No director gates apply. The verdict is COMPLETE when helper files are written.
@@ -75,7 +75,7 @@ None. `gamedev:test-helpers` is a scaffolding utility. No director gates apply.
 
 1. Skill checks for `tests/` directory — not found
 2. Skill reports: "Test directory not found — test framework must be set up first"
-3. Skill suggests running `gamedev:test-setup` before generating helpers
+3. Skill suggests running the `gamedev:test-setup` skill before generating helpers
 4. No helper file is created
 
 **Assertions:**

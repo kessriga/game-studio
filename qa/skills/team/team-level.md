@@ -18,8 +18,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
 - [ ] Contains verdict keywords: COMPLETE, BLOCKED
 - [ ] Contains "May I write" or "File Write Protocol" — writes delegated to sub-agents, orchestrator does not write
       files directly
-- [ ] Has a next-step handoff at the end (references `gamedev:design-review`, `gamedev:dev-story`,
-      `gamedev:qa-plan`)
+- [ ] Has a next-step handoff at the end (references `gamedev:design-review`, `gamedev:dev-story`, `gamedev:qa-plan`)
 - [ ] Error Recovery Protocol section is present with all four recovery steps
 - [ ] Uses a user-input tool or chat at step transitions for user approval before proceeding
 - [ ] Step 4 is explicitly marked as parallel (art-director and accessibility-specialist run simultaneously)
@@ -67,8 +66,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
    `design/levels/forest-dungeon.md`?"; file saved
 8. Summary report: area overview, encounter count, estimated asset list, narrative beats, cross-team dependencies,
    verdict: COMPLETE
-9. Next steps listed: `gamedev:design-review design/levels/forest-dungeon.md`, `gamedev:dev-story`,
-   `gamedev:qa-plan`
+9. Next steps listed: `gamedev:design-review design/levels/forest-dungeon.md`, `gamedev:dev-story`, `gamedev:qa-plan`
 
 **Assertions:**
 
@@ -202,7 +200,7 @@ sub-agents. Produces a summary report with verdict COMPLETE / BLOCKED and handof
    does not exist"
 4. a user-input tool or chat presented with options:
    - (a) Proceed with a placeholder reference — note the dependency in the level doc as UNRESOLVED
-   - (b) Pause and run `gamedev:team-level crystal caves` first to establish that area
+   - (b) Pause and run the `gamedev:team-level` skill with `crystal caves` first to establish that area
 5. Skill does NOT invent crystal caves content to satisfy the reference
 6. If user chooses (a): level doc compiled with the west exit marked "→ crystal-caves (UNRESOLVED — area not yet
    designed)"; flagged in the open dependencies section of the summary report

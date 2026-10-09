@@ -22,8 +22,8 @@ gamedev:code-review [files]      ← review it
 gamedev:story-done [path]        ← verify and close it (sets the Backlog task to Done)
 ```
 
-**After a milestone's stories are done:** run `gamedev:team-qa [milestone]` to execute the full QA cycle and get
-a sign-off verdict before advancing the project stage.
+**After a milestone's stories are done:** run the `gamedev:team-qa` skill with `[milestone]` to execute the full QA
+cycle and get a sign-off verdict before advancing the project stage.
 
 **Output:** Source code + test file in the project's `src/` and `tests/` directories.
 
@@ -34,8 +34,8 @@ a sign-off verdict before advancing the project stage.
 **If a path is provided**: read that story `.md` directly, and note its `Tracked in: TASK-N` header so Phase 2 can
 update the Backlog task.
 
-**If a Backlog task ID is provided** (e.g. `gamedev:dev-story TASK-42`): `task_view` it, read its `Spec:`
-reference, and open that story `.md`.
+**If a Backlog task ID is provided** (e.g. `gamedev:dev-story TASK-42`): `task_view` it, read its `Spec:` reference, and
+open that story `.md`.
 
 **If no argument**: check `production/session-state/active.md` for the active story. If found, confirm: "Continuing work
 on [story title] — is that correct?" If not found, pull the board: `task_list` with `status: "To Do"` (exclude any task
@@ -51,9 +51,9 @@ chosen task's `Spec:` story `.md`.
 
 | File | Path | If missing |
 | ------ | ------ | ------------ |
-| TR registry | `docs/architecture/tr-registry.yaml` | **STOP** — "TR registry not found at `docs/architecture/tr-registry.yaml`. Run `gamedev:architecture-review` to bootstrap the registry from your GDDs and ADRs." |
-| Governing ADR | path from story's ADR field | **STOP** — "ADR file [path] not found. Run `gamedev:architecture-decision` to create it, or correct the filename in the story's ADR field." |
-| Control manifest | `docs/architecture/control-manifest.md` | **WARN and continue** — "Control manifest not found — layer rules cannot be checked. Run `gamedev:create-control-manifest`." |
+| TR registry | `docs/architecture/tr-registry.yaml` | **STOP** — "TR registry not found at `docs/architecture/tr-registry.yaml`. Run the `gamedev:architecture-review` skill to bootstrap the registry from your GDDs and ADRs." |
+| Governing ADR | path from story's ADR field | **STOP** — "ADR file [path] not found. Run the `gamedev:architecture-decision` skill to create it, or correct the filename in the story's ADR field." |
+| Control manifest | `docs/architecture/control-manifest.md` | **WARN and continue** — "Control manifest not found — layer rules cannot be checked. Run the `gamedev:create-control-manifest` skill." |
 
 If the TR registry or governing ADR is missing, set the story status to **BLOCKED** in the session state and do not
 spawn any programmer agent.
@@ -112,7 +112,7 @@ Then read the manifest carefully for new rules. If [B]: edit the story file's `M
 manifest date AND add a `Manifest-Note: Proceeded with old manifest rules on [date] — non-compliance risk accepted.`
 line to the story header. Read the manifest for new rules anyway. Note the decision in the Phase 6 summary under
 "Deviations". `gamedev:story-done` will include the Manifest-Note in its deviations section without re-checking
-staleness. If [C]: stop. Do not spawn any agent. Let the user review and re-run `gamedev:dev-story`.
+staleness. If [C]: stop. Do not spawn any agent. Let the user review and re-run the `gamedev:dev-story` skill.
 
 ### Dependency validation
 
@@ -213,8 +213,8 @@ prompt. The agent reads what it needs directly:
 6. **Test file path**: `[path from story's Test Evidence section]` — this file must be created as part of implementation
 7. **Test requirement** (Logic and Integration stories only): The test file MUST be created at
    `[path from the story's Test Evidence section]`. Write the test alongside the implementation — do not defer it. The
-   story cannot be closed via `gamedev:story-done` without this file present. Each acceptance criterion must have
-   at least one test function covering it. Test file naming: `[system]_[feature]_test.[ext]`. Function naming:
+   story cannot be closed via `gamedev:story-done` without this file present. Each acceptance criterion must have at
+   least one test function covering it. Test file naming: `[system]_[feature]_test.[ext]`. Function naming:
    `test_[scenario]_[expected_outcome]`. No random seeds, no time-dependent assertions, no external I/O.
 8. **Explicit instruction**: implement this story following the ADR guidelines, respect the manifest rules, stay within
    the story's Out of Scope boundaries. Write clean, doc-commented public APIs.
@@ -235,8 +235,7 @@ what they changed from/to.
 ### Visual/Feel stories
 
 Spawn `gamedev:gameplay-programmer` to implement the code/animation calls. Note that Visual/Feel acceptance criteria
-cannot be auto-verified — the "does it feel right?" check happens in `gamedev:story-done` via manual
-confirmation.
+cannot be auto-verified — the "does it feel right?" check happens in `gamedev:story-done` via manual confirmation.
 
 ---
 
@@ -326,7 +325,7 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `gamedev:architecture-decision` first
+- ADR status is Proposed → do not implement; run the `gamedev:architecture-decision` skill first
 - Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 - Manifest version mismatch → show diff to user, ask whether to proceed with old rules or update story first
@@ -353,7 +352,7 @@ Common blockers:
 
 ## Recommended Next Steps
 
-- Run `gamedev:code-review [file1] [file2]` to review the implementation before closing the story
-- Run `gamedev:story-done [story-path]` to verify acceptance criteria and mark the story complete
-- After a milestone's stories are done: run `gamedev:team-qa [milestone]` for the full QA cycle before advancing
-  the project stage
+- Run the `gamedev:code-review` skill with `[file1] [file2]` to review the implementation before closing the story
+- Run the `gamedev:story-done` skill with `[story-path]` to verify acceptance criteria and mark the story complete
+- After a milestone's stories are done: run the `gamedev:team-qa` skill with `[milestone]` for the full QA cycle before
+  advancing the project stage

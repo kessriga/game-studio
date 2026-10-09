@@ -116,7 +116,7 @@ within the target time, without developer guidance? Can the team build at this q
 
 **Performance targets:** [Confirmed / Revised — list changes if revised]
 
-**Playtest note:** Run `gamedev:playtest-report` to structure additional session data before running
+**Playtest note:** Run the `gamedev:playtest-report` skill to structure additional session data before running
 `gamedev:gate-check pre-production`.
 
 **Next steps:**
@@ -148,8 +148,8 @@ within the target time, without developer guidance? Can the team build at this q
 [Why the full game loop does not work at this quality level. What specifically prevented the player from experiencing
 the core fantasy. What to do instead.]
 
-**Next step:** `gamedev:brainstorm` to explore a new direction, or `gamedev:prototype [new-concept]` to
-test a different concept cheaply before investing in another vertical slice.
+**Next step:** `gamedev:brainstorm` to explore a new direction, or `gamedev:prototype [new-concept]` to test a different
+concept cheaply before investing in another vertical slice.
 
 ---
 

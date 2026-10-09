@@ -239,5 +239,5 @@ If yes, write the file, creating directories as needed.
 
 ## Phase 6: Next Steps
 
-- Run `gamedev:gate-check` to get a formal PASS/CONCERNS/FAIL verdict before launch.
+- Run the `gamedev:gate-check` skill to get a formal PASS/CONCERNS/FAIL verdict before launch.
 - Coordinate sign-offs via `gamedev:team-release`.

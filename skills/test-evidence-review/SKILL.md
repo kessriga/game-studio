@@ -221,10 +221,10 @@ This is optional — the report is useful standalone. Write only if the user wan
 
 After the report:
 
-- For BLOCKING items: "These must be resolved before `gamedev:story-done` can mark the story Complete. Would you
-  like to address any of them now?"
-- For thin assertions: "Consider running `gamedev:test-helpers [system]` to see scaffolded assertion patterns for
-  common cases."
+- For BLOCKING items: "These must be resolved before `gamedev:story-done` can mark the story Complete. Would you like to
+  address any of them now?"
+- For thin assertions: "Consider running the `gamedev:test-helpers` skill with `[system]` to see scaffolded assertion
+  patterns for common cases."
 - For missing sign-offs: "Manual sign-off is required from [role]. Share `[evidence-path]` with them to complete
   sign-off."
 

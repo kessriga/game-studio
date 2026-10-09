@@ -2,14 +2,14 @@
 
 ## Skill Summary
 
-`gamedev:ux-design` is a guided, section-by-section UX spec authoring skill. It produces user flow diagrams
-(described textually), interaction state definitions, wireframe descriptions, and accessibility notes for a specified
-screen or HUD element. The skill follows the skeleton-first pattern: it creates the file with all section headers
-immediately, then fills each section through discussion and writes each section to disk after user approval.
+`gamedev:ux-design` is a guided, section-by-section UX spec authoring skill. It produces user flow diagrams (described
+textually), interaction state definitions, wireframe descriptions, and accessibility notes for a specified screen or HUD
+element. The skill follows the skeleton-first pattern: it creates the file with all section headers immediately, then
+fills each section through discussion and writes each section to disk after user approval.
 
-The skill has no inline director gates — `gamedev:ux-review` is the separate review step. Each section requires a
-"May I write section [N] to [filepath]?" ask. If a UX spec already exists for the named screen, the skill offers to
-retrofit individual sections rather than replace. Verdict is COMPLETE when all sections are written.
+The skill has no inline director gates — `gamedev:ux-review` is the separate review step. Each section requires a "May I
+write section [N] to [filepath]?" ask. If a UX spec already exists for the named screen, the skill offers to retrofit
+individual sections rather than replace. Verdict is COMPLETE when all sections are written.
 
 ---
 
@@ -27,8 +27,8 @@ Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 ## Director Gate Checks
 
-None. `gamedev:ux-design` has no inline director gates. `gamedev:ux-review` is the separate review skill
-invoked after this skill completes.
+None. `gamedev:ux-design` has no inline director gates. `gamedev:ux-review` is the separate review skill invoked after
+this skill completes.
 
 ---
 
@@ -51,7 +51,7 @@ invoked after this skill completes.
 3. After each section is drafted and user confirms, skill asks "May I write section [N] to `design/ux/hud.md`?"
 4. Each section is written in sequence after approval
 5. After all sections are written, verdict is COMPLETE
-6. Skill suggests running `gamedev:ux-review` as the next step
+6. Skill suggests running the `gamedev:ux-review` skill as the next step
 
 **Assertions:**
 
@@ -130,8 +130,7 @@ invoked after this skill completes.
 
 1. Skill detects no screen name or argument provided
 2. Skill outputs a usage error: "Screen name required. Usage: `gamedev:ux-design [screen-name]`"
-3. Skill provides examples: `gamedev:ux-design hud`, `gamedev:ux-design main-menu`,
-   `gamedev:ux-design inventory`
+3. Skill provides examples: `gamedev:ux-design hud`, `gamedev:ux-design main-menu`, `gamedev:ux-design inventory`
 4. No file is created; no "May I write" is asked
 
 **Assertions:**

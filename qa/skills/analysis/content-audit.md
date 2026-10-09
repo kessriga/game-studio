@@ -2,9 +2,9 @@
 
 ## Skill Summary
 
-`gamedev:content-audit` reads GDDs in `design/gdd/` and checks whether all content items specified there
-(enemies, items, levels, etc.) are accounted for in `assets/`. It produces a gap table: Content Type → Specified Count →
-Found Count → Missing Items. No director gates are invoked. The skill does not write without user approval. Verdicts:
+`gamedev:content-audit` reads GDDs in `design/gdd/` and checks whether all content items specified there (enemies,
+items, levels, etc.) are accounted for in `assets/`. It produces a gap table: Content Type → Specified Count → Found
+Count → Missing Items. No director gates are invoked. The skill does not write without user approval. Verdicts:
 COMPLETE, GAPS FOUND, or MISSING CRITICAL CONTENT.
 
 ---
@@ -94,15 +94,14 @@ None. Content audit is a read-only analysis skill; no gates are invoked.
 **Expected behavior:**
 
 1. Skill reads all GDDs — finds no content inventory sections
-2. Skill outputs: "No content specifications found in GDDs — run gamedev:design-system first to define content
-   lists"
+2. Skill outputs: "No content specifications found in GDDs — run gamedev:design-system first to define content lists"
 3. No gap table is produced
 4. Verdict is GAPS FOUND (cannot confirm completeness without specs)
 
 **Assertions:**
 
 - [ ] Skill does not produce a gap table when no GDD content specs exist
-- [ ] Output recommends running `gamedev:design-system`
+- [ ] Output recommends running the `gamedev:design-system` skill
 - [ ] Verdict reflects inability to confirm completeness
 
 ---

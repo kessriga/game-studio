@@ -149,7 +149,7 @@ name or "pending review"]
 
 **Recommended Balance Pass**:
 
-- Run `gamedev:balance-check` on [specific aspect]
+- Run the `gamedev:balance-check` skill on [specific aspect]
 - Playtest with focus on [specific scenario]
 
 ---
@@ -190,7 +190,7 @@ name or "pending review"]
 - [ ] **Update [Formula X]**: Change from exponential to linear (per user clarification)
 - [ ] **Implement [Edge Case Y]**: Handle scenario not in current code
 - [ ] **Create ADR**: Document why [architectural decision] was chosen
-- [ ] **Balance pass**: Run `gamedev:balance-check` on progression curve
+- [ ] **Balance pass**: Run the `gamedev:balance-check` skill on progression curve
 - [ ] **Extend design doc**: When [related feature] is implemented, update this doc
 
 ---

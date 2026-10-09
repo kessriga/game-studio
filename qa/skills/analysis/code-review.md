@@ -2,8 +2,8 @@
 
 ## Skill Summary
 
-`gamedev:code-review` performs an architectural code review of source files in `src/`, checking coding standards
-from `AGENTS.md` (doc comments on public APIs, dependency injection over singletons, data-driven values, testability).
+`gamedev:code-review` performs an architectural code review of source files in `src/`, checking coding standards from
+`AGENTS.md` (doc comments on public APIs, dependency injection over singletons, data-driven values, testability).
 Findings are advisory. No director gates are invoked. No code edits are made. Verdicts: APPROVED, CONCERNS, or NEEDS
 CHANGES.
 
@@ -120,7 +120,7 @@ None. Code review is a read-only advisory skill; no gates are invoked.
 
 **Fixture:**
 
-- User calls `gamedev:code-review src/networking/`
+- User calls the `gamedev:code-review` skill with `src/networking/`
 - `src/networking/` directory does not exist
 
 **Input:** `gamedev:code-review src/networking/`

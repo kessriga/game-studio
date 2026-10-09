@@ -303,7 +303,7 @@ gamedev:skill-test [lint|spec|catalog] ─────────────�
 
 ## Brownfield Onboarding Flow
 
-For projects with existing work (use `gamedev:start` option D or run directly):
+For projects with existing work (use the `gamedev:start` skill option D or run directly):
 
 ```
 gamedev:project-stage-detect    → stage detection report

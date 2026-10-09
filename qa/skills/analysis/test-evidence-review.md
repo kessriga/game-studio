@@ -2,10 +2,10 @@
 
 ## Skill Summary
 
-`gamedev:test-evidence-review` performs a quality review of test files in `tests/`, checking test naming
-conventions, determinism, isolation, and absence of hardcoded magic numbers — all against the project's test standards
-defined in `coding-standards.md`. Findings may be flagged for qa-lead review. No director gates are invoked. The skill
-does not write without user approval. Verdicts: PASS, WARNINGS, or FAIL.
+`gamedev:test-evidence-review` performs a quality review of test files in `tests/`, checking test naming conventions,
+determinism, isolation, and absence of hardcoded magic numbers — all against the project's test standards defined in
+`coding-standards.md`. Findings may be flagged for qa-lead review. No director gates are invoked. The skill does not
+write without user approval. Verdicts: PASS, WARNINGS, or FAIL.
 
 ---
 
@@ -128,7 +128,7 @@ triggered here.
 
 **Fixture:**
 
-- User calls `gamedev:test-evidence-review tests/unit/audio/`
+- User calls the `gamedev:test-evidence-review` skill with `tests/unit/audio/`
 - `tests/unit/audio/` directory does not exist
 
 **Input:** `gamedev:test-evidence-review tests/unit/audio/`
@@ -136,7 +136,7 @@ triggered here.
 **Expected behavior:**
 
 1. Skill attempts to read files in `tests/unit/audio/` — not found
-2. Skill outputs: "No test files found at `tests/unit/audio/` — run `gamedev:test-setup` to scaffold test
+2. Skill outputs: "No test files found at `tests/unit/audio/` — run the `gamedev:test-setup` skill to scaffold test
    directories"
 3. No verdict is emitted
 
@@ -163,7 +163,7 @@ triggered here.
 1. Skill reviews tests; finds 1 WARNINGS-level finding
 2. No director gate is invoked (QL-TEST-COVERAGE is invoked separately, not here)
 3. Verdict is WARNINGS
-4. Output notes: "For full test coverage gate, run `gamedev:gate-check` which invokes QL-TEST-COVERAGE"
+4. Output notes: "For full test coverage gate, run the `gamedev:gate-check` skill which invokes QL-TEST-COVERAGE"
 5. Skill offers optional report write; asks "May I write" if user opts in
 
 **Assertions:**

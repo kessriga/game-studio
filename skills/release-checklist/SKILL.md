@@ -185,5 +185,5 @@ If yes, write the file, creating the directory if needed.
 
 ## Phase 6: Next Steps
 
-- Run `gamedev:gate-check` for a formal phase gate verdict before proceeding to release.
+- Run the `gamedev:gate-check` skill for a formal phase gate verdict before proceeding to release.
 - Coordinate final sign-offs via `gamedev:team-release`.

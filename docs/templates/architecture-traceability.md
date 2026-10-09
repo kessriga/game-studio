@@ -97,7 +97,7 @@ matrix.
 **When approving a GDD change**: Scan the matrix for requirements from that GDD and check whether the change invalidates
 any existing ADR. Add to "Superseded Requirements" if so.
 
-**When running `gamedev:architecture-review`**: The skill will update this document automatically with the
+**When running the `gamedev:architecture-review` skill**: The skill will update this document automatically with the
 current state.
 
 **Gate check**: The Pre-Production gate requires this document to exist and to have zero Foundation Layer Gaps.

@@ -16,8 +16,8 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 This is the **concept prototype** — a fast, throwaway build that answers one question:
 *"Is this core idea actually fun to interact with?"*
 
-**Default use** — run right after `gamedev:brainstorm` and `gamedev:setup-engine`, before writing GDDs or
-architecture docs. Its verdict determines whether the concept is worth the investment of full design documentation.
+**Default use** — run right after `gamedev:brainstorm` and `gamedev:setup-engine`, before writing GDDs or architecture
+docs. Its verdict determines whether the concept is worth the investment of full design documentation.
 
 **Mid-production?** You can also run this at any stage to test a specific mechanic, design change, or technical
 question. Pass `--spike` to activate spike mode: a lightweight ~4-hour build with no GDD prerequisites and no phase gate
@@ -411,8 +411,7 @@ learned.
 
 Recommended path (in order):
 
-1. `gamedev:design-review design/gdd/game-concept.md` — validate the concept doc against what the prototype
-   revealed
+1. `gamedev:design-review design/gdd/game-concept.md` — validate the concept doc against what the prototype revealed
 2. `gamedev:gate-check` — confirm readiness to advance to Systems Design
 3. `gamedev:art-bible` — define visual identity (optional but worth doing before GDDs)
 4. `gamedev:map-systems` — decompose the concept into all game systems
@@ -434,10 +433,10 @@ time):
 Ask: "May I write this to `prototypes/[concept-name]-concept/PIVOT-NOTE.md`?"
 
 If yes, write the file with: original hypothesis, what to keep, what to change, and the revised hypothesis for the next
-prototype. When `gamedev:prototype` is next run, check `prototypes/` for any `PIVOT-NOTE.md` files — if found,
-read them and use the revised hypothesis as the starting point rather than forming one from scratch.
+prototype. When `gamedev:prototype` is next run, check `prototypes/` for any `PIVOT-NOTE.md` files — if found, read them
+and use the revised hypothesis as the starting point rather than forming one from scratch.
 
-- Run `gamedev:prototype [revised-concept]` to test the adjusted direction
+- Run the `gamedev:prototype` skill with `[revised-concept]` to test the adjusted direction
 - Or `gamedev:brainstorm [hint]` if the concept needs more fundamental rethinking
 
 **If KILL:**
@@ -465,7 +464,7 @@ If 2+ boxes apply → KILL verdict is sound. If 0–1 apply → consider one mor
 
 This file exists so the same mistake doesn't get made twice on the next concept.
 
-- Run `gamedev:brainstorm open` or `gamedev:brainstorm [new-hint]` to explore a different concept
+- Run the `gamedev:brainstorm` skill with `open` or `gamedev:brainstorm [new-hint]` to explore a different concept
 - The prototype report is the deliverable — no further action needed
 
 ---

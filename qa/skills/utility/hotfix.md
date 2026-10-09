@@ -2,10 +2,10 @@
 
 ## Skill Summary
 
-`gamedev:hotfix` manages an emergency fix workflow: it creates a hotfix branch from main, applies a targeted fix
-to the identified file(s), runs `gamedev:smoke-check` to validate the fix doesn't introduce regressions, and
-prompts the user to confirm merge back to main. Each code change requires a "May I write to [filepath]?" ask. Git
-operations (branch creation, merge) are presented as Bash commands for user confirmation before execution.
+`gamedev:hotfix` manages an emergency fix workflow: it creates a hotfix branch from main, applies a targeted fix to the
+identified file(s), runs the `gamedev:smoke-check` skill to validate the fix doesn't introduce regressions, and prompts
+the user to confirm merge back to main. Each code change requires a "May I write to [filepath]?" ask. Git operations
+(branch creation, merge) are presented as Bash commands for user confirmation before execution.
 
 The skill is time-sensitive — director review is optional post-hoc, not a blocking gate. Verdicts: HOTFIX COMPLETE (fix
 applied, smoke check passed, merged) or HOTFIX BLOCKED (fix introduced regression or user declined).
@@ -49,7 +49,7 @@ this skill.
 2. User confirms; Bash command for branch creation is shown and confirmed
 3. Skill identifies the fix location in `arena.gd` and drafts the change
 4. Skill asks "May I write to `src/gameplay/arena.gd`?" and applies fix on approval
-5. Skill runs `gamedev:smoke-check` — PASS
+5. Skill runs the `gamedev:smoke-check` skill — PASS
 6. Skill presents the merge command and asks user to confirm merge to `main`
 7. User confirms; merge executes; verdict is HOTFIX COMPLETE
 
@@ -74,7 +74,7 @@ this skill.
 
 **Expected behavior:**
 
-1. Skill applies the fix and runs `gamedev:smoke-check`
+1. Skill applies the fix and runs the `gamedev:smoke-check` skill
 2. Smoke check returns FAIL with specific regression identified
 3. Skill reports: "HOTFIX BLOCKED — smoke check failed: [regression detail]"
 4. Skill presents options: attempt revised fix, revert changes, or merge with known regression (user acknowledges risk)
@@ -119,7 +119,7 @@ this skill.
 
 **Fixture:**
 
-- User invokes `gamedev:hotfix` with a vague description: "something is broken on level 3"
+- User invokes the `gamedev:hotfix` skill with a vague description: "something is broken on level 3"
 - No repro steps provided
 
 **Input:** `gamedev:hotfix` (vague description)
@@ -167,7 +167,7 @@ this skill.
 
 - [ ] Creates hotfix branch before making any code changes
 - [ ] Asks "May I write" before modifying any source files
-- [ ] Runs `gamedev:smoke-check` after applying the fix
+- [ ] Runs the `gamedev:smoke-check` skill after applying the fix
 - [ ] Requires explicit user confirmation before merging
 - [ ] HOTFIX BLOCKED when smoke check fails — no automatic merge
 - [ ] Verdict is HOTFIX COMPLETE or HOTFIX BLOCKED

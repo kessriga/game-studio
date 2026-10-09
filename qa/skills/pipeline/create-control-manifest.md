@@ -2,10 +2,10 @@
 
 ## Skill Summary
 
-`gamedev:create-control-manifest` reads all Accepted ADRs from `docs/architecture/` and generates a control
-manifest — a summary document that captures all architectural constraints, required patterns, and forbidden patterns in
-one place. The manifest is the reference document that story authors use when writing story files, ensuring stories
-inherit the correct architectural rules without having to read all ADRs individually.
+`gamedev:create-control-manifest` reads all Accepted ADRs from `docs/architecture/` and generates a control manifest — a
+summary document that captures all architectural constraints, required patterns, and forbidden patterns in one place.
+The manifest is the reference document that story authors use when writing story files, ensuring stories inherit the
+correct architectural rules without having to read all ADRs individually.
 
 The skill only includes Accepted ADRs; Proposed ADRs are excluded and noted. It has no director gates. The skill asks
 "May I write" before writing `docs/architecture/control-manifest.md`.
@@ -75,7 +75,7 @@ Accepted ADRs; no creative or technical review gate is needed.
 **Expected behavior:**
 
 1. Skill reads `docs/architecture/` and finds no ADR files
-2. Skill outputs: "No ADRs found. Run `gamedev:architecture-decision` to create ADRs before generating the
+2. Skill outputs: "No ADRs found. Run the `gamedev:architecture-decision` skill to create ADRs before generating the
    control manifest."
 3. Skill exits without creating any file
 4. Verdict is BLOCKED

@@ -108,9 +108,9 @@ Write the file:
 After writing, tell the user:
 > "Entity inventory saved. Next steps:
 >
-> - Run `gamedev:ux-design [screen name]` for each UI screen in the inventory
-> - Run `gamedev:asset-spec entity:[name]` to spec each visual entity
-> - Or run `gamedev:asset-spec` again to work through the inventory one item at a time"
+> - Run the `gamedev:ux-design` skill with `[screen name]` for each UI screen in the inventory
+> - Run the `gamedev:asset-spec` skill with `entity:[name]` to spec each visual entity
+> - Or run the `gamedev:asset-spec` skill again to work through the inventory one item at a time"
 
 ---
 
@@ -138,9 +138,9 @@ Read all source material **before** asking the user anything.
 ### Required reads
 
 - **Art bible**: Read `design/art/art-bible.md` — fail if missing:
-  > "No art bible found. Run `gamedev:art-bible` first — asset specs are anchored to the art bible's visual rules
-and asset standards." Extract: Visual Identity Statement, Color System (semantic colors), Shape Language, Asset
-Standards (Section 8 — dimensions, formats, polycount budgets, texture resolution tiers).
+  > "No art bible found. Run the `gamedev:art-bible` skill first — asset specs are anchored to the art bible's visual
+rules and asset standards." Extract: Visual Identity Statement, Color System (semantic colors), Shape Language,
+Asset Standards (Section 8 — dimensions, formats, polycount budgets, texture resolution tiers).
 
 - **Technical preferences**: Read `docs/technical-preferences.md` — extract performance budgets and naming conventions.
 
@@ -149,8 +149,8 @@ Standards (Section 8 — dimensions, formats, polycount budgets, texture resolut
 - **system**: Read `design/gdd/[target-name].md`. Extract the **Visual/Audio Requirements** section. If it doesn't exist
   or reads `[To be designed]`:
   > "The Visual/Audio section of `design/gdd/[target-name].md` is empty. Either run
-`gamedev:design-system [target-name]` to complete the GDD, or describe the visual needs manually." Use a
-user-input tool or chat: `[A] Describe needs manually` / `[B] Stop — complete the GDD first`
+`gamedev:design-system [target-name]` to complete the GDD, or describe the visual needs manually." Use a user-input
+tool or chat: `[A] Describe needs manually` / `[B] Stop — complete the GDD first`
 - **level**: Read `design/levels/[target-name].md`. Extract art requirements, asset list, VFX needs, and the
   art-director's production concept specs from Step 4.
 - **character** or **entity**: Read `design/narrative/characters/[target-name].md` or search `design/narrative/` and
@@ -406,6 +406,6 @@ Every phase follows: **Identify → Confirm → Generate → Review → Approve 
 
 ## Recommended Next Steps
 
-- Run `gamedev:asset-spec [next-context]` to continue speccing remaining systems, levels, or characters
-- Run `gamedev:asset-audit` to validate delivered assets against the written specs and identify gaps or
+- Run the `gamedev:asset-spec` skill with `[next-context]` to continue speccing remaining systems, levels, or characters
+- Run the `gamedev:asset-audit` skill to validate delivered assets against the written specs and identify gaps or
   mismatches

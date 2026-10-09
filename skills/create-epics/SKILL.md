@@ -119,7 +119,7 @@ Present to user before writing anything:
 
 If there are untraced requirements:
 > "⚠️ [N] requirements in [system] have no ADR. The epic can be created, but stories for these requirements will be
-> marked Blocked until ADRs exist. Run `gamedev:architecture-decision` first, or proceed with placeholders."
+> marked Blocked until ADRs exist. Run the `gamedev:architecture-decision` skill first, or proceed with placeholders."
 
 Use a user-input tool or chat:
 
@@ -254,8 +254,8 @@ After writing all epics for the requested scope:
 
 - **Foundation + Core complete**: These are required for the Pre-Production → Production gate. Run
   `gamedev:gate-check production` to check readiness.
-- **Reminder**: Epics define scope. Stories define implementation steps. Run `gamedev:create-stories [epic-slug]`
-  for each epic before developers can pick up work.
+- **Reminder**: Epics define scope. Stories define implementation steps. Run the `gamedev:create-stories` skill with
+  `[epic-slug]` for each epic before developers can pick up work.
 
 ---
 
@@ -269,5 +269,5 @@ After writing all epics for the requested scope:
 
 After all requested epics are processed:
 
-- **Verdict: COMPLETE** — [N] epic(s) written. Run `gamedev:create-stories [epic-slug]` per epic.
+- **Verdict: COMPLETE** — [N] epic(s) written. Run the `gamedev:create-stories` skill with `[epic-slug]` per epic.
 - **Verdict: BLOCKED** — user declined all epics, or no eligible systems found.

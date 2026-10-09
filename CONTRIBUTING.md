@@ -77,8 +77,8 @@ function declarations there; `claude plugin validate` follows `$` only within th
 pure and testable.
 
 The start skill preserves existing files and blocks legacy preferences/rules before writing defaults. Follow
-[the migration guide](docs/migration-0.4.md). Use `gamedev:status` for current-directory stage reporting and the host
-guide's explicit validation and handoff checks.
+[the migration guide](docs/migration-0.4.md). Use the `gamedev:status` skill for current-directory stage reporting and
+the host guide's explicit validation and handoff checks.
 
 ## Testing Your Changes
 

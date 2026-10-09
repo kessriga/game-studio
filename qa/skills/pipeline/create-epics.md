@@ -84,7 +84,7 @@ In `solo` mode: PR-EPIC is skipped. Output notes: "PR-EPIC skipped — solo mode
 1. Skill reads systems index and attempts to find approved GDDs
 2. No approved GDDs found
 3. Skill outputs: "No approved GDDs to convert. GDDs must be Approved before creating epics."
-4. Skill suggests running `gamedev:design-system` and completing GDD approval first
+4. Skill suggests running the `gamedev:design-system` skill and completing GDD approval first
 5. Skill exits without creating any EPIC files
 
 **Assertions:**

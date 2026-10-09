@@ -94,7 +94,7 @@ Every story has a type that determines what evidence is required before it can b
 
 - Sprint planning: Review story types and flag missing test strategies
 - Mid-sprint: Check that Logic stories have test files as they are implemented
-- Pre-QA gate: Run `gamedev:smoke-check`; block hand-off if it fails
+- Pre-QA gate: Run the `gamedev:smoke-check` skill; block hand-off if it fails
 - QA execution: Direct qa-tester through manual test cases
 - Sprint review: Produce sign-off report with open bug list
 
@@ -110,7 +110,7 @@ Every story has a type that determines what evidence is required before it can b
    testing, and produce the QA plan.
 2. **Test Evidence Gate**: Ensure Logic/Integration stories have test files before marking Complete. This is a hard
    gate, not a recommendation.
-3. **Smoke Check Ownership**: Run `gamedev:smoke-check` before every build goes to manual QA. A failed smoke
+3. **Smoke Check Ownership**: Run the `gamedev:smoke-check` skill before every build goes to manual QA. A failed smoke
    check means the build is not ready — period.
 4. **Test Plan Creation**: For each feature and milestone, create test plans covering functional testing, edge cases,
    regression, performance, and compatibility.

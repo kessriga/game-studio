@@ -28,8 +28,8 @@ Resolve the review mode (once, store for all gate spawns this run):
 
 See `../../docs/director-gates.md` for the full check pattern.
 
-**If a file path is provided** (e.g., `gamedev:story-done production/epics/core/story-damage-calculator.md`):
-read that file directly.
+**If a file path is provided** (e.g., `gamedev:story-done production/epics/core/story-damage-calculator.md`): read that
+file directly.
 
 **If no argument is provided:**
 
@@ -174,7 +174,7 @@ for a playtest record referencing this story. If none found: flag as **BLOCKING*
   ADVISORY passed."
 
 **For Config/Data stories**: check for any `production/qa/smoke-*.md` file. If none: flag as **ADVISORY** — "No smoke
-check report found. Run `gamedev:smoke-check`."
+check report found. Run the `gamedev:smoke-check` skill."
 
 **If no Story Type is set**: flag as **ADVISORY** — "Story Type not declared. Add
 `Type: [Logic|Integration|Visual/Feel|UI|Config/Data]` to the story header to enable test evidence gate enforcement in
@@ -258,7 +258,7 @@ Skip this phase for Config/Data stories (no code tests required).
 
 - `solo` → skip. Note: "LP-CODE-REVIEW skipped — Solo mode." Proceed to Phase 6 (completion report).
 - `lean` → use a user-input tool or chat before proceeding:
-  - Prompt: "Code review is skipped in lean mode. Did you run `gamedev:code-review` on the implemented files?"
+  - Prompt: "Code review is skipped in lean mode. Did you run the `gamedev:code-review` skill on the implemented files?"
   - Options:
     - `Yes — gamedev:code-review passed or was approved with suggestions`
     - `No — skipping code review for this story`
@@ -452,7 +452,8 @@ If tasks are blocked, surface them so the user can unblock (clear the `blocked` 
 
 ## Recommended Next Steps
 
-- Run `gamedev:story-readiness [next-story-path]` to validate the next story before starting implementation
-- If all ready stories in the milestone are done: run `gamedev:smoke-check` →
-  `gamedev:team-qa [milestone]` → `gamedev:gate-check`
+- Run the `gamedev:story-readiness` skill with `[next-story-path]` to validate the next story before starting
+  implementation
+- If all ready stories in the milestone are done: run the `gamedev:smoke-check` skill → `gamedev:team-qa [milestone]` →
+  `gamedev:gate-check`
 - If tech debt was logged: track it via `gamedev:tech-debt` to keep the register current

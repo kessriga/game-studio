@@ -2,8 +2,8 @@
 
 ## Skill Summary
 
-`gamedev:review-all-gdds` is a skill that performs a holistic cross-GDD review across all files in `design/gdd/`.
-It runs two complementary review phases in parallel: Phase 1 checks for consistency (contradictions, formula mismatches,
+`gamedev:review-all-gdds` is a skill that performs a holistic cross-GDD review across all files in `design/gdd/`. It
+runs two complementary review phases in parallel: Phase 1 checks for consistency (contradictions, formula mismatches,
 stale references, competing ownership), and Phase 2 checks design theory (dominant strategies, pillar drift, cognitive
 overload, economic imbalance). Because the two phases are independent, they are spawned simultaneously to save time. The
 skill produces a CONSISTENT / MINOR ISSUES / MAJOR ISSUES verdict and is read-only — no files are written without
@@ -113,7 +113,7 @@ would create a circular dependency.
 
 - [ ] Verdict is MINOR ISSUES (not MAJOR ISSUES for a single orphaned reference)
 - [ ] The specific GDD filename and the missing dependency name are reported
-- [ ] Skill suggests running `gamedev:design-system system-B` to resolve the gap
+- [ ] Skill suggests running the `gamedev:design-system` skill with `system-B` to resolve the gap
 - [ ] Skill does NOT skip or silently ignore the missing dependency
 
 ---
@@ -131,7 +131,7 @@ would create a circular dependency.
 
 1. Skill attempts to read files in `design/gdd/`
 2. No files found — skill outputs an error with guidance
-3. Skill recommends running `gamedev:brainstorm` and `gamedev:design-system` before re-running
+3. Skill recommends running the `gamedev:brainstorm` skill and `gamedev:design-system` before re-running
 4. Skill does NOT produce a verdict (CONSISTENT / MINOR ISSUES / MAJOR ISSUES)
 
 **Assertions:**

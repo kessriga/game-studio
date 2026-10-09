@@ -117,7 +117,7 @@ After presenting the report, offer concrete follow-up:
   `gamedev:estimate` to re-baseline timeline.
 
 Always end with:
-> "Run `gamedev:scope-check [name]` again after cuts are made to verify the verdict improves."
+> "Run the `gamedev:scope-check` skill with `[name]` again after cuts are made to verify the verdict improves."
 
 ---
 

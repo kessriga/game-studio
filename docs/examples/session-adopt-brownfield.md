@@ -68,7 +68,7 @@ index) fixed immediately
 > | ----- | ---------- | -------- |
 > | No systems index | BLOCKING | `gamedev:design-system`, `gamedev:create-stories`, `gamedev:gate-check` all require it |
 > | GDD files not in template format | HIGH | Skills cannot reference TR-IDs from malformed GDDs |
-> | No architecture docs | HIGH | Cannot run `gamedev:architecture-review` or `gamedev:create-control-manifest` |
+> | No architecture docs | HIGH | Cannot run the `gamedev:architecture-review` skill or `gamedev:create-control-manifest` |
 > | No production tracking | MEDIUM | Story and Backlog task skills won't work, but not needed until production phase |
 > | `design/crafting-ideas.md` — pre-GDD content | LOW | Useful as input; needs full GDD authoring before it blocks anything |
 
@@ -106,7 +106,7 @@ index) fixed immediately
 > The BLOCKING gap is the missing `design/gdd/systems-index.md`.
 >
 > I can create one now by reading your existing code and design docs to infer what systems you've built. This is faster
-> than running `gamedev:map-systems` from scratch — I'll populate it based on what already exists, then you
+> than running the `gamedev:map-systems` skill from scratch — I'll populate it based on what already exists, then you
 > confirm or adjust.
 >
 > Would you like me to do that now?
@@ -174,11 +174,12 @@ index) fixed immediately
 >
 > **Recommended next steps (from adoption plan):**
 >
-> 1. Run `gamedev:design-system retrofit design/inventory.md` — your most complete existing doc, easiest win
-> 2. Run `gamedev:design-system retrofit design/combat-notes.md`
-> 3. Run `gamedev:design-system crafting` — author crafting GDD using your ideas file as input
+> 1. Run the `gamedev:design-system` skill with `retrofit design/inventory.md` — your most complete existing doc,
+>    easiest win
+> 2. Run the `gamedev:design-system` skill with `retrofit design/combat-notes.md`
+> 3. Run the `gamedev:design-system` skill with `crafting` — author crafting GDD using your ideas file as input
 >
-> After those 3, you'll have 5 of 7 systems with complete GDDs. Then run `gamedev:review-all-gdds` to catch
+> After those 3, you'll have 5 of 7 systems with complete GDDs. Then run the `gamedev:review-all-gdds` skill to catch
 > cross-system consistency issues before architecture work.
 
 ## Turn 8: User Confirms Plan
@@ -200,9 +201,9 @@ index) fixed immediately
 
 ## What This Example Demonstrates
 
-- **FORMAT audit, not existence audit**: `gamedev:adopt` doesn't just check whether files exist — it checks
-  whether their internal structure matches what skills expect. A file named `gdd.md` with no template sections is
-  flagged as a gap.
+- **FORMAT audit, not existence audit**: `gamedev:adopt` doesn't just check whether files exist — it checks whether
+  their internal structure matches what skills expect. A file named `gdd.md` with no template sections is flagged as a
+  gap.
 - **Migration, not replacement**: existing content is never overwritten. The plan fills gaps only.
 - **BLOCKING gaps surface first**: the missing systems index is identified as BLOCKING because it prevents the most
   skills from functioning.
@@ -212,5 +213,5 @@ index) fixed immediately
   brownfield code already contains the answer.
 - **Retrofit vs. new authoring**: `gamedev:design-system retrofit` handles existing-but-incomplete docs; full
   `gamedev:design-system` handles net-new docs. The adoption plan distinguishes which applies to each file.
-- **Context: fork**: `gamedev:adopt` runs in a forked context to avoid polluting the main session with large file
-  reads across the whole codebase.
+- **Context: fork**: `gamedev:adopt` runs in a forked context to avoid polluting the main session with large file reads
+  across the whole codebase.

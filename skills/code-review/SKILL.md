@@ -30,9 +30,9 @@ If the section reads `[TO BE CONFIGURED]`, no engine is pinned — skip engine s
 
 ## Phase 3: ADR Compliance Check
 
-**Argument:** `gamedev:code-review [file(s)]` may optionally include a story file path as the last argument
-(e.g., `gamedev:code-review src/combat/attack.gd production/epics/combat/story-001.md`). If a story path is
-provided, read it to extract the governing ADR reference.
+**Argument:** `gamedev:code-review [file(s)]` may optionally include a story file path as the last argument (e.g.,
+`gamedev:code-review src/combat/attack.gd production/epics/combat/story-001.md`). If a story path is provided, read it
+to extract the governing ADR reference.
 
 Search for ADR references in, in priority order:
 
@@ -200,7 +200,7 @@ Use a user-input tool or chat:
 If an ARCHITECTURAL VIOLATION is found:
 
 - If the violation contradicts an **existing ADR**: fix the implementation to comply with
-  `docs/architecture/[adr-file].md`. If the design has legitimately changed, run `gamedev:architecture-decision`
-  to formally *revise* the existing ADR — do not create a competing one.
-- If **no ADR exists** for the pattern that was violated: run `gamedev:architecture-decision` to document the
+  `docs/architecture/[adr-file].md`. If the design has legitimately changed, run the `gamedev:architecture-decision`
+  skill to formally *revise* the existing ADR — do not create a competing one.
+- If **no ADR exists** for the pattern that was violated: run the `gamedev:architecture-decision` skill to document the
   correct approach before fixing the code.

@@ -87,8 +87,8 @@ list of what comes next
 >
 > **Required steps this phase (in order):**
 >
-> 1. **`gamedev:create-architecture`** — Author the master architecture document. Covers system decomposition,
->    data flow, layer boundaries, and module responsibilities.
+> 1. **`gamedev:create-architecture`** — Author the master architecture document. Covers system decomposition, data
+>    flow, layer boundaries, and module responsibilities.
 >
 > 2. **`gamedev:architecture-decision` (one per significant technical choice)** — At minimum:
 >    - Rendering approach (2D camera, viewport, etc.)
@@ -96,22 +96,22 @@ list of what comes next
 >    - Audio bus architecture
 >    - The "item stack size authority" issue from cross-review (crafting vs inventory)
 >
-> 3. **`gamedev:architecture-review`** — Validates all ADRs for completeness, dependency ordering, and GDD
->    traceability. Produces the TR-registry.
+> 3. **`gamedev:architecture-review`** — Validates all ADRs for completeness, dependency ordering, and GDD traceability.
+>    Produces the TR-registry.
 >
-> 4. **`gamedev:create-control-manifest`** — Converts Accepted ADRs into a flat programmer rules sheet. This is
->    what implementation agents will consult during coding.
+> 4. **`gamedev:create-control-manifest`** — Converts Accepted ADRs into a flat programmer rules sheet. This is what
+>    implementation agents will consult during coding.
 >
-> 5. **`gamedev:gate-check`** — Technical Setup → Pre-Production gate. Requires: architecture doc, all ADRs
->    Accepted, control manifest, and dependency ordering resolved.
+> 5. **`gamedev:gate-check`** — Technical Setup → Pre-Production gate. Requires: architecture doc, all ADRs Accepted,
+>    control manifest, and dependency ordering resolved.
 >
 > **Optional but recommended:**
 >
 > - `gamedev:tech-debt` scan if you have any prototype code you plan to carry forward
 > - `gamedev:setup-engine` re-run if you haven't yet fetched Godot 4.6 API snapshots
 >
-> **Tip:** Start with `gamedev:architecture-decision` for the item stack size conflict. It's a quick win that
-> closes an open question before it creates ambiguity in two ADRs later.
+> **Tip:** Start with `gamedev:architecture-decision` for the item stack size conflict. It's a quick win that closes an
+> open question before it creates ambiguity in two ADRs later.
 
 ## Turn 5: User Asks About the Cross-Review Concern
 
@@ -142,7 +142,7 @@ list of what comes next
 > Most studios go with B (shared resource) once they have >2 systems touching item data. But either is valid for a solo
 > project.
 >
-> Run `gamedev:architecture-decision` and it will guide you through the ADR format, including the Dependencies
+> Run the `gamedev:architecture-decision` skill and it will guide you through the ADR format, including the Dependencies
 > section that links this ADR back to the two GDDs.
 
 ## Turn 7: User Wraps Up
@@ -154,8 +154,8 @@ list of what comes next
 > Good starting point. The ADR will document the decision, the reasoning, and the GDD requirements it addresses — so
 > when you write code months from now, the rationale is preserved.
 >
-> Your phase gate is logged. Run `gamedev:help` at any time during Technical Setup to see your current progress
-> against the required checklist.
+> Your phase gate is logged. Run the `gamedev:help` skill at any time during Technical Setup to see your current
+> progress against the required checklist.
 
 ---
 
@@ -164,8 +164,8 @@ list of what comes next
 - **Gate check is automated, not manual**: agent reads artifacts and checks them — user doesn't fill out a form
 - **CONCERNS ≠ FAIL**: the cross-review concern is LOW severity and passes the gate. A FAIL would require resolution
   before advancing.
-- **Stage.txt is the authority**: stage reporting, `gamedev:help`, and phase checks read from
-  `production/stage.txt` — updating it here changes what every subsequent skill sees
+- **Stage.txt is the authority**: stage reporting, `gamedev:help`, and phase checks read from `production/stage.txt` —
+  updating it here changes what every subsequent skill sees
 - **Next steps are phase-specific**: the agent doesn't give a generic "good luck" — it gives the ordered checklist for
   Technical Setup specifically
 - **Gate check surfaces carry-forward work**: the stack size conflict was a cross-review note; the gate check ensures it

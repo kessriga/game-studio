@@ -27,11 +27,10 @@ helpers. This skill generates a `tests/helpers/` library tailored to the project
 
 **Modes:**
 
-- `gamedev:test-helpers [system-name]` — generate helpers for a specific system (e.g.,
-  `gamedev:test-helpers combat`)
+- `gamedev:test-helpers [system-name]` — generate helpers for a specific system (e.g., `gamedev:test-helpers combat`)
 - `gamedev:test-helpers all` — generate helpers for all systems with test files
-- `gamedev:test-helpers scaffold` — generate only the base helper library (no system-specific helpers); use this
-  on first run
+- `gamedev:test-helpers scaffold` — generate only the base helper library (no system-specific helpers); use this on
+  first run
 - No argument — run `scaffold` if no helpers exist, else `all`
 
 ---
@@ -44,7 +43,7 @@ Read `docs/technical-preferences.md` and extract:
 - `Language:` value
 - `Framework:` from the Testing section
 
-If engine is not configured: "Engine not configured. Run `gamedev:setup-engine` first."
+If engine is not configured: "Engine not configured. Run the `gamedev:setup-engine` skill first."
 
 ---
 
@@ -448,6 +447,6 @@ After writing: Verdict: **COMPLETE** — helper files created.
 
 ## Next Steps
 
-- Run `gamedev:test-setup` if the test framework has not been scaffolded yet.
-- Use `gamedev:dev-story` to implement stories — helpers reduce boilerplate in new test files.
-- Run `gamedev:skill-test` to validate other skills that may need helper coverage.
+- Run the `gamedev:test-setup` skill if the test framework has not been scaffolded yet.
+- Use the `gamedev:dev-story` skill to implement stories — helpers reduce boilerplate in new test files.
+- Run the `gamedev:skill-test` skill to validate other skills that may need helper coverage.

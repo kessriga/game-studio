@@ -234,7 +234,7 @@ This skill is READ-ONLY — it never edits or writes files. It reports findings 
 
 After delivering the verdict:
 
-- For **APPROVED**: suggest running `gamedev:team-ui` to begin implementation coordination
+- For **APPROVED**: suggest running the `gamedev:team-ui` skill to begin implementation coordination
 - For **NEEDS REVISION**: offer to help fix specific gaps ("Would you like me to help draft the missing error state?") —
   but do not auto-fix; wait for user instruction
 - For **MAJOR REVISION NEEDED**: suggest returning to `gamedev:ux-design` with the specific sections to rework

@@ -282,8 +282,8 @@ file before moving on. Abbreviated here.)*
 > - Rolling has a flat stamina cost (not per-second)
 > - Heavy carry disables run (signal-driven, not hardcoded check)
 >
-> **Recommended next step:** Run `gamedev:design-review design/gdd/movement-system.md` before moving to the next
-> system in your queue (stamina is next in dependency order, per systems-index).
+> **Recommended next step:** Run the `gamedev:design-review` skill with `design/gdd/movement-system.md` before moving to
+> the next system in your queue (stamina is next in dependency order, per systems-index).
 >
 > The review will validate completeness, internal consistency, and catch anything that needs revision before you build
 > on this GDD.

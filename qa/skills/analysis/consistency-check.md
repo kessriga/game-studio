@@ -2,9 +2,9 @@
 
 ## Skill Summary
 
-`gamedev:consistency-check` scans all GDDs in `design/gdd/` and checks for internal conflicts across documents.
-It produces a structured findings table with columns: System A vs System B, Conflict Type, Severity (HIGH / MEDIUM /
-LOW). Conflict types include: formula mismatch, competing ownership, stale reference, and dependency gap.
+`gamedev:consistency-check` scans all GDDs in `design/gdd/` and checks for internal conflicts across documents. It
+produces a structured findings table with columns: System A vs System B, Conflict Type, Severity (HIGH / MEDIUM / LOW).
+Conflict types include: formula mismatch, competing ownership, stale reference, and dependency gap.
 
 The skill is read-only during analysis. It has no director gates. An optional consistency report can be written to
 `design/consistency-report-[date].md` if the user requests it, but the skill asks "May I write" before doing so.
@@ -112,7 +112,7 @@ technical director review is required as part of the scan itself.
 - [ ] Verdict is DEPENDENCY GAP (distinct from CONSISTENT and CONFLICTS FOUND)
 - [ ] Findings entry names GDD-A and the missing system-B
 - [ ] Severity is MEDIUM for an unresolved dependency reference
-- [ ] Skill suggests running `gamedev:design-system system-B` to create the missing GDD
+- [ ] Skill suggests running the `gamedev:design-system` skill with `system-B` to create the missing GDD
 
 ---
 
@@ -128,7 +128,7 @@ technical director review is required as part of the scan itself.
 
 1. Skill attempts to read files in `design/gdd/`
 2. No GDD files found
-3. Skill outputs an error: "No GDDs found in `design/gdd/`. Run `gamedev:design-system` to create GDDs first."
+3. Skill outputs an error: "No GDDs found in `design/gdd/`. Run the `gamedev:design-system` skill to create GDDs first."
 4. No findings table is produced
 5. No verdict is issued
 

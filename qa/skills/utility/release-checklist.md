@@ -2,14 +2,14 @@
 
 ## Skill Summary
 
-`gamedev:release-checklist` generates an internal release readiness checklist covering: sprint story completion,
-open bug severity, QA sign-off status, build stability, and changelog readiness. It is an internal gate — not a
-platform/store checklist (that is `gamedev:launch-checklist`). When a previous release checklist exists, it shows
-a delta of resolved and newly introduced issues.
+`gamedev:release-checklist` generates an internal release readiness checklist covering: sprint story completion, open
+bug severity, QA sign-off status, build stability, and changelog readiness. It is an internal gate — not a
+platform/store checklist (that is `gamedev:launch-checklist`). When a previous release checklist exists, it shows a
+delta of resolved and newly introduced issues.
 
 The skill writes its checklist report to `production/releases/release-checklist-[date].md` after a "May I write" ask. No
-director gates apply — `gamedev:gate-check` handles formal phase gate logic. Verdicts: RELEASE READY, RELEASE
-BLOCKED, or CONCERNS.
+director gates apply — `gamedev:gate-check` handles formal phase gate logic. Verdicts: RELEASE READY, RELEASE BLOCKED,
+or CONCERNS.
 
 ---
 
@@ -21,8 +21,7 @@ Verified automatically by `gamedev:skill-test static` — no fixture needed.
 - [ ] Has ≥2 phase headings
 - [ ] Contains verdict keywords: RELEASE READY, RELEASE BLOCKED, CONCERNS
 - [ ] Contains "May I write" collaborative protocol language before writing the report
-- [ ] Has a next-step handoff (e.g., `gamedev:launch-checklist` for external or `gamedev:gate-check` for
-      phase)
+- [ ] Has a next-step handoff (e.g., `gamedev:launch-checklist` for external or `gamedev:gate-check` for phase)
 
 ---
 
@@ -104,7 +103,7 @@ None. `gamedev:release-checklist` is an internal audit utility. Formal phase adv
 1. Skill checks all items
 2. Changelog check fails: no changelog entry found
 3. Skill reports: "CONCERNS — Changelog not generated for this release"
-4. Skill suggests running `gamedev:changelog` to generate it
+4. Skill suggests running the `gamedev:changelog` skill to generate it
 5. Verdict is CONCERNS (advisory — not a hard block)
 
 **Assertions:**

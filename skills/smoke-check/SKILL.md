@@ -59,8 +59,8 @@ Before running anything, understand the environment:
    fallback).
 
 5. **QA plan check**: glob `production/qa/qa-plan-*.md` and take the most recently modified file. If found, note the
-   path — it will be used in Phase 3 and Phase 4. If not found, note: "No QA plan found. Run
-   `gamedev:qa-plan milestone` before smoke-checking for best results."
+   path — it will be used in Phase 3 and Phase 4. If not found, note: "No QA plan found. Run `gamedev:qa-plan milestone`
+   before smoke-checking for best results."
 
 Report findings before proceeding: "Environment: [engine]. Test directory: [found / not found]. CI configured: [yes /
 no]. QA plan: [path / not found]."
@@ -119,7 +119,7 @@ Parse the trailing `test result: ok. N passed; M failed; ...` summary line(s) fo
 means the smoke check FAILS.
 
 **Unknown engine / not configured:** "Engine not configured in `docs/technical-preferences.md`. Run
-`gamedev:setup-engine` to specify the engine, then re-run `gamedev:smoke-check`."
+`gamedev:setup-engine` to specify the engine, then re-run the `gamedev:smoke-check` skill."
 
 **If the test runner is not available in this environment** (engine binary not on PATH, runner script not found, etc.),
 report clearly:
@@ -393,13 +393,13 @@ After writing, deliver the gate verdict:
 
 [List each failing automated test or smoke check with a one-line description]
 
-Fix the failures and run `gamedev:smoke-check` again to re-gate before QA hand-off."
+Fix the failures and run the `gamedev:smoke-check` skill again to re-gate before QA hand-off."
 
 **If verdict is PASS WITH WARNINGS:**
 
 "Smoke check passed with warnings. The build is ready for manual QA.
 
-Advisory items to resolve before running `gamedev:story-done` on affected stories: [list MISSING test evidence
+Advisory items to resolve before running the `gamedev:story-done` skill on affected stories: [list MISSING test evidence
 entries]
 
 QA hand-off: share `production/qa/qa-plan-[milestone].md` with the qa-tester agent to begin manual verification."
@@ -418,8 +418,7 @@ QA hand-off: share `production/qa/qa-plan-[milestone].md` with the qa-tester age
   Unconfirmed NOT RUN contributes to PASS WITH WARNINGS, not FAIL.
 - **Never auto-fix failures** — report them and state what must be resolved. Do not attempt to edit source code or test
   files.
-- **PASS WITH WARNINGS does not block QA hand-off** — it records advisory gaps for `gamedev:story-done` to follow
-  up on.
+- **PASS WITH WARNINGS does not block QA hand-off** — it records advisory gaps for `gamedev:story-done` to follow up on.
 - **`quick` argument** skips Phase 3 (coverage scan) and Phase 4 Batch 3. Use it for rapid re-checks after fixing a
   specific failure.
 - Use a user-input tool or chat for all manual smoke check verification.

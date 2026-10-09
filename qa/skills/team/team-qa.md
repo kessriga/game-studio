@@ -69,7 +69,7 @@ independent stories.
 - [ ] Sign-off report includes Test Coverage Summary table and Verdict: APPROVED
 - [ ] Sign-off report written only after "May I write?" approval
 - [ ] Verdict: COMPLETE appears in final output
-- [ ] Next step: "Run `gamedev:gate-check` to validate advancement."
+- [ ] Next step: "Run the `gamedev:gate-check` skill to validate advancement."
 
 ---
 
@@ -89,7 +89,7 @@ independent stories.
 2. Phase 4: Spawns `gamedev:qa-lead` through authorized delegation; smoke check returns FAIL; two specific failures are
    identified
 3. Skill reports: "Smoke check failed. QA cannot begin until these issues are resolved: [list of 2 failures]. Fix them
-   and re-run `gamedev:smoke-check`, or re-run `gamedev:team-qa` once resolved."
+   and re-run the `gamedev:smoke-check` skill, or re-run the `gamedev:team-qa` skill once resolved."
 4. Skill stops immediately after Phase 4 — no Phase 5, 6, or 7 is executed
 5. No sign-off report is produced; no "May I write?" for a sign-off is issued
 
@@ -121,25 +121,24 @@ independent stories.
 2. Phase 6: User marks Visual/Feel story as FAIL; a user-input tool or chat collects failure description: "Animation
    plays at 2x speed — jitter visible on every loop"
 3. Phase 6: Spawns `gamedev:qa-tester` through authorized delegation to file a bug as a Backlog task with the `bug`
-   label (via `gamedev:bug-report`); the task includes a severity in its description and a severity-mapped
-   priority
+   label (via `gamedev:bug-report`); the task includes a severity in its description and a severity-mapped priority
 4. Result summary: "Stories PASS: 1, FAIL: 1 — bugs filed: BUG-001"
 5. Phase 7: Spawns `gamedev:qa-lead` to produce sign-off report; Bugs Found table lists BUG-001 with severity and status
    Open; Verdict: NOT APPROVED (S1/S2 bug open, or FAIL without documented workaround)
 6. Sign-off report write is offered; writes after approval
-7. Next step: "Resolve S1/S2 bugs and re-run `gamedev:team-qa` or targeted manual QA before advancing."
+7. Next step: "Resolve S1/S2 bugs and re-run the `gamedev:team-qa` skill or targeted manual QA before advancing."
 
 **Assertions:**
 
 - [ ] FAIL result in Phase 6 triggers a user-input tool or chat to collect the failure description before the bug task
       is filed
-- [ ] the bug is filed via `gamedev:bug-report` as a Backlog `bug` task — the orchestrator does not write a
-      markdown bug file
+- [ ] the bug is filed via `gamedev:bug-report` as a Backlog `bug` task — the orchestrator does not write a markdown bug
+      file
 - [ ] Bug is filed as a Backlog task carrying the `bug` label (no markdown bug file)
 - [ ] Bug report NNN is incremented correctly from existing bugs in the directory
 - [ ] Phase 7 sign-off report Bugs Found table includes the bug ID, story name, severity, and status
 - [ ] Verdict in sign-off report is NOT APPROVED
-- [ ] Next step explicitly mentions re-running `gamedev:team-qa`
+- [ ] Next step explicitly mentions re-running the `gamedev:team-qa` skill
 - [ ] Verdict: COMPLETE is still issued by the orchestrator (the QA cycle finished — the verdict is NOT APPROVED, but
       the skill completed its pipeline)
 
@@ -164,8 +163,8 @@ independent stories.
 1. Phase 1: No argument provided; reads `production/session-state/active.md`; `task_list`s the Backlog board (status
    `In Progress`/`Done`)
 2. Infers `Combat System` as the active milestone from both sources
-3. Proceeds as if `gamedev:team-qa "Combat System"` was the input; reports "No milestone argument provided —
-   inferred Combat System from session state and the board. Found [N] stories."
+3. Proceeds as if `gamedev:team-qa "Combat System"` was the input; reports "No milestone argument provided — inferred
+   Combat System from session state and the board. Found [N] stories."
 
 **Expected behavior (variant B):**
 
@@ -207,7 +206,7 @@ independent stories.
 5. Phase 7: qa-lead produces sign-off report covering all 4 stories; BUG-001 listed as S1/Open; Story D listed as
    BLOCKED; Verdict: NOT APPROVED
 6. Sign-off report written after "May I write?" approval
-7. Next step: "Resolve S1/S2 bugs and re-run `gamedev:team-qa` or targeted manual QA before advancing."
+7. Next step: "Resolve S1/S2 bugs and re-run the `gamedev:team-qa` skill or targeted manual QA before advancing."
 
 **Assertions:**
 

@@ -13,8 +13,8 @@ Detects cross-document inconsistencies by comparing all GDDs against the entity 
 (`design/registry/entities.yaml`). Uses a grep-first approach: reads the registry once, then targets only the GDD
 sections that mention registered names — no full document reads unless a conflict needs investigation.
 
-**This skill is the write-time safety net.** It catches what `gamedev:design-system`'s per-section checks may
-have missed and what `gamedev:review-all-gdds`'s holistic review catches too late.
+**This skill is the write-time safety net.** It catches what `gamedev:design-system`'s per-section checks may have
+missed and what `gamedev:review-all-gdds`'s holistic review catches too late.
 
 **When to run:**
 
@@ -43,8 +43,8 @@ Read path="design/registry/entities.yaml"
 ```
 
 If the file does not exist or has no entries:
-> "Entity registry is empty. Run `gamedev:design-system` to write GDDs — the registry is populated automatically
-> after each GDD is completed. Nothing to check yet."
+> "Entity registry is empty. Run the `gamedev:design-system` skill to write GDDs — the registry is populated
+> automatically after each GDD is completed. Nothing to check yet."
 
 Stop and exit.
 
@@ -306,8 +306,8 @@ Never end the skill with plain text. Always close with this widget.
 
 ## Recovery / Reference
 
-- **If PASS**: Run `gamedev:review-all-gdds` for holistic design-theory review, or
+- **If PASS**: Run the `gamedev:review-all-gdds` skill for holistic design-theory review, or
   `gamedev:create-architecture` if all MVP GDDs are complete.
-- **If CONFLICTS FOUND**: Fix the flagged GDDs, then re-run `gamedev:consistency-check` to confirm resolution.
+- **If CONFLICTS FOUND**: Fix the flagged GDDs, then re-run the `gamedev:consistency-check` skill to confirm resolution.
 - **If STALE REGISTRY**: Update the registry (Phase 6), then re-run to verify.
-- Run `gamedev:consistency-check` after writing each new GDD to catch issues early, not at architecture time.
+- Run the `gamedev:consistency-check` skill after writing each new GDD to catch issues early, not at architecture time.

@@ -12,7 +12,7 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 This skill is read-only — it reports findings but writes no files.
 
 This skill figures out exactly where you are in the game development pipeline and tells you what comes next. It is
-**lightweight** — not a full audit. For a full gap analysis, use `gamedev:project-stage-detect`.
+**lightweight** — not a full audit. For a full gap analysis, use the `gamedev:project-stage-detect` skill.
 
 ---
 
@@ -195,7 +195,7 @@ Verdict: **COMPLETE** — next steps identified.
 After the current phase's steps, check if the user is likely approaching a gate:
 
 - If all required steps in the current phase are complete (or nearly complete), add: "You're close to the
-  **[Current] → [Next]** gate. Run `gamedev:gate-check` when ready."
+  **[Current] → [Next]** gate. Run the `gamedev:gate-check` skill when ready."
 - If multiple required steps remain, skip the gate warning — it's not relevant yet.
 
 ---

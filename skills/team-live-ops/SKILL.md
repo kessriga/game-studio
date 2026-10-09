@@ -8,8 +8,8 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 **Arguments:** [season name or event description] [--review full|lean|solo]
 
 **Argument check:** If no season name or event description is provided, output:
-> "Usage: `gamedev:team-live-ops [season name or event description]` — Provide the name or description of the
-season or live event to plan." Then stop immediately without spawning any subagents or reading any files.
+> "Usage: `gamedev:team-live-ops [season name or event description]` — Provide the name or description of the season or
+live event to plan." Then stop immediately without spawning any subagents or reading any files.
 
 When this skill is invoked with a valid argument, orchestrate the live-ops team through a structured planning pipeline.
 
@@ -189,6 +189,6 @@ Verdict: **COMPLETE** — season plan produced and handed off for production.
 
 ## Next Steps
 
-- Run `gamedev:design-review` on the season design document for consistency validation.
+- Run the `gamedev:design-review` skill on the season design document for consistency validation.
 - File the season's content creation work as Backlog tasks (group them under a milestone).
-- Run `gamedev:team-release` when the season content is ready to deploy.
+- Run the `gamedev:team-release` skill when the season content is ready to deploy.

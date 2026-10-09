@@ -154,8 +154,8 @@ If either is missing:
 
 - Missing skill: "Skill '[name]' not found in `skills/`."
 - Missing spec path in catalog: "No spec path set for '[name]' in catalog.yaml."
-- Spec file not found at path: "Spec file missing at [path]. Run `gamedev:skill-test audit` to see coverage
-  gaps."
+- Spec file not found at path: "Spec file missing at [path]. Run the `gamedev:skill-test` skill with `audit` to see
+  coverage gaps."
 
 ### Step 2 — Read Both Files
 
@@ -340,9 +340,9 @@ Agent coverage:  49/49 specs (100%)
 
 No file writes in audit mode.
 
-Offer: "Would you like to run `gamedev:skill-test static all` to check structural compliance across all skills?
-`gamedev:skill-test category all` to run category rubric checks? Or `gamedev:skill-test spec [name]` to
-run a specific behavioral test?"
+Offer: "Would you like to run the `gamedev:skill-test` skill with `static all` to check structural compliance across all
+skills? `gamedev:skill-test category all` to run category rubric checks? Or `gamedev:skill-test spec [name]` to run a
+specific behavioral test?"
 
 ---
 
@@ -350,10 +350,10 @@ run a specific behavioral test?"
 
 After any mode completes, offer contextual follow-up:
 
-- After `static [name]`: "Run `gamedev:skill-test spec [name]` to validate behavioral correctness if a test spec
-  exists."
-- After `static all` with failures: "Address NON-COMPLIANT skills first. Run `gamedev:skill-test static [name]`
-  individually for detailed remediation guidance."
+- After `static [name]`: "Run the `gamedev:skill-test` skill with `spec [name]` to validate behavioral correctness if a
+  test spec exists."
+- After `static all` with failures: "Address NON-COMPLIANT skills first. Run the `gamedev:skill-test` skill with
+  `static [name]` individually for detailed remediation guidance."
 - After `spec [name]` PASS: "Update `qa/catalog.yaml` to record this pass date. Consider running
   `gamedev:skill-test audit` to find the next spec gap."
 - After `spec [name]` FAIL: "Review the failing assertions and update the skill or the test spec to resolve the

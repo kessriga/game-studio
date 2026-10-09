@@ -278,7 +278,7 @@ After writing:
 4. File bugs from 'Issues Found' as Backlog tasks with the `bug` label (via `gamedev:bug-report`)
 5. File any S1/S2 issues as Backlog tasks (`bug` label) after the session and triage them on the board
 
-If the verdict is FAIL, run `gamedev:smoke-check` again after fixing the issues."
+If the verdict is FAIL, run the `gamedev:smoke-check` skill again after fixing the issues."
 
 ---
 

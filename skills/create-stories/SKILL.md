@@ -55,7 +55,7 @@ Read in full:
 If any ADR file cannot be found, **stop immediately** before decomposing any story:
 
 > "Epic references [ADR-NNNN: title] but `docs/architecture/[adr-file].md` was not found. Check the filename in the
-> epic's Governing ADRs list, or run `gamedev:architecture-decision` to create it. Cannot create stories until
+> epic's Governing ADRs list, or run the `gamedev:architecture-decision` skill to create it. Cannot create stories until
 > all referenced ADR files are present."
 
 Do not proceed to Step 3 until all referenced ADR files are confirmed present.
@@ -99,7 +99,7 @@ For each story, determine:
 - **Governing ADR**: which ADR governs how to implement this?
   - `Status: Accepted` → embed normally
   - `Status: Proposed` → mark the story blocked: its Backlog task (minted in Step 6) gets the `blocked` label, with an
-    Implementation Note: "BLOCKED: ADR-NNNN is Proposed — run `gamedev:architecture-decision` to advance it"
+    Implementation Note: "BLOCKED: ADR-NNNN is Proposed — run the `gamedev:architecture-decision` skill to advance it"
   - **Multiple ADRs apply**: List all governing ADRs in the story's `Governing ADRs:` field. Designate the one most
     directly controlling the implementation pattern as primary (first in the list). Others are listed as secondary
     references.
@@ -353,8 +353,8 @@ Widget:
   What next?"
 - Options (include all that apply):
   - `[A] Start implementing — run gamedev:story-readiness [first-story-path]` (Recommended)
-  - `[B] Create stories for [next-epic-slug] — run gamedev:create-stories [slug]` (only if other epics have no
-    stories yet)
+  - `[B] Create stories for [next-epic-slug] — run gamedev:create-stories [slug]` (only if other epics have no stories
+    yet)
   - `[C] Stop here for this session`
 
 Note in output: "Work through stories in order — each story's `Depends on:` field tells you what must be DONE before you
@@ -373,6 +373,6 @@ can start it."
 
 After writing (or declining):
 
-- **Verdict: COMPLETE** — [N] stories written to `production/epics/[epic-slug]/`. Run `gamedev:story-readiness` →
-  `gamedev:dev-story` to begin implementation.
+- **Verdict: COMPLETE** — [N] stories written to `production/epics/[epic-slug]/`. Run the `gamedev:story-readiness`
+  skill → `gamedev:dev-story` to begin implementation.
 - **Verdict: BLOCKED** — user declined. No story files written.

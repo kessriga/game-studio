@@ -132,7 +132,7 @@ None. `gamedev:reverse-document` is a documentation utility. No director gates a
 
 1. Skill attempts to read the specified file — not found
 2. Skill outputs: "Source file not found: src/gameplay/inventory_system.gd"
-3. Skill suggests checking the path or running `gamedev:map-systems` to identify the correct source file
+3. Skill suggests checking the path or running the `gamedev:map-systems` skill to identify the correct source file
 4. No document is created
 
 **Assertions:**

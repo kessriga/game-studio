@@ -28,13 +28,13 @@ and brownfield onboarding. **Start here if you want to understand how the pieces
 
 ### [Session: Authoring a GDD with gamedev:design-system](session-design-system-skill.md)
 
-**Type:** Design (skill-driven) **Skill:** `gamedev:design-system` **Duration:** ~60 minutes (14 turns)
-**Complexity:** Medium
+**Type:** Design (skill-driven) **Skill:** `gamedev:design-system` **Duration:** ~60 minutes (14 turns) **Complexity:**
+Medium
 
-**Scenario:** Dev runs `gamedev:design-system movement` after `gamedev:map-systems` produced the systems
-index. The skill loads context from the game concept and dependency GDDs, runs a technical feasibility pre-check, then
-guides through all 8 GDD sections one at a time — drafting, approving, and writing each section to disk before moving to
-the next.
+**Scenario:** Dev runs the `gamedev:design-system` skill with `movement` after `gamedev:map-systems` produced the
+systems index. The skill loads context from the game concept and dependency GDDs, runs a technical feasibility
+pre-check, then guides through all 8 GDD sections one at a time — drafting, approving, and writing each section to disk
+before moving to the next.
 
 **Key Moments:**
 
@@ -42,7 +42,7 @@ the next.
 - Incremental writing: each section on disk immediately after approval
 - Session crash during section 5 → agent resumes from first empty section
 - Dependency signals (stamina, inventory) surfaced during the Dependencies section
-- Ends with explicit handoff: "run `gamedev:design-review` before the next system"
+- Ends with explicit handoff: "run the `gamedev:design-review` skill before the next system"
 
 **Learn:**
 
@@ -55,12 +55,12 @@ the next.
 
 ### [Session: Full Story Lifecycle](session-story-lifecycle.md)
 
-**Type:** Full Workflow **Skills:** `gamedev:story-readiness` → implementation → `gamedev:story-done`
-**Duration:** ~50 minutes (13 turns) **Complexity:** Medium
+**Type:** Full Workflow **Skills:** `gamedev:story-readiness` → implementation → `gamedev:story-done` **Duration:** ~50
+minutes (13 turns) **Complexity:** Medium
 
-**Scenario:** Dev pulls a story off the Backlog board. `gamedev:story-readiness` catches a roll-direction
-ambiguity before any code is written. After implementation, `gamedev:story-done` verifies 9 acceptance criteria,
-identifies 2 deferred criteria (inventory not integrated yet), and closes the story with notes.
+**Scenario:** Dev pulls a story off the Backlog board. `gamedev:story-readiness` catches a roll-direction ambiguity
+before any code is written. After implementation, `gamedev:story-done` verifies 9 acceptance criteria, identifies 2
+deferred criteria (inventory not integrated yet), and closes the story with notes.
 
 **Key Moments:**
 
@@ -83,9 +83,9 @@ identifies 2 deferred criteria (inventory not integrated yet), and closes the st
 
 **Type:** Phase Gate **Skill:** `gamedev:gate-check` **Duration:** ~20 minutes (7 turns) **Complexity:** Low
 
-**Scenario:** Dev completes the Systems Design phase and runs `gamedev:gate-check` to advance. The gate finds all
-6 MVP GDDs complete, cross-review passed with one low-severity concern. Gate passes, `stage.txt` updated, and the agent
-provides a specific ordered checklist for Technical Setup.
+**Scenario:** Dev completes the Systems Design phase and runs the `gamedev:gate-check` skill to advance. The gate finds
+all 6 MVP GDDs complete, cross-review passed with one low-severity concern. Gate passes, `stage.txt` updated, and the
+agent provides a specific ordered checklist for Technical Setup.
 
 **Key Moments:**
 
@@ -106,12 +106,12 @@ provides a specific ordered checklist for Technical Setup.
 
 ### [Session: UX Pipeline — gamedev:ux-design → gamedev:ux-review → gamedev:team-ui](session-ux-pipeline.md)
 
-**Type:** UX Design Pipeline **Skills:** `gamedev:ux-design`, `gamedev:ux-review`,
-`gamedev:team-ui` **Duration:** ~90 minutes (16 turns) **Complexity:** Medium-High
+**Type:** UX Design Pipeline **Skills:** `gamedev:ux-design`, `gamedev:ux-review`, `gamedev:team-ui` **Duration:** ~90
+minutes (16 turns) **Complexity:** Medium-High
 
-**Scenario:** Dev designs the HUD and inventory screen. `gamedev:ux-design` reads the player journey and GDDs to
-ground decisions in player emotional state. `gamedev:ux-review` catches a blocking accessibility gap (no keyboard
-alternative to drag-drop) and an advisory colorblind issue. After fixes, `gamedev:team-ui` accepts the handoff.
+**Scenario:** Dev designs the HUD and inventory screen. `gamedev:ux-design` reads the player journey and GDDs to ground
+decisions in player emotional state. `gamedev:ux-review` catches a blocking accessibility gap (no keyboard alternative
+to drag-drop) and an advisory colorblind issue. After fixes, `gamedev:team-ui` accepts the handoff.
 
 **Key Moments:**
 
@@ -132,13 +132,11 @@ alternative to drag-drop) and an advisory colorblind issue. After fixes, `gamede
 
 ### [Session: Brownfield Onboarding with gamedev:adopt](session-adopt-brownfield.md)
 
-**Type:** Brownfield Adoption **Skill:** `gamedev:adopt` **Duration:** ~30 minutes (8 turns) **Complexity:**
-Low-Medium
+**Type:** Brownfield Adoption **Skill:** `gamedev:adopt` **Duration:** ~30 minutes (8 turns) **Complexity:** Low-Medium
 
-**Scenario:** Dev has 3 months of existing code and rough design notes but nothing in the right format.
-`gamedev:adopt` audits format compliance (not just file existence), classifies 4 gaps by severity, builds an
-ordered 7-step migration plan, and immediately fixes the BLOCKING gap (missing systems index) by inferring it from the
-codebase.
+**Scenario:** Dev has 3 months of existing code and rough design notes but nothing in the right format. `gamedev:adopt`
+audits format compliance (not just file existence), classifies 4 gaps by severity, builds an ordered 7-step migration
+plan, and immediately fixes the BLOCKING gap (missing systems index) by inferring it from the codebase.
 
 **Key Moments:**
 

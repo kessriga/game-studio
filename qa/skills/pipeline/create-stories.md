@@ -2,11 +2,11 @@
 
 ## Skill Summary
 
-`gamedev:create-stories` breaks a single epic into developer-ready story files. It reads the EPIC.md, the
-corresponding GDD, governing ADRs, the control manifest, and the TR registry. Each story gets structured frontmatter
-including: Title, Epic, Layer, Priority, Status, TR-ID, ADR references, Acceptance Criteria, and Definition of Done.
-Stories are classified by type (Logic / Integration / Visual/Feel / UI / Config/Data) which determines the required test
-evidence path.
+`gamedev:create-stories` breaks a single epic into developer-ready story files. It reads the EPIC.md, the corresponding
+GDD, governing ADRs, the control manifest, and the TR registry. Each story gets structured frontmatter including: Title,
+Epic, Layer, Priority, Status, TR-ID, ADR references, Acceptance Criteria, and Definition of Done. Stories are
+classified by type (Logic / Integration / Visual/Feel / UI / Config/Data) which determines the required test evidence
+path.
 
 In `full` review mode, a QL-STORY-READY check runs per story after creation. In `lean` or `solo` mode, QL-STORY-READY is
 skipped. The skill asks "May I write" before writing each story file. Stories are written to
@@ -88,7 +88,7 @@ In `solo` mode: QL-STORY-READY is skipped with equivalent notes.
 1. Skill attempts to read the EPIC.md file
 2. File not found
 3. Skill outputs a clear error with the path it searched
-4. Skill suggests checking `production/epics/` or running `gamedev:create-epics` first
+4. Skill suggests checking `production/epics/` or running the `gamedev:create-epics` skill first
 5. No story files are created
 
 **Assertions:**

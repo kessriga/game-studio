@@ -2,10 +2,10 @@
 
 ## Skill Summary
 
-`gamedev:patch-notes` is a skill that generates player-facing patch notes from existing changelog content,
-stripping internal task IDs and technical jargon in favor of plain language. It filters entries to only those relevant
-to players (visible features and bug fixes; internal refactors are excluded). No director gates are used. The skill asks
-"May I write to `docs/patch-notes-vX.X.md`?" before persisting. Verdict is always COMPLETE.
+`gamedev:patch-notes` is a skill that generates player-facing patch notes from existing changelog content, stripping
+internal task IDs and technical jargon in favor of plain language. It filters entries to only those relevant to players
+(visible features and bug fixes; internal refactors are excluded). No director gates are used. The skill asks "May I
+write to `docs/patch-notes-vX.X.md`?" before persisting. Verdict is always COMPLETE.
 
 ---
 
@@ -79,7 +79,7 @@ None. Patch notes generation is a fast compilation task; no gates are invoked.
 **Assertions:**
 
 - [ ] Skill does not crash when changelog is absent
-- [ ] Output explicitly directs user to run `gamedev:changelog`
+- [ ] Output explicitly directs user to run the `gamedev:changelog` skill
 - [ ] No "May I write" prompt appears (nothing to write)
 - [ ] Verdict is BLOCKED (dependency not met)
 

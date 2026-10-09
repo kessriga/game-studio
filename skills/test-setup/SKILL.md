@@ -24,8 +24,8 @@ start costs 30 minutes. A test framework installed at sprint four costs 3 sprint
 
 1. **Read engine config**:
    - Read `docs/technical-preferences.md` and extract the `Engine:` value.
-   - If engine is not configured (`[TO BE CONFIGURED]`), stop: "Engine not configured. Run `gamedev:setup-engine`
-     first, then re-run `gamedev:test-setup`."
+   - If engine is not configured (`[TO BE CONFIGURED]`), stop: "Engine not configured. Run the `gamedev:setup-engine`
+     skill first, then re-run the `gamedev:test-setup` skill."
 
 2. **Check for existing test infrastructure**:
    - Glob `tests/` — does the directory exist?
@@ -92,8 +92,8 @@ After approval, create the following files:
 ```
 
 tests/ unit/ # Isolated unit tests (formulas, state machines, logic) integration/ # Cross-system and save/load tests
-smoke/ # Critical path test list for gamedev:smoke-check gate evidence/ # Screenshot logs and manual test
-sign-off records
+smoke/ # Critical path test list for gamedev:smoke-check gate evidence/ # Screenshot logs and manual test sign-off
+records
 
 ```
 
@@ -489,7 +489,7 @@ Files created:
 Next steps:
 1. [Engine-specific install step, e.g., "Install GdUnit4 via AssetLib"]
 2. Write your first test: create tests/unit/[first-system]/[system]_test.[ext]
-3. Run `gamedev:qa-plan sprint` before your first sprint to classify stories and set
+3. Run the `gamedev:qa-plan` skill with `sprint` before your first sprint to classify stories and set
    test evidence requirements
 4. `gamedev:smoke-check` before every QA hand-off
 
@@ -509,8 +509,8 @@ Verdict: **COMPLETE** — test framework scaffolded and CI/CD wired up.
 - **Never overwrite existing test files** — only create files that are missing. If a test runner file exists, leave it
   as-is.
 - **Always ask before creating files** — Phase 2 requires explicit approval.
-- **Engine detection is non-negotiable** — if the engine is not configured, stop and redirect to
-  `gamedev:setup-engine`. Do not guess.
+- **Engine detection is non-negotiable** — if the engine is not configured, stop and redirect to `gamedev:setup-engine`.
+  Do not guess.
 - **`force` flag skips the "already exists" early-exit but never overwrites.** It means "create any missing files even
   if the directory already exists."
 - For Unity CI, note that the `UNITY_LICENSE` secret must be configured manually. Do not attempt to automate license

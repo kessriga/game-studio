@@ -2,14 +2,14 @@
 
 ## Skill Summary
 
-`gamedev:project-stage-detect` automatically analyzes project artifacts to determine the current development
-stage. It is read-only and examines `production/stage.txt` (if present), design documents in `design/`, source code in
-`src/`, sprint and milestone files in `production/`, and the presence of engine configuration to classify the project
-into one of seven stages: Concept, Systems Design, Technical Setup, Pre-Production, Production, Polish, or Release.
+`gamedev:project-stage-detect` automatically analyzes project artifacts to determine the current development stage. It
+is read-only and examines `production/stage.txt` (if present), design documents in `design/`, source code in `src/`,
+sprint and milestone files in `production/`, and the presence of engine configuration to classify the project into one
+of seven stages: Concept, Systems Design, Technical Setup, Pre-Production, Production, Polish, or Release.
 
-The skill is advisory — it never writes `stage.txt`. That file is only updated when `gamedev:gate-check` passes
-and the user confirms advancement. The skill reports its confidence level (HIGH if stage.txt was read directly, MEDIUM
-if inferred from artifacts, LOW if conflicting signals were found).
+The skill is advisory — it never writes `stage.txt`. That file is only updated when `gamedev:gate-check` passes and the
+user confirms advancement. The skill reports its confidence level (HIGH if stage.txt was read directly, MEDIUM if
+inferred from artifacts, LOW if conflicting signals were found).
 
 ---
 
@@ -82,13 +82,13 @@ None. `gamedev:project-stage-detect` is a read-only detection utility. No direct
    active)
 3. Skill infers: Stage = Production
 4. Confidence is MEDIUM (inferred from artifacts, not from stage.txt)
-5. Skill recommends running `gamedev:gate-check` to formalize and write stage.txt
+5. Skill recommends running the `gamedev:gate-check` skill to formalize and write stage.txt
 
 **Assertions:**
 
 - [ ] Inferred stage is Production
 - [ ] Confidence is MEDIUM (not HIGH, since stage.txt is absent)
-- [ ] Recommendation to run `gamedev:gate-check` is present
+- [ ] Recommendation to run the `gamedev:gate-check` skill is present
 - [ ] No stage.txt is written by this skill
 
 ---
@@ -138,7 +138,7 @@ None. `gamedev:project-stage-detect` is a read-only detection utility. No direct
 2. Cross-check finds: no source code, no sprints — inconsistent with Production
 3. Skill flags discrepancy: "stage.txt says Production but no source code or sprints found"
 4. Skill reports detected stage as Production (honoring stage.txt) but confidence drops to LOW due to artifact mismatch
-5. Skill suggests reviewing stage.txt manually or running `gamedev:gate-check`
+5. Skill suggests reviewing stage.txt manually or running the `gamedev:gate-check` skill
 
 **Assertions:**
 

@@ -2,10 +2,10 @@
 
 ## Skill Summary
 
-`gamedev:dev-story` reads a story file, loads all required context (referenced ADR, TR-ID from the registry,
-control manifest, engine preferences), implements the story, verifies that all acceptance criteria are met, and marks
-the story Complete. The skill routes implementation to the correct specialist agent based on the engine and file type —
-it does not write source code directly.
+`gamedev:dev-story` reads a story file, loads all required context (referenced ADR, TR-ID from the registry, control
+manifest, engine preferences), implements the story, verifies that all acceptance criteria are met, and marks the story
+Complete. The skill routes implementation to the correct specialist agent based on the engine and file type — it does
+not write source code directly.
 
 In `full` review mode, an LP-CODE-REVIEW gate runs before marking the story Complete. In `lean` or `solo` mode,
 LP-CODE-REVIEW is skipped and the story is marked Complete after the user confirms all criteria are met. The skill asks
@@ -94,7 +94,7 @@ In `solo` mode: LP-CODE-REVIEW is skipped with equivalent notes.
 2. Skill resolves the TR-ID and reads the governing ADR
 3. ADR status is Proposed — skill outputs a BLOCKED message
 4. Skill names the specific ADR blocking the story
-5. Skill recommends running `gamedev:architecture-decision` to advance the ADR
+5. Skill recommends running the `gamedev:architecture-decision` skill to advance the ADR
 6. Implementation does NOT begin
 
 **Assertions:**

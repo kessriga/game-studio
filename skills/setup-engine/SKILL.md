@@ -17,8 +17,8 @@ Four modes:
 - **Engine only**: `gamedev:setup-engine unity` — engine provided, version will be looked up
 - **No args**: `gamedev:setup-engine` — fully guided mode (engine recommendation + version)
 - **Refresh**: `gamedev:setup-engine refresh` — update reference docs (see Section 10)
-- **Upgrade**: `gamedev:setup-engine upgrade [old-version] [new-version]` — migrate to a new engine version (see
-  Section 11)
+- **Upgrade**: `gamedev:setup-engine upgrade [old-version] [new-version]` — migrate to a new engine version (see Section
+  11)
 
 ---
 
@@ -31,8 +31,8 @@ If no engine is specified, run an interactive engine selection process:
 - Read `design/gdd/game-concept.md` if it exists — extract genre, scope, platform targets, art style, team size, and any
   engine recommendation from `gamedev:brainstorm`
 - If no concept exists, inform the user:
-  > "No game concept found. Consider running `gamedev:brainstorm` first to discover what you want to build — it
-  > will also recommend an engine. Or tell me about your game and I can help you pick."
+  > "No game concept found. Consider running the `gamedev:brainstorm` skill first to discover what you want to build —
+  > it will also recommend an engine. Or tell me about your game and I can help you pick."
 
 ### If the user wants to pick without a concept, ask in this order
 

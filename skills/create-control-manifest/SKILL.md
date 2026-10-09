@@ -17,8 +17,8 @@ reference docs. Where ADRs explain *why*, the manifest tells you *what*.
 
 **Output:** `docs/architecture/control-manifest.md`
 
-**When to run:** After `gamedev:architecture-review` passes and ADRs are in Accepted status. Re-run whenever new
-ADRs are accepted or existing ADRs are revised.
+**When to run:** After `gamedev:architecture-review` passes and ADRs are in Accepted status. Re-run whenever new ADRs
+are accepted or existing ADRs are revised.
 
 ---
 
@@ -287,9 +287,8 @@ These APIs are deprecated or unverified for [engine + version]:
 
 After writing the manifest:
 
-- If epics/stories don't exist yet: "Run `gamedev:create-epics layer: foundation` then
-  `gamedev:create-stories [epic-slug]` — programmers can now use this manifest when writing story implementation
-  notes."
+- If epics/stories don't exist yet: "Run the `gamedev:create-epics` skill with `layer: foundation` then
+  `gamedev:create-stories [epic-slug]` — programmers can now use this manifest when writing story implementation notes."
 - If this is a regeneration (manifest already existed): "Updated. Recommend notifying the team of changed rules —
   especially any new Forbidden entries."
 

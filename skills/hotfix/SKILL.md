@@ -7,8 +7,8 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 
 **Arguments:** [bug-id or description]
 
-> **Explicit invocation only**: This skill should only run when the user explicitly requests it with
-> `gamedev:hotfix`. Do not auto-invoke based on context matching.
+> **Explicit invocation only**: This skill should only run when the user explicitly requests it with `gamedev:hotfix`.
+> Do not auto-invoke based on context matching.
 
 ## Phase 1: Assess Severity
 
@@ -126,11 +126,12 @@ Ask qa-lead: **Is a full smoke check sufficient, or does this fix require a targ
 
 Apply the verdict:
 
-- **Smoke check sufficient** — run `gamedev:smoke-check` against the hotfix build. If PASS, proceed to Phase 6.
-- **Targeted QA pass required** — run `gamedev:team-qa [affected-system]` scoped to the changed system only. If
-  QA returns APPROVED or APPROVED WITH CONDITIONS, proceed to Phase 6.
-- **Full QA required** — S1 fixes that touch core systems may require a full `gamedev:team-qa sprint`. This
-  delays deployment but prevents a bad patch.
+- **Smoke check sufficient** — run the `gamedev:smoke-check` skill against the hotfix build. If PASS, proceed to Phase
+  6.
+- **Targeted QA pass required** — run the `gamedev:team-qa` skill with `[affected-system]` scoped to the changed system
+  only. If QA returns APPROVED or APPROVED WITH CONDITIONS, proceed to Phase 6.
+- **Full QA required** — S1 fixes that touch core systems may require a full `gamedev:team-qa sprint`. This delays
+  deployment but prevents a bad patch.
 
 Do not skip this gate. A hotfix that breaks something else is worse than the original bug.
 
@@ -177,11 +178,11 @@ Next: gamedev:bug-report verify [TASK-ID] after deploy to confirm resolution
 
 ## Phase 7: Post-Deploy Verification
 
-After deploying, run `gamedev:bug-report verify [TASK-ID]` to confirm the fix resolved the issue in the deployed
-build.
+After deploying, run the `gamedev:bug-report` skill with `verify [TASK-ID]` to confirm the fix resolved the issue in the
+deployed build.
 
-If VERIFIED FIXED: run `gamedev:bug-report close [TASK-ID]` to formally close it. If STILL PRESENT: the hotfix
-failed — immediately re-open, assess rollback, and escalate.
+If VERIFIED FIXED: run the `gamedev:bug-report` skill with `close [TASK-ID]` to formally close it. If STILL PRESENT: the
+hotfix failed — immediately re-open, assess rollback, and escalate.
 
 Schedule a post-incident review within 48 hours (capture findings as Backlog tasks if follow-up work is needed).
 

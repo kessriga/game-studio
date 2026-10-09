@@ -100,10 +100,10 @@ The user needs creative exploration before anything else.
 
 1. Acknowledge that starting from zero is completely fine
 2. Briefly explain what `gamedev:brainstorm` does (guided ideation using professional frameworks — MDA, player
-   psychology, verb-first design). Mention that it has two modes: `gamedev:brainstorm open` for fully open
-   exploration, or `gamedev:brainstorm [hint]` if they have even a vague theme (e.g., "space", "cozy", "horror").
-3. Recommend running `gamedev:brainstorm open` as the next step, but invite them to use a hint if something comes
-   to mind
+   psychology, verb-first design). Mention that it has two modes: `gamedev:brainstorm open` for fully open exploration,
+   or `gamedev:brainstorm [hint]` if they have even a vague theme (e.g., "space", "cozy", "horror").
+3. Recommend running the `gamedev:brainstorm` skill with `open` as the next step, but invite them to use a hint if
+   something comes to mind
 4. Show the recommended path: **Concept phase:**
    - `gamedev:brainstorm open` — discover your game concept
    - `gamedev:setup-engine` — configure the engine (brainstorm will recommend one)
@@ -124,15 +124,14 @@ The user needs creative exploration before anything else.
    - `gamedev:playtest-report (×1+)` — document each vertical slice playtest session
    - `gamedev:create-epics` — map systems to epics
    - `gamedev:create-stories` — break epics into implementable stories
-   - `gamedev:create-epics` — define the first epic (Backlog milestone), then `gamedev:create-stories` to
-     fill the board
+   - `gamedev:create-epics` — define the first epic (Backlog milestone), then `gamedev:create-stories` to fill the board
    **Production phase:** → pick up stories with `gamedev:dev-story`
 
 #### If B: Vague idea
 
 1. Ask them to share their vague idea — even a few words is enough
 2. Validate the idea as a starting point (don't judge or redirect)
-3. Recommend running `gamedev:brainstorm [their hint]` to develop it
+3. Recommend running the `gamedev:brainstorm` skill with `[their hint]` to develop it
 4. Show the recommended path: **Concept phase:**
    - `gamedev:brainstorm [hint]` — develop the idea into a full concept
    - `gamedev:setup-engine` — configure the engine
@@ -153,8 +152,7 @@ The user needs creative exploration before anything else.
    - `gamedev:playtest-report (×1+)` — document each vertical slice playtest session
    - `gamedev:create-epics` — map systems to epics
    - `gamedev:create-stories` — break epics into implementable stories
-   - `gamedev:create-epics` — define the first epic (Backlog milestone), then `gamedev:create-stories` to
-     fill the board
+   - `gamedev:create-epics` — define the first epic (Backlog milestone), then `gamedev:create-stories` to fill the board
    **Production phase:** → pick up stories with `gamedev:dev-story`
 
 #### If C: Clear concept
@@ -164,8 +162,8 @@ The user needs creative exploration before anything else.
 2. Acknowledge the concept, then use a user-input tool or chat to offer two paths:
    - **Prompt**: "How would you like to proceed?"
    - **Options**:
-     - `Formalize it first` — Run `gamedev:brainstorm [concept]` to structure it into a proper game concept
-       document
+     - `Formalize it first` — Run the `gamedev:brainstorm` skill with `[concept]` to structure it into a proper game
+       concept document
      - `Jump straight in` — Go to `gamedev:setup-engine` now and write the GDD manually afterward
 3. Show the recommended path: **Concept phase:**
    - `gamedev:brainstorm` or `gamedev:setup-engine` — (their pick from step 2)
@@ -187,8 +185,7 @@ The user needs creative exploration before anything else.
    - `gamedev:playtest-report (×1+)` — document each vertical slice playtest session
    - `gamedev:create-epics` — map systems to epics
    - `gamedev:create-stories` — break epics into implementable stories
-   - `gamedev:create-epics` — define the first epic (Backlog milestone), then `gamedev:create-stories` to
-     fill the board
+   - `gamedev:create-epics` — define the first epic (Backlog milestone), then `gamedev:create-stories` to fill the board
    **Production phase:** → pick up stories with `gamedev:dev-story`
 
 #### If D: Existing work
@@ -250,8 +247,8 @@ not ask again.
 - **Options**:
   - `Solo (recommended)` — No director reviews at all. Maximum speed. Best for solo devs, game jams, and prototypes.
     This is the default if you skip this choice.
-  - `Lean` — Directors only at phase gate transitions (gamedev:gate-check). Skips per-skill reviews. For small
-    teams that still want milestone review.
+  - `Lean` — Directors only at phase gate transitions (gamedev:gate-check). Skips per-skill reviews. For small teams
+    that still want milestone review.
   - `Full` — Director specialists review at each key workflow step. Best for teams, learning the workflow, or when you
     want thorough feedback on every decision.
 

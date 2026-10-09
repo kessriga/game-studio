@@ -2,8 +2,8 @@
 
 ## Skill Summary
 
-`gamedev:localize` manages the full localization pipeline: it extracts all player-facing strings from source
-files, manages translation files in `assets/localization/`, and validates completeness across all locale files. For new
+`gamedev:localize` manages the full localization pipeline: it extracts all player-facing strings from source files,
+manages translation files in `assets/localization/`, and validates completeness across all locale files. For new
 languages, it creates a locale file skeleton with all current strings as keys and empty values. For existing locale
 files, it produces a diff showing additions, removals, and changed keys.
 
@@ -27,8 +27,8 @@ Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 ## Director Gate Checks
 
-None. `gamedev:localize` is a pipeline utility. No director gates apply. Localization lead agent may review
-separately but is not invoked within this skill.
+None. `gamedev:localize` is a pipeline utility. No director gates apply. Localization lead agent may review separately
+but is not invoked within this skill.
 
 ---
 
@@ -132,7 +132,7 @@ separately but is not invoked within this skill.
 2. Skill outputs: "Parse error in fr.csv at line 47: [error detail]"
 3. Skill cannot diff or validate the file until the error is fixed
 4. Skill does NOT attempt to overwrite or auto-fix the malformed file
-5. Skill suggests fixing the file manually and re-running `gamedev:localize`
+5. Skill suggests fixing the file manually and re-running the `gamedev:localize` skill
 
 **Assertions:**
 

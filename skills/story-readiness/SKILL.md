@@ -35,8 +35,8 @@ See `../../docs/director-gates.md` for the full check pattern and mode definitio
 
 **Scope:** the first invocation argument (blank = ask user via a user-input tool or chat)
 
-- **Specific path** (e.g., `gamedev:story-readiness production/epics/combat/story-001-basic-attack.md`): validate
-  that single story file.
+- **Specific path** (e.g., `gamedev:story-readiness production/epics/combat/story-001-basic-attack.md`): validate that
+  single story file.
 - **`milestone [name]`**: `task_list` for that Backlog milestone, follow each task's `Spec:` reference to its story
   `.md`, validate each one.
 - **`all`**: glob `production/epics/**/*.md`, exclude `EPIC.md` index files, validate every story file found.
@@ -260,11 +260,11 @@ tools — the user (or `gamedev:create-stories`) handles writing.
 
 **Redirect rules:**
 
-- If a story file does not exist at all: "This story file is missing entirely. Run `gamedev:create-epics [layer]`
-  then `gamedev:create-stories [epic-slug]` to generate stories from the GDD and ADR."
+- If a story file does not exist at all: "This story file is missing entirely. Run the `gamedev:create-epics` skill with
+  `[layer]` then `gamedev:create-stories [epic-slug]` to generate stories from the GDD and ADR."
 - If a story has no GDD reference and the work appears small: "This story has no GDD reference. If the change is small
-  (under ~4 hours), run `gamedev:quick-design [description]` to create a Quick Design Spec, then reference that
-  spec in the story."
+  (under ~4 hours), run the `gamedev:quick-design` skill with `[description]` to create a Quick Design Spec, then
+  reference that spec in the story."
 - If a story's scope has grown beyond its original sizing: "This story appears to have expanded in scope. Consider
   splitting it or escalating to the producer before implementation begins."
 
@@ -323,6 +323,6 @@ Handle the verdict per standard rules in `director-gates.md`:
 
 ## Recommended Next Steps
 
-- Run `gamedev:dev-story [story-path]` to begin implementation once the story is READY
-- Run `gamedev:story-readiness milestone [name]` to check all stories in a milestone at once
-- Run `gamedev:create-stories [epic-slug]` if a story file is missing entirely
+- Run the `gamedev:dev-story` skill with `[story-path]` to begin implementation once the story is READY
+- Run the `gamedev:story-readiness` skill with `milestone [name]` to check all stories in a milestone at once
+- Run the `gamedev:create-stories` skill with `[epic-slug]` if a story file is missing entirely

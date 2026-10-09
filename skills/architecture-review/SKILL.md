@@ -613,27 +613,27 @@ After completing the review and writing approved files, present:
 1. **Immediate actions**: List the top 3 ADRs to create (highest-impact gaps first, Foundation layer before Feature
    layer)
 2. **Pre-gate checklist**: Check whether these exist via Glob and mark each ✅ or ❌:
-   - `tests/unit/` and `tests/integration/` directories — if ❌: run `gamedev:test-setup`
-   - `.github/workflows/tests.yml` — if ❌: run `gamedev:test-setup`
-   - `design/accessibility-requirements.md` — if ❌: run `gamedev:ux-design`
-   - `design/ux/interaction-patterns.md` — if ❌: run `gamedev:ux-design`
-   Present ❌ items as required steps before gate-check. Do not offer `gamedev:gate-check` as an option if any
-   item is ❌ — offer the missing skill to run instead.
-3. **Rerun trigger**: "Re-run `gamedev:architecture-review` after each new ADR is written to verify coverage
+   - `tests/unit/` and `tests/integration/` directories — if ❌: run the `gamedev:test-setup` skill
+   - `.github/workflows/tests.yml` — if ❌: run the `gamedev:test-setup` skill
+   - `design/accessibility-requirements.md` — if ❌: run the `gamedev:ux-design` skill
+   - `design/ux/interaction-patterns.md` — if ❌: run the `gamedev:ux-design` skill
+   Present ❌ items as required steps before gate-check. Do not offer `gamedev:gate-check` as an option if any item is
+   ❌ — offer the missing skill to run instead.
+3. **Rerun trigger**: "Re-run the `gamedev:architecture-review` skill after each new ADR is written to verify coverage
    improves"
 
 Then close with a user-input tool or chat tailored to the pre-gate checklist state:
 
 - If ADR gaps remain or any pre-gate item is ❌:
   - "Architecture review complete. What would you like to do next?"
-    - [A] Write a missing ADR — open a fresh session and run `gamedev:architecture-decision [system]`
-    - [B] Run `gamedev:test-setup` — required before gate-check (only show if test infrastructure is ❌)
-    - [C] Run `gamedev:ux-design` — required before gate-check (only show if UX/accessibility files are ❌)
+    - [A] Write a missing ADR — open a fresh session and run the `gamedev:architecture-decision` skill with `[system]`
+    - [B] Run the `gamedev:test-setup` skill — required before gate-check (only show if test infrastructure is ❌)
+    - [C] Run the `gamedev:ux-design` skill — required before gate-check (only show if UX/accessibility files are ❌)
     - [D] Stop here for this session
 - If all pre-gate checklist items are ✅ and no blocking ADR gaps remain:
   - "Architecture review complete. All pre-gate items confirmed. What would you like to do next?"
-    - [A] Run `gamedev:gate-check pre-production`
-    - [B] Write a missing ADR — open a fresh session and run `gamedev:architecture-decision [system]`
+    - [A] Run the `gamedev:gate-check` skill with `pre-production`
+    - [B] Write a missing ADR — open a fresh session and run the `gamedev:architecture-decision` skill with `[system]`
     - [C] Stop here for this session
 
 ---

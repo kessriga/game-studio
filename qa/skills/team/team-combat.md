@@ -87,7 +87,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
    system is Proposed — cannot implement until ADR is Accepted"
 3. Error Recovery Protocol triggered: "ai-programmer: BLOCKED — AI behavior ADR is Proposed"
 4. a user-input tool or chat presented with options: (a) Skip ai-programmer and note the gap; (b) Retry with narrower
-   scope; (c) Stop here and run `gamedev:architecture-decision` first
+   scope; (c) Stop here and run the `gamedev:architecture-decision` skill first
 5. If user chooses (a): Phase 3 proceeds with gameplay-programmer, technical-artist, sound-designer only; ai-programmer
    gap noted in partial report
 6. Final report produced: partial implementation documented, ai-programmer section marked BLOCKED, overall verdict:
@@ -197,8 +197,7 @@ to sub-agents. Produces a summary report with verdict COMPLETE / NEEDS WORK / BL
 - [ ] Phase 3 agents launched in parallel per skill spec
 - [ ] Partial report always produced even when agents are BLOCKED
 - [ ] Verdict is one of COMPLETE / NEEDS WORK / BLOCKED
-- [ ] Next steps present at end of output: `gamedev:code-review`, `gamedev:balance-check`,
-      `gamedev:team-polish`
+- [ ] Next steps present at end of output: `gamedev:code-review`, `gamedev:balance-check`, `gamedev:team-polish`
 
 ---
 

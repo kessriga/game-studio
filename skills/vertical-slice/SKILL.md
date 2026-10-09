@@ -31,7 +31,7 @@ It validates:
 4. **Velocity** (how long did this take? That's your real production rate estimate.)
 
 **Earlier in the project?** If you haven't written GDDs yet and want to validate whether the core idea is worth
-designing, run `gamedev:prototype` (concept prototype) instead.
+designing, run the `gamedev:prototype` skill (concept prototype) instead.
 
 ---
 

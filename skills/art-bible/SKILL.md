@@ -18,7 +18,7 @@ Resolve the review mode (once, store for all gate spawns this run):
 See `../../docs/director-gates.md` for the full check pattern.
 
 Read `design/gdd/game-concept.md`. If it does not exist, fail with:
-> "No game concept found. Run `gamedev:brainstorm` first — the art bible is authored after the game concept is
+> "No game concept found. Run the `gamedev:brainstorm` skill first — the art bible is authored after the game concept is
 > approved."
 
 Extract from game-concept.md:
@@ -275,25 +275,25 @@ above:
 
 **Option pool — include only if not already done:**
 
-- `[_] Run gamedev:map-systems — decompose the concept into systems before writing GDDs` (skip if
-  systems-index.md exists)
-- `[_] Run gamedev:setup-engine — configure the engine (asset standards may need revisiting after engine is set)`
-  (skip if engine configured)
+- `[_] Run gamedev:map-systems — decompose the concept into systems before writing GDDs` (skip if systems-index.md
+  exists)
+- `[_] Run gamedev:setup-engine — configure the engine (asset standards may need revisiting after engine is set)` (skip
+  if engine configured)
 - `[_] Run gamedev:design-system — start the first GDD` (skip if any GDDs exist)
 - `[_] Run gamedev:review-all-gdds — cross-GDD consistency check (required before Technical Setup gate)` (skip if
   gdd-cross-review-*.md exists)
-- `[_] Run gamedev:asset-spec — generate per-asset visual specs and AI generation prompts from approved GDDs`
-  (include if GDDs exist)
-- `[_] Run gamedev:consistency-check — scan existing GDDs against the art bible for visual direction conflicts`
-  (include if GDDs exist)
+- `[_] Run gamedev:asset-spec — generate per-asset visual specs and AI generation prompts from approved GDDs` (include
+  if GDDs exist)
+- `[_] Run gamedev:consistency-check — scan existing GDDs against the art bible for visual direction conflicts` (include
+  if GDDs exist)
 - `[_] Run gamedev:create-architecture — author the master architecture document (next Technical Setup step)`
 - `[_] Stop here`
 
 Assign letters A, B, C… only to the options actually included. Mark the most logical pipeline-advancing option as
 `(recommended)`.
 
-> **Always include** `gamedev:create-architecture` and Stop here as options — these are always valid next steps
-> once the art bible is complete.
+> **Always include** `gamedev:create-architecture` and Stop here as options — these are always valid next steps once the
+> art bible is complete.
 
 ---
 
@@ -314,9 +314,9 @@ Every section follows: **Question → Options → Decision → Draft (from art-d
 
 After the art bible is approved:
 
-- Run `gamedev:map-systems` to decompose the concept into game systems before authoring GDDs
-- Run `gamedev:setup-engine` if the engine is not yet configured (asset standards may need revisiting after
+- Run the `gamedev:map-systems` skill to decompose the concept into game systems before authoring GDDs
+- Run the `gamedev:setup-engine` skill if the engine is not yet configured (asset standards may need revisiting after
   engine selection)
-- Run `gamedev:design-system [first-system]` to start authoring per-system GDDs
-- Run `gamedev:consistency-check` once GDDs exist to validate them against the art bible's visual rules
-- Run `gamedev:create-architecture` to produce the master architecture document
+- Run the `gamedev:design-system` skill with `[first-system]` to start authoring per-system GDDs
+- Run the `gamedev:consistency-check` skill once GDDs exist to validate them against the art bible's visual rules
+- Run the `gamedev:create-architecture` skill to produce the master architecture document

@@ -128,7 +128,7 @@ None. `gamedev:test-setup` is a scaffolding utility. No director gates apply.
 
 1. Skill reads `technical-preferences.md` and finds engine placeholder
 2. Skill reports: "Engine not configured — cannot scaffold engine-specific test framework"
-3. Skill suggests running `gamedev:setup-engine` first
+3. Skill suggests running the `gamedev:setup-engine` skill first
 4. No directories or files are created
 
 **Assertions:**

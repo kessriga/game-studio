@@ -2,8 +2,8 @@
 
 ## Skill Summary
 
-`gamedev:balance-check` reads balance data files (JSON or YAML in `assets/data/`) and checks each value against
-the design formulas defined in GDDs under `design/gdd/`. It produces a findings table with columns: Value → Formula →
+`gamedev:balance-check` reads balance data files (JSON or YAML in `assets/data/`) and checks each value against the
+design formulas defined in GDDs under `design/gdd/`. It produces a findings table with columns: Value → Formula →
 Deviation → Severity. No director gates are invoked (read-only analysis). The skill may optionally write a balance
 report but asks "May I write" before doing so. Verdicts: BALANCED, CONCERNS, or OUT OF BALANCE.
 
@@ -106,7 +106,7 @@ None. Balance check is a read-only analysis skill; no gates are invoked.
 
 - [ ] Skill does not fabricate formula targets when none exist in GDDs
 - [ ] Output explicitly names the missing formula source
-- [ ] Output recommends running `gamedev:design-system` to define formulas
+- [ ] Output recommends running the `gamedev:design-system` skill to define formulas
 - [ ] Verdict is CONCERNS (not BALANCED, since validation was impossible)
 
 ---

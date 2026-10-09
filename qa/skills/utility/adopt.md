@@ -7,8 +7,8 @@
 severity (BLOCKING / HIGH / MEDIUM / LOW), composes a numbered, ordered migration plan, and writes it to
 `docs/adoption-plan-[date].md` after explicit user approval via a user-input tool or chat.
 
-This skill is distinct from `gamedev:project-stage-detect` (which checks what exists). `gamedev:adopt`
-checks whether what exists will actually work with the template's skills.
+This skill is distinct from `gamedev:project-stage-detect` (which checks what exists). `gamedev:adopt` checks whether
+what exists will actually work with the template's skills.
 
 No director gates apply. The skill does NOT invoke any director agents.
 
@@ -95,7 +95,7 @@ None. `gamedev:adopt` is a brownfield audit utility. No director gates apply.
    - MEDIUM: `combat.md` missing Formulas
 4. Phase 4 builds ordered migration plan:
    - Step 1 (BLOCKING): Add `## Status` to `adr-0001.md` — command: `gamedev:architecture-decision retrofit`
-   - Step 2 (HIGH): Run `gamedev:architecture-review` to bootstrap tr-registry.yaml
+   - Step 2 (HIGH): Run the `gamedev:architecture-review` skill to bootstrap tr-registry.yaml
    - Step 3 (HIGH): Add Acceptance Criteria to `combat.md` — command: `gamedev:design-system retrofit`
    - Step 4 (MEDIUM): Add Formulas to `combat.md`
 5. Gap Preview shows BLOCKING items as bullets (actual file names), HIGH/MEDIUM as counts
@@ -166,7 +166,7 @@ None. `gamedev:adopt` is a brownfield audit utility. No director gates apply.
 3. Uses a user-input tool or chat:
    - "This looks like a fresh project — no existing artifacts found. `gamedev:adopt` is for projects with work to
      migrate. What would you like to do?"
-   - Options: "Run `gamedev:start`", "My artifacts are in a non-standard location", "Cancel"
+   - Options: "Run the `gamedev:start` skill", "My artifacts are in a non-standard location", "Cancel"
 4. Skill stops — does not proceed to audit regardless of user selection
 
 **Assertions:**

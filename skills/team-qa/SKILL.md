@@ -77,10 +77,10 @@ Prompt the qa-lead to:
 - Estimate manual QA effort (number of test sessions needed)
 - **Before assessing smoke status, check for an existing smoke check report**: Glob `production/qa/smoke-*.md` and read
   the most recently modified file (if found). If a report exists, use its verdict and findings directly — do not
-  re-interview the user. If no report exists, note: "No prior smoke check report found — run
-  `gamedev:smoke-check` before proceeding." and set smoke check status to UNKNOWN (treat as PASS WITH WARNINGS
-  for the purpose of continuing). Produce a smoke check verdict: **PASS** / **PASS WITH WARNINGS [list]** /
-  **FAIL [list of failures]** / **UNKNOWN (no report found)**
+  re-interview the user. If no report exists, note: "No prior smoke check report found — run `gamedev:smoke-check`
+  before proceeding." and set smoke check status to UNKNOWN (treat as PASS WITH WARNINGS for the purpose of continuing).
+  Produce a smoke check verdict: **PASS** / **PASS WITH WARNINGS [list]** / **FAIL [list of failures]** /
+  **UNKNOWN (no report found)**
 - Produce a strategy summary table and smoke check result:
 
   | Story | Type | Automated Required | Manual Required | Blocker? |
@@ -105,10 +105,11 @@ options:
 ```
 
 If smoke check **FAIL**: do not proceed to Phase 3. Surface the failures from the smoke check report and stop. The user
-must fix them, re-run `gamedev:smoke-check`, and then re-run `gamedev:team-qa`. If smoke check
-**UNKNOWN**: surface a warning — "No smoke check report found. Recommend running `gamedev:smoke-check` before QA.
-Proceeding with caution." If smoke check **PASS WITH WARNINGS**: note the warnings for the sign-off report and continue.
-If blockers are present: list them explicitly. The user may choose to skip blocked stories or cancel the cycle.
+must fix them, re-run the `gamedev:smoke-check` skill, and then re-run the `gamedev:team-qa` skill. If smoke check
+**UNKNOWN**: surface a warning — "No smoke check report found. Recommend running the `gamedev:smoke-check` skill before
+QA. Proceeding with caution." If smoke check **PASS WITH WARNINGS**: note the warnings for the sign-off report and
+continue. If blockers are present: list them explicitly. The user may choose to skip blocked stories or cancel the
+cycle.
 
 ### Phase 3: Test Plan Generation
 
@@ -181,8 +182,8 @@ options:
 ```
 
 After each FAIL result: use a user-input tool or chat to collect the failure description, then file a bug via
-`gamedev:bug-report` — a Backlog task with the `bug` label (repro/severity/context in the task description). The
-board is the bug list; there is no `production/qa/bugs/` markdown store.
+`gamedev:bug-report` — a Backlog task with the `bug` label (repro/severity/context in the task description). The board
+is the bug list; there is no `production/qa/bugs/` markdown store.
 
 After collecting all results, summarize:
 
@@ -228,9 +229,9 @@ Verdict rules:
 
 Next step guidance by verdict:
 
-- APPROVED: "Build is ready for the next phase. Run `gamedev:gate-check` to validate advancement."
+- APPROVED: "Build is ready for the next phase. Run the `gamedev:gate-check` skill to validate advancement."
 - APPROVED WITH CONDITIONS: "Resolve conditions before advancing. S3/S4 bugs may be deferred to polish."
-- NOT APPROVED: "Resolve S1/S2 bugs and re-run `gamedev:team-qa` or targeted manual QA before advancing."
+- NOT APPROVED: "Resolve S1/S2 bugs and re-run the `gamedev:team-qa` skill or targeted manual QA before advancing."
 
 Ask: "May I write this QA sign-off report to `production/qa/qa-signoff-[milestone]-[date].md`?"
 
@@ -252,7 +253,7 @@ If any spawned agent (through authorized delegation) returns BLOCKED, errors, or
 Common blockers:
 
 - Input file missing (story not found, GDD absent) → redirect to the skill that creates it
-- ADR status is Proposed → do not implement; run `gamedev:architecture-decision` first
+- ADR status is Proposed → do not implement; run the `gamedev:architecture-decision` skill first
 - Scope too large → split into two stories via `gamedev:create-stories`
 - Conflicting instructions between ADR and story → surface the conflict, do not guess
 

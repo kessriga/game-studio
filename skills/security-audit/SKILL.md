@@ -239,8 +239,8 @@ Write only after approval.
 
 This report is a required artifact for the **Polish → Release gate**.
 
-After remediating findings, re-run: `gamedev:security-audit quick` to confirm CRITICAL/HIGH items are resolved
-before running `gamedev:gate-check release`.
+After remediating findings, re-run: `gamedev:security-audit quick` to confirm CRITICAL/HIGH items are resolved before
+running the `gamedev:gate-check` skill with `release`.
 
 If CRITICAL findings exist:
 > "⛔ CRITICAL security findings must be resolved before any public release. Do not proceed to

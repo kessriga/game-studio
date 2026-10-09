@@ -2,8 +2,8 @@
 
 ## Skill Summary
 
-`gamedev:gate-check` validates whether the project is ready to advance to the next development phase. It checks
-for required artifacts, runs quality checks, asks the user about unverifiable items, and produces a PASS/CONCERNS/FAIL
+`gamedev:gate-check` validates whether the project is ready to advance to the next development phase. It checks for
+required artifacts, runs quality checks, asks the user about unverifiable items, and produces a PASS/CONCERNS/FAIL
 verdict. On PASS with user confirmation, it writes the new stage name to `production/stage.txt`. It governs all 6 phase
 transitions and is the most critical gate-keeping skill in the pipeline.
 
@@ -70,7 +70,7 @@ Verified automatically by `gamedev:skill-test static` — no fixture needed.
 2. Skill marks required artifact as missing (not present)
 3. Skill outputs FAIL verdict
 4. Skill lists blocker: "No game concept document found"
-5. Skill suggests remediation: run `gamedev:brainstorm` to create one
+5. Skill suggests remediation: run the `gamedev:brainstorm` skill to create one
 
 **Assertions:**
 

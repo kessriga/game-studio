@@ -2,8 +2,8 @@
 
 ## Skill Summary
 
-`gamedev:smoke-check` is the gate between implementation and QA hand-off. It detects the test environment, runs
-the automated test suite (via Bash), scans test coverage against sprint stories, and uses a user-input tool or chat to
+`gamedev:smoke-check` is the gate between implementation and QA hand-off. It detects the test environment, runs the
+automated test suite (via Bash), scans test coverage against sprint stories, and uses a user-input tool or chat to
 batch-verify manual smoke checks with the developer. It writes a report to `production/qa/smoke-[date].md` after
 explicit user approval.
 
@@ -91,7 +91,7 @@ None. `gamedev:smoke-check` is a pre-QA utility skill. No director gates apply.
 5. Report shows automated tests as FAIL with failing test names listed
 6. Asks to write report; writes after approval
 7. Delivers FAIL verdict with message: "The smoke check failed. Do not hand off to QA until these failures are
-   resolved." Lists failing tests and suggests fixing then re-running `gamedev:smoke-check`
+   resolved." Lists failing tests and suggests fixing then re-running the `gamedev:smoke-check` skill
 
 **Assertions:**
 
@@ -119,8 +119,8 @@ None. `gamedev:smoke-check` is a pre-QA utility skill. No director gates apply.
 2. Coverage scan finds 1 MISSING entry for a Logic story
 3. a user-input tool or chat is used for Batch 1 and Batch 2 — developer confirms all PASS
 4. Report shows: automated tests PASS, manual checks all PASS, 1 MISSING coverage entry
-5. Verdict is PASS WITH WARNINGS — build ready for QA, but MISSING entry must be resolved before
-   `gamedev:story-done` closes the affected story
+5. Verdict is PASS WITH WARNINGS — build ready for QA, but MISSING entry must be resolved before `gamedev:story-done`
+   closes the affected story
 6. Asks to write report; writes after approval
 
 **Assertions:**
@@ -145,7 +145,7 @@ None. `gamedev:smoke-check` is a pre-QA utility skill. No director gates apply.
 **Expected behavior:**
 
 1. Phase 1 checks for `tests/` directory — not found
-2. Skill outputs: "No test directory found at `tests/`. Run `gamedev:test-setup` to scaffold the testing
+2. Skill outputs: "No test directory found at `tests/`. Run the `gamedev:test-setup` skill to scaffold the testing
    infrastructure, or create the directory manually if tests live elsewhere."
 3. Skill stops — no automated tests run, no manual smoke checks, no report written
 

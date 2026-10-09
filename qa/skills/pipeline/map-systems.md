@@ -2,9 +2,9 @@
 
 ## Skill Summary
 
-`gamedev:map-systems` decomposes a game concept into a systems index. It reads the approved game concept and
-pillars, enumerates both explicit and implicit systems, maps dependencies between systems, assigns priority tiers (MVP /
-Vertical Slice / Alpha / Full Vision), and organizes systems into a layered design order (Foundation → Core → Feature →
+`gamedev:map-systems` decomposes a game concept into a systems index. It reads the approved game concept and pillars,
+enumerates both explicit and implicit systems, maps dependencies between systems, assigns priority tiers (MVP / Vertical
+Slice / Alpha / Full Vision), and organizes systems into a layered design order (Foundation → Core → Feature →
 Presentation). The output is written to `design/systems-index.md` after user approval.
 
 This skill is required between game concept approval and per-system GDD creation — it is a mandatory gate in the
@@ -87,7 +87,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 
 1. Skill attempts to read `design/gdd/game-concept.md`
 2. File not found
-3. Skill outputs: "No game concept found. Run `gamedev:brainstorm` to create one, then return to
+3. Skill outputs: "No game concept found. Run the `gamedev:brainstorm` skill to create one, then return to
    `gamedev:map-systems`."
 4. Skill exits without creating systems-index.md
 
@@ -208,5 +208,5 @@ In `solo` mode: both gates are skipped with equivalent notes.
   phase — not independently fixture-tested here.
 - Priority tier assignment (MVP heuristics) is evaluated as part of the Case 1 collaborative workflow rather than
   independently.
-- The `next` argument mode (handing off the highest-priority undesigned system to `gamedev:design-system`) is not
-  tested here — it is a post-index-creation convenience.
+- The `next` argument mode (handing off the highest-priority undesigned system to `gamedev:design-system`) is not tested
+  here — it is a post-index-creation convenience.

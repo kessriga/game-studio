@@ -28,8 +28,8 @@ Verified automatically by `gamedev:skill-test static` — no fixture needed.
 
 ## Director Gate Checks
 
-None. `gamedev:ux-review` is itself the review gate for UX specs. No additional director gates are invoked within
-this skill.
+None. `gamedev:ux-review` is itself the review gate for UX specs. No additional director gates are invoked within this
+skill.
 
 ---
 
@@ -130,7 +130,7 @@ this skill.
 
 1. Skill attempts to read `design/ux/inventory-screen.md` — file not found
 2. Skill outputs: "UX spec not found: design/ux/inventory-screen.md"
-3. Skill suggests running `gamedev:ux-design inventory-screen` to create the spec first
+3. Skill suggests running the `gamedev:ux-design` skill with `inventory-screen` to create the spec first
 4. No review is performed; no verdict is issued
 
 **Assertions:**

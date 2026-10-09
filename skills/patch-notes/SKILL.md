@@ -31,8 +31,8 @@ If no version is provided, ask the user before proceeding.
 **If no changelog data is available** (neither `production/releases/[version]gamedev:changelog.md` nor a
 `docs/CHANGELOG.md` entry for this version exists, and git log is empty or unavailable):
 
-> "No changelog data found for [version]. Run `gamedev:changelog [version]` first to generate the internal
-> changelog, then re-run `gamedev:patch-notes [version]`."
+> "No changelog data found for [version]. Run the `gamedev:changelog` skill with `[version]` first to generate the
+> internal changelog, then re-run the `gamedev:patch-notes` skill with `[version]`."
 
 Verdict: **BLOCKED** — stop here without generating notes.
 
@@ -185,5 +185,5 @@ If yes, write the file to `docs/patch-notes/[version].md`, creating the director
 
 Verdict: **COMPLETE** — patch notes generated and saved.
 
-- Run `gamedev:release-checklist` to verify all other release gates are met before publishing.
+- Run the `gamedev:release-checklist` skill to verify all other release gates are met before publishing.
 - Share the patch notes draft with the community-manager for tone review before posting publicly.

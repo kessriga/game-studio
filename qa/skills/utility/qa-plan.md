@@ -2,8 +2,8 @@
 
 ## Skill Summary
 
-`gamedev:qa-plan` generates a structured QA test plan for a milestone (epic) or feature. It reads the story tasks
-for the specified milestone via `task_list` (following each task's `Spec:` reference to its story `.md`), extracts
+`gamedev:qa-plan` generates a structured QA test plan for a milestone (epic) or feature. It reads the story tasks for
+the specified milestone via `task_list` (following each task's `Spec:` reference to its story `.md`), extracts
 acceptance criteria from each story, cross-references test standards from `coding-standards.md` to assign the
 appropriate test type (unit, integration, visual, UI, or config/data), and produces a prioritized QA plan document.
 
@@ -130,7 +130,7 @@ None. `gamedev:qa-plan` is a planning utility. Story readiness gates are separat
 
 1. Skill `task_list`s the `Netcode` milestone — no story tasks found
 2. Skill outputs: "No story tasks found for the Netcode milestone"
-3. Skill suggests running `gamedev:create-stories` to break the epic into story tasks first
+3. Skill suggests running the `gamedev:create-stories` skill to break the epic into story tasks first
 4. No plan is written; no "May I write" is asked
 
 **Assertions:**

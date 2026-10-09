@@ -8,7 +8,7 @@ from any game project.
 | File | Purpose |
 | ------ | --------- |
 | `catalog.yaml` | Registry of 65 skill specs and 53 agent specs; run the coverage audit to find untracked skills. Contains category, spec path, and last-test tracking fields. Always read this first when running any test command. |
-| `quality-rubric.md` | Category-specific pass/fail metrics. Read the matching `###` section for the skill's category when running `gamedev:skill-test category`. |
+| `quality-rubric.md` | Category-specific pass/fail metrics. Read the matching `###` section for the skill's category when running the `gamedev:skill-test` skill with `category`. |
 | `skills/[category]/[name].md` | Behavioral spec for a skill — 5 test cases + protocol compliance assertions. |
 | `agents/[tier]/[name].md` | Behavioral spec for an agent — 5 test cases + protocol compliance assertions. |
 | `templates/skill-test-spec.md` | Template for writing new skill spec files. |
@@ -88,8 +88,8 @@ analysis from conversational execution and record the evidence actually observed
 
 ## Workflow for improving a skill
 
-Use `gamedev:skill-improve [name]`. It handles the full loop: test → diagnose → propose fix → rewrite → retest → keep or
-revert.
+Use the `gamedev:skill-improve` skill with `[name]`. It handles the full loop: test → diagnose → propose fix → rewrite →
+retest → keep or revert.
 
 ## Spec validity note
 

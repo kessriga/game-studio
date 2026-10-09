@@ -12,7 +12,7 @@ Requirements Addressed
 **Status lifecycle:** `Proposed` → `Accepted` → `Superseded`
 
 - Never skip `Accepted` — stories referencing a `Proposed` ADR are auto-blocked
-- Use `gamedev:architecture-decision` to create ADRs through the guided flow
+- Use the `gamedev:architecture-decision` skill to create ADRs through the guided flow
 
 **TR Registry:** `docs/architecture/tr-registry.yaml`
 
@@ -26,7 +26,7 @@ Requirements Addressed
 - Date-stamped `Manifest Version:` in header
 - Stories embed this version; `gamedev:story-done` checks for staleness
 
-**Validation:** Run `gamedev:architecture-review` after completing a set of ADRs.
+**Validation:** Run the `gamedev:architecture-review` skill after completing a set of ADRs.
 
 ## Engine Reference (`docs/engine-reference/`)
 

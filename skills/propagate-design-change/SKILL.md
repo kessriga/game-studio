@@ -231,10 +231,10 @@ declined write.
 
 Based on the resolution decisions, suggest:
 
-- **ADRs marked Superseded**: "Run `gamedev:architecture-decision [title]` to write the replacement ADR. Then
-  re-run `gamedev:propagate-design-change` to verify coverage."
+- **ADRs marked Superseded**: "Run the `gamedev:architecture-decision` skill with `[title]` to write the replacement
+  ADR. Then re-run the `gamedev:propagate-design-change` skill to verify coverage."
 - **ADRs to update in place**: List the specific fields to update in each ADR
-- **If many ADRs affected**: "Run `gamedev:architecture-review` after all ADRs are updated to verify the full
+- **If many ADRs affected**: "Run the `gamedev:architecture-review` skill after all ADRs are updated to verify the full
   traceability matrix is still coherent."
 
 ---

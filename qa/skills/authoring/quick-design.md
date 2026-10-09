@@ -2,9 +2,9 @@
 
 ## Skill Summary
 
-`gamedev:quick-design` produces a lightweight design spec for features too small to warrant a full 8-section GDD.
-The target scope is under 4 hours of design time for a single-system feature. Instead of the full 8-section GDD format,
-the quick-design spec uses a streamlined 3-section format: Overview, Rules, and Acceptance Criteria.
+`gamedev:quick-design` produces a lightweight design spec for features too small to warrant a full 8-section GDD. The
+target scope is under 4 hours of design time for a single-system feature. Instead of the full 8-section GDD format, the
+quick-design spec uses a streamlined 3-section format: Overview, Rules, and Acceptance Criteria.
 
 The skill has no director gates — adding gate overhead would defeat the purpose of a lightweight design tool. The skill
 asks "May I write" before writing the design note to `design/quick-notes/[name].md`. If the feature scope is too large
@@ -76,8 +76,8 @@ gate overhead is intentionally absent. Full GDD review is not needed for sub-4-h
 
 1. Skill asks scoping questions
 2. Skill determines scope exceeds the sub-4h / single-system threshold
-3. Skill outputs: "This feature is too large for a quick-design. Use `gamedev:design-system [name]` for a full
-   GDD."
+3. Skill outputs: "This feature is too large for a quick-design. Use the `gamedev:design-system` skill with `[name]` for
+   a full GDD."
 4. Skill does NOT write a quick-note file
 5. Verdict is REDIRECTED
 

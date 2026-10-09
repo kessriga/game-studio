@@ -134,7 +134,7 @@ gamedev:skill-improve gate-check           # Test → diagnose → propose fix �
 1. Find the spec template at `templates/skill-test-spec.md`
 2. Copy it to `skills/[category]/[skill-name].md`
 3. Update the `spec:` field in `catalog.yaml` to point to the new file
-4. Run `gamedev:skill-test spec [skill-name]` to validate it
+4. Run the `gamedev:skill-test` skill with `spec [skill-name]` to validate it
 
 ---
 
@@ -147,4 +147,4 @@ rm -rf qa
 ```
 
 The skills `gamedev:skill-test` and `gamedev:skill-improve` will still function — they'll simply report that
-`catalog.yaml` is missing and suggest running `gamedev:skill-test audit` to initialize it.
+`catalog.yaml` is missing and suggest running the `gamedev:skill-test` skill with `audit` to initialize it.

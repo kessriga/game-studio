@@ -245,8 +245,8 @@ After writing:
 Next steps:
 
 - Share this plan with the team before milestone implementation begins
-- Once all milestone stories are implemented, run `gamedev:smoke-check` to gate QA hand-off — not yet, only after
-  implementation is complete
+- Once all milestone stories are implemented, run the `gamedev:smoke-check` skill to gate QA hand-off — not yet, only
+  after implementation is complete
 - For Logic/Integration stories, create the test files at the listed paths before marking stories done —
   `gamedev:story-done` checks for them"
 

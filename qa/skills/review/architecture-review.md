@@ -136,7 +136,7 @@ In `solo` mode: both gates are skipped with equivalent notes.
 1. Skill attempts to read the file
 2. File not found
 3. Skill outputs a clear error naming the missing file
-4. Skill suggests checking `docs/architecture/` or running `gamedev:create-architecture`
+4. Skill suggests checking `docs/architecture/` or running the `gamedev:create-architecture` skill
 5. Skill does NOT produce a verdict
 
 **Assertions:**
@@ -204,5 +204,5 @@ In `solo` mode: both gates are skipped with equivalent notes.
   re-enumerated here.
 - Engine version compatibility checking (cross-referencing `docs/engine-reference/`) is part of Case 1's happy path but
   not independently fixture-tested.
-- RTM (requirement traceability matrix) mode is a separate concern covered by the `gamedev:architecture-review`
-  skill's own `rtm` argument mode, not tested here.
+- RTM (requirement traceability matrix) mode is a separate concern covered by the `gamedev:architecture-review` skill's
+  own `rtm` argument mode, not tested here.

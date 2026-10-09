@@ -14,8 +14,8 @@ Before following this workflow, read [the host guide](../../docs/host-runtime.md
 This skill audits an existing project's artifacts for **format compliance** with the template's skill pipeline, then
 produces a prioritised migration plan.
 
-**This is not `gamedev:project-stage-detect`.** `gamedev:project-stage-detect` answers: *what exists?*
-`gamedev:adopt` answers: *will what exists actually work with the template's skills?*
+**This is not `gamedev:project-stage-detect`.** `gamedev:project-stage-detect` answers: *what exists?* `gamedev:adopt`
+answers: *will what exists actually work with the template's skills?*
 
 A project can have GDDs, ADRs, and stories — and every format-sensitive skill will still fail silently or produce wrong
 results if those artifacts are in the wrong internal format.
@@ -66,9 +66,9 @@ Use the same heuristic as `gamedev:project-stage-detect`:
 
 If the project appears fresh (no artifacts at all), use a user-input tool or chat:
 
-- "This looks like a fresh project — no existing artifacts found. `gamedev:adopt` is for projects with work to
-  migrate. What would you like to do?"
-  - "Run `gamedev:start` — begin guided first-time onboarding"
+- "This looks like a fresh project — no existing artifacts found. `gamedev:adopt` is for projects with work to migrate.
+  What would you like to do?"
+  - "Run the `gamedev:start` skill — begin guided first-time onboarding"
   - "My artifacts are in a non-standard location — help me find them"
   - "Cancel"
 
@@ -127,8 +127,8 @@ For each ADR, record: which sections present, which missing, current Status valu
 If `design/gdd/systems-index.md` exists:
 
 1. **Parenthetical status values** — Grep for any Status cell containing parentheses: `"Needs Revision ("`,
-   `"In Progress ("`, etc. These break exact-string matching in `gamedev:gate-check`,
-   `gamedev:create-stories`, and `gamedev:architecture-review`. **BLOCKING.**
+   `"In Progress ("`, etc. These break exact-string matching in `gamedev:gate-check`, `gamedev:create-stories`, and
+   `gamedev:architecture-review`. **BLOCKING.**
 
 2. **Valid status values** — check that Status column values are only from: `Not Started`, `In Progress`, `In Review`,
    `Designed`, `Approved`, `Needs Revision` Flag any unrecognised values.
@@ -212,8 +212,8 @@ For each gap, produce a plan entry with:
 values that need changing and the exact replacement text. Offer to fix this immediately before writing the plan.
 
 **Special case — ADRs missing Status field:** For each affected ADR, the fix is:
-`gamedev:architecture-decision retrofit docs/architecture/adr-[NNNN]-[slug].md` List each ADR as a separate
-checkable item.
+`gamedev:architecture-decision retrofit docs/architecture/adr-[NNNN]-[slug].md` List each ADR as a separate checkable
+item.
 
 **Special case — GDDs missing sections:** For each affected GDD, list which sections are missing and the fix:
 `gamedev:design-system retrofit design/gdd/[filename].md`
@@ -221,10 +221,10 @@ checkable item.
 **Infrastructure bootstrap ordering** — always present in this sequence:
 
 1. Fix ADR formats first (registry depends on reading ADR Status fields)
-2. Run `gamedev:architecture-review` → bootstraps `tr-registry.yaml`
-3. Run `gamedev:create-control-manifest` → creates manifest with version stamp
+2. Run the `gamedev:architecture-review` skill → bootstraps `tr-registry.yaml`
+3. Run the `gamedev:create-control-manifest` skill → creates manifest with version stamp
 4. Initialise the Backlog board (`backlog/config.yml`) → work-item store for stories/bugs
-5. Run `gamedev:gate-check [phase]` → writes `stage.txt` authoritatively
+5. Run the `gamedev:gate-check` skill with `[phase]` → writes `stage.txt` authoritatively
 
 **Existing stories** — note explicitly:
 > "Existing stories continue to work with all template skills — all new format checks auto-pass when the fields are
@@ -374,8 +374,8 @@ After writing the adoption plan (or if the user cancels writing), check whether 
 - **Options**:
   - `Full` — Director specialists review at each key workflow step. Best for teams, learning the workflow, or when you
     want thorough feedback on every decision.
-  - `Lean (recommended)` — Directors only at phase gate transitions (gamedev:gate-check). Skips per-skill
-    reviews. Balanced for solo devs and small teams.
+  - `Lean (recommended)` — Directors only at phase gate transitions (gamedev:gate-check). Skips per-skill reviews.
+    Balanced for solo devs and small teams.
   - `Solo` — No director reviews at all. Maximum speed. Best for game jams, prototypes, or if reviews feel like
     overhead.
 
@@ -397,8 +397,8 @@ a user-input tool or chat. Choose the first branch that applies:
 **If there are parenthetical status values in systems-index.md:** Use a user-input tool or chat:
 
 - "The most urgent fix is `systems-index.md` — [N] rows have parenthetical status values (e.g.
-  `Needs Revision (see notes)`) that break gamedev:gate-check, gamedev:create-stories, and
-  gamedev:architecture-review right now. I can fix these in-place."
+  `Needs Revision (see notes)`) that break gamedev:gate-check, gamedev:create-stories, and gamedev:architecture-review
+  right now. I can fix these in-place."
   - "Fix it now — edit systems-index.md"
   - "I'll fix it myself"
   - "Done — leave me with the plan"
@@ -426,7 +426,7 @@ a user-input tool or chat. Choose the first branch that applies:
   - "Run gamedev:project-stage-detect for a broader health check"
   - "Done — I'll work through the plan at my own pace"
 
-> **Adoption plan saved to `docs/adoption-plan-[date].md`.** Re-run `gamedev:adopt` at any time to re-check
+> **Adoption plan saved to `docs/adoption-plan-[date].md`.** Re-run the `gamedev:adopt` skill at any time to re-check
 > remaining gaps as you complete them.
 
 ---

@@ -19,8 +19,8 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 - [ ] Contains "File Write Protocol" section
 - [ ] File writes are delegated to sub-agents — orchestrator does not write files directly
 - [ ] Sub-agents enforce "May I write to [path]?" before any write
-- [ ] Has a next-step handoff at the end (references `gamedev:release-checklist`, filing remaining issues as
-      Backlog tasks, `gamedev:gate-check`)
+- [ ] Has a next-step handoff at the end (references `gamedev:release-checklist`, filing remaining issues as Backlog
+      tasks, `gamedev:gate-check`)
 - [ ] Error Recovery Protocol section is present
 - [ ] a user-input tool or chat is used at phase transitions before proceeding
 - [ ] Phase 3 (visual polish) and Phase 4 (audio polish) are explicitly run in parallel with Phase 2
@@ -101,7 +101,7 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 7. Verdict: NEEDS MORE WORK
 8. Report lists the specific unresolved issue: "particle-storm frame cost (9ms) exceeds budget (6ms) by 3ms — requires
    design scope reduction or budget renegotiation"
-9. Next Steps: file the remaining issue as a Backlog task; re-run `gamedev:team-polish` after fix
+9. Next Steps: file the remaining issue as a Backlog task; re-run the `gamedev:team-polish` skill after fix
 
 **Assertions:**
 
@@ -126,8 +126,8 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 **Expected behavior:**
 
 1. Skill detects no argument is provided
-2. Outputs usage guidance: e.g., "Usage: `gamedev:team-polish [feature or area]` — specify the feature or area to
-   polish (e.g., `combat`, `main menu`, `inventory system`, `level-1`)"
+2. Outputs usage guidance: e.g., "Usage: `gamedev:team-polish [feature or area]` — specify the feature or area to polish
+   (e.g., `combat`, `main menu`, `inventory system`, `level-1`)"
 3. Skill exits without spawning any agents
 
 **Assertions:**
@@ -233,8 +233,8 @@ root causes. Verdict is READY FOR RELEASE or NEEDS MORE WORK.
 - [ ] A partial report is always produced when some agents complete and others block
 - [ ] Verdict is exactly READY FOR RELEASE or NEEDS MORE WORK — no other verdict values used
 - [ ] NEEDS MORE WORK verdict always lists specific remaining issues with severity
-- [ ] Next Steps handoff references `gamedev:release-checklist` (on success) and filing remaining issues as
-      Backlog tasks + `gamedev:gate-check` (on failure)
+- [ ] Next Steps handoff references `gamedev:release-checklist` (on success) and filing remaining issues as Backlog
+      tasks + `gamedev:gate-check` (on failure)
 
 ---
 

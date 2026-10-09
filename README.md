@@ -110,8 +110,8 @@ handful you reach for only when the situation calls.
 | `gamedev:help [what you just finished]` | *"What's next?"* Reads your phase and artifacts, then names the next command. |
 | `gamedev:project-stage-detect` | *"What am I missing?"* Full gap analysis — deeper than `help`. |
 
-The rhythm is: run a command → run `gamedev:help` → it names the next one → repeat. You never have to hold the whole map
-in your head — `help` keeps your place.
+The rhythm is: run a command → run the `gamedev:help` skill → it names the next one → repeat. You never have to hold the
+whole map in your head — `help` keeps your place.
 
 ### Set your review mode first
 
@@ -380,7 +380,7 @@ production/                      # Stage, QA evidence, workflow progress, handof
 prototypes/                      # Throwaway prototypes
 ```
 
-See [directory structure](docs/directory-structure.md). Use `gamedev:status` for a snapshot.
+See [directory structure](docs/directory-structure.md). Use the `gamedev:status` skill for a snapshot.
 
 ## How It Works
 

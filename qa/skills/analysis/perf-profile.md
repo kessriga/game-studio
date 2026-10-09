@@ -62,7 +62,7 @@ None. Performance profiling is an advisory analysis skill; no gates are invoked.
 
 **Fixture:**
 
-- User runs `gamedev:perf-profile` with no arguments
+- User runs the `gamedev:perf-profile` skill with no arguments
 - No profiler data files exist in `production/qa/`
 
 **Input:** `gamedev:perf-profile`
@@ -153,7 +153,7 @@ None. Performance profiling is an advisory analysis skill; no gates are invoked.
 
 1. Skill analyzes profiler data; verdict is CONCERNS
 2. No director gate is invoked regardless of review mode
-3. Output notes: "For in-depth analysis, consider running `gamedev:perf-profile` with the performance-analyst
+3. Output notes: "For in-depth analysis, consider running the `gamedev:perf-profile` skill with the performance-analyst
    agent"
 4. Skill asks "May I write" and writes report on user approval
 

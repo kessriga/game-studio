@@ -59,7 +59,7 @@ Enter **retrofit mode**:
    - Append each missing section to the ADR file using the Edit tool.
    - **Never modify any existing section.** Only append or fill absent sections.
 6. After adding all missing sections, update the ADR's `## Date` field if it is absent.
-7. Suggest: "Run `gamedev:architecture-review` to re-validate coverage now that this ADR has its Status and
+7. Suggest: "Run the `gamedev:architecture-review` skill to re-validate coverage now that this ADR has its Status and
    Dependencies fields."
 
 If NOT in retrofit mode, proceed to Step 1 below (normal ADR authoring).
@@ -109,8 +109,8 @@ Before doing anything else, establish the engine environment:
    Proceed with verified information only — do NOT rely solely on training data.
    ```
 
-   If no engine has been configured yet, prompt: "No engine is configured. Run `gamedev:setup-engine` first, or
-   tell me which engine you are using."
+   If no engine has been configured yet, prompt: "No engine is configured. Run the `gamedev:setup-engine` skill first,
+   or tell me which engine you are using."
 
 ---
 
@@ -468,9 +468,9 @@ If there are no remaining priority ADRs and no undesigned GDD systems, offer onl
 
 **Always include this fixed notice in the closing output (do NOT omit it):**
 
-> To validate ADR coverage against your GDDs, open a **fresh session** and run `gamedev:architecture-review`.
+> To validate ADR coverage against your GDDs, open a **fresh session** and run the `gamedev:architecture-review` skill.
 >
-> **Never run `gamedev:architecture-review` in the same session as `gamedev:architecture-decision`.** The
+> **Never run the `gamedev:architecture-review` skill in the same session as `gamedev:architecture-decision`.** The
 > reviewing agent must be independent of the authoring context to give an unbiased assessment. Running it here would
 > invalidate the review.
 

@@ -50,8 +50,8 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
    identifies any deferred scope; produces release authorization; presents to user; a user-input tool or chat: user
    approves before Phase 2
 2. Phase 2: Spawns `gamedev:release-manager` through authorized delegation; cuts release branch from agreed commit;
-   bumps version numbers; invokes `gamedev:release-checklist`; freezes branch; output: branch name and checklist;
-   a user-input tool or chat: user approves before Phase 3
+   bumps version numbers; invokes the `gamedev:release-checklist` skill; freezes branch; output: branch name and
+   checklist; a user-input tool or chat: user approves before Phase 3
 3. Phase 3 (parallel): Issues delegation calls simultaneously for `gamedev:qa-lead` (regression suite, critical path
    sign-off) and `gamedev:devops-engineer` (build artifacts, CI verification); security-engineer is NOT spawned (no
    online features); network-programmer is NOT spawned (no multiplayer); both complete successfully
@@ -61,7 +61,7 @@ producer calls NO-GO. Closes with a post-release monitoring plan.
    devops-engineer; no open blocking issues; producer declares GO; a user-input tool or chat: user sees GO decision and
    confirms deployment
 6. Phase 6: Spawns `gamedev:release-manager` + `gamedev:devops-engineer` (parallel); tags release in version control;
-   invokes `gamedev:changelog`; deploys to staging; smoke test passes; deploys to production; simultaneously
+   invokes the `gamedev:changelog` skill; deploys to staging; smoke test passes; deploys to production; simultaneously
    spawns `gamedev:community-manager` to finalize patch notes via `gamedev:patch-notes v1.0.0` and prepare launch
    announcement
 7. Phase 7: release-manager generates release report; producer updates milestone tracking; qa-lead begins monitoring for
