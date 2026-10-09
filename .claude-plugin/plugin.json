@@ -1,7 +1,7 @@
 {
   "name": "gamedev",
   "displayName": "Game Studio",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Game Studio: 72 skills, 53 specialist roles, and workflow tracking for building games with Godot, Unity, Unreal, and Bevy.",
   "author": {
     "name": "Kessriga Jeükal",
