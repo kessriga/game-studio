@@ -1,4 +1,5 @@
 import type { On } from "claude-code";
+import { fixturePath } from "./paths.test-support.ts";
 import { expect, mock, test } from "claude-code/testing";
 import {
   checkAsset,
@@ -98,10 +99,10 @@ function boot(
 ) {
   mock.clock(on);
   on("fs.exists", (_, e) => ({
-    value: e.path === "/game/production/stage.txt",
+    value: fixturePath(e.path) === "/game/production/stage.txt",
   }));
   on("fs.read", (_, e) => {
-    const text = files[e.path];
+    const text = files[fixturePath(e.path)];
     return text === undefined ? { deny: "ENOENT" } : { value: text };
   });
   on("process.run", (_, e) => {
@@ -215,10 +216,10 @@ test("commit -a also reads unstaged tracked changes and git -C is recognised", a
   };
   mock.clock(on);
   on("fs.exists", (_, e) => ({
-    value: e.path === "/game/production/stage.txt",
+    value: fixturePath(e.path) === "/game/production/stage.txt",
   }));
   on("fs.read", (_, e) => {
-    const text = files[e.path];
+    const text = files[fixturePath(e.path)];
     return text === undefined ? { deny: "ENOENT" } : { value: text };
   });
   const listings: string[] = [];

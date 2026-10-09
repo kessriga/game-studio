@@ -1,3 +1,4 @@
+import { fixturePath } from "./paths.test-support.ts";
 import { expect, test } from "claude-code/testing";
 import type { Tracking, WorkflowView } from "../types";
 import { claudeCommand, focusOf, statusText, summaryText } from "./view.tsx";
@@ -104,7 +105,7 @@ test("no phase and errors have their own texts", () => {
 
 test("the pane lists the phase steps after a session start in a game project", async ($, on) => {
   on("fs.exists", (_, e) => ({
-    value: e.path === "/game/production/stage.txt",
+    value: fixturePath(e.path) === "/game/production/stage.txt",
   }));
   on("process.run", () => ({
     value: {

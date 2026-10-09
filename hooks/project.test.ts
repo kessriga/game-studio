@@ -1,3 +1,4 @@
+import { fixturePath } from "./paths.test-support.ts";
 import { expect, test } from "claude-code/testing";
 import { NODE_HINT, parseWorkflowReply, workflowArgv } from "./project.ts";
 
@@ -75,7 +76,7 @@ test("output that is not JSON is reported, bounded", () => {
 test("the mod runs the CLI in the project and leaves other directories alone", async ($, on) => {
   const calls: (readonly string[])[] = [];
   on("fs.exists", (_, e) => ({
-    value: e.path === "/game/production/stage.txt",
+    value: fixturePath(e.path) === "/game/production/stage.txt",
   }));
   on("process.run", (_, e) => {
     calls.push(e.argv);
@@ -95,5 +96,7 @@ test("the mod runs the CLI in the project and leaves other directories alone", a
     isInteractive: false,
   });
   expect(calls.length).toBe(1);
-  expect(calls[0]?.slice(3, 6)).toEqual(["status", "--root", "/game"]);
+  expect(calls[0]?.[3]).toBe("status");
+  expect(calls[0]?.[4]).toBe("--root");
+  expect(fixturePath(calls[0]?.[5])).toBe("/game");
 });

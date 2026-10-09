@@ -1,3 +1,4 @@
+import { fixturePath } from "./paths.test-support.ts";
 import { expect, test } from "claude-code/testing";
 import {
   handoffNote,
@@ -92,10 +93,10 @@ const ok = (stdout: string) => ({
 function boot(on: On, files: Record<string, string>) {
   mock.clock(on);
   on("fs.exists", (_, e) => ({
-    value: e.path === "/game/production/stage.txt",
+    value: fixturePath(e.path) === "/game/production/stage.txt",
   }));
   on("fs.read", (_, e) => {
-    const text = files[e.path];
+    const text = files[fixturePath(e.path)];
     return text === undefined ? { deny: "ENOENT" } : { value: text };
   });
   on("process.run", () => ok(JSON.stringify({ ok: true, snapshot: null })));
@@ -150,13 +151,14 @@ test("the root AGENTS.md joins the instruction files unless a CLAUDE.md already 
     isInteractive: false,
   });
   const added = await $.prompt.context({ blocks: [], instructionFiles: [] });
-  expect(added.instructionFiles).toEqual([
-    {
-      path: "/game/AGENTS.md",
-      kind: "project",
-      content: "# Game project\nRead docs/technical-preferences.md.",
-    },
-  ]);
+  expect(added.instructionFiles?.length).toBe(1);
+  expect(fixturePath(added.instructionFiles?.[0]?.path)).toBe(
+    "/game/AGENTS.md",
+  );
+  expect(added.instructionFiles?.[0]).toMatchObject({
+    kind: "project",
+    content: "# Game project\nRead docs/technical-preferences.md.",
+  });
   served = [claudeMd];
   const kept = await $.prompt.context({
     blocks: [],
@@ -168,11 +170,16 @@ test("the root AGENTS.md joins the instruction files unless a CLAUDE.md already 
 test("a nested AGENTS.md is shown once after a file beneath it is touched", async ($, on) => {
   boot(on, {});
   on("fs.ancestors", (_, e) => ({
-    value: e.of?.startsWith("/game/src/")
+    value: fixturePath(e.of).startsWith("/game/src/")
       ? [
-          { dir: "/game", name: "AGENTS.md", content: "root", parts: [] },
           {
-            dir: "/game/src",
+            dir: e.below ?? "/game",
+            name: "AGENTS.md",
+            content: "root",
+            parts: [],
+          },
+          {
+            dir: `${e.below ?? "/game"}/src`,
             name: "AGENTS.md",
             content: "Source rules",
             parts: [],
@@ -202,7 +209,8 @@ test("a nested AGENTS.md is shown once after a file beneath it is touched", asyn
     tool: "Read",
     file_path: "/game/src/player.gd",
   });
-  expect(first.context?.[0]).toContain(
+  expect(first.context?.length).toBe(1);
+  expect(fixturePath(first.context?.[0])).toContain(
     "Nested project guide /game/src/AGENTS.md",
   );
   expect(first.context?.[0]).toContain("Source rules");

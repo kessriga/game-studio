@@ -1,5 +1,6 @@
 import type { Engine } from "claude-code/testing";
 import type { On } from "claude-code";
+import { fixturePath } from "./paths.test-support.ts";
 import { expect, test } from "claude-code/testing";
 import { parseWorkflowCommand, toolBody, USAGE } from "./commands.ts";
 
@@ -118,7 +119,7 @@ const view = {
 
 function boot(on: On, calls: Call[], failingAction?: string) {
   on("fs.exists", (_, e) => ({
-    value: e.path === "/game/production/stage.txt",
+    value: fixturePath(e.path) === "/game/production/stage.txt",
   }));
   on("process.run", (_, e) => {
     calls.push({ argv: e.argv, stdin: e.init?.stdin ?? "" });
@@ -197,9 +198,9 @@ test("the tool reads status and records updates with the agent actor", async ($,
   });
   expect(started.isError).toBe(undefined);
   const start = calls.find((call) => call.argv[3] === "start");
-  expect(start?.argv.slice(4)).toEqual([
-    "--root",
-    "/game",
+  expect(start?.argv[4]).toBe("--root");
+  expect(fixturePath(start?.argv[5])).toBe("/game");
+  expect(start?.argv.slice(6)).toEqual([
     "--actor",
     "agent:s1",
     "--revision",
