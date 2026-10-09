@@ -1,5 +1,6 @@
 """Shared workflows remain host-neutral and resolve their instruction sources."""
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -76,16 +77,32 @@ class SharedContractTests(unittest.TestCase):
                     "Only the start example may show host syntax",
                 )
 
+    def test_claude_plugin_manifests_agree_with_package(self):
+        package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+        plugin = json.loads(
+            (ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8")
+        )
+        marketplace = json.loads(
+            (ROOT / ".claude-plugin/marketplace.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(plugin["name"], "gamedev")
+        self.assertEqual(plugin["version"], package["version"])
+        self.assertEqual(plugin["types"], "./types/index.d.ts")
+        self.assertEqual(marketplace["name"], "game-studio")
+        self.assertEqual(marketplace["metadata"]["version"], package["version"])
+        [entry] = marketplace["plugins"]
+        self.assertEqual(entry["name"], "gamedev")
+        self.assertEqual(entry["source"], "./")
+        self.assertEqual(entry["version"], package["version"])
+        hooks = json.loads((ROOT / "hooks/hooks.json").read_text(encoding="utf-8"))
+        self.assertEqual(set(hooks), {"modules"})
+        self.assertEqual(hooks["modules"], ["./gamedev.tsx"])
+
     def test_retired_distribution_resources_are_absent(self):
-        for name in (
-            ".claude-plugin",
-            ".codex-plugin",
-            ".agents/plugins",
-            "hooks",
-            "CLAUDE.md",
-        ):
+        for name in (".codex-plugin", ".agents/plugins", "CLAUDE.md"):
             self.assertFalse(any(p.is_file() for p in (ROOT / name).rglob("*")))
             self.assertFalse((ROOT / name).is_file())
+        self.assertFalse(list((ROOT / "hooks").glob("*.sh")))
         self.assertFalse(list((ROOT / "templates").rglob("CLAUDE.md")))
 
 

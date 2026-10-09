@@ -1,0 +1,23 @@
+{
+  "name": "gamedev",
+  "displayName": "Game Studio",
+  "version": "0.4.1",
+  "description": "Game Studio: 72 skills, 53 specialist roles, and workflow tracking for building games with Godot, Unity, Unreal, and Bevy.",
+  "author": {
+    "name": "Kessriga Jeükal",
+    "url": "https://github.com/kessriga"
+  },
+  "homepage": "https://github.com/kessriga/game-studio",
+  "repository": "https://github.com/kessriga/game-studio",
+  "license": "MIT",
+  "keywords": [
+    "game-development",
+    "godot",
+    "unity",
+    "unreal",
+    "bevy",
+    "game-design",
+    "workflows"
+  ],
+  "types": "./types/index.d.ts"
+}
