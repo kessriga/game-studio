@@ -143,7 +143,10 @@ test("the pane lists the phase steps after a session start in a game project", a
       },
     });
     expect(
-      await ui.find({ type: "Text", text: /Concept · phase 1\/7 ●○○○○○○/ }),
+      await ui.find({
+        type: "Text",
+        text: /Concept · phase 1\/7 ● ○ ○ ○ ○ ○ ○/,
+      }),
     ).toBeDefined();
     expect(
       await ui.find({ type: "Text", text: /✓ Engine Setup/ }),
