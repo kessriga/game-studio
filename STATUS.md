@@ -1,13 +1,19 @@
 # Implementation status
 
-## Current implementation: 0.5.0 (unreleased)
+## Current implementation: 0.6.0 (unreleased)
+
+- The Claude Code mod no longer sets a status line, and `/gamedev-workflow` drops `hide` and `show`. The pane now uses
+  theme colors for step markers, commands, and the phase header, shows phase progress as dots, and has one column of
+  horizontal padding. A failed background refresh shows in the pane instead of the status line.
+
+## Implementation 0.5.0
 
 - Claude Code is a packaged host beside Pi: the repository root is the plugin `gamedev` in the marketplace
   `game-studio`. Skills load as `/gamedev:<name>`, roles as `gamedev:<role>` subagent types. Frontmatter is unchanged.
 - Shared prose names skills by the neutral identifier `gamedev:<name>`; the contract test rejects host syntax outside
   the two host guides. The workflow catalog stores the identifier and each host renders its own command.
 - The progress core lives in `workflow/` with a JSON CLI. Pi imports it; the Claude Code mod runs it through Node and
-  provides the status line, the `Game Studio` pane, the `mcp__gamedev__workflow` tool, and `/gamedev-workflow`.
+  provides the `Game Studio` pane, the `mcp__gamedev__workflow` tool, and `/gamedev-workflow`.
 - The mod's hooks run only in recognized game projects: per-prompt workflow context, `AGENTS.md` loading, the handoff
   kept for the pre-compaction summary, commit checks (invalid staged JSON denies; other findings are notes),
   protected-push reminders, and asset naming and format notes. No shell hooks, notifications, session logs, or
@@ -201,6 +207,8 @@ environment. Earlier evidence is retained below.
   global settings were installed here.
 
 ## Release history
+
+- 0.6.0 (unreleased): Claude Code pane styling; the mod's status line and its `hide`/`show` commands are removed.
 
 - 0.5.0 (unreleased): Claude Code plugin and mod, neutral skill identifiers, and the shared progress core.
 

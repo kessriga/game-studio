@@ -38,7 +38,7 @@ import {
   pushReminder,
 } from "./validators.ts";
 import type { Finding, StagedFile } from "./validators.ts";
-import { PANE, paneTree, statusText, summaryText } from "./view.tsx";
+import { PANE, paneTree, summaryText } from "./view.tsx";
 
 const tracking = atom(
   { plugin: "gamedev", key: "tracking" } as const,
@@ -46,7 +46,6 @@ const tracking = atom(
     kind: "none",
   } as Tracking,
 );
-const isHidden = atom({ plugin: "gamedev", key: "isHidden" } as const, false);
 
 /** Tools whose results can change workflow state or evidence. */
 const REFRESH_TOOLS = new Set([
@@ -111,14 +110,12 @@ async function refresh($: EngineInterface): Promise<Tracking> {
       : { kind: "none" };
   if (sequence !== refreshSequence) return next;
   await update($, tracking, () => next);
-  $.ui.status((await read($, isHidden)) ? undefined : statusText(next));
   return next;
 }
 
 type Approval = Exclude<
   WorkflowCommand,
-  | { usage: string }
-  | { action: "status" | "panel" | "history" | "hide" | "show" }
+  { usage: string } | { action: "status" | "panel" | "history" }
 >;
 
 /** Approve, finish, handoff, or gate: the user confirms in the ask dialog; the core checks the revision again. */
@@ -280,8 +277,13 @@ async function nestedGuideNotes(
   return newNestedGuides(found, root, shownGuides).map(nestedGuideNote);
 }
 
-function reportRefreshFailure($: EngineInterface, error: unknown): void {
-  $.ui.status(`Game Studio: refresh failed: ${String(error)}`);
+async function reportRefreshFailure(
+  $: EngineInterface,
+  error: unknown,
+): Promise<void> {
+  const message = `Refresh failed: ${String(error)}`;
+  $.ui.log(`Game Studio: ${message}`, { to: "debug" });
+  await update($, tracking, (): Tracking => ({ kind: "error", message }));
 }
 
 function refreshSoon($: EngineInterface): void {
@@ -307,10 +309,7 @@ export const register: Register = (on) => {
     pending = undefined;
     shownGuides.clear();
     root = (await isGameProject($, e.cwd)) ? e.cwd : undefined;
-    if (!root) {
-      $.ui.status(undefined);
-      return next(e);
-    }
+    if (!root) return next(e);
     await $.tool.register({
       name: TOOL,
       description: TOOL_DESCRIPTION,
@@ -319,7 +318,7 @@ export const register: Register = (on) => {
     await $.command.register({
       name: COMMAND,
       description:
-        "Game Studio workflow: status, panel, history, approve <run> <note>, finish <step> <note>, handoff <run> <note>, gate <note>, hide, show",
+        "Game Studio workflow: status, panel, history, approve <run> <note>, finish <step> <note>, handoff <run> <note>, gate <note>",
       argumentHint: "[action] [id] [note]",
     });
     await refresh($);
@@ -374,14 +373,6 @@ export const register: Register = (on) => {
       case "panel":
         await $.ui.open({ id: PANE, title: "Game Studio" });
         return { text: "Game Studio pane opened." };
-      case "hide":
-        await update($, isHidden, () => true);
-        $.ui.status(undefined);
-        return { text: "Game Studio status line hidden for this session." };
-      case "show":
-        await update($, isHidden, () => false);
-        await refresh($);
-        return { text: "Game Studio status line shown." };
       case "history": {
         const reply = await runWorkflow($, {
           root,

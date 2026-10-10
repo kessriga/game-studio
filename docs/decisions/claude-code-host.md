@@ -27,7 +27,7 @@ project. Nothing in the plugin depends on the desktop app.
 | Path | Role |
 | ------ | ------ |
 | `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` | Manifest and marketplace; version equals `package.json` |
-| `hooks/hooks.json`, `hooks/gamedev.tsx`, `types/index.d.ts` | The mod: function hooks, pane, status line, tool, command |
+| `hooks/hooks.json`, `hooks/gamedev.tsx`, `types/index.d.ts` | The mod: function hooks, pane, tool, command |
 | `workflow/` | Host-neutral progress core, catalog JSON, and `cli.ts` |
 | `pi/extension.ts`, `pi/panel.ts`, `pi/skills/` | Pi host, importing `../workflow/` |
 | `docs/claude-code.md` | Claude Code host guide |
@@ -44,15 +44,16 @@ directory. Writes use the same command with the update as JSON on stdin and the 
 
 The mod provides:
 
-- A status line under the prompt: phase, current work, next required step, in Claude syntax.
-- A pane `gamedev` listing the current phase's steps, status, and commands. `/gamedev-workflow panel` opens it. At
-  session start the mod opens it unasked; the engine seats it only on wide terminals.
+- A pane `gamedev` listing the current phase's steps, status, and commands, with theme colors and one column of
+  horizontal padding. The mod sets no status line: the pane and the per-prompt context already carry the phase, and a
+  second display under the prompt repeated it. `/gamedev-workflow panel` opens it. At session start the mod opens it
+  unasked; the engine seats it only on wide terminals.
 - The tool `workflow`, listed to the model as `mcp__gamedev__workflow`, with the Pi actions `status`, `start`, `block`,
   and `submit`, including `worktree` evidence sources.
-- The command `/gamedev-workflow` with `status`, `panel`, `hide`, `show`, `history`, `approve <run> <note>`,
-  `finish <step> <note>`, `handoff <run> <note>`, and `gate <note>`. The note is the rest of the arguments and is
-  required. Confirmation uses the engine's question dialog. The mod rereads status before and after confirmation, as Pi
-  does, and refuses when the revision changed.
+- The command `/gamedev-workflow` with `status`, `panel`, `history`, `approve <run> <note>`, `finish <step> <note>`,
+  `handoff <run> <note>`, and `gate <note>`. The note is the rest of the arguments and is required. Confirmation uses
+  the engine's question dialog. The mod rereads status before and after confirmation, as Pi does, and refuses when the
+  revision changed.
 
 Hooks inside the mod:
 
@@ -75,10 +76,9 @@ Hooks inside the mod:
 
 ## Error handling
 
-A missing or old Node is reported once on the status line and in the tool result; skills still work. CLI failures return
-the core's message unchanged. The mod never writes `production/workflow-state.json` itself and never resets state. A
-hook that fails is skipped by the engine; the mod's `.catch` handlers keep the pane and status line from going stale
-with a visible error line.
+A missing or old Node is reported in the pane and in the tool result; skills still work. CLI failures return the core's
+message unchanged. The mod never writes `production/workflow-state.json` itself and never resets state. A hook that
+fails is skipped by the engine; the mod's `.catch` handlers keep the pane from going stale with a visible error line.
 
 ## Gates and release
 

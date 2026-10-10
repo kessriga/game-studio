@@ -70,12 +70,12 @@ to confirm. The core rechecks the recorded hashes and the revision before writin
 fresh decision. `gate` records a phase decision without changing the stage; use `/gamedev:gate-check` for the review and
 the advancement.
 
-### Status line and pane
+### Pane
 
-A status line under the prompt shows the phase, the current work, and the next required step. `/gamedev-workflow hide`
-and `show` control it for the session. The `Game Studio` pane lists the current phase's steps with their status and
-commands. `/gamedev-workflow panel` opens it; at session start the mod opens it only on terminals wide enough to dock it
-beside the transcript. Both refresh after edits, shell commands, subagent runs, and workflow updates.
+The `Game Studio` pane shows the phase, its progress, and each step with a colored status marker and its command.
+`/gamedev-workflow panel` opens it at any width. At session start the mod opens it, but Claude Code docks it only on
+terminals wide enough to show it beside the transcript. The pane refreshes after edits, shell commands, subagent runs,
+and workflow updates. The mod sets no status line; `/gamedev-workflow status` prints the full summary on request.
 
 ## Hooks
 

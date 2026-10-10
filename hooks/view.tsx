@@ -44,14 +44,6 @@ export function focusOf(view: WorkflowView): Focus {
   return { previous, current: currentText, next };
 }
 
-export function statusText(tracking: Tracking): string | undefined {
-  if (tracking.kind === "none") return undefined;
-  if (tracking.kind === "error") return `Game Studio: ${tracking.message}`;
-  const { view } = tracking;
-  const focus = focusOf(view);
-  return `Game Studio · ${view.label} ${view.index}/${view.count} · Current: ${focus.current} · Next: ${focus.next}`;
-}
-
 /** The text the model and the command output read: Pi's summary in Claude syntax. */
 export function summaryText(tracking: Tracking): string {
   if (tracking.kind === "none")
@@ -87,11 +79,19 @@ export function summaryText(tracking: Tracking): string {
   return lines.join("\n");
 }
 
-function marker(step: WorkflowStep): string {
-  if (step.complete) return "✓";
-  if (step.status.startsWith("active")) return "▶";
-  if (step.status.startsWith("blocked")) return "!";
-  return "○";
+type Marker = { glyph: string; color: string };
+
+/** Glyph and theme color for a step, so the pane reads at a glance. */
+function marker(step: WorkflowStep): Marker {
+  if (step.complete) return { glyph: "✓", color: "success" };
+  if (step.status.startsWith("active")) return { glyph: "▶", color: "claude" };
+  if (step.status.startsWith("blocked")) return { glyph: "!", color: "error" };
+  return { glyph: "○", color: "inactive" };
+}
+
+/** One dot per phase: filled up to the current phase. */
+function phaseDots(view: WorkflowView): string {
+  return "●".repeat(view.index) + "○".repeat(view.count - view.index);
 }
 
 export type PaneElements = Pick<Elements[RenderSurface], "Box" | "Text">;
@@ -99,7 +99,7 @@ export type PaneElements = Pick<Elements[RenderSurface], "Box" | "Text">;
 export function paneTree({ Box, Text }: PaneElements, tracking: Tracking) {
   if (tracking.kind === "none")
     return (
-      <Box>
+      <Box paddingX={1}>
         <Text dimColor>
           No saved game phase. Run /gamedev:start to begin tracking.
         </Text>
@@ -107,32 +107,51 @@ export function paneTree({ Box, Text }: PaneElements, tracking: Tracking) {
     );
   if (tracking.kind === "error")
     return (
-      <Box>
-        <Text color="red">{tracking.message}</Text>
+      <Box paddingX={1}>
+        <Text color="error">{tracking.message}</Text>
       </Box>
     );
   const { view } = tracking;
   return (
-    <Box flexDirection="column">
-      <Text bold>
-        Game Studio · {view.label} ({view.index}/{view.count})
+    <Box flexDirection="column" paddingX={1}>
+      <Text wrap="truncate-end">
+        <Text bold color="claude">
+          {view.label}
+        </Text>
+        <Text dimColor>
+          {" "}
+          · phase {view.index}/{view.count}{" "}
+        </Text>
+        <Text color="claude">{phaseDots(view)}</Text>
       </Text>
-      {view.steps.map((step) => (
-        <Box flexDirection="column">
-          <Text wrap="truncate-end">
-            {marker(step)} {step.name}
-            {step.required ? "" : " (optional)"}
-          </Text>
-          <Text dimColor wrap="truncate-end">
-            {"  "}
-            {step.status}
-            {claudeCommand(step.command)
-              ? ` · ${claudeCommand(step.command)}`
-              : ""}
-          </Text>
-        </Box>
-      ))}
-      <Text dimColor>Next phase: {view.nextLabel ?? "end"}</Text>
+      <Box flexDirection="column" marginTop={1}>
+        {view.steps.map((step) => {
+          const { glyph, color } = marker(step);
+          const command = claudeCommand(step.command);
+          return (
+            <Box flexDirection="column">
+              <Text wrap="truncate-end">
+                <Text color={color}>{glyph}</Text>
+                <Text bold={!step.complete && step.required}> {step.name}</Text>
+                {step.required ? "" : <Text dimColor> (optional)</Text>}
+              </Text>
+              <Text wrap="truncate-end">
+                <Text dimColor>
+                  {"  "}
+                  {step.status}
+                </Text>
+                {command ? <Text color="suggestion"> · {command}</Text> : ""}
+              </Text>
+            </Box>
+          );
+        })}
+      </Box>
+      <Box marginTop={1}>
+        <Text wrap="truncate-end">
+          <Text dimColor>Next phase: </Text>
+          <Text>{view.nextLabel ?? "end"}</Text>
+        </Text>
+      </Box>
     </Box>
   );
 }
