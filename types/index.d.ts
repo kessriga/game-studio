@@ -1,6 +1,6 @@
 /**
  * State contract of the gamedev mod. The values mirror the JSON reply of
- * workflow/cli.ts so the pane and status line never read the core directly.
+ * workflow/cli.ts so the pane never reads the core directly.
  */
 export type WorkflowStep = {
   id: string;
@@ -56,6 +56,6 @@ export type Tracking =
 
 declare module "claude-code" {
   interface PluginState {
-    gamedev: { tracking: Tracking; isHidden: boolean };
+    gamedev: { tracking: Tracking };
   }
 }

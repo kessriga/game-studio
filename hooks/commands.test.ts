@@ -169,7 +169,6 @@ function boot(on: On, calls: Call[], failingAction?: string) {
     value: { tool: `mcp__gamedev__${e.name}` },
   }));
   on("tool.check", () => ({ decision: "allow" as const }));
-  on("ui.status", () => ({ value: undefined }));
   on("session.id", () => ({ value: "s1" }));
   on("session.start", (_, e) => ({ cwd: e.cwd }));
 }

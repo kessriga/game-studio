@@ -1,7 +1,7 @@
 import { fixturePath } from "./paths.test-support.ts";
 import { expect, test } from "claude-code/testing";
-import type { Tracking, WorkflowView } from "../types";
-import { claudeCommand, focusOf, statusText, summaryText } from "./view.tsx";
+import type { WorkflowView } from "../types";
+import { claudeCommand, focusOf, summaryText } from "./view.tsx";
 
 const view: WorkflowView = {
   phase: "concept",
@@ -61,10 +61,6 @@ test("the focus names the previous approved step and the next required one", () 
     current: "/gamedev:brainstorm · Game Concept Document",
     next: "Systems Design",
   });
-  const tracking: Tracking = { kind: "view", view };
-  expect(statusText(tracking)).toBe(
-    "Game Studio · Concept 1/7 · Current: /gamedev:brainstorm · Game Concept Document · Next: Systems Design",
-  );
 });
 
 test("an active run becomes the current line and the summary lists it", () => {
@@ -96,11 +92,10 @@ test("an active run becomes the current line and the summary lists it", () => {
 });
 
 test("no phase and errors have their own texts", () => {
-  expect(statusText({ kind: "none" })).toBe(undefined);
-  expect(
-    statusText({ kind: "error", message: "Unknown saved phase: Alpha." }),
-  ).toBe("Game Studio: Unknown saved phase: Alpha.");
   expect(summaryText({ kind: "none" })).toContain("/gamedev:start");
+  expect(
+    summaryText({ kind: "error", message: "Unknown saved phase: Alpha." }),
+  ).toContain("Workflow tracking is unavailable: Unknown saved phase: Alpha.");
 });
 
 test("the pane lists the phase steps after a session start in a game project", async ($, on) => {
@@ -120,9 +115,9 @@ test("the pane lists the phase steps after a session start in a game project", a
   on("tool.register", (_, e) => ({
     value: { tool: `mcp__gamedev__${e.name}` },
   }));
-  let status: string | undefined;
-  on("ui.status", (_, e) => {
-    status = e.text;
+  let statusCalls = 0;
+  on("ui.status", () => {
+    statusCalls += 1;
     return { value: undefined };
   });
   on("session.start", (_, e) => ({ cwd: e.cwd }));
@@ -131,7 +126,7 @@ test("the pane lists the phase steps after a session start in a game project", a
     surface: "terminal",
     isInteractive: false,
   });
-  expect(status).toContain("Game Studio · Concept 1/7");
+  expect(statusCalls).toBe(0);
   for (const surface of ["terminal", "desktop"] as const) {
     const ui = await $.ui.mount({
       plugin: "gamedev",
@@ -148,7 +143,7 @@ test("the pane lists the phase steps after a session start in a game project", a
       },
     });
     expect(
-      await ui.find({ type: "Text", text: /Game Studio · Concept \(1\/7\)/ }),
+      await ui.find({ type: "Text", text: /Concept · phase 1\/7 ●○○○○○○/ }),
     ).toBeDefined();
     expect(
       await ui.find({ type: "Text", text: /✓ Engine Setup/ }),

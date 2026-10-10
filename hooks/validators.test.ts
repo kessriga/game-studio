@@ -117,7 +117,6 @@ function boot(
     value: { tool: `mcp__gamedev__${e.name}` },
   }));
   on("tool.check", () => ({ decision: "allow" as const }));
-  on("ui.status", () => ({ value: undefined }));
   on("session.start", (_, e) => ({ cwd: e.cwd }));
 }
 
@@ -237,7 +236,6 @@ test("commit -a also reads unstaged tracked changes and git -C is recognised", a
     value: { tool: `mcp__gamedev__${e.name}` },
   }));
   on("tool.check", () => ({ decision: "allow" as const }));
-  on("ui.status", () => ({ value: undefined }));
   on("session.start", (_, e) => ({ cwd: e.cwd }));
   on("tool.call", { tool: "Bash" }, () => bashRan);
   await $.session.start({

@@ -5,7 +5,7 @@ export const TOOL_NAME = "mcp__gamedev__workflow";
 export const COMMAND = "gamedev-workflow";
 
 export const USAGE = [
-  "Usage: /gamedev-workflow [status|panel|history|hide|show]",
+  "Usage: /gamedev-workflow [status|panel|history]",
   "       /gamedev-workflow approve <run> <what you verified>",
   "       /gamedev-workflow finish <step> <scope you confirmed>",
   "       /gamedev-workflow handoff <run> <note>",
@@ -13,7 +13,7 @@ export const USAGE = [
 ].join("\n");
 
 export type WorkflowCommand =
-  | { action: "status" | "panel" | "history" | "hide" | "show" }
+  | { action: "status" | "panel" | "history" }
   | { action: "approve" | "finish" | "handoff"; id: string; note: string }
   | { action: "gate"; note: string }
   | { usage: string };
@@ -26,8 +26,6 @@ export function parseWorkflowCommand(args: string): WorkflowCommand {
     case "status":
     case "panel":
     case "history":
-    case "hide":
-    case "show":
       return { action: action || "status" };
     case "approve":
     case "finish":

@@ -105,7 +105,6 @@ function boot(on: On, files: Record<string, string>) {
     value: { tool: `mcp__gamedev__${e.name}` },
   }));
   on("tool.check", () => ({ decision: "allow" as const }));
-  on("ui.status", () => ({ value: undefined }));
   on("session.start", (_, e) => ({ cwd: e.cwd }));
 }
 
