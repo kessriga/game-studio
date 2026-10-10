@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Game Studio: the gamedev plugin for guided game development.",
-    "version": "0.6.0"
+    "version": "0.6.1"
   },
   "plugins": [
     {
       "name": "gamedev",
       "source": "./",
       "description": "Game Studio: 72 skills, 53 specialist roles, and workflow tracking across Godot, Unity, Unreal, and Bevy.",
-      "version": "0.6.0",
+      "version": "0.6.1",
       "author": {
         "name": "Kessriga Jeükal"
       }

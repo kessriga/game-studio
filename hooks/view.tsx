@@ -89,9 +89,11 @@ function marker(step: WorkflowStep): Marker {
   return { glyph: "○", color: "inactive" };
 }
 
-/** One dot per phase: filled up to the current phase. */
+/** One dot per phase, filled up to the current phase and spaced for legibility. */
 function phaseDots(view: WorkflowView): string {
-  return "●".repeat(view.index) + "○".repeat(view.count - view.index);
+  const filled = Array<string>(view.index).fill("●");
+  const empty = Array<string>(view.count - view.index).fill("○");
+  return [...filled, ...empty].join(" ");
 }
 
 export type PaneElements = Pick<Elements[RenderSurface], "Box" | "Text">;
