@@ -1,6 +1,8 @@
 # Implementation status
 
-## Current implementation: 0.6.0 (unreleased)
+## Current implementation: 0.6.1 (unreleased)
+
+- The pane separates its phase progress dots with spaces so they stay legible.
 
 - The Claude Code mod no longer sets a status line, and `/gamedev-workflow` drops `hide` and `show`. The pane now uses
   theme colors for step markers, commands, and the phase header, shows phase progress as dots, and has one column of
@@ -207,6 +209,8 @@ environment. Earlier evidence is retained below.
   global settings were installed here.
 
 ## Release history
+
+- 0.6.1 (unreleased): spaced phase progress dots in the Claude Code pane.
 
 - 0.6.0 (unreleased): Claude Code pane styling; the mod's status line and its `hide`/`show` commands are removed.
 
