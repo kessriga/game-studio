@@ -18,6 +18,8 @@ import type {
   ProgressState,
   Run,
 } from "./progress-store.ts";
+import { countProgress } from "./progress-table.ts";
+import type { Progress, ProgressSpec } from "./progress-table.ts";
 
 export type Step = {
   id: string;
@@ -34,7 +36,12 @@ export type Step = {
     note?: string;
   };
 };
-export type Phase = { label: string; next_phase: string | null; steps: Step[] };
+export type Phase = {
+  label: string;
+  next_phase: string | null;
+  steps: Step[];
+  progress?: ProgressSpec;
+};
 export const phases = loadCatalog();
 
 function loadCatalog(): Record<string, Phase> {
@@ -58,6 +65,8 @@ export type Row = {
   artifactRefs?: ArtifactRef[];
   runsApproved: boolean;
   complete: boolean;
+  /** Every run is approved with current evidence, so the user can confirm the scope. */
+  finishable: boolean;
 };
 export type Snapshot = {
   phase: string;
@@ -65,6 +74,7 @@ export type Snapshot = {
   nextPhase: string | null;
   state: ProgressState;
   rows: Row[];
+  progress?: Progress;
 };
 export type Update =
   | { action: "start"; step: string; subject: string; note: string }
@@ -276,6 +286,11 @@ async function rowFor(
   );
   if (active && !(stale && runs.some((run) => run.source)))
     status = `${active.status}: ${active.subject || active.id}`;
+  const finishable =
+    approved &&
+    step.repeatable === true &&
+    !scopeCurrent &&
+    status.endsWith("scope open");
   if (runs.some((run) => effectiveSource(run)))
     status += " [worktree evidence]";
   return {
@@ -286,7 +301,20 @@ async function rowFor(
     artifactRefs,
     runsApproved: approved,
     complete,
+    finishable,
   };
+}
+
+async function progressFor(
+  root: string,
+  spec: ProgressSpec,
+): Promise<Progress | undefined> {
+  try {
+    const text = await readOptional(root, spec.table);
+    return text === undefined ? undefined : countProgress(text, spec);
+  } catch {
+    return undefined; // a counter must never hide the workflow view
+  }
 }
 
 export async function snapshot(root: string): Promise<Snapshot | undefined> {
@@ -297,12 +325,15 @@ export async function snapshot(root: string): Promise<Snapshot | undefined> {
   const rows = await Promise.all(
     phases[phase].steps.map((step) => rowFor(root, state, phase, step)),
   );
+  const spec = phases[phase].progress;
+  const progress = spec && (await progressFor(root, spec));
   return {
     phase,
     label: phases[phase].label,
     nextPhase: phases[phase].next_phase,
     state,
     rows,
+    ...(progress ? { progress } : {}),
   };
 }
 

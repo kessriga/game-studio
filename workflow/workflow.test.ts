@@ -1495,6 +1495,30 @@ for (const coordinator of [false, true]) {
   }
 }
 
+test("the systems design phase counts approved rows of the systems index", async (t) => {
+  const root = await game(t, "Systems Design");
+  await mkdir(join(root, "design/gdd"), { recursive: true });
+  await writeFile(
+    join(root, "design/gdd/systems-index.md"),
+    [
+      "| # | System Name | Category | Priority | Status | Design Doc |",
+      "|---|---|---|---|---|---|",
+      "| 1 | Camera | Core | MVP | Approved | camera.md |",
+      "| 2 | Crowd | World | Vertical Slice | Not Started | — |",
+      "",
+    ].join("\n"),
+  );
+  const view = await snapshot(root);
+  assert.deepEqual(view?.progress, {
+    label: "systems",
+    done: 1,
+    total: 2,
+    focus: { label: "MVP", done: 1, total: 1 },
+  });
+  const concept = await snapshot(await game(t));
+  assert.equal(concept?.progress, undefined);
+});
+
 test("a newer run for the same step and subject supersedes the older one", () => {
   const run = (id: string, subject: string) =>
     ({ id, phase: "systems-design", step: "design-system", subject }) as never;

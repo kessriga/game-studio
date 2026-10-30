@@ -1,7 +1,13 @@
 import { fixturePath } from "./paths.test-support.ts";
 import { expect, test } from "claude-code/testing";
 import type { WorkflowView } from "../types";
-import { claudeCommand, focusOf, summaryText } from "./view.tsx";
+import {
+  claudeCommand,
+  focusOf,
+  pendingActions,
+  progressText,
+  summaryText,
+} from "./view.tsx";
 
 const view: WorkflowView = {
   phase: "concept",
@@ -21,6 +27,7 @@ const view: WorkflowView = {
       aggregate: false,
       status: "not started",
       complete: false,
+      finishable: false,
       artifacts: [],
     },
     {
@@ -32,6 +39,7 @@ const view: WorkflowView = {
       aggregate: false,
       status: "approved",
       complete: true,
+      finishable: false,
       artifacts: ["docs/technical-preferences.md"],
     },
     {
@@ -43,6 +51,7 @@ const view: WorkflowView = {
       aggregate: false,
       status: "missing artifact",
       complete: false,
+      finishable: false,
       artifacts: [],
     },
   ],
@@ -163,4 +172,154 @@ test("the pane lists the phase steps after a session start in a game project", a
     ).toBeDefined();
     await ui.unmount();
   }
+});
+
+const systems: WorkflowView = {
+  ...view,
+  phase: "systems-design",
+  label: "Systems Design",
+  index: 2,
+  progress: {
+    label: "systems",
+    done: 5,
+    total: 48,
+    focus: { label: "MVP", done: 5, total: 28 },
+  },
+  steps: [
+    {
+      id: "design-system",
+      name: "System GDDs",
+      command: "gamedev:design-system",
+      required: true,
+      repeatable: true,
+      aggregate: false,
+      status: "5 approved; scope open",
+      complete: false,
+      finishable: true,
+      artifacts: [],
+    },
+  ],
+  runs: [
+    ["r16", "approved", "worktree /g/.worktrees/old", true],
+    [
+      "r18",
+      "approved",
+      "coordinator /g (handed off from /g/.worktrees/a)",
+      false,
+    ],
+    ["r25", "approved", "worktree /g/.worktrees/camera", false],
+    ["r27", "submitted", "worktree /g/.worktrees/connectors", false],
+  ].map(([id, status, source, superseded]) => ({
+    id: id as string,
+    phase: "systems-design",
+    step: "design-system",
+    subject: id === "r27" ? "Connectors" : "Camera",
+    status: status as string,
+    note: "Done.",
+    evidence: [],
+    source: source as string,
+    superseded: superseded as boolean,
+  })),
+  blockers: ["design-system"],
+};
+
+test("the progress text names the focus tier and the whole index", () => {
+  expect(progressText(systems.progress)).toBe(
+    "MVP systems 5/28 approved · all 5/48",
+  );
+  expect(progressText({ label: "systems", done: 2, total: 3 })).toBe(
+    "systems 2/3 approved",
+  );
+  expect(progressText(undefined)).toBe(undefined);
+});
+
+test("waiting actions skip replaced and handed-off runs and an unfinished scope", () => {
+  expect(pendingActions(systems)).toEqual([
+    {
+      kind: "approve",
+      what: "design-system · Connectors",
+      command: "/gamedev-workflow approve r27 <what you verified>",
+    },
+    {
+      kind: "handoff",
+      what: "design-system · Camera",
+      command: "/gamedev-workflow handoff r25 <note>",
+    },
+  ]);
+  const done: WorkflowView = {
+    ...systems,
+    runs: [],
+    progress: {
+      ...systems.progress!,
+      focus: { label: "MVP", done: 28, total: 28 },
+    },
+  };
+  expect(pendingActions(done)).toEqual([
+    {
+      kind: "finish",
+      what: "System GDDs",
+      command: "/gamedev-workflow finish design-system <scope you confirmed>",
+    },
+  ]);
+});
+
+test("the summary leaves out replaced runs and names what waits on the user", () => {
+  const summary = summaryText({ kind: "view", view: systems });
+  expect(summary).toContain("Progress: MVP systems 5/28 approved · all 5/48");
+  expect(summary).not.toContain("r16:");
+  expect(summary).toContain("r25: design-system Camera");
+  expect(summary).toContain(
+    "Waiting on the user: approve design-system · Connectors (/gamedev-workflow approve r27 <what you verified>)",
+  );
+});
+
+test("the pane shows the systems count and what needs the user", async ($, on) => {
+  on("fs.exists", (_, e) => ({
+    value: fixturePath(e.path) === "/game/production/stage.txt",
+  }));
+  on("process.run", () => ({
+    value: {
+      exitCode: 0,
+      stdout: JSON.stringify({ ok: true, snapshot: systems }),
+      stderr: "",
+      isStdoutTruncated: false,
+      isStderrTruncated: false,
+    },
+  }));
+  on("command.register", (_, e) => ({ value: { command: e.name } }));
+  on("tool.register", (_, e) => ({
+    value: { tool: `mcp__gamedev__${e.name}` },
+  }));
+  on("session.start", (_, e) => ({ cwd: e.cwd }));
+  await $.session.start({
+    cwd: "/game",
+    surface: "terminal",
+    isInteractive: false,
+  });
+  const ui = await $.ui.mount({
+    plugin: "gamedev",
+    surface: "terminal",
+    component: "Pane",
+    requestId: "gamedev",
+    props: {
+      title: "Game Studio",
+      isFocused: false,
+      bodyColumns: 60,
+      placement: "dock",
+      scroll: { offset: 0, bodyRows: 30 },
+      view: {},
+    },
+  });
+  expect(
+    await ui.find({
+      type: "Text",
+      text: /MVP systems 5\/28 approved · all 5\/48/,
+    }),
+  ).toBeDefined();
+  expect(await ui.find({ type: "Text", text: /Needs you/ })).toBeDefined();
+  expect(
+    await ui.find({ type: "Text", text: /handoff r25 <note>/ }),
+  ).toBeDefined();
+  expect(await ui.find({ type: "Text", text: /r16/ })).toBeUndefined();
+  await ui.unmount();
 });

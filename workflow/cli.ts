@@ -24,6 +24,7 @@ import {
 } from "./workflow.ts";
 import type { Snapshot, Update } from "./workflow.ts";
 import type { History } from "./progress-store.ts";
+import type { Progress } from "./progress-table.ts";
 
 export type SnapshotJson = {
   phase: string;
@@ -42,6 +43,7 @@ export type SnapshotJson = {
     aggregate: boolean;
     status: string;
     complete: boolean;
+    finishable: boolean;
     artifacts: string[];
   }[];
   runs: {
@@ -56,6 +58,7 @@ export type SnapshotJson = {
     superseded: boolean;
   }[];
   blockers: string[];
+  progress?: Progress;
 };
 
 export type Reply =
@@ -93,6 +96,7 @@ export function toJson(view: Snapshot): SnapshotJson {
       aggregate: row.step.artifact?.aggregate === true,
       status: row.status,
       complete: row.complete,
+      finishable: row.finishable,
       artifacts: row.artifacts,
     })),
     runs: view.state.runs.map((run) => ({
@@ -107,6 +111,7 @@ export function toJson(view: Snapshot): SnapshotJson {
       superseded: isSuperseded(view.state, run),
     })),
     blockers: blockers(view).map((row) => row.step.id),
+    ...(view.progress ? { progress: view.progress } : {}),
   };
 }
 

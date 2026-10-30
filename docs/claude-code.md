@@ -72,10 +72,15 @@ the advancement.
 
 ### Pane
 
-The `Game Studio` pane shows the phase, its progress, and each step with a colored status marker and its command.
-`/gamedev-workflow panel` opens it at any width. At session start the mod opens it, but Claude Code docks it only on
-terminals wide enough to show it beside the transcript. The pane refreshes after edits, shell commands, subagent runs,
-and workflow updates. The mod sets no status line; `/gamedev-workflow status` prints the full summary on request.
+The `Game Studio` pane shows the phase, its progress, and each step with a colored status marker and its command. In a
+phase with a counted index, it also shows how many rows are done. In Systems Design, it counts the systems that
+`design/gdd/systems-index.md` marks Approved: MVP systems, then all systems. A **Needs you** list names each run that
+waits for your approval or handoff, and each repeatable step whose scope you can finish, with its `/gamedev-workflow`
+command. A step can be finished only when every counted system is done. Runs that a newer run for the same step and
+subject replaces are left out of the pane and the summary; they need no action. `/gamedev-workflow panel` opens it at
+any width. At session start the mod opens it, but Claude Code docks it only on terminals wide enough to show it beside
+the transcript. The pane refreshes after edits, shell commands, subagent runs, and workflow updates. The mod sets no
+status line; `/gamedev-workflow status` prints the full summary on request.
 
 ## Hooks
 
