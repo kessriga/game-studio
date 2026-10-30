@@ -30,6 +30,7 @@ function pendingPhase(phase: string): Snapshot {
       artifacts: [],
       runsApproved: false,
       complete: false,
+      finishable: false,
     })),
   };
 }

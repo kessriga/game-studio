@@ -66,6 +66,13 @@
       "label": "Systems Design",
       "description": "Author a GDD for each system in the systems index",
       "next_phase": "technical-setup",
+      "progress": {
+        "table": "design/gdd/systems-index.md",
+        "label": "systems",
+        "done": "Approved",
+        "focus": "MVP",
+        "step": "design-system"
+      },
       "steps": [
         {
           "id": "design-system",

@@ -15,6 +15,7 @@ import { fingerprint, readState, STATE_FILE } from "./progress-store.ts";
 import { compactLines } from "../pi/panel.ts";
 import {
   blockers,
+  isSuperseded,
   phases,
   recordGateDecision,
   recordUpdate,
@@ -1493,3 +1494,85 @@ for (const coordinator of [false, true]) {
     });
   }
 }
+
+test("the systems design phase counts approved rows of the systems index", async (t) => {
+  const root = await game(t, "Systems Design");
+  await mkdir(join(root, "design/gdd"), { recursive: true });
+  await writeFile(
+    join(root, "design/gdd/systems-index.md"),
+    [
+      "| # | System Name | Category | Priority | Status | Design Doc |",
+      "|---|---|---|---|---|---|",
+      "| 1 | Camera | Core | MVP | Approved | camera.md |",
+      "| 2 | Crowd | World | Vertical Slice | Not Started | — |",
+      "",
+    ].join("\n"),
+  );
+  const view = await snapshot(root);
+  assert.deepEqual(view?.progress, {
+    label: "systems",
+    status: "Approved",
+    done: 1,
+    total: 2,
+    focus: { label: "MVP", done: 1, total: 1 },
+  });
+  const concept = await snapshot(await game(t));
+  assert.equal(concept?.progress, undefined);
+});
+
+test("a newer run for the same step and subject supersedes the older one", () => {
+  const run = (id: string, subject: string) =>
+    ({ id, phase: "systems-design", step: "design-system", subject }) as never;
+  const runs = [
+    run("r16", "Time Scale"),
+    run("r18", "Time Scale"),
+    run("r25", "Camera"),
+  ];
+  const state = {
+    version: 1,
+    revision: 0,
+    runs,
+    scopes: [],
+    history: [],
+  } as never;
+  assert.deepEqual(
+    runs.map((item) => isSuperseded(state, item)),
+    [true, false, false],
+  );
+});
+
+test("only the counted step waits for its focus tier before it can be finished", async (t) => {
+  const root = await game(t, "Systems Design");
+  const index = (crowd: string) =>
+    put(
+      root,
+      "design/gdd/systems-index.md",
+      [
+        "| # | System Name | Priority | Status |",
+        "|---|---|---|---|",
+        "| 1 | Camera | MVP | Approved |",
+        `| 2 | Crowd | MVP | ${crowd} |`,
+        "",
+      ].join("\n"),
+    );
+  await index("In Review");
+  await approveStory(root, "Camera", "design-system");
+  await approveStory(root, "Camera", "design-review");
+  assert.equal((await row(root, "design-system")).finishable, false);
+  assert.equal((await row(root, "design-review")).finishable, true);
+  await index("Approved");
+  assert.equal((await row(root, "design-system")).finishable, true);
+});
+
+test("a step cannot be finished while one of its runs waits for handoff", async (t) => {
+  const { root, worktree, git } = await worktreeGame(t, "Systems Design");
+  await approveStory(root, "Camera", "design-system", [], worktree);
+  assert.equal((await row(root, "design-system")).finishable, false);
+  git("worktree", "remove", "--force", worktree);
+  await update(
+    root,
+    { action: "handoff", run: "r1", note: "Merged Camera" },
+    "user:test",
+  );
+  assert.equal((await row(root, "design-system")).finishable, true);
+});

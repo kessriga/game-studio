@@ -11,7 +11,19 @@ export type WorkflowStep = {
   aggregate: boolean;
   status: string;
   complete: boolean;
+  /** The user can confirm the scope now: runs approved and handed off, evidence current, counted tier complete. */
+  finishable: boolean;
   artifacts: string[];
+};
+
+export type WorkflowCount = { done: number; total: number };
+
+/** Rows of a project index table, such as the systems index, that reached the done status. */
+export type WorkflowProgress = WorkflowCount & {
+  label: string;
+  /** The index status that counts as done, such as Approved. */
+  status: string;
+  focus?: WorkflowCount & { label: string };
 };
 
 export type WorkflowRun = {
@@ -23,6 +35,8 @@ export type WorkflowRun = {
   note: string;
   evidence: string[];
   source: string;
+  /** A newer run for the same step and subject replaces this one. */
+  superseded: boolean;
 };
 
 export type WorkflowView = {
@@ -36,6 +50,7 @@ export type WorkflowView = {
   steps: WorkflowStep[];
   runs: WorkflowRun[];
   blockers: string[];
+  progress?: WorkflowProgress;
 };
 
 export type WorkflowHistory = {

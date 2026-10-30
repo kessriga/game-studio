@@ -1,5 +1,10 @@
 import type { Elements, RenderSurface } from "claude-code";
-import type { Tracking, WorkflowStep, WorkflowView } from "../types";
+import type {
+  Tracking,
+  WorkflowProgress,
+  WorkflowStep,
+  WorkflowView,
+} from "../types";
 
 export const PANE = "gamedev";
 
@@ -44,6 +49,58 @@ export function focusOf(view: WorkflowView): Focus {
   return { previous, current: currentText, next };
 }
 
+/** "MVP systems 5/28 approved · all 5/48", or nothing outside a counted phase. */
+export function progressText(
+  progress: WorkflowProgress | undefined,
+): string | undefined {
+  if (!progress) return undefined;
+  const all = `${progress.done}/${progress.total}`;
+  const status = progress.status.toLowerCase();
+  const { focus } = progress;
+  return focus
+    ? `${focus.label} ${progress.label} ${focus.done}/${focus.total} ${status} · all ${all}`
+    : `${progress.label} ${all} ${status}`;
+}
+
+export type Action = {
+  kind: "approve" | "handoff" | "finish";
+  what: string;
+  command: string;
+};
+
+/** The workflow steps only the user can take: approve, hand off, or finish a step's scope. */
+export function pendingActions(view: WorkflowView): Action[] {
+  const runs = view.runs.filter(
+    (run) => run.phase === view.phase && !run.superseded,
+  );
+  const what = (run: WorkflowView["runs"][number]) =>
+    `${run.step}${run.subject ? ` · ${run.subject}` : ""}`;
+  const approve = runs
+    .filter((run) => run.status === "submitted")
+    .map((run) => ({
+      kind: "approve" as const,
+      what: what(run),
+      command: `/gamedev-workflow approve ${run.id} <what you verified>`,
+    }));
+  const handoff = runs
+    .filter(
+      (run) => run.status === "approved" && run.source.startsWith("worktree"),
+    )
+    .map((run) => ({
+      kind: "handoff" as const,
+      what: `${what(run)} (once its branch merges)`,
+      command: `/gamedev-workflow handoff ${run.id} <note>`,
+    }));
+  const finish = view.steps
+    .filter((step) => step.finishable)
+    .map((step) => ({
+      kind: "finish" as const,
+      what: step.name,
+      command: `/gamedev-workflow finish ${step.id} <scope you confirmed>`,
+    }));
+  return [...approve, ...handoff, ...finish];
+}
+
 /** The text the model and the command output read: Pi's summary in Claude syntax. */
 export function summaryText(tracking: Tracking): string {
   if (tracking.kind === "none")
@@ -56,6 +113,7 @@ export function summaryText(tracking: Tracking): string {
     `Game Studio · ${view.label} · ${view.index}/${view.count} | Previous: ${focus.previous}`,
     `Current: ${focus.current}`,
     `Next required: ${focus.next}`,
+    ...(view.progress ? [`Progress: ${progressText(view.progress)}`] : []),
     `State revision: ${view.revision}`,
     ...view.steps.map(
       (step) =>
@@ -66,12 +124,18 @@ export function summaryText(tracking: Tracking): string {
     .filter(
       (run) =>
         run.phase === view.phase &&
+        !run.superseded &&
         (run.status !== "approved" || run.source.startsWith("worktree")),
     )
     .slice(-8);
   for (const run of active)
     lines.push(
       `${run.id}: ${run.step} ${run.subject} — ${run.note} [source: ${run.source}]`,
+    );
+  const actions = pendingActions(view);
+  if (actions.length)
+    lines.push(
+      `Waiting on the user: ${actions.map((action) => `${action.kind} ${action.what} (${action.command})`).join("; ")}`,
     );
   lines.push(
     "Artifact presence is not approval. Repeatable steps need scope confirmation. Backlog remains the story authority.",
@@ -114,6 +178,8 @@ export function paneTree({ Box, Text }: PaneElements, tracking: Tracking) {
       </Box>
     );
   const { view } = tracking;
+  const progress = progressText(view.progress);
+  const actions = pendingActions(view);
   return (
     <Box flexDirection="column" paddingX={1}>
       <Text wrap="truncate-end">
@@ -126,6 +192,27 @@ export function paneTree({ Box, Text }: PaneElements, tracking: Tracking) {
         </Text>
         <Text color="claude">{phaseDots(view)}</Text>
       </Text>
+      {progress ? <Text wrap="truncate-end">{progress}</Text> : ""}
+      {actions.length ? (
+        <Box flexDirection="column" marginTop={1}>
+          <Text bold color="warning">
+            Needs you
+          </Text>
+          {actions.map((action) => (
+            <Box flexDirection="column">
+              <Text wrap="truncate-end">
+                <Text color="warning">!</Text> {action.kind} {action.what}
+              </Text>
+              <Text wrap="truncate-end" color="suggestion">
+                {"  "}
+                {action.command}
+              </Text>
+            </Box>
+          ))}
+        </Box>
+      ) : (
+        ""
+      )}
       <Box flexDirection="column" marginTop={1}>
         {view.steps.map((step) => {
           const { glyph, color } = marker(step);

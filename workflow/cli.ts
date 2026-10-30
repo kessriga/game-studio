@@ -14,6 +14,7 @@ import { readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import {
   blockers,
+  isSuperseded,
   phases,
   recordGateDecision,
   recordUpdate,
@@ -23,6 +24,7 @@ import {
 } from "./workflow.ts";
 import type { Snapshot, Update } from "./workflow.ts";
 import type { History } from "./progress-store.ts";
+import type { Progress } from "./progress-table.ts";
 
 export type SnapshotJson = {
   phase: string;
@@ -41,6 +43,7 @@ export type SnapshotJson = {
     aggregate: boolean;
     status: string;
     complete: boolean;
+    finishable: boolean;
     artifacts: string[];
   }[];
   runs: {
@@ -52,8 +55,10 @@ export type SnapshotJson = {
     note: string;
     evidence: string[];
     source: string;
+    superseded: boolean;
   }[];
   blockers: string[];
+  progress?: Progress;
 };
 
 export type Reply =
@@ -91,6 +96,7 @@ export function toJson(view: Snapshot): SnapshotJson {
       aggregate: row.step.artifact?.aggregate === true,
       status: row.status,
       complete: row.complete,
+      finishable: row.finishable,
       artifacts: row.artifacts,
     })),
     runs: view.state.runs.map((run) => ({
@@ -102,8 +108,10 @@ export function toJson(view: Snapshot): SnapshotJson {
       note: run.note,
       evidence: run.evidence.map((item) => item.path),
       source: sourceLabel(run),
+      superseded: isSuperseded(view.state, run),
     })),
     blockers: blockers(view).map((row) => row.step.id),
+    ...(view.progress ? { progress: view.progress } : {}),
   };
 }
 

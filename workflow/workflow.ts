@@ -18,6 +18,8 @@ import type {
   ProgressState,
   Run,
 } from "./progress-store.ts";
+import { countProgress, tierComplete } from "./progress-table.ts";
+import type { Progress, ProgressSpec } from "./progress-table.ts";
 
 export type Step = {
   id: string;
@@ -34,7 +36,12 @@ export type Step = {
     note?: string;
   };
 };
-export type Phase = { label: string; next_phase: string | null; steps: Step[] };
+export type Phase = {
+  label: string;
+  next_phase: string | null;
+  steps: Step[];
+  progress?: ProgressSpec;
+};
 export const phases = loadCatalog();
 
 function loadCatalog(): Record<string, Phase> {
@@ -58,6 +65,8 @@ export type Row = {
   artifactRefs?: ArtifactRef[];
   runsApproved: boolean;
   complete: boolean;
+  /** The user can confirm the scope now: runs approved and handed off, evidence current, counted tier complete. */
+  finishable: boolean;
 };
 export type Snapshot = {
   phase: string;
@@ -65,6 +74,7 @@ export type Snapshot = {
   nextPhase: string | null;
   state: ProgressState;
   rows: Row[];
+  progress?: Progress;
 };
 export type Update =
   | { action: "start"; step: string; subject: string; note: string }
@@ -111,6 +121,11 @@ function latestRuns(state: ProgressState, phase: string, step: string): Run[] {
       bySubject.set(run.subject, run);
   }
   return [...bySubject.values()];
+}
+
+/** A newer run for the same step and subject replaces this one; it needs no approval or handoff. */
+export function isSuperseded(state: ProgressState, run: Run): boolean {
+  return !latestRuns(state, run.phase, run.step).includes(run);
 }
 
 export async function artifactFiles(
@@ -255,22 +270,28 @@ async function rowFor(
   let status =
     artifacts.length > 0 ? "artifact found; not approved" : "pending";
   if (latest) status = latest.status;
-  if (approved && step.repeatable && !scopeCurrent)
-    status = `${runs.length} approved; scope open`;
+  const scopeOpen = approved && step.repeatable === true && !scopeCurrent;
+  if (scopeOpen) status = `${runs.length} approved; scope open`;
   if (complete) status = "approved";
   if (runs.some((run) => run.status === "submitted")) status = "submitted";
-  if (
+  const staleEvidence =
     stale ||
     (approved &&
       (!hasArtifacts ||
-        (!artifactSetCurrent && (!step.artifact?.aggregate || scope))))
-  )
-    status = "stale evidence";
+        (!artifactSetCurrent && (!step.artifact?.aggregate || scope))));
+  if (staleEvidence) status = "stale evidence";
   const active = runs.find(
     (run) => run.status === "active" || run.status === "blocked",
   );
   if (active && !(stale && runs.some((run) => run.source)))
     status = `${active.status}: ${active.subject || active.id}`;
+  // A handoff clears the step's scope, so finishing before it is wasted.
+  const awaitingHandoff = runs.some((run) => run.source && !run.handoff);
+  const finishable =
+    scopeOpen &&
+    hasArtifacts &&
+    !awaitingHandoff &&
+    (step.artifact?.aggregate === true || !staleEvidence);
   if (runs.some((run) => effectiveSource(run)))
     status += " [worktree evidence]";
   return {
@@ -281,7 +302,20 @@ async function rowFor(
     artifactRefs,
     runsApproved: approved,
     complete,
+    finishable,
   };
+}
+
+async function progressFor(
+  root: string,
+  spec: ProgressSpec,
+): Promise<Progress | undefined> {
+  try {
+    const text = await readOptional(root, spec.table);
+    return text === undefined ? undefined : countProgress(text, spec);
+  } catch {
+    return undefined; // a counter must never hide the workflow view
+  }
 }
 
 export async function snapshot(root: string): Promise<Snapshot | undefined> {
@@ -292,12 +326,20 @@ export async function snapshot(root: string): Promise<Snapshot | undefined> {
   const rows = await Promise.all(
     phases[phase].steps.map((step) => rowFor(root, state, phase, step)),
   );
+  const spec = phases[phase].progress;
+  const progress = spec && (await progressFor(root, spec));
+  const countOpen = progress !== undefined && !tierComplete(progress);
   return {
     phase,
     label: phases[phase].label,
     nextPhase: phases[phase].next_phase,
     state,
-    rows,
+    rows: rows.map((row) =>
+      countOpen && row.step.id === spec?.step
+        ? { ...row, finishable: false }
+        : row,
+    ),
+    ...(progress ? { progress } : {}),
   };
 }
 
