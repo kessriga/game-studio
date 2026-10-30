@@ -1,6 +1,16 @@
 # Implementation status
 
-## Current implementation: 0.6.1 (unreleased)
+## Current implementation: 0.7.0 (unreleased)
+
+- In Systems Design, the Claude Code pane and the workflow summary show how many systems the systems index marks
+  Approved, for the MVP tier and for all systems. A catalog phase names its counted table with `progress`.
+- The pane's **Needs you** list names runs that wait for approval or handoff, and steps whose scope the user can finish,
+  each with its `/gamedev-workflow` command. The summary has the same list.
+- The Claude Code and Pi summaries no longer list a run that a newer run for the same step and subject replaces. The CLI
+  marks such runs `superseded`; the tracker already refused their handoff.
+- Not run: the pane in a live Claude Code session, and the Pi panel with the new data (Pi draws neither addition).
+
+## Implementation 0.6.1
 
 - The pane separates its phase progress dots with spaces so they stay legible.
 
@@ -209,6 +219,8 @@ environment. Earlier evidence is retained below.
   global settings were installed here.
 
 ## Release history
+
+- 0.7.0 (unreleased): systems count and a Needs you list in the Claude Code pane; replaced runs leave the summaries.
 
 - 0.6.1 (unreleased): spaced phase progress dots in the Claude Code pane.
 
