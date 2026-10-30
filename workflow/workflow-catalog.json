@@ -70,7 +70,8 @@
         "table": "design/gdd/systems-index.md",
         "label": "systems",
         "done": "Approved",
-        "focus": "MVP"
+        "focus": "MVP",
+        "step": "design-system"
       },
       "steps": [
         {

@@ -5,11 +5,14 @@ export type ProgressSpec = {
   label: string;
   done: string;
   focus?: string;
+  /** The repeatable step whose finish waits until the counted tier is done. */
+  step?: string;
 };
 
 export type Count = { done: number; total: number };
 export type Progress = Count & {
   label: string;
+  status: string;
   focus?: Count & { label: string };
 };
 
@@ -56,6 +59,7 @@ export function countProgress(
   const isDone = (row: string[]) => row[status] === spec.done.toLowerCase();
   const progress: Progress = {
     label: spec.label,
+    status: spec.done,
     done: table.rows.filter(isDone).length,
     total: table.rows.length,
   };
@@ -63,6 +67,7 @@ export function countProgress(
   const tier = table.rows.filter(
     (row) => row[priority] === spec.focus!.toLowerCase(),
   );
+  if (!tier.length) return progress;
   return {
     ...progress,
     focus: {
@@ -71,4 +76,10 @@ export function countProgress(
       total: tier.length,
     },
   };
+}
+
+/** The focus tier, or the whole table without one, has rows and all of them are done. */
+export function tierComplete(progress: Progress): boolean {
+  const counted = progress.focus ?? progress;
+  return counted.total > 0 && counted.done === counted.total;
 }

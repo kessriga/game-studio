@@ -76,11 +76,14 @@ The `Game Studio` pane shows the phase, its progress, and each step with a color
 phase with a counted index, it also shows how many rows are done. In Systems Design, it counts the systems that
 `design/gdd/systems-index.md` marks Approved: MVP systems, then all systems. A **Needs you** list names each run that
 waits for your approval or handoff, and each repeatable step whose scope you can finish, with its `/gamedev-workflow`
-command. A step can be finished only when every counted system is done. Runs that a newer run for the same step and
-subject replaces are left out of the pane and the summary; they need no action. `/gamedev-workflow panel` opens it at
-any width. At session start the mod opens it, but Claude Code docks it only on terminals wide enough to show it beside
-the transcript. The pane refreshes after edits, shell commands, subagent runs, and workflow updates. The mod sets no
-status line; `/gamedev-workflow status` prints the full summary on request.
+command. The pane offers to finish System GDDs only when every MVP system is Approved, and offers to finish any step
+only after its worktree runs are handed off, because a handoff reopens the step's scope. The tracker itself does not
+check the systems count: `/gamedev-workflow finish` still accepts an earlier confirmation. A handoff succeeds only after
+the run's branch is merged. Runs that a newer run for the same step and subject replaces are left out of the pane, the
+summary and the finish prompt; they need no action. `/gamedev-workflow panel` opens it at any width. At session start
+the mod opens it, but Claude Code docks it only on terminals wide enough to show it beside the transcript. The pane
+refreshes after edits, shell commands, subagent runs, and workflow updates. The mod sets no status line;
+`/gamedev-workflow status` prints the full summary on request.
 
 ## Hooks
 

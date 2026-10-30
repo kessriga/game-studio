@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { countProgress } from "./progress-table.ts";
+import { countProgress, tierComplete } from "./progress-table.ts";
 
 const spec = {
   table: "design/gdd/systems-index.md",
@@ -28,6 +28,7 @@ Text after the table.
 test("counts approved rows overall and in the focus tier", () => {
   assert.deepEqual(countProgress(index, spec), {
     label: "systems",
+    status: "Approved",
     done: 2,
     total: 4,
     focus: { label: "MVP", done: 1, total: 2 },
@@ -39,6 +40,7 @@ test("a table without a Priority column reports only the overall count", () => {
     "| Name | Status |\n| --- | --- |\n| A | approved |\n| B | Designed |\n";
   assert.deepEqual(countProgress(text, spec), {
     label: "systems",
+    status: "Approved",
     done: 1,
     total: 2,
   });
@@ -46,4 +48,36 @@ test("a table without a Priority column reports only the overall count", () => {
 
 test("text without a status table reports nothing", () => {
   assert.equal(countProgress("# Empty\n\nNo table yet.\n", spec), undefined);
+});
+
+test("an empty focus tier is dropped and an empty count is never complete", () => {
+  const progress = countProgress(index, { ...spec, focus: "P0" });
+  assert.equal(progress?.focus, undefined);
+  assert.equal(tierComplete(progress!), false);
+  const empty = countProgress("| Name | Status |\n| --- | --- |\n", spec)!;
+  assert.deepEqual(empty, {
+    label: "systems",
+    status: "Approved",
+    done: 0,
+    total: 0,
+  });
+  assert.equal(tierComplete(empty), false);
+  assert.equal(
+    tierComplete({
+      ...empty,
+      done: 2,
+      total: 2,
+      focus: { label: "MVP", done: 1, total: 2 },
+    }),
+    false,
+  );
+  assert.equal(
+    tierComplete({
+      ...empty,
+      done: 1,
+      total: 2,
+      focus: { label: "MVP", done: 2, total: 2 },
+    }),
+    true,
+  );
 });

@@ -11,7 +11,7 @@ export type WorkflowStep = {
   aggregate: boolean;
   status: string;
   complete: boolean;
-  /** Every run is approved with current evidence; the user can confirm the scope. */
+  /** The user can confirm the scope now: runs approved and handed off, evidence current, counted tier complete. */
   finishable: boolean;
   artifacts: string[];
 };
@@ -21,6 +21,8 @@ export type WorkflowCount = { done: number; total: number };
 /** Rows of a project index table, such as the systems index, that reached the done status. */
 export type WorkflowProgress = WorkflowCount & {
   label: string;
+  /** The index status that counts as done, such as Approved. */
+  status: string;
   focus?: WorkflowCount & { label: string };
 };
 

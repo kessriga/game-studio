@@ -55,10 +55,11 @@ export function progressText(
 ): string | undefined {
   if (!progress) return undefined;
   const all = `${progress.done}/${progress.total}`;
+  const status = progress.status.toLowerCase();
   const { focus } = progress;
   return focus
-    ? `${focus.label} ${progress.label} ${focus.done}/${focus.total} approved · all ${all}`
-    : `${progress.label} ${all} approved`;
+    ? `${focus.label} ${progress.label} ${focus.done}/${focus.total} ${status} · all ${all}`
+    : `${progress.label} ${all} ${status}`;
 }
 
 export type Action = {
@@ -87,13 +88,11 @@ export function pendingActions(view: WorkflowView): Action[] {
     )
     .map((run) => ({
       kind: "handoff" as const,
-      what: what(run),
+      what: `${what(run)} (once its branch merges)`,
       command: `/gamedev-workflow handoff ${run.id} <note>`,
     }));
-  const counted = view.progress?.focus ?? view.progress;
-  const scopeDone = !counted || counted.done === counted.total;
   const finish = view.steps
-    .filter((step) => step.finishable && scopeDone)
+    .filter((step) => step.finishable)
     .map((step) => ({
       kind: "finish" as const,
       what: step.name,

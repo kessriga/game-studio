@@ -144,7 +144,12 @@ async function approveFromUser(
     const sources = [
       ...new Set(
         view.runs
-          .filter((run) => run.phase === view.phase && run.step === step.id)
+          .filter(
+            (run) =>
+              run.phase === view.phase &&
+              run.step === step.id &&
+              !run.superseded,
+          )
           .map((run) => run.source),
       ),
     ];

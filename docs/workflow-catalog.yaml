@@ -12,6 +12,13 @@
 # required: false → optional enhancement (shown as OPTIONAL)
 # repeatable: true → runs multiple times (one per system, story, etc.)
 #
+# Phase progress (optional): counts rows of a Markdown index table
+#   table: project path of the file; the first table with a Status column counts
+#   label: noun shown with the count, such as "systems"
+#   done: Status value that counts as done (exact, case-insensitive)
+#   focus: Priority value counted on its own, such as "MVP"; omitted if no row has it
+#   step: repeatable step the pane offers to finish only when the focus tier is done
+#
 # Phase gates (gamedev:gate-check): verdicts are ADVISORY — they
 #   guide the
 # decision
@@ -87,6 +94,7 @@ phases:
       label: "systems"
       done: "Approved"
       focus: "MVP"
+      step: design-system
     steps:
       - id: design-system
         name: "System GDDs"

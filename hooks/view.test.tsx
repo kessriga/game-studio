@@ -181,6 +181,7 @@ const systems: WorkflowView = {
   index: 2,
   progress: {
     label: "systems",
+    status: "Approved",
     done: 5,
     total: 48,
     focus: { label: "MVP", done: 5, total: 28 },
@@ -195,7 +196,7 @@ const systems: WorkflowView = {
       aggregate: false,
       status: "5 approved; scope open",
       complete: false,
-      finishable: true,
+      finishable: false,
       artifacts: [],
     },
   ],
@@ -213,7 +214,13 @@ const systems: WorkflowView = {
     id: id as string,
     phase: "systems-design",
     step: "design-system",
-    subject: id === "r27" ? "Connectors" : "Camera",
+    subject:
+      (
+        { r16: "Time Scale", r18: "Time Scale", r25: "Camera" } as Record<
+          string,
+          string
+        >
+      )[id as string] ?? "Connectors",
     status: status as string,
     note: "Done.",
     evidence: [],
@@ -227,13 +234,18 @@ test("the progress text names the focus tier and the whole index", () => {
   expect(progressText(systems.progress)).toBe(
     "MVP systems 5/28 approved · all 5/48",
   );
-  expect(progressText({ label: "systems", done: 2, total: 3 })).toBe(
-    "systems 2/3 approved",
-  );
+  expect(
+    progressText({
+      label: "stories",
+      status: "Implemented",
+      done: 2,
+      total: 3,
+    }),
+  ).toBe("stories 2/3 implemented");
   expect(progressText(undefined)).toBe(undefined);
 });
 
-test("waiting actions skip replaced and handed-off runs and an unfinished scope", () => {
+test("waiting actions skip replaced and handed-off runs and steps the core cannot finish", () => {
   expect(pendingActions(systems)).toEqual([
     {
       kind: "approve",
@@ -242,17 +254,14 @@ test("waiting actions skip replaced and handed-off runs and an unfinished scope"
     },
     {
       kind: "handoff",
-      what: "design-system · Camera",
+      what: "design-system · Camera (once its branch merges)",
       command: "/gamedev-workflow handoff r25 <note>",
     },
   ]);
   const done: WorkflowView = {
     ...systems,
     runs: [],
-    progress: {
-      ...systems.progress!,
-      focus: { label: "MVP", done: 28, total: 28 },
-    },
+    steps: systems.steps.map((step) => ({ ...step, finishable: true })),
   };
   expect(pendingActions(done)).toEqual([
     {

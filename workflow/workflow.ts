@@ -18,7 +18,7 @@ import type {
   ProgressState,
   Run,
 } from "./progress-store.ts";
-import { countProgress } from "./progress-table.ts";
+import { countProgress, tierComplete } from "./progress-table.ts";
 import type { Progress, ProgressSpec } from "./progress-table.ts";
 
 export type Step = {
@@ -65,7 +65,7 @@ export type Row = {
   artifactRefs?: ArtifactRef[];
   runsApproved: boolean;
   complete: boolean;
-  /** Every run is approved with current evidence, so the user can confirm the scope. */
+  /** The user can confirm the scope now: runs approved and handed off, evidence current, counted tier complete. */
   finishable: boolean;
 };
 export type Snapshot = {
@@ -270,27 +270,28 @@ async function rowFor(
   let status =
     artifacts.length > 0 ? "artifact found; not approved" : "pending";
   if (latest) status = latest.status;
-  if (approved && step.repeatable && !scopeCurrent)
-    status = `${runs.length} approved; scope open`;
+  const scopeOpen = approved && step.repeatable === true && !scopeCurrent;
+  if (scopeOpen) status = `${runs.length} approved; scope open`;
   if (complete) status = "approved";
   if (runs.some((run) => run.status === "submitted")) status = "submitted";
-  if (
+  const staleEvidence =
     stale ||
     (approved &&
       (!hasArtifacts ||
-        (!artifactSetCurrent && (!step.artifact?.aggregate || scope))))
-  )
-    status = "stale evidence";
+        (!artifactSetCurrent && (!step.artifact?.aggregate || scope))));
+  if (staleEvidence) status = "stale evidence";
   const active = runs.find(
     (run) => run.status === "active" || run.status === "blocked",
   );
   if (active && !(stale && runs.some((run) => run.source)))
     status = `${active.status}: ${active.subject || active.id}`;
+  // A handoff clears the step's scope, so finishing before it is wasted.
+  const awaitingHandoff = runs.some((run) => run.source && !run.handoff);
   const finishable =
-    approved &&
-    step.repeatable === true &&
-    !scopeCurrent &&
-    status.endsWith("scope open");
+    scopeOpen &&
+    hasArtifacts &&
+    !awaitingHandoff &&
+    (step.artifact?.aggregate === true || !staleEvidence);
   if (runs.some((run) => effectiveSource(run)))
     status += " [worktree evidence]";
   return {
@@ -327,12 +328,17 @@ export async function snapshot(root: string): Promise<Snapshot | undefined> {
   );
   const spec = phases[phase].progress;
   const progress = spec && (await progressFor(root, spec));
+  const countOpen = progress !== undefined && !tierComplete(progress);
   return {
     phase,
     label: phases[phase].label,
     nextPhase: phases[phase].next_phase,
     state,
-    rows,
+    rows: rows.map((row) =>
+      countOpen && row.step.id === spec?.step
+        ? { ...row, finishable: false }
+        : row,
+    ),
     ...(progress ? { progress } : {}),
   };
 }
