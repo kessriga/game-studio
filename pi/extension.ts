@@ -15,6 +15,7 @@ import {
   blockers,
   checkHandoff,
   checkRunApproval,
+  isSuperseded,
   scopeEvidence,
   phases,
   recordGateDecision,
@@ -38,7 +39,9 @@ function summary(view: Snapshot | undefined): string {
   const active = view.state.runs
     .filter(
       (run) =>
-        run.phase === view.phase && (run.status !== "approved" || run.source),
+        run.phase === view.phase &&
+        !isSuperseded(view.state, run) &&
+        (run.status !== "approved" || run.source),
     )
     .slice(-8);
   for (const run of active)

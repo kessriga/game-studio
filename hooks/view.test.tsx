@@ -76,6 +76,7 @@ test("an active run becomes the current line and the summary lists it", () => {
         note: "Draft ready.",
         evidence: ["design/gdd/game-concept.md"],
         source: "worktree /g/.worktrees/x",
+        superseded: false,
       },
     ],
   };

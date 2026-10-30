@@ -15,6 +15,7 @@ import { fingerprint, readState, STATE_FILE } from "./progress-store.ts";
 import { compactLines } from "../pi/panel.ts";
 import {
   blockers,
+  isSuperseded,
   phases,
   recordGateDecision,
   recordUpdate,
@@ -1493,3 +1494,24 @@ for (const coordinator of [false, true]) {
     });
   }
 }
+
+test("a newer run for the same step and subject supersedes the older one", () => {
+  const run = (id: string, subject: string) =>
+    ({ id, phase: "systems-design", step: "design-system", subject }) as never;
+  const runs = [
+    run("r16", "Time Scale"),
+    run("r18", "Time Scale"),
+    run("r25", "Camera"),
+  ];
+  const state = {
+    version: 1,
+    revision: 0,
+    runs,
+    scopes: [],
+    history: [],
+  } as never;
+  assert.deepEqual(
+    runs.map((item) => isSuperseded(state, item)),
+    [true, false, false],
+  );
+});

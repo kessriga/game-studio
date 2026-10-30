@@ -23,6 +23,8 @@ export type WorkflowRun = {
   note: string;
   evidence: string[];
   source: string;
+  /** A newer run for the same step and subject replaces this one. */
+  superseded: boolean;
 };
 
 export type WorkflowView = {

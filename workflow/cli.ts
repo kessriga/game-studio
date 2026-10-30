@@ -14,6 +14,7 @@ import { readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import {
   blockers,
+  isSuperseded,
   phases,
   recordGateDecision,
   recordUpdate,
@@ -52,6 +53,7 @@ export type SnapshotJson = {
     note: string;
     evidence: string[];
     source: string;
+    superseded: boolean;
   }[];
   blockers: string[];
 };
@@ -102,6 +104,7 @@ export function toJson(view: Snapshot): SnapshotJson {
       note: run.note,
       evidence: run.evidence.map((item) => item.path),
       source: sourceLabel(run),
+      superseded: isSuperseded(view.state, run),
     })),
     blockers: blockers(view).map((row) => row.step.id),
   };

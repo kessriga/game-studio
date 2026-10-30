@@ -66,6 +66,7 @@ export function summaryText(tracking: Tracking): string {
     .filter(
       (run) =>
         run.phase === view.phase &&
+        !run.superseded &&
         (run.status !== "approved" || run.source.startsWith("worktree")),
     )
     .slice(-8);

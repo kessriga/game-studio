@@ -113,6 +113,11 @@ function latestRuns(state: ProgressState, phase: string, step: string): Run[] {
   return [...bySubject.values()];
 }
 
+/** A newer run for the same step and subject replaces this one; it needs no approval or handoff. */
+export function isSuperseded(state: ProgressState, run: Run): boolean {
+  return !latestRuns(state, run.phase, run.step).includes(run);
+}
+
 export async function artifactFiles(
   root: string,
   step: Step,
